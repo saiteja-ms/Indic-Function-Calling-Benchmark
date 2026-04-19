@@ -1,0 +1,288 @@
+[
+    {
+        "name": "pmjay_verify_beneficiary",
+        "description": "Verifies a PM-JAY beneficiary using family ID and returns a session_token for authenticated operations. Must be called before pmjay_get_benefit_balance, pmjay_download_ecard, pmjay_get_claim_history, pmjay_check_claim_status, and pmjay_raise_grievance. Does NOT check eligibility (use pmjay_check_eligibility for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                }
+            }
+        },
+        "required": [
+            "family_id"
+        ]
+    },
+    {
+        "name": "pmjay_check_eligibility",
+        "description": "Checks whether a person/family is eligible for PM-JAY benefits. Must be called before pmjay_verify_beneficiary if the user is unsure of coverage. Does NOT authenticate or return a session_token.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                }
+            }
+        },
+        "required": [
+            "family_id"
+        ]
+    },
+    {
+        "name": "pmjay_get_benefit_balance",
+        "description": "Retrieves the remaining PM-JAY insurance benefit balance for a verified beneficiary. Requires pmjay_verify_beneficiary first. Does NOT provide claim history (use pmjay_get_claim_history for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by pmjay_verify_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                }
+            }
+        },
+        "required": [
+            "family_id",
+            "session_token"
+        ]
+    },
+    {
+        "name": "pmjay_download_ecard",
+        "description": "Downloads the PM-JAY e-card for a verified beneficiary. Requires pmjay_verify_beneficiary first. Does NOT verify beneficiary identity (use pmjay_verify_beneficiary for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by pmjay_verify_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                }
+            }
+        },
+        "required": [
+            "family_id",
+            "session_token"
+        ]
+    },
+    {
+        "name": "pmjay_search_hospitals",
+        "description": "Searches for PM-JAY empanelled hospitals by location, speciality, and hospital type. Does NOT confirm whether a hospital is currently active (use pmjay_check_hospital_status for verification).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "City or district to search hospitals."
+                },
+                "speciality": {
+                    "type": "string",
+                    "enum": [
+                        "cardiology",
+                        "oncology",
+                        "orthopaedics",
+                        "neurology",
+                        "nephrology",
+                        "ophthalmology",
+                        "gynaecology",
+                        "paediatrics",
+                        "general_surgery",
+                        "dermatology"
+                    ],
+                    "description": "Medical speciality required."
+                },
+                "hospital_type": {
+                    "type": "string",
+                    "enum": [
+                        "government",
+                        "private",
+                        "both"
+                    ],
+                    "description": "Type of hospital."
+                }
+            }
+        },
+        "required": [
+            "location"
+        ]
+    },
+    {
+        "name": "pmjay_check_hospital_status",
+        "description": "Checks whether a specific hospital is currently empanelled and active under PM-JAY. Should be called before visiting a hospital. Does NOT search hospitals (use pmjay_search_hospitals for discovery).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "hospital_id": {
+                    "type": "string",
+                    "description": "Unique identifier of the hospital."
+                }
+            }
+        },
+        "required": [
+            "hospital_id"
+        ]
+    },
+    {
+        "name": "pmjay_get_claim_history",
+        "description": "Retrieves the full claim history for a verified beneficiary. Requires pmjay_verify_beneficiary first. Does NOT provide real-time status of a single claim (use pmjay_check_claim_status for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by pmjay_verify_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "claim_status_filter": {
+                    "type": "string",
+                    "enum": [
+                        "all",
+                        "approved",
+                        "rejected",
+                        "pending",
+                        "settled"
+                    ],
+                    "description": "Filter for claim status."
+                }
+            }
+        },
+        "required": [
+            "family_id",
+            "session_token"
+        ]
+    },
+    {
+        "name": "pmjay_check_claim_status",
+        "description": "Checks the current status of a specific PM-JAY claim. Requires pmjay_verify_beneficiary first. Must be called before pmjay_raise_grievance. Does NOT retrieve full history (use pmjay_get_claim_history for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "claim_id": {
+                    "type": "string",
+                    "description": "Unique claim identifier."
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by pmjay_verify_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                }
+            }
+        },
+        "required": [
+            "claim_id",
+            "session_token",
+            "family_id"
+        ]
+    },
+    {
+        "name": "pmjay_search_health_packages",
+        "description": "Searches for PM-JAY covered treatment packages by speciality or procedure name. Should be called before pmjay_raise_grievance if a procedure is denied. Does NOT raise complaints (use pmjay_raise_grievance for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "speciality": {
+                    "type": "string",
+                    "enum": [
+                        "cardiology",
+                        "oncology",
+                        "orthopaedics",
+                        "neurology",
+                        "nephrology",
+                        "ophthalmology",
+                        "gynaecology",
+                        "paediatrics",
+                        "general_surgery",
+                        "dermatology"
+                    ],
+                    "description": "Medical speciality to search packages."
+                },
+                "procedure_name": {
+                    "type": "string",
+                    "description": "Name of the medical procedure."
+                }
+            }
+        },
+        "required": [
+            "speciality"
+        ]
+    },
+    {
+        "name": "pmjay_raise_grievance",
+        "description": "Raises a grievance related to PM-JAY services such as claim rejection or treatment denial. Requires pmjay_verify_beneficiary and pmjay_check_claim_status beforehand. Does NOT track grievance status (use pmjay_track_grievance_status for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by pmjay_verify_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "grievance_category": {
+                    "type": "string",
+                    "enum": [
+                        "treatment_denied",
+                        "claim_rejected",
+                        "claim_delayed",
+                        "hospital_delisted",
+                        "card_not_generated",
+                        "wrong_package_billed",
+                        "overcharged"
+                    ],
+                    "description": "Category of grievance."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Detailed description of the grievance."
+                }
+            }
+        },
+        "required": [
+            "family_id",
+            "session_token",
+            "grievance_category"
+        ]
+    },
+    {
+        "name": "pmjay_track_grievance_status",
+        "description": "Tracks the status of a previously raised PM-JAY grievance. Requires pmjay_verify_beneficiary first. Does NOT raise new grievances (use pmjay_raise_grievance for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "grievance_id": {
+                    "type": "string",
+                    "description": "Unique grievance identifier."
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by pmjay_verify_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "family_id": {
+                    "type": "string",
+                    "description": "PM-JAY family ID (12-digit identifier assigned at beneficiary registration)."
+                }
+            }
+        },
+        "required": [
+            "grievance_id",
+            "session_token",
+            "family_id"
+        ]
+    }
+]
