@@ -1,0 +1,230 @@
+[
+    {
+        "name": "pmkisan_verify_farmer",
+        "description": "Verifies the identity of a farmer using Aadhaar number and registered mobile number through OTP authentication. This establishes user identity for accessing personalized PM-KISAN services. Prerequisites: None. This tool must be called before tools that require authenticated access such as checking eKYC status, payment status, updating details, or raising helpdesk tickets. It does NOT perform eKYC, retrieve payment/installment data, check registration status, or update any beneficiary information.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                },
+                "mobile_number": {
+                    "type": "string",
+                    "description": "Mobile number linked with Aadhaar for OTP-based verification"
+                }
+            },
+            "required": [
+                "aadhaar_number",
+                "mobile_number"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_check_ekyc_status",
+        "description": "Retrieves the current eKYC status (completed or pending) of the farmer under PM-KISAN. Prerequisites: pmkisan_verify_farmer must be successfully completed to ensure authenticated access. It does NOT perform or update eKYC, generate OTP, or retrieve payment or registration details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                }
+            },
+            "required": [
+                "aadhaar_number"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_complete_ekyc",
+        "description": "Completes the Aadhaar-based eKYC process for a farmer using OTP verification. This updates the farmer's compliance status required for receiving benefits. Prerequisites: pmkisan_verify_farmer must be completed prior to this step. It does NOT check eKYC status, retrieve payments, or update other beneficiary details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                },
+                "otp": {
+                    "type": "string",
+                    "description": "One-time password sent to Aadhaar-linked mobile number"
+                }
+            },
+            "required": [
+                "aadhaar_number",
+                "otp"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_get_payment_status",
+        "description": "Fetches the PM-KISAN installment/payment status for the authenticated farmer, including whether installments are credited or pending. Prerequisites: pmkisan_verify_farmer must be completed before calling this tool. It does NOT modify payment records, perform eKYC, or update beneficiary information.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                }
+            },
+            "required": [
+                "aadhaar_number"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_check_registration_status",
+        "description": "Checks the status of a farmer's self-registration in the PM-KISAN scheme (e.g., approved, pending, rejected). Prerequisites: pmkisan_verify_farmer must be completed to access the registration status. It does NOT submit a new registration, update existing records, or fetch payment details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number used for registration"
+                }
+            },
+            "required": [
+                "aadhaar_number"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_submit_self_registration",
+        "description": "Submits a new self-registration request for enrolling a farmer into the PM-KISAN scheme using Aadhaar and bank details. Prerequisites: None, but valid Aadhaar, bank, and personal details must be provided. It does NOT verify identity automatically, check registration status, or update existing beneficiary records.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                },
+                "farmer_name": {
+                    "type": "string",
+                    "description": "Full name of the farmer as per Aadhaar records"
+                },
+                "bank_account_number": {
+                    "type": "string",
+                    "description": "Bank account number for receiving PM-KISAN benefits"
+                },
+                "ifsc_code": {
+                    "type": "string",
+                    "description": "IFSC code of the farmer's bank branch"
+                },
+                "mobile_number": {
+                    "type": "string",
+                    "description": "Mobile number of the farmer"
+                }
+            },
+            "required": [
+                "aadhaar_number",
+                "farmer_name",
+                "bank_account_number",
+                "ifsc_code",
+                "mobile_number"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_update_beneficiary_details",
+        "description": "Updates existing beneficiary details such as mobile number or bank account information for a registered farmer. Prerequisites: pmkisan_verify_farmer must be completed before making updates. It does NOT register a new farmer, check payment status, or perform eKYC.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                },
+                "update_field": {
+                    "type": "string",
+                    "description": "The specific field to update",
+                    "enum": [
+                        "mobile_number",
+                        "bank_account"
+                    ]
+                },
+                "new_value": {
+                    "type": "string",
+                    "description": "New value corresponding to the selected field"
+                }
+            },
+            "required": [
+                "aadhaar_number",
+                "update_field",
+                "new_value"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_raise_helpdesk_ticket",
+        "description": "Creates a helpdesk support ticket for issues related to PM-KISAN such as payment failure, registration problems, or eKYC issues. Prerequisites: pmkisan_verify_farmer should be completed to associate the issue with a verified farmer. It does NOT track ticket progress or resolve the issue; it only registers the complaint.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                },
+                "issue_category": {
+                    "type": "string",
+                    "description": "Category of the issue being reported",
+                    "enum": [
+                        "payment_issue",
+                        "registration_issue",
+                        "ekyc_issue",
+                        "other"
+                    ]
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Detailed explanation of the issue faced by the farmer"
+                }
+            },
+            "required": [
+                "aadhaar_number",
+                "issue_category",
+                "description"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_track_ticket_status",
+        "description": "Retrieves the current status of a previously raised PM-KISAN helpdesk ticket using its ticket ID. Prerequisites: pmkisan_raise_helpdesk_ticket must have been called earlier to generate a valid ticket ID. It does NOT create new tickets, modify tickets, or resolve complaints.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "ticket_id": {
+                    "type": "string",
+                    "description": "Unique identifier of the helpdesk ticket"
+                }
+            },
+            "required": [
+                "ticket_id"
+            ]
+        }
+    },
+    {
+        "name": "pmkisan_surrender_benefits",
+        "description": "Allows a farmer to voluntarily surrender their PM-KISAN benefits if they are no longer eligible or wish to opt out. Prerequisites: pmkisan_verify_farmer must be completed to confirm identity. It does NOT check eligibility, retrieve payment history, or allow reversal once processed.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                },
+                "confirmation": {
+                    "type": "string",
+                    "description": "Explicit confirmation from the farmer to proceed with surrender",
+                    "enum": [
+                        "yes"
+                    ]
+                }
+            },
+            "required": [
+                "aadhaar_number",
+                "confirmation"
+            ]
+        }
+    }
+]

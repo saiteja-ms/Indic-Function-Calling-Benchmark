@@ -1,0 +1,294 @@
+[
+    {
+        "name": "pmfby_calculate_premium",
+        "description": "Calculates the estimated insurance premium payable by a farmer for a specific crop, season, and insured area under PMFBY. This helps farmers understand their contribution before applying. Prerequisites: None. It does NOT submit an insurance application or provide claim-related information.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "crop_name": {
+                    "type": "string",
+                    "description": "Name of the crop to insure, e.g. wheat, paddy, cotton"
+                },
+                "season": {
+                    "type": "string",
+                    "enum": [
+                        "Kharif",
+                        "Rabi",
+                        "Zaid"
+                    ],
+                    "description": "Crop season. Kharif = June-October (paddy, cotton, maize). Rabi = November-April (wheat, mustard, gram). Zaid = April-June (watermelon, cucumber, fodder crops)."
+                },
+                "area_hectare": {
+                    "type": "number",
+                    "description": "Area of land in hectares for which insurance is required"
+                }
+            },
+            "required": [
+                "crop_name",
+                "season",
+                "area_hectare"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_check_application_status",
+        "description": "Checks the status of an existing PMFBY insurance application using the application reference number. Prerequisites: pmfby_submit_application must have been called earlier. It does NOT check claim status or provide payment/claim settlement details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "application_id": {
+                    "type": "string",
+                    "description": "Unique application reference number generated during enrollment"
+                },
+                "season": {
+                    "type": "string",
+                    "enum": [
+                        "Kharif",
+                        "Rabi",
+                        "Zaid"
+                    ],
+                    "description": "Crop season. Kharif = June-October (paddy, cotton, maize). Rabi = November-April (wheat, mustard, gram). Zaid = April-June (watermelon, cucumber, fodder crops)."
+                }
+            },
+            "required": [
+                "application_id",
+                "season"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_check_claim_status",
+        "description": "Retrieves the status of a submitted crop loss/damage claim under PMFBY. Prerequisites: pmfby_submit_claim must have been completed earlier. It does NOT check application/enrollment status or calculate premiums.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "claim_id": {
+                    "type": "string",
+                    "description": "Unique claim reference number generated during claim submission"
+                }
+            },
+            "required": [
+                "claim_id"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_submit_application",
+        "description": "Submits a new crop insurance application for a farmer under PMFBY. This enrolls the farmer for insurance coverage for a specific crop and season. Prerequisites: None, but premium details are typically calculated beforehand. It does NOT submit crop loss claims or check application status.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "farmer_name": {
+                    "type": "string",
+                    "description": "Full name of the farmer applying for insurance"
+                },
+                "aadhaar_number": {
+                    "type": "string",
+                    "description": "12-digit Aadhaar number of the farmer"
+                },
+                "crop_name": {
+                    "type": "string",
+                    "description": "Name of the crop to insure"
+                },
+                "season": {
+                    "type": "string",
+                    "enum": [
+                        "Kharif",
+                        "Rabi",
+                        "Zaid"
+                    ],
+                    "description": "Crop season. Kharif = June-October (paddy, cotton, maize). Rabi = November-April (wheat, mustard, gram). Zaid = April-June (watermelon, cucumber, fodder crops)."
+                },
+                "area_hectare": {
+                    "type": "number",
+                    "description": "Area of land in hectares"
+                },
+                "application_type": {
+                    "type": "string",
+                    "enum": [
+                        "new",
+                        "renewal"
+                    ],
+                    "description": "Type of insurance application"
+                }
+            },
+            "required": [
+                "farmer_name",
+                "aadhaar_number",
+                "crop_name",
+                "season",
+                "area_hectare",
+                "application_type"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_submit_claim",
+        "description": "Submits a crop loss or damage claim under PMFBY for an insured crop. Prerequisites: pmfby_submit_application must have been completed and the crop must be insured. It does NOT check claim status or process claim settlement.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "application_id": {
+                    "type": "string",
+                    "description": "Application ID of the insured crop"
+                },
+                "crop_loss_cause": {
+                    "type": "string",
+                    "enum": [
+                        "flood",
+                        "drought",
+                        "hailstorm",
+                        "pest_attack",
+                        "unseasonal_rain",
+                        "cyclone"
+                    ],
+                    "description": "Cause of crop damage"
+                },
+                "loss_date": {
+                    "type": "string",
+                    "description": "Date on which crop loss occurred"
+                },
+                "season": {
+                    "type": "string",
+                    "enum": [
+                        "Kharif",
+                        "Rabi",
+                        "Zaid"
+                    ],
+                    "description": "Crop season. Kharif = June-October (paddy, cotton, maize). Rabi = November-April (wheat, mustard, gram). Zaid = April-June (watermelon, cucumber, fodder crops)."
+                }
+            },
+            "required": [
+                "application_id",
+                "crop_loss_cause",
+                "loss_date",
+                "season"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_find_enrollment_center",
+        "description": "Finds the nearest Common Service Center (CSC) or bank branch where a farmer can enroll for PMFBY insurance. Prerequisites: None. It does NOT submit applications or provide insurance details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "district": {
+                    "type": "string",
+                    "description": "District where the farmer is located"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "State where the farmer is located"
+                }
+            },
+            "required": [
+                "district",
+                "state"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_get_crop_coverage_details",
+        "description": "Provides crop-wise insurance coverage details including sum insured and risk coverage under PMFBY. Prerequisites: None. It does NOT calculate premium or submit applications.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "crop_name": {
+                    "type": "string",
+                    "description": "Name of the crop"
+                },
+                "season": {
+                    "type": "string",
+                    "enum": [
+                        "Kharif",
+                        "Rabi",
+                        "Zaid"
+                    ],
+                    "description": "Crop season. Kharif = June-October (paddy, cotton, maize). Rabi = November-April (wheat, mustard, gram). Zaid = April-June (watermelon, cucumber, fodder crops)."
+                }
+            },
+            "required": [
+                "crop_name",
+                "season"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_raise_grievance",
+        "description": "Raises a grievance related to claim rejection, delay, or other PMFBY service issues. Prerequisites: A claim or application must already exist. It does NOT track grievance status or resolve the issue.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "reference_id": {
+                    "type": "string",
+                    "description": "Application ID or Claim ID related to the grievance"
+                },
+                "issue_type": {
+                    "type": "string",
+                    "enum": [
+                        "claim_rejection",
+                        "claim_delay",
+                        "other"
+                    ],
+                    "description": "Type of grievance"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Detailed explanation of the issue"
+                }
+            },
+            "required": [
+                "reference_id",
+                "issue_type",
+                "description"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_track_grievance_status",
+        "description": "Tracks the current status of a previously raised grievance under PMFBY. Prerequisites: pmfby_raise_grievance must have been called earlier. It does NOT raise new grievances or provide claim details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "grievance_id": {
+                    "type": "string",
+                    "description": "Unique grievance reference number"
+                }
+            },
+            "required": [
+                "grievance_id"
+            ]
+        }
+    },
+    {
+        "name": "pmfby_get_notified_crops",
+        "description": "Retrieves the list of government-notified crops eligible for insurance in a specific district and season under PMFBY. Prerequisites: None. It does NOT provide premium calculation or coverage details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "district": {
+                    "type": "string",
+                    "description": "District name"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "State name"
+                },
+                "season": {
+                    "type": "string",
+                    "enum": [
+                        "Kharif",
+                        "Rabi",
+                        "Zaid"
+                    ],
+                    "description": "Crop season. Kharif = June-October (paddy, cotton, maize). Rabi = November-April (wheat, mustard, gram). Zaid = April-June (watermelon, cucumber, fodder crops)."
+                }
+            },
+            "required": [
+                "district",
+                "state",
+                "season"
+            ]
+        }
+    }
+]

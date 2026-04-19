@@ -1,0 +1,420 @@
+[
+    {
+        "id": "IFCB_v1_pmkisan_simple_001",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I want to verify my details, my Aadhaar number is 987654321012 and my mobile number is 9876543210"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_verify_farmer",
+                "description": "Verifies the identity of a farmer using Aadhaar number and registered mobile number through OTP authentication. This establishes user identity for accessing personalized PM-KISAN services. Prerequisites: None. This tool must be called before tools that require authenticated access such as checking eKYC status, payment status, updating details, or raising helpdesk tickets. It does NOT perform eKYC, retrieve payment/installment data, check registration status, or update any beneficiary information.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        },
+                        "mobile_number": {
+                            "type": "string",
+                            "description": "Mobile number linked with Aadhaar for OTP-based verification"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number",
+                        "mobile_number"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_verify_farmer(aadhaar_number='987654321012', mobile_number='9876543210')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_002",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "Can you check my eKYC status, my Aadhaar number is 123456789012"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_check_ekyc_status",
+                "description": "Retrieves the current eKYC status (completed or pending) of the farmer under PM-KISAN. Prerequisites: pmkisan_verify_farmer must be successfully completed to ensure authenticated access. It does NOT perform or update eKYC, generate OTP, or retrieve payment or registration details.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_check_ekyc_status(aadhaar_number='123456789012')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_003",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I want to complete my eKYC, my Aadhaar number is 234567890123 and the OTP is 456789"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_complete_ekyc",
+                "description": "Completes the Aadhaar-based eKYC process for a farmer using OTP verification. This updates the farmer's compliance status required for receiving benefits. Prerequisites: pmkisan_verify_farmer must be completed prior to this step. It does NOT check eKYC status, retrieve payments, or update other beneficiary details.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        },
+                        "otp": {
+                            "type": "string",
+                            "description": "One-time password sent to Aadhaar-linked mobile number"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number",
+                        "otp"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_complete_ekyc(aadhaar_number='234567890123', otp='456789')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_004",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "Please tell me my PM Kisan payment status, my Aadhaar number is 345678901234"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_get_payment_status",
+                "description": "Fetches the PM-KISAN installment/payment status for the authenticated farmer, including whether installments are credited or pending. Prerequisites: pmkisan_verify_farmer must be completed before calling this tool. It does NOT modify payment records, perform eKYC, or update beneficiary information.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_get_payment_status(aadhaar_number='345678901234')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_005",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I want to know my registration status, my Aadhaar number is 456789012345"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_check_registration_status",
+                "description": "Checks the status of a farmer's self-registration in the PM-KISAN scheme (e.g., approved, pending, rejected). Prerequisites: pmkisan_verify_farmer must be completed to access the registration status. It does NOT submit a new registration, update existing records, or fetch payment details.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number used for registration"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_check_registration_status(aadhaar_number='456789012345')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_006",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I want to register for PM Kisan, my Aadhaar number is 567890123456, my name is Ramesh Kumar, my bank account number is 12345678901234, IFSC code is SBIN0001234 and my mobile number is 9123456789"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_submit_self_registration",
+                "description": "Submits a new self-registration request for enrolling a farmer into the PM-KISAN scheme using Aadhaar and bank details. Prerequisites: None, but valid Aadhaar, bank, and personal details must be provided. It does NOT verify identity automatically, check registration status, or update existing beneficiary records.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        },
+                        "farmer_name": {
+                            "type": "string",
+                            "description": "Full name of the farmer as per Aadhaar records"
+                        },
+                        "bank_account_number": {
+                            "type": "string",
+                            "description": "Bank account number for receiving PM-KISAN benefits"
+                        },
+                        "ifsc_code": {
+                            "type": "string",
+                            "description": "IFSC code of the farmer's bank branch"
+                        },
+                        "mobile_number": {
+                            "type": "string",
+                            "description": "Mobile number of the farmer"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number",
+                        "farmer_name",
+                        "bank_account_number",
+                        "ifsc_code",
+                        "mobile_number"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_submit_self_registration(aadhaar_number='567890123456', farmer_name='Ramesh Kumar', bank_account_number='12345678901234', ifsc_code='SBIN0001234', mobile_number='9123456789')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_007",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I want to update my mobile number in PM Kisan, my Aadhaar number is 678901234567 and new mobile number is 9988776655"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_update_beneficiary_details",
+                "description": "Updates existing beneficiary details such as mobile number or bank account information for a registered farmer. Prerequisites: pmkisan_verify_farmer must be completed before making updates. It does NOT register a new farmer, check payment status, or perform eKYC.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        },
+                        "update_field": {
+                            "type": "string",
+                            "description": "The specific field to update",
+                            "enum": [
+                                "mobile_number",
+                                "bank_account"
+                            ]
+                        },
+                        "new_value": {
+                            "type": "string",
+                            "description": "New value corresponding to the selected field"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number",
+                        "update_field",
+                        "new_value"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_update_beneficiary_details(aadhaar_number='678901234567', update_field='mobile_number', new_value='9988776655')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_008",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I have not received my payment, my Aadhaar number is 789012345678, please raise a complaint saying payment not received"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_raise_helpdesk_ticket",
+                "description": "Creates a helpdesk support ticket for issues related to PM-KISAN such as payment failure, registration problems, or eKYC issues. Prerequisites: pmkisan_verify_farmer should be completed to associate the issue with a verified farmer. It does NOT track ticket progress or resolve the issue; it only registers the complaint.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        },
+                        "issue_category": {
+                            "type": "string",
+                            "description": "Category of the issue being reported",
+                            "enum": [
+                                "payment_issue",
+                                "registration_issue",
+                                "ekyc_issue",
+                                "other"
+                            ]
+                        },
+                        "description": {
+                            "type": "string",
+                            "description": "Detailed explanation of the issue faced by the farmer"
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number",
+                        "issue_category",
+                        "description"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_raise_helpdesk_ticket(aadhaar_number='789012345678', issue_category='payment_issue', description='payment not received')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_009",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I want to check my complaint status, my ticket id is TICKET12345"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_track_ticket_status",
+                "description": "Retrieves the current status of a previously raised PM-KISAN helpdesk ticket using its ticket ID. Prerequisites: pmkisan_raise_helpdesk_ticket must have been called earlier to generate a valid ticket ID. It does NOT create new tickets, modify tickets, or resolve complaints.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "ticket_id": {
+                            "type": "string",
+                            "description": "Unique identifier of the helpdesk ticket"
+                        }
+                    },
+                    "required": [
+                        "ticket_id"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_track_ticket_status(ticket_id='TICKET12345')"
+        ]
+    },
+    {
+        "id": "IFCB_v1_pmkisan_simple_010",
+        "usecase": "pm_kisan",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [
+            [
+                {
+                    "role": "user",
+                    "content": "I want to surrender my PM Kisan benefits, my Aadhaar number is 890123456789 and I confirm yes"
+                }
+            ]
+        ],
+        "function": [
+            {
+                "name": "pmkisan_surrender_benefits",
+                "description": "Allows a farmer to voluntarily surrender their PM-KISAN benefits if they are no longer eligible or wish to opt out. Prerequisites: pmkisan_verify_farmer must be completed to confirm identity. It does NOT check eligibility, retrieve payment history, or allow reversal once processed.",
+                "parameters": {
+                    "type": "dict",
+                    "properties": {
+                        "aadhaar_number": {
+                            "type": "string",
+                            "description": "12-digit Aadhaar number of the farmer"
+                        },
+                        "confirmation": {
+                            "type": "string",
+                            "description": "Explicit confirmation from the farmer to proceed with surrender",
+                            "enum": [
+                                "yes"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "aadhaar_number",
+                        "confirmation"
+                    ]
+                }
+            }
+        ],
+        "ground_truth": [
+            "pmkisan_surrender_benefits(aadhaar_number='890123456789', confirmation='yes')"
+        ]
+    }
+]
