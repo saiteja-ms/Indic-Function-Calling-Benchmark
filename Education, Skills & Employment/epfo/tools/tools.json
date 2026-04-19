@@ -1,0 +1,334 @@
+[
+    {
+        "name": "epfo_authenticate_member",
+        "description": "Authenticates an EPFO member using UAN and credentials to initiate a session. This tool must be called before ALL other EPFO tools and returns a session_token required for subsequent operations. It does NOT perform any EPFO service like checking balance or submitting claims.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password associated with the EPFO member portal"
+                },
+                "otp": {
+                    "type": "string",
+                    "description": "One-time password sent to the registered mobile number for authentication"
+                }
+            },
+            "required": [
+                "uan",
+                "password",
+                "otp"
+            ]
+        }
+    },
+    {
+        "name": "epfo_check_kyc_status",
+        "description": "Retrieves the KYC status of Aadhaar, PAN, and bank account for an EPFO member. Must be called after epfo_authenticate_member and before epfo_raise_withdrawal_claim. It does NOT update or complete KYC details.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                }
+            },
+            "required": [
+                "uan",
+                "session_token"
+            ]
+        }
+    },
+    {
+        "name": "epfo_complete_kyc",
+        "description": "Submits or updates KYC details such as Aadhaar, PAN, or bank account for an EPFO member. Must be called after epfo_authenticate_member. It does NOT retrieve KYC status.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                },
+                "kyc_document_type": {
+                    "type": "string",
+                    "enum": [
+                        "aadhaar",
+                        "pan",
+                        "bank_account"
+                    ],
+                    "description": "Type of KYC document to be updated"
+                },
+                "document_number": {
+                    "type": "string",
+                    "description": "Document number for the selected KYC type"
+                }
+            },
+            "required": [
+                "uan",
+                "session_token",
+                "kyc_document_type",
+                "document_number"
+            ]
+        }
+    },
+    {
+        "name": "epfo_get_pf_balance",
+        "description": "Fetches the current PF balance of the EPFO member. Must be called after epfo_authenticate_member. It does NOT provide detailed transaction history like passbook.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                }
+            },
+            "required": [
+                "uan",
+                "session_token"
+            ]
+        }
+    },
+    {
+        "name": "epfo_view_passbook",
+        "description": "Provides detailed transaction history of the EPFO member's PF account. Must be called after epfo_authenticate_member. It does NOT return only the summary balance.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                }
+            },
+            "required": [
+                "uan",
+                "session_token"
+            ]
+        }
+    },
+    {
+        "name": "epfo_get_service_history",
+        "description": "Retrieves employment/service history of the EPFO member across employers. Must be called after epfo_authenticate_member and before epfo_transfer_pf_account. It does NOT initiate PF transfer.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                }
+            },
+            "required": [
+                "uan",
+                "session_token"
+            ]
+        }
+    },
+    {
+        "name": "epfo_update_date_of_exit",
+        "description": "Updates the date of exit from the last employer for an EPFO member. Must be called after epfo_authenticate_member and before epfo_raise_withdrawal_claim for Form_19 settlement. It does NOT process withdrawal claims.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                },
+                "date_of_exit": {
+                    "type": "string",
+                    "description": "Date of exit from the last employer in YYYY-MM-DD format"
+                }
+            },
+            "required": [
+                "uan",
+                "session_token",
+                "date_of_exit"
+            ]
+        }
+    },
+    {
+        "name": "epfo_raise_withdrawal_claim",
+        "description": "Submits a withdrawal claim for PF or pension using specified form type. Must be called after epfo_authenticate_member, epfo_check_kyc_status, and epfo_update_date_of_exit (for Form_19). It does NOT track claim status.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                },
+                "withdrawal_form_type": {
+                    "type": "string",
+                    "enum": [
+                        "Form_19",
+                        "Form_31",
+                        "Form_10C",
+                        "Form_10D"
+                    ],
+                    "description": "Type of withdrawal form"
+                },
+                "withdrawal_reason": {
+                    "type": "string",
+                    "enum": [
+                        "medical",
+                        "home_loan",
+                        "marriage",
+                        "education",
+                        "home_construction",
+                        "natural_calamity"
+                    ],
+                    "description": "Reason for withdrawal (applicable only for Form_31)"
+                }
+            },
+            "required": [
+                "uan",
+                "session_token",
+                "withdrawal_form_type"
+            ]
+        }
+    },
+    {
+        "name": "epfo_track_claim_status",
+        "description": "Tracks the status of a submitted EPFO withdrawal claim. Must be called after epfo_authenticate_member and before epfo_raise_grievance. It does NOT raise new claims.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                },
+                "claim_id": {
+                    "type": "string",
+                    "description": "Unique identifier of the withdrawal claim"
+                }
+            },
+            "required": [
+                "uan",
+                "session_token",
+                "claim_id"
+            ]
+        }
+    },
+    {
+        "name": "epfo_transfer_pf_account",
+        "description": "Transfers PF balance from a previous employer to the current employer account. Must be called after epfo_authenticate_member and epfo_get_service_history. It does NOT retrieve service history itself.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                },
+                "previous_employer_id": {
+                    "type": "string",
+                    "description": "Identifier of the previous employer"
+                }
+            },
+            "required": [
+                "uan",
+                "session_token",
+                "previous_employer_id"
+            ]
+        }
+    },
+    {
+        "name": "epfo_raise_grievance",
+        "description": "Raises a grievance related to EPFO services such as claim delay or KYC mismatch. Must be called after epfo_authenticate_member and epfo_track_claim_status. It does NOT track grievance status.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                },
+                "grievance_category": {
+                    "type": "string",
+                    "enum": [
+                        "claim_delay",
+                        "claim_rejection",
+                        "kyc_mismatch",
+                        "passbook_not_updated",
+                        "transfer_delay"
+                    ],
+                    "description": "Category of grievance"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Detailed description of the grievance"
+                }
+            },
+            "required": [
+                "uan",
+                "session_token",
+                "grievance_category",
+                "description"
+            ]
+        }
+    },
+    {
+        "name": "epfo_track_grievance_status",
+        "description": "Tracks the status of a previously raised EPFO grievance. Must be called after epfo_authenticate_member. It does NOT raise new grievances.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "uan": {
+                    "type": "string",
+                    "description": "12-digit Universal Account Number of the EPFO member"
+                },
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by epfo_authenticate_member. Required for all tools except epfo_authenticate_member itself."
+                },
+                "grievance_id": {
+                    "type": "string",
+                    "description": "Unique identifier of the grievance"
+                }
+            },
+            "required": [
+                "uan",
+                "session_token",
+                "grievance_id"
+            ]
+        }
+    }
+]

@@ -1,0 +1,299 @@
+[
+    {
+        "name": "ncs_register_jobseeker",
+        "description": "Registers a new jobseeker on the NCS portal by creating an account. No prerequisite tools are required. It does NOT log the user in or return a session_token.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "description": "Full name of the jobseeker"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for account registration"
+                },
+                "mobile_number": {
+                    "type": "string",
+                    "description": "Mobile number linked to the account"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password for the account"
+                }
+            },
+            "required": [
+                "full_name",
+                "email",
+                "mobile_number",
+                "password"
+            ]
+        }
+    },
+    {
+        "name": "ncs_login_jobseeker",
+        "description": "Authenticates a registered jobseeker and returns a session_token. Must be called before ncs_apply_job, ncs_check_application_status, ncs_enroll_skill_training, ncs_register_job_fair, and ncs_update_profile. It does NOT register a new user.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": "Registered email of the jobseeker"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password for login"
+                }
+            },
+            "required": [
+                "email",
+                "password"
+            ]
+        }
+    },
+    {
+        "name": "ncs_update_profile",
+        "description": "Updates jobseeker profile details such as qualifications, skills, and experience. Must be called after ncs_login_jobseeker and before ncs_apply_job to ensure successful application. It does NOT apply for jobs.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by ncs_login_jobseeker. Required for all tools that act on behalf of a logged-in jobseeker. Not required for ncs_register_jobseeker, ncs_login_jobseeker, ncs_search_jobs, ncs_search_job_fair, ncs_find_career_centre (these are public-facing)."
+                },
+                "qualification": {
+                    "type": "string",
+                    "enum": [
+                        "below_10th",
+                        "10th_pass",
+                        "12th_pass",
+                        "diploma",
+                        "graduate",
+                        "post_graduate"
+                    ],
+                    "description": "Highest qualification of the jobseeker"
+                },
+                "skills": {
+                    "type": "string",
+                    "description": "List of skills of the jobseeker"
+                }
+            },
+            "required": [
+                "session_token",
+                "qualification"
+            ]
+        }
+    },
+    {
+        "name": "ncs_search_jobs",
+        "description": "Searches for available jobs based on filters like sector, qualification, and employment type. Must be called before ncs_apply_job to obtain job_id. It does NOT apply for jobs.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "sector": {
+                    "type": "string",
+                    "enum": [
+                        "manufacturing",
+                        "IT",
+                        "healthcare",
+                        "education",
+                        "retail",
+                        "construction",
+                        "agriculture",
+                        "banking",
+                        "hospitality",
+                        "logistics"
+                    ],
+                    "description": "Sector of the job"
+                },
+                "employment_type": {
+                    "type": "string",
+                    "enum": [
+                        "full_time",
+                        "part_time",
+                        "contract",
+                        "internship",
+                        "apprenticeship"
+                    ],
+                    "description": "Type of employment"
+                },
+                "qualification": {
+                    "type": "string",
+                    "enum": [
+                        "below_10th",
+                        "10th_pass",
+                        "12th_pass",
+                        "diploma",
+                        "graduate",
+                        "post_graduate"
+                    ],
+                    "description": "Minimum qualification required"
+                }
+            },
+            "required": [
+                "sector"
+            ]
+        }
+    },
+    {
+        "name": "ncs_apply_job",
+        "description": "Applies for a job using a job_id obtained from ncs_search_jobs. Must be called after ncs_login_jobseeker and ncs_update_profile. It does NOT search for jobs or update profile.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by ncs_login_jobseeker. Required for all tools that act on behalf of a logged-in jobseeker. Not required for ncs_register_jobseeker, ncs_login_jobseeker, ncs_search_jobs, ncs_search_job_fair, ncs_find_career_centre (these are public-facing)."
+                },
+                "job_id": {
+                    "type": "string",
+                    "description": "Unique identifier of the job"
+                }
+            },
+            "required": [
+                "session_token",
+                "job_id"
+            ]
+        }
+    },
+    {
+        "name": "ncs_check_application_status",
+        "description": "Checks the status of a submitted job application. Must be called after ncs_login_jobseeker. It does NOT apply for jobs.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by ncs_login_jobseeker. Required for all tools that act on behalf of a logged-in jobseeker. Not required for ncs_register_jobseeker, ncs_login_jobseeker, ncs_search_jobs, ncs_search_job_fair, ncs_find_career_centre (these are public-facing)."
+                },
+                "application_id": {
+                    "type": "string",
+                    "description": "Unique ID of the job application"
+                }
+            },
+            "required": [
+                "session_token",
+                "application_id"
+            ]
+        }
+    },
+    {
+        "name": "ncs_search_skill_training",
+        "description": "Searches for available skill training programs based on filters. Must be called before ncs_enroll_skill_training to obtain course_id. It does NOT enroll in training.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "sector": {
+                    "type": "string",
+                    "enum": [
+                        "manufacturing",
+                        "IT",
+                        "healthcare",
+                        "education",
+                        "retail",
+                        "construction",
+                        "agriculture",
+                        "banking",
+                        "hospitality",
+                        "logistics"
+                    ],
+                    "description": "Sector of training"
+                },
+                "training_mode": {
+                    "type": "string",
+                    "enum": [
+                        "online",
+                        "offline",
+                        "hybrid"
+                    ],
+                    "description": "Mode of training"
+                }
+            },
+            "required": [
+                "sector"
+            ]
+        }
+    },
+    {
+        "name": "ncs_enroll_skill_training",
+        "description": "Enrolls a jobseeker in a skill training program using course_id from ncs_search_skill_training. Must be called after ncs_login_jobseeker. It does NOT search for courses.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by ncs_login_jobseeker. Required for all tools that act on behalf of a logged-in jobseeker. Not required for ncs_register_jobseeker, ncs_login_jobseeker, ncs_search_jobs, ncs_search_job_fair, ncs_find_career_centre (these are public-facing)."
+                },
+                "course_id": {
+                    "type": "string",
+                    "description": "Unique identifier of the training course"
+                }
+            },
+            "required": [
+                "session_token",
+                "course_id"
+            ]
+        }
+    },
+    {
+        "name": "ncs_search_job_fair",
+        "description": "Searches for job fairs based on type and location. Must be called before ncs_register_job_fair to obtain job_fair_id. It does NOT register for job fairs.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "job_fair_type": {
+                    "type": "string",
+                    "enum": [
+                        "online",
+                        "offline"
+                    ],
+                    "description": "Type of job fair"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "Location of the job fair"
+                }
+            },
+            "required": [
+                "job_fair_type"
+            ]
+        }
+    },
+    {
+        "name": "ncs_register_job_fair",
+        "description": "Registers a jobseeker for a job fair using job_fair_id from ncs_search_job_fair. Must be called after ncs_login_jobseeker. It does NOT search for job fairs.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by ncs_login_jobseeker. Required for all tools that act on behalf of a logged-in jobseeker. Not required for ncs_register_jobseeker, ncs_login_jobseeker, ncs_search_jobs, ncs_search_job_fair, ncs_find_career_centre (these are public-facing)."
+                },
+                "job_fair_id": {
+                    "type": "string",
+                    "description": "Unique identifier of the job fair"
+                }
+            },
+            "required": [
+                "session_token",
+                "job_fair_id"
+            ]
+        }
+    },
+    {
+        "name": "ncs_find_career_centre",
+        "description": "Finds nearby career centers based on location. No prerequisite tools are required. It does NOT register users or apply for jobs.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "Location to search for career centers"
+                }
+            },
+            "required": [
+                "location"
+            ]
+        }
+    }
+]
