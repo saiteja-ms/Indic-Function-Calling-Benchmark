@@ -1,0 +1,320 @@
+[
+    {
+        "name": "cowin_register_beneficiary",
+        "description": "Registers a new beneficiary in the CoWIN system using identity proof. This is the first step before any vaccination-related action. It does not log the user in or generate a session_token (use cowin_login_beneficiary for authentication).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Full name of the beneficiary"
+                },
+                "mobile_number": {
+                    "type": "string",
+                    "description": "Mobile number used for registration"
+                },
+                "id_proof_type": {
+                    "type": "string",
+                    "enum": [
+                        "aadhaar",
+                        "pan",
+                        "passport",
+                        "driving_licence",
+                        "voter_id",
+                        "nprs"
+                    ],
+                    "description": "Type of ID proof"
+                },
+                "id_proof_number": {
+                    "type": "string",
+                    "description": "ID proof number"
+                }
+            },
+            "required": [
+                "name",
+                "mobile_number",
+                "id_proof_type",
+                "id_proof_number"
+            ]
+        }
+    },
+    {
+        "name": "cowin_login_beneficiary",
+        "description": "Authenticates a beneficiary using mobile OTP and returns a session_token required for all authenticated tools. Must be called before cowin_book_appointment, cowin_cancel_appointment, cowin_download_certificate, cowin_request_international_certificate, cowin_raise_issue, and cowin_track_issue_status. It does not register a new user.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "mobile_number": {
+                    "type": "string",
+                    "description": "Registered mobile number"
+                },
+                "otp": {
+                    "type": "string",
+                    "description": "One-time password sent to mobile"
+                }
+            },
+            "required": [
+                "mobile_number",
+                "otp"
+            ]
+        }
+    },
+    {
+        "name": "cowin_check_vaccination_status",
+        "description": "Checks vaccination status (dose history) for a beneficiary_ref_id. Must be called before cowin_download_certificate to ensure at least one dose is recorded. It does not download certificates or modify records.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "beneficiary_ref_id": {
+                    "type": "string",
+                    "description": "Unique reference ID assigned to the beneficiary during registration. Used to identify which registered person the action applies to (up to 4 per mobile number)."
+                }
+            },
+            "required": [
+                "beneficiary_ref_id"
+            ]
+        }
+    },
+    {
+        "name": "cowin_find_vaccination_centres",
+        "description": "Finds vaccination centres based on location and filters like vaccine type and fee type. Must be called before cowin_check_slot_availability to obtain centre_id. It does not show slot availability or allow booking.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "district": {
+                    "type": "string",
+                    "description": "District to search centres in"
+                },
+                "vaccine_type": {
+                    "type": "string",
+                    "enum": [
+                        "covaxin",
+                        "covishield",
+                        "corbevax",
+                        "covovax",
+                        "sputnik_v"
+                    ],
+                    "description": "Preferred vaccine type"
+                },
+                "centre_fee_type": {
+                    "type": "string",
+                    "enum": [
+                        "free",
+                        "paid",
+                        "both"
+                    ],
+                    "description": "Type of vaccination centre"
+                }
+            },
+            "required": [
+                "district"
+            ]
+        }
+    },
+    {
+        "name": "cowin_check_slot_availability",
+        "description": "Checks available vaccination slots for a given centre_id and date. Must be called before cowin_book_appointment because booking requires a session_id from this step. It does not book appointments.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "centre_id": {
+                    "type": "string",
+                    "description": "ID of vaccination centre obtained from cowin_find_vaccination_centres"
+                },
+                "date": {
+                    "type": "string",
+                    "description": "Date for slot availability (YYYY-MM-DD)"
+                }
+            },
+            "required": [
+                "centre_id",
+                "date"
+            ]
+        }
+    },
+    {
+        "name": "cowin_book_appointment",
+        "description": "Books a vaccination appointment using a session_id from cowin_check_slot_availability. Must be called after cowin_login_beneficiary and cowin_check_slot_availability. Returns appointment_id required for cancellation. It does not check slot availability itself.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by cowin_login_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "beneficiary_ref_id": {
+                    "type": "string",
+                    "description": "Unique reference ID assigned to the beneficiary during registration. Used to identify which registered person the action applies to (up to 4 per mobile number)."
+                },
+                "session_id": {
+                    "type": "string",
+                    "description": "Session ID from slot availability check"
+                },
+                "dose_number": {
+                    "type": "string",
+                    "enum": [
+                        "dose_1",
+                        "dose_2",
+                        "booster"
+                    ],
+                    "description": "Dose to be booked"
+                }
+            },
+            "required": [
+                "session_token",
+                "beneficiary_ref_id",
+                "session_id",
+                "dose_number"
+            ]
+        }
+    },
+    {
+        "name": "cowin_cancel_appointment",
+        "description": "Cancels an existing vaccination appointment using appointment_id obtained from cowin_book_appointment. Must be called after cowin_login_beneficiary and cowin_book_appointment. It does not create or modify appointments.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by cowin_login_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "beneficiary_ref_id": {
+                    "type": "string",
+                    "description": "Unique reference ID assigned to the beneficiary during registration. Used to identify which registered person the action applies to (up to 4 per mobile number)."
+                },
+                "appointment_id": {
+                    "type": "string",
+                    "description": "Appointment ID returned during booking"
+                }
+            },
+            "required": [
+                "session_token",
+                "beneficiary_ref_id",
+                "appointment_id"
+            ]
+        }
+    },
+    {
+        "name": "cowin_download_certificate",
+        "description": "Downloads vaccination certificate for a beneficiary. Must be called after cowin_login_beneficiary and cowin_check_vaccination_status to ensure dose is recorded. It does not check vaccination status itself.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by cowin_login_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "beneficiary_ref_id": {
+                    "type": "string",
+                    "description": "Unique reference ID assigned to the beneficiary during registration. Used to identify which registered person the action applies to (up to 4 per mobile number)."
+                },
+                "dose_number": {
+                    "type": "string",
+                    "enum": [
+                        "dose_1",
+                        "dose_2",
+                        "booster"
+                    ],
+                    "description": "Dose certificate to download"
+                }
+            },
+            "required": [
+                "session_token",
+                "beneficiary_ref_id",
+                "dose_number"
+            ]
+        }
+    },
+    {
+        "name": "cowin_request_international_certificate",
+        "description": "Requests an international travel vaccination certificate. Must be called after cowin_login_beneficiary. It does not download the standard certificate (use cowin_download_certificate for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by cowin_login_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "beneficiary_ref_id": {
+                    "type": "string",
+                    "description": "Unique reference ID assigned to the beneficiary during registration. Used to identify which registered person the action applies to (up to 4 per mobile number)."
+                },
+                "passport_number": {
+                    "type": "string",
+                    "description": "Passport number for international certificate"
+                }
+            },
+            "required": [
+                "session_token",
+                "beneficiary_ref_id",
+                "passport_number"
+            ]
+        }
+    },
+    {
+        "name": "cowin_raise_issue",
+        "description": "Raises an issue related to vaccination such as certificate errors or missing dose records. Must be called after cowin_login_beneficiary. Returns request_id required for tracking. It does not track issues (use cowin_track_issue_status for that).",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by cowin_login_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "beneficiary_ref_id": {
+                    "type": "string",
+                    "description": "Unique reference ID assigned to the beneficiary during registration. Used to identify which registered person the action applies to (up to 4 per mobile number)."
+                },
+                "issue_category": {
+                    "type": "string",
+                    "enum": [
+                        "dose_not_recorded",
+                        "certificate_mismatch",
+                        "wrong_vaccine_type",
+                        "name_correction",
+                        "date_correction",
+                        "certificate_not_generating",
+                        "appointment_not_confirmed"
+                    ],
+                    "description": "Type of issue"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Details of the issue"
+                }
+            },
+            "required": [
+                "session_token",
+                "beneficiary_ref_id",
+                "issue_category",
+                "description"
+            ]
+        }
+    },
+    {
+        "name": "cowin_track_issue_status",
+        "description": "Tracks the status of an issue raised using request_id from cowin_raise_issue. Must be called after cowin_login_beneficiary and cowin_raise_issue. It does not raise new issues.",
+        "parameters": {
+            "type": "dict",
+            "properties": {
+                "session_token": {
+                    "type": "string",
+                    "description": "Token returned by cowin_login_beneficiary. Required for all authenticated tools. Not required for the 4 public tools listed above."
+                },
+                "beneficiary_ref_id": {
+                    "type": "string",
+                    "description": "Unique reference ID assigned to the beneficiary during registration. Used to identify which registered person the action applies to (up to 4 per mobile number)."
+                },
+                "request_id": {
+                    "type": "string",
+                    "description": "Request ID returned when issue was raised"
+                }
+            },
+            "required": [
+                "session_token",
+                "beneficiary_ref_id",
+                "request_id"
+            ]
+        }
+    }
+]

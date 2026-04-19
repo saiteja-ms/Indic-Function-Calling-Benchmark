@@ -1,0 +1,418 @@
+[
+  {
+    "name": "nps_authenticate_subscriber",
+    "description": "Authenticates a subscriber using their PRAN and OTP to return a session_token. Prerequisites: Subscriber must be registered with NPS and have a valid mobile number for OTP. MUST be called before ALL other tools. NPS has NO public tools — every action requires authentication. What it does NOT do: Does not fetch balance or other details, only provides authentication token.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "otp": {
+          "type": "string",
+          "description": "The 6-digit OTP sent to the subscriber's registered mobile number."
+        }
+      },
+      "required": [
+        "pran",
+        "otp"
+      ]
+    }
+  },
+  {
+    "name": "nps_get_account_balance",
+    "description": "Fetches the current account balance for a specific NPS account tier. Prerequisites: MUST call nps_authenticate_subscriber first. What it does NOT do: Does not show detailed transaction history or scheme allocation percentages.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "account_type": {
+          "type": "string",
+          "description": "The type of NPS account to check balance for.",
+          "enum": [
+            "Tier_I",
+            "Tier_II"
+          ]
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "account_type"
+      ]
+    }
+  },
+  {
+    "name": "nps_get_transaction_history",
+    "description": "Retrieves the transaction history and statement for a given period. Prerequisites: MUST call nps_authenticate_subscriber first. What it does NOT do: Does not allow modifying or deleting any transactions.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "account_type": {
+          "type": "string",
+          "description": "The type of NPS account.",
+          "enum": [
+            "Tier_I",
+            "Tier_II"
+          ]
+        },
+        "start_date": {
+          "type": "string",
+          "description": "Start date for transaction history in YYYY-MM-DD format."
+        },
+        "end_date": {
+          "type": "string",
+          "description": "End date for transaction history in YYYY-MM-DD format."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "account_type",
+        "start_date",
+        "end_date"
+      ]
+    }
+  },
+  {
+    "name": "nps_get_scheme_details",
+    "description": "Fetches the current investment scheme allocation and asset class distribution. Prerequisites: MUST call nps_authenticate_subscriber first. MUST be called before nps_change_scheme_preference. Subscriber must know current allocation before switching. What it does NOT do: Does not change the scheme preferences.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "account_type": {
+          "type": "string",
+          "description": "The type of NPS account.",
+          "enum": [
+            "Tier_I",
+            "Tier_II"
+          ]
+        },
+        "asset_class": {
+          "type": "string",
+          "description": "Optional asset class filter. E=equity (max 75%), C=corporate bonds, G=govt securities, A=alternative assets (max 5%)",
+          "enum": [
+            "E",
+            "C",
+            "G",
+            "A"
+          ]
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "account_type"
+      ]
+    }
+  },
+  {
+    "name": "nps_change_scheme_preference",
+    "description": "Updates the asset allocation and pension fund manager preferences. Prerequisites: MUST call nps_authenticate_subscriber first, AND MUST call nps_get_scheme_details before this tool. What it does NOT do: Does not allow exceeding maximum regulatory limits for asset classes.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "account_type": {
+          "type": "string",
+          "description": "The type of NPS account to modify.",
+          "enum": [
+            "Tier_I",
+            "Tier_II"
+          ]
+        },
+        "asset_class": {
+          "type": "string",
+          "description": "The asset class to allocate funds to. E=equity (max 75%), C=corporate bonds, G=govt securities, A=alternative assets (max 5%)",
+          "enum": [
+            "E",
+            "C",
+            "G",
+            "A"
+          ]
+        },
+        "allocation_percentage": {
+          "type": "number",
+          "description": "The percentage to allocate to the selected asset class."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "account_type",
+        "asset_class",
+        "allocation_percentage"
+      ]
+    }
+  },
+  {
+    "name": "nps_make_contribution",
+    "description": "Initiates a voluntary contribution to the specified NPS account. Prerequisites: MUST call nps_authenticate_subscriber first. What it does NOT do: Does not process employer (mandatory) contributions.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "account_type": {
+          "type": "string",
+          "description": "The type of NPS account.",
+          "enum": [
+            "Tier_I",
+            "Tier_II"
+          ]
+        },
+        "amount": {
+          "type": "number",
+          "description": "The contribution amount in INR."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "account_type",
+        "amount"
+      ]
+    }
+  },
+  {
+    "name": "nps_check_partial_withdrawal_eligibility",
+    "description": "Evaluates if a subscriber is eligible for partial withdrawal. Prerequisites: MUST call nps_authenticate_subscriber first. MUST be called before nps_raise_partial_withdrawal. Three simultaneous PFRDA-enforced conditions must ALL pass: (a) subscriber must have completed at least 3 full financial years in NPS (b) withdrawal reason must be one of 6 approved categories (c) amount must not exceed 25% of subscriber's own contributions (not total corpus). Skipping this causes automatic rejection on the real system. What it does NOT do: Does not initiate the actual withdrawal.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "withdrawal_reason": {
+          "type": "string",
+          "description": "The specific reason for the partial withdrawal.",
+          "enum": [
+            "higher_education",
+            "marriage",
+            "medical_treatment",
+            "home_purchase",
+            "home_construction",
+            "disability"
+          ]
+        },
+        "amount": {
+          "type": "number",
+          "description": "The requested partial withdrawal amount in INR."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "withdrawal_reason",
+        "amount"
+      ]
+    }
+  },
+  {
+    "name": "nps_raise_partial_withdrawal",
+    "description": "Submits a request for partial withdrawal from the NPS Tier I account. Prerequisites: MUST call nps_authenticate_subscriber first, AND MUST call nps_check_partial_withdrawal_eligibility first. What it does NOT do: does NOT handle full exit at retirement (age 60+). Full superannuation exit requires offline physical form submission to POP. This tool is ONLY for partial withdrawals during the accumulation phase.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "withdrawal_reason": {
+          "type": "string",
+          "description": "The reason for withdrawal as evaluated in the eligibility check.",
+          "enum": [
+            "higher_education",
+            "marriage",
+            "medical_treatment",
+            "home_purchase",
+            "home_construction",
+            "disability"
+          ]
+        },
+        "amount": {
+          "type": "number",
+          "description": "The approved partial withdrawal amount to claim in INR."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "withdrawal_reason",
+        "amount"
+      ]
+    }
+  },
+  {
+    "name": "nps_track_withdrawal_request",
+    "description": "Checks the status of a previously submitted withdrawal request. Prerequisites: MUST call nps_authenticate_subscriber first. MUST be called before nps_raise_grievance when grievance is about a withdrawal — confirm the withdrawal status before escalating. What it does NOT do: Does not cancel or expedite the withdrawal.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "request_id": {
+          "type": "string",
+          "description": "The unique request ID provided when the withdrawal was raised."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "request_id"
+      ]
+    }
+  },
+  {
+    "name": "nps_update_nominee_details",
+    "description": "Updates or adds a nominee to the NPS account. Prerequisites: MUST call nps_authenticate_subscriber first. What it does NOT do: Does not change the subscriber's own personal details.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "nominee_name": {
+          "type": "string",
+          "description": "The full name of the new nominee."
+        },
+        "nominee_relation": {
+          "type": "string",
+          "description": "The relationship of the nominee with the subscriber."
+        },
+        "allocation_share": {
+          "type": "number",
+          "description": "The percentage of the corpus allocated to this nominee."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "nominee_name",
+        "nominee_relation",
+        "allocation_share"
+      ]
+    }
+  },
+  {
+    "name": "nps_raise_grievance",
+    "description": "Registers a complaint regarding NPS services. Prerequisites: MUST call nps_authenticate_subscriber first. MUST call nps_track_withdrawal_request beforehand if the grievance is about a withdrawal. What it does NOT do: Does not resolve the grievance instantly.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "grievance_category": {
+          "type": "string",
+          "description": "The category of the grievance.",
+          "enum": [
+            "withdrawal_delay",
+            "wrong_nav",
+            "contribution_not_credited",
+            "pran_card_not_received",
+            "nominee_update_failed"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the issue."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "grievance_category",
+        "description"
+      ]
+    }
+  },
+  {
+    "name": "nps_track_grievance_status",
+    "description": "Tracks the current status of an existing grievance. Prerequisites: MUST call nps_authenticate_subscriber first. What it does NOT do: Does not provide an option to escalate or modify the existing grievance.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "pran": {
+          "type": "string",
+          "description": "12-digit Permanent Retirement Account Number. Unique to the subscriber for life."
+        },
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by nps_authenticate_subscriber. Required for ALL tools except nps_authenticate_subscriber. NPS has no public tools."
+        },
+        "grievance_id": {
+          "type": "string",
+          "description": "The unique grievance ticket ID to track."
+        }
+      },
+      "required": [
+        "pran",
+        "session_token",
+        "grievance_id"
+      ]
+    }
+  }
+]

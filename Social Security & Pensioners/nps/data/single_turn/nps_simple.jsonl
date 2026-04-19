@@ -1,0 +1,330 @@
+{
+    "id": "nps_simple_001",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "My PRAN is 110098765432, session token is NPS-TKN-2024-AB77. Show me my Tier_I account balance."
+            }
+        ]
+    ],
+    "function": [
+        "nps_get_account_balance",
+        "nps_get_transaction_history",
+        "nps_authenticate_subscriber"
+    ],
+    "ground_truth": [
+        "nps_get_account_balance(pran='110098765432', session_token='NPS-TKN-2024-AB77', account_type='Tier_I')"
+    ]
+}
+{
+    "id": "nps_simple_002",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "I am logged in with PRAN 110011223344 and token TKN-NPS-002. Please fetch the balance for my Tier_II account."
+            }
+        ]
+    ],
+    "function": [
+        "nps_get_account_balance",
+        "nps_get_scheme_details",
+        "nps_make_contribution"
+    ],
+    "ground_truth": [
+        "nps_get_account_balance(pran='110011223344', session_token='TKN-NPS-002', account_type='Tier_II')"
+    ]
+}
+{
+    "id": "nps_simple_003",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Could you check the balance for my Tier_I account? My PRAN is 220033445566 and session token is TKN-NPS-003."
+            }
+        ]
+    ],
+    "function": [
+        "nps_get_account_balance",
+        "nps_track_withdrawal_request",
+        "nps_raise_grievance"
+    ],
+    "ground_truth": [
+        "nps_get_account_balance(pran='220033445566', session_token='TKN-NPS-003', account_type='Tier_I')"
+    ]
+}
+{
+    "id": "nps_simple_004",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Can you pull the transaction history for my Tier_I account from 2025-01-01 to 2025-12-31? PRAN is 330044556677, token is TKN-NPS-004."
+            }
+        ]
+    ],
+    "function": [
+        "nps_get_transaction_history",
+        "nps_get_account_balance",
+        "nps_track_grievance_status"
+    ],
+    "ground_truth": [
+        "nps_get_transaction_history(pran='330044556677', session_token='TKN-NPS-004', account_type='Tier_I', start_date='2025-01-01', end_date='2025-12-31')"
+    ]
+}
+{
+    "id": "nps_simple_005",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "I need to see my Tier_II transactions from 2024-04-01 to 2025-03-31. My PRAN is 440055667788 and session token is TKN-NPS-005."
+            }
+        ]
+    ],
+    "function": [
+        "nps_get_transaction_history",
+        "nps_make_contribution",
+        "nps_check_partial_withdrawal_eligibility"
+    ],
+    "ground_truth": [
+        "nps_get_transaction_history(pran='440055667788', session_token='TKN-NPS-005', account_type='Tier_II', start_date='2024-04-01', end_date='2025-03-31')"
+    ]
+}
+{
+    "id": "nps_simple_006",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "I requested a withdrawal earlier. Please track my request WRQ-12345. My PRAN is 550066778899 and token is TKN-NPS-006."
+            }
+        ]
+    ],
+    "function": [
+        "nps_track_withdrawal_request",
+        "nps_raise_partial_withdrawal",
+        "nps_get_account_balance"
+    ],
+    "ground_truth": [
+        "nps_track_withdrawal_request(pran='550066778899', session_token='TKN-NPS-006', request_id='WRQ-12345')"
+    ]
+}
+{
+    "id": "nps_simple_007",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "What is the status of my withdrawal request W-998877? PRAN 660077889900, token TKN-NPS-007."
+            }
+        ]
+    ],
+    "function": [
+        "nps_track_withdrawal_request",
+        "nps_check_partial_withdrawal_eligibility",
+        "nps_get_scheme_details"
+    ],
+    "ground_truth": [
+        "nps_track_withdrawal_request(pran='660077889900', session_token='TKN-NPS-007', request_id='W-998877')"
+    ]
+}
+{
+    "id": "nps_simple_008",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Show me the current scheme details for my Tier_I account. PRAN is 770088990011, session token TKN-NPS-008."
+            }
+        ]
+    ],
+    "function": [
+        "nps_get_scheme_details",
+        "nps_change_scheme_preference",
+        "nps_make_contribution"
+    ],
+    "ground_truth": [
+        "nps_get_scheme_details(pran='770088990011', session_token='TKN-NPS-008', account_type='Tier_I')"
+    ]
+}
+{
+    "id": "nps_simple_009",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "What is my scheme allocation for equity (E) in my Tier_II account? PRAN 880099001122, token TKN-NPS-009."
+            }
+        ]
+    ],
+    "function": [
+        "nps_get_scheme_details",
+        "nps_get_account_balance",
+        "nps_track_grievance_status"
+    ],
+    "ground_truth": [
+        "nps_get_scheme_details(pran='880099001122', session_token='TKN-NPS-009', account_type='Tier_II', asset_class='E')"
+    ]
+}
+{
+    "id": "nps_simple_010",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Check the status of my grievance ticket GRV-NPS-101. My PRAN is 990011223344 and token is TKN-NPS-010."
+            }
+        ]
+    ],
+    "function": [
+        "nps_track_grievance_status",
+        "nps_raise_grievance",
+        "nps_authenticate_subscriber"
+    ],
+    "ground_truth": [
+        "nps_track_grievance_status(pran='990011223344', session_token='TKN-NPS-010', grievance_id='GRV-NPS-101')"
+    ]
+}
+{
+    "id": "nps_simple_011",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "I want to update my nominee to my wife, Sunita Sharma, with an allocation share of 100. PRAN 123456789012, token TKN-NPS-011."
+            }
+        ]
+    ],
+    "function": [
+        "nps_update_nominee_details",
+        "nps_raise_grievance",
+        "nps_get_account_balance"
+    ],
+    "ground_truth": [
+        "nps_update_nominee_details(pran='123456789012', session_token='TKN-NPS-011', nominee_name='Sunita Sharma', nominee_relation='wife', allocation_share=100)"
+    ]
+}
+{
+    "id": "nps_simple_012",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Contribute 50000 to my Tier_I account. PRAN 234567890123, token TKN-NPS-012."
+            }
+        ]
+    ],
+    "function": [
+        "nps_make_contribution",
+        "nps_get_transaction_history",
+        "nps_change_scheme_preference"
+    ],
+    "ground_truth": [
+        "nps_make_contribution(pran='234567890123', session_token='TKN-NPS-012', account_type='Tier_I', amount=50000)"
+    ]
+}
+{
+    "id": "nps_simple_013",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Check if I am eligible to withdraw 200000 for higher_education. My PRAN is 345678901234 and token is TKN-NPS-013."
+            }
+        ]
+    ],
+    "function": [
+        "nps_check_partial_withdrawal_eligibility",
+        "nps_raise_partial_withdrawal",
+        "nps_track_withdrawal_request"
+    ],
+    "ground_truth": [
+        "nps_check_partial_withdrawal_eligibility(pran='345678901234', session_token='TKN-NPS-013', withdrawal_reason='higher_education', amount=200000)"
+    ]
+}
+{
+    "id": "nps_simple_014",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Raise a grievance for withdrawal_delay. It has been 3 weeks since I requested. PRAN 456789012345, token TKN-NPS-014."
+            }
+        ]
+    ],
+    "function": [
+        "nps_raise_grievance",
+        "nps_track_grievance_status",
+        "nps_track_withdrawal_request"
+    ],
+    "ground_truth": [
+        "nps_raise_grievance(pran='456789012345', session_token='TKN-NPS-014', grievance_category='withdrawal_delay', description='It has been 3 weeks since I requested')"
+    ]
+}
+{
+    "id": "nps_simple_015",
+    "usecase": "nps",
+    "language": "en",
+    "intent_type": "simple",
+    "question": [
+        [
+            {
+                "role": "user",
+                "content": "Change my Tier_I scheme allocation to 50 percent for asset class E. PRAN 567890123456, token TKN-NPS-015."
+            }
+        ]
+    ],
+    "function": [
+        "nps_change_scheme_preference",
+        "nps_get_scheme_details",
+        "nps_make_contribution"
+    ],
+    "ground_truth": [
+        "nps_change_scheme_preference(pran='567890123456', session_token='TKN-NPS-015', account_type='Tier_I', asset_class='E', allocation_percentage=50)"
+    ]
+}
