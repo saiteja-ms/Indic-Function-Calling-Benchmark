@@ -1,0 +1,62 @@
+[
+  {
+    "name": "ksweather_get_current_weather",
+    "description": "Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure. Location must be valid (village/district/GPS). This is a PUBLIC tool — no authentication required. Does NOT provide forecasts — use ksweather_get_weather_forecast. Fails if location is invalid, ambiguous, or no data is available. Data reflects near real-time conditions but may be slightly delayed.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Village, district, or GPS-based location." } }, "required": ["location"] }
+  },
+  {
+    "name": "ksweather_get_weather_forecast",
+    "description": "Retrieves weather forecast for a location for up to 10 days. Returns predicted temperature, rainfall, humidity, and wind. Forecasts are reliable up to 7-10 days only. PUBLIC tool — no authentication needed. Does NOT provide current conditions — use ksweather_get_current_weather. Fails if location is invalid or forecast data is unavailable. Forecasts are predictive and may change.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Village, district, or GPS-based location." }, "time_range": { "type": "string", "description": "Forecast period. Allowed: 'today', '3_day', '7_day', '10_day'." }, "forecast_type": { "type": "string", "description": "Forecast granularity. Allowed: 'hourly', 'daily'." } }, "required": ["location", "time_range"] }
+  },
+  {
+    "name": "ksweather_get_weather_alerts",
+    "description": "Fetches active extreme weather alerts (storms, heavy rainfall, heatwaves, cold waves, frost) for a location. PUBLIC tool. Returns alert severity, type, and validity period. Does NOT provide agricultural advisory — use ksweather_get_weather_advisory. Fails if location is invalid. Returns empty if no active alerts exist. Old/expired alerts are NOT returned.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Village, district, or GPS-based location." } }, "required": ["location"] }
+  },
+  {
+    "name": "ksweather_get_location_weather",
+    "description": "Fetches comprehensive weather data for a specific location combining current conditions and short-term outlook. PUBLIC tool. Resolves ambiguous location names to the most probable match. Does NOT provide historical data. Fails if location cannot be resolved or data is unavailable.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Village, district, or GPS-based location." }, "weather_parameter": { "type": "string", "description": "Specific parameter. Allowed: 'temperature', 'rainfall', 'humidity', 'wind_speed', 'pressure'. Optional — returns all if omitted." } }, "required": ["location"] }
+  },
+  {
+    "name": "ksweather_get_weather_parameters",
+    "description": "Retrieves specific weather parameters for a location with detailed measurements. PUBLIC tool. Returns data_status ('available', 'partial', 'not_available'). Does NOT provide forecasts or advisories. Fails if the parameter type is unsupported or location is invalid.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Village, district, or GPS-based location." }, "weather_parameter": { "type": "string", "description": "Parameter to query. Allowed: 'temperature', 'rainfall', 'humidity', 'wind_speed', 'pressure'." }, "time_range": { "type": "string", "description": "Time range. Allowed: 'today', '3_day', '7_day'." } }, "required": ["location", "weather_parameter"] }
+  },
+  {
+    "name": "ksweather_get_historical_weather",
+    "description": "Retrieves historical weather data for a location for the recent past (last 7-30 days only). PUBLIC tool. Does NOT provide forecasts or real-time data. Fails if location is invalid or historical data is unavailable for the requested period. Data may be partial for some regions.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Village, district, or GPS-based location." }, "start_date": { "type": "string", "description": "Start date in YYYY-MM-DD format. Must be within last 30 days." }, "end_date": { "type": "string", "description": "End date in YYYY-MM-DD format." } }, "required": ["location", "start_date", "end_date"] }
+  },
+  {
+    "name": "ksweather_resolve_location_ambiguity",
+    "description": "Resolves ambiguous location names that match multiple regions. Returns a list of possible locations with state/district disambiguation. PUBLIC tool. Does NOT provide weather data — use other tools after resolving. Fails if the input does not match any known location.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Ambiguous village or district name to resolve." } }, "required": ["location"] }
+  },
+  {
+    "name": "ksweather_get_weather_advisory",
+    "description": "Generates weather-based advisory for farming activities (irrigation timing, spraying, harvesting) based on current and forecasted weather. PUBLIC tool. Does NOT provide crop-specific advisory — use ATMA tools for that. Fails if location is invalid or weather data is insufficient for advisory generation.",
+    "parameters": { "type": "dict", "properties": { "location": { "type": "string", "description": "Village, district, or GPS-based location." }, "activity_type": { "type": "string", "description": "Farming activity: 'irrigation', 'spraying', 'harvesting', 'sowing'." } }, "required": ["location"] }
+  },
+  {
+    "name": "ksweather_subscribe_alerts",
+    "description": "Subscribes the farmer to weather alerts for a specific location. Transitions subscription_status to 'subscribed'. Requires session_token (authenticated). Does NOT provide actual alerts — use ksweather_get_weather_alerts. Fails if already subscribed or session_token is invalid.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after authentication. Required for subscription and grievance tools." }, "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." }, "location": { "type": "string", "description": "Location to subscribe alerts for." } }, "required": ["session_token", "aadhaar_number", "location"] }
+  },
+  {
+    "name": "ksweather_unsubscribe_alerts",
+    "description": "Unsubscribes the farmer from weather alerts. Transitions subscription_status to 'unsubscribed'. Requires session_token. Does NOT affect already-received alerts. Fails if not currently subscribed.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after authentication. Required for subscription and grievance tools." }, "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." } }, "required": ["session_token", "aadhaar_number"] }
+  },
+  {
+    "name": "ksweather_raise_grievance",
+    "description": "Raises a grievance about weather data quality. Valid categories: 'incorrect_forecast', 'missing_weather_data', 'delayed_update', 'wrong_location', 'alert_not_received'. Farmer must verify data first. Requires session_token. Does NOT correct data. Fails if category is invalid.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after authentication. Required for subscription and grievance tools." }, "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." }, "grievance_category": { "type": "string", "description": "Category: 'incorrect_forecast', 'missing_weather_data', 'delayed_update', 'wrong_location', 'alert_not_received'." }, "description": { "type": "string", "description": "Detailed description of the issue." } }, "required": ["session_token", "aadhaar_number", "grievance_category", "description"] }
+  },
+  {
+    "name": "ksweather_track_grievance_status",
+    "description": "Tracks a previously raised weather grievance. Returns resolution status and remarks. Requires session_token. Does NOT raise new grievances. Fails if grievance_id is invalid.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after authentication. Required for subscription and grievance tools." }, "grievance_id": { "type": "string", "description": "Unique identifier of the grievance." } }, "required": ["session_token", "grievance_id"] }
+  }
+]

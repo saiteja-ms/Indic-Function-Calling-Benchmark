@@ -1,0 +1,937 @@
+[
+  {
+    "intent_id": "ifms_simple_001",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for iFMS fertilizer subsidy authentication.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_002",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "ifms_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_003",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Checks farmer's eligibility for fertilizer subsidy based on Aadhaar-linked records, land size, crop type, and season.",
+    "required_tools": [
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_004",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Checks fertilizer stock availability at retailers in a location.",
+    "required_tools": [
+      "ifms_get_fertilizer_availability"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_005",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Returns list of authorized fertilizer retailers/dealers in a location.",
+    "required_tools": [
+      "ifms_get_retailer_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_006",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Initiates a fertilizer purchase transaction at an authorized retailer.",
+    "required_tools": [
+      "ifms_initiate_purchase"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_007",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Validates a purchase transaction by verifying Aadhaar biometric/OTP at the point of sale.",
+    "required_tools": [
+      "ifms_validate_transaction"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_008",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Completes the fertilizer purchase transaction.",
+    "required_tools": [
+      "ifms_complete_purchase"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_009",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Records the subsidy application against a completed purchase.",
+    "required_tools": [
+      "ifms_apply_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_010",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Tracks the current transaction_status ('initiated', 'validated', 'completed', 'failed') and subsidy_status ('not_applied', 'applied', 'verified', 'settled').",
+    "required_tools": [
+      "ifms_track_transaction"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_011",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Retrieves all past fertilizer purchase records for the farmer including fertilizer types, quantities, dates, retailers, and subsidy amounts.",
+    "required_tools": [
+      "ifms_get_purchase_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_012",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Checks real-time inventory status at a specific retailer for a fertilizer type.",
+    "required_tools": [
+      "ifms_check_inventory_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_013",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous or conflicting transaction records when duplicate or partial transactions are detected.",
+    "required_tools": [
+      "ifms_resolve_transaction_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_014",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Cancels a fertilizer purchase transaction.",
+    "required_tools": [
+      "ifms_cancel_transaction"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_015",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Calculates the subsidy amount for a given fertilizer type and quantity.",
+    "required_tools": [
+      "ifms_calculate_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_016",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about iFMS fertilizer subsidy services.",
+    "required_tools": [
+      "ifms_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_simple_017",
+    "usecase": "ifms",
+    "category": "simple",
+    "abstract_goal": "Tracks an iFMS grievance.",
+    "required_tools": [
+      "ifms_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "ifms_multiple_001",
+    "usecase": "ifms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for iFMS fertilizer subsidy authentication.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "ifms_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "ifms_multiple_002",
+    "usecase": "ifms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for iFMS fertilizer subsidy authentication.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "ifms_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "ifms_multiple_003",
+    "usecase": "ifms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for iFMS fertilizer subsidy authentication.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "ifms_get_fertilizer_availability"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "ifms_multiple_004",
+    "usecase": "ifms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for iFMS fertilizer subsidy authentication.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "ifms_get_retailer_list"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "ifms_multiple_005",
+    "usecase": "ifms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for iFMS fertilizer subsidy authentication.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "ifms_initiate_purchase"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "ifms_parallel_001",
+    "usecase": "ifms",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: ifms_generate_otp.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "ifms_parallel_002",
+    "usecase": "ifms",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: ifms_verify_otp.",
+    "required_tools": [
+      "ifms_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "ifms_parallel_003",
+    "usecase": "ifms",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: ifms_check_eligibility.",
+    "required_tools": [
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_check_eligibility"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "ifms_parallel_multiple_001",
+    "usecase": "ifms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ifms_get_retailer_list and ifms_resolve_transaction_ambiguity.",
+    "required_tools": [
+      "ifms_get_retailer_list",
+      "ifms_resolve_transaction_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_get_retailer_list",
+      "ifms_resolve_transaction_ambiguity"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "ifms_parallel_multiple_002",
+    "usecase": "ifms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ifms_generate_otp and ifms_resolve_transaction_ambiguity.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_resolve_transaction_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_generate_otp",
+      "ifms_resolve_transaction_ambiguity"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "ifms_parallel_multiple_003",
+    "usecase": "ifms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ifms_get_fertilizer_availability and ifms_cancel_transaction.",
+    "required_tools": [
+      "ifms_get_fertilizer_availability",
+      "ifms_cancel_transaction"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_get_fertilizer_availability",
+      "ifms_cancel_transaction"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "ifms_parallel_multiple_004",
+    "usecase": "ifms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ifms_generate_otp and ifms_get_purchase_history.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_get_purchase_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_generate_otp",
+      "ifms_get_purchase_history"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "ifms_parallel_multiple_005",
+    "usecase": "ifms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ifms_get_purchase_history and ifms_calculate_subsidy.",
+    "required_tools": [
+      "ifms_get_purchase_history",
+      "ifms_calculate_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ifms_get_purchase_history",
+      "ifms_calculate_subsidy"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "ifms_irrelevance_001",
+    "usecase": "ifms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "ifms_generate_otp",
+      "ifms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "ifms_irrelevance_002",
+    "usecase": "ifms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "ifms_generate_otp",
+      "ifms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "ifms_irrelevance_003",
+    "usecase": "ifms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "ifms_generate_otp",
+      "ifms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "ifms_irrelevance_004",
+    "usecase": "ifms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "ifms_generate_otp",
+      "ifms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "ifms_irrelevance_005",
+    "usecase": "ifms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "ifms_generate_otp",
+      "ifms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "ifms_base_001",
+    "usecase": "ifms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ifms_generate_otp, ifms_verify_otp.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "ifms_base_002",
+    "usecase": "ifms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ifms_raise_grievance, ifms_track_grievance_status.",
+    "required_tools": [
+      "ifms_raise_grievance",
+      "ifms_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "ifms_base_003",
+    "usecase": "ifms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ifms_generate_otp, ifms_check_eligibility.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "ifms_base_004",
+    "usecase": "ifms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ifms_generate_otp, ifms_verify_otp, ifms_check_eligibility.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_verify_otp",
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "ifms_base_005",
+    "usecase": "ifms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ifms_verify_otp, ifms_check_eligibility.",
+    "required_tools": [
+      "ifms_verify_otp",
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "ifms_miss_param_001",
+    "usecase": "ifms",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform ifms_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "ifms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "ifms_miss_param_002",
+    "usecase": "ifms",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform ifms_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "ifms_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "ifms_miss_param_003",
+    "usecase": "ifms",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform ifms_check_eligibility but do not provide the necessary session_token.",
+    "required_tools": [
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "ifms_miss_func_001",
+    "usecase": "ifms",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "ifms_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "ifms_long_context_001",
+    "usecase": "ifms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ifms_generate_otp, ifms_verify_otp.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "ifms_long_context_002",
+    "usecase": "ifms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ifms_raise_grievance, ifms_track_grievance_status.",
+    "required_tools": [
+      "ifms_raise_grievance",
+      "ifms_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "ifms_long_context_003",
+    "usecase": "ifms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ifms_generate_otp, ifms_check_eligibility.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "ifms_long_context_004",
+    "usecase": "ifms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ifms_generate_otp, ifms_verify_otp, ifms_check_eligibility.",
+    "required_tools": [
+      "ifms_generate_otp",
+      "ifms_verify_otp",
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "ifms_long_context_005",
+    "usecase": "ifms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ifms_verify_otp, ifms_check_eligibility.",
+    "required_tools": [
+      "ifms_verify_otp",
+      "ifms_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

@@ -1,0 +1,154 @@
+You are building test personas for a function-calling
+benchmark for the e-Pashu Haat (buy–sell cattle)
+livestock trading service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\6 Livestock & Allied\e-Pashu Haat (buy-sell cattle)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\6 Livestock & Allied\e-Pashu Haat (buy-sell cattle)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific livestock trading scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not registered on platform
+  registration_status: NOT_REGISTERED
+
+PATH 2 — Registered, browsing livestock listings
+  registration_status: REGISTERED
+  browsing_status: ACTIVE
+
+PATH 3 — Listed livestock for sale
+  listing_status: LISTED
+
+PATH 4 — Livestock purchased successfully
+  trade_status: COMPLETED
+  role: BUYER
+
+PATH 5 — Livestock sold successfully
+  trade_status: COMPLETED
+  role: SELLER
+
+PATH 6 — Trade failed due to price disagreement
+  trade_status: FAILED
+  failure_reason: PRICE_DISPUTE
+
+PATH 7 — Multiple livestock listings managed
+  multiple_listings: TRUE
+
+PATH 8 — Invalid livestock listing (missing details)
+  listing_status: FAILED
+  failure_reason: INVALID_LISTING
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REGISTRATION RULE
+   - NOT_REGISTERED → cannot list or trade
+
+2. LISTING STRUCTURE
+   - Must include:
+     - livestock_id
+     - animal_type
+     - breed
+     - age
+     - price
+
+3. TRADE RULE
+   - COMPLETED → payment_status must be SUCCESS
+   - FAILED → must include failure_reason
+
+4. ROLE RULE
+   - BUYER or SELLER must be specified for completed trade
+
+5. FAILURE REASONS
+   - PRICE_DISPUTE
+   - INVALID_LISTING
+   - BUYER_WITHDRAWAL
+
+6. MULTI-LISTING RULE
+   - Each listing must have unique livestock_id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Animal types:
+  COW, BUFFALO, GOAT, SHEEP
+
+- Age:
+  1–10 years
+
+- Price:
+  ₹10,000–₹1,00,000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed trading scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Suresh Yadav — UP, PATH 2",
+  "code_path": "PATH 2 — browsing livestock listings",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer exploring cattle options before buying",
+  "stub_test_assertion": "listing_status should become LISTED after livestock_listing tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

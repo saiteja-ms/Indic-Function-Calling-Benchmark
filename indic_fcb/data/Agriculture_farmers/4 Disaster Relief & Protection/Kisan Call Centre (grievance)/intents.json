@@ -1,0 +1,901 @@
+[
+  {
+    "intent_id": "kcc_simple_001",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for Kisan Call Centre authentication.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_002",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "kcc_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_003",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Raises a new grievance ticket.",
+    "required_tools": [
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_004",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Returns current grievance_status ('raised', 'assigned', 'in_progress', 'resolved', 'closed', 'escalated') with details.",
+    "required_tools": [
+      "kcc_get_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_005",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Assigns a grievance to an appropriate expert/department based on category.",
+    "required_tools": [
+      "kcc_assign_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_006",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Records a response or update for a grievance from the assigned expert.",
+    "required_tools": [
+      "kcc_provide_response"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_007",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Escalates an unresolved grievance to higher authorities.",
+    "required_tools": [
+      "kcc_escalate_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_008",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Closes a resolved grievance.",
+    "required_tools": [
+      "kcc_close_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_009",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Submits farmer feedback after grievance resolution.",
+    "required_tools": [
+      "kcc_submit_feedback"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_010",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Retrieves all past grievances for the farmer.",
+    "required_tools": [
+      "kcc_get_grievance_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_011",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Updates the description or details of an existing grievance.",
+    "required_tools": [
+      "kcc_update_grievance_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_012",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Marks a grievance as resolved after investigation.",
+    "required_tools": [
+      "kcc_resolve_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_013",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Sets or updates the priority level of a grievance.",
+    "required_tools": [
+      "kcc_set_priority"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_014",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Tracks whether a response has been provided for a grievance.",
+    "required_tools": [
+      "kcc_track_response_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_simple_015",
+    "usecase": "kcc",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous grievance categorization when the issue spans multiple domains.",
+    "required_tools": [
+      "kcc_resolve_category_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kcc_multiple_001",
+    "usecase": "kcc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Kisan Call Centre authentication.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "kcc_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kcc_multiple_002",
+    "usecase": "kcc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Kisan Call Centre authentication.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "kcc_raise_grievance"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kcc_multiple_003",
+    "usecase": "kcc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Kisan Call Centre authentication.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "kcc_get_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kcc_multiple_004",
+    "usecase": "kcc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Kisan Call Centre authentication.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "kcc_assign_grievance"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kcc_multiple_005",
+    "usecase": "kcc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Kisan Call Centre authentication.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "kcc_provide_response"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kcc_parallel_001",
+    "usecase": "kcc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: kcc_generate_otp.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "kcc_parallel_002",
+    "usecase": "kcc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: kcc_verify_otp.",
+    "required_tools": [
+      "kcc_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "kcc_parallel_003",
+    "usecase": "kcc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: kcc_raise_grievance.",
+    "required_tools": [
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "kcc_parallel_multiple_001",
+    "usecase": "kcc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: kcc_verify_otp and kcc_update_grievance_details.",
+    "required_tools": [
+      "kcc_verify_otp",
+      "kcc_update_grievance_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_verify_otp",
+      "kcc_update_grievance_details"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kcc_parallel_multiple_002",
+    "usecase": "kcc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: kcc_provide_response and kcc_escalate_grievance.",
+    "required_tools": [
+      "kcc_provide_response",
+      "kcc_escalate_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_provide_response",
+      "kcc_escalate_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kcc_parallel_multiple_003",
+    "usecase": "kcc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: kcc_raise_grievance and kcc_resolve_category_ambiguity.",
+    "required_tools": [
+      "kcc_raise_grievance",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_raise_grievance",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kcc_parallel_multiple_004",
+    "usecase": "kcc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: kcc_verify_otp and kcc_resolve_grievance.",
+    "required_tools": [
+      "kcc_verify_otp",
+      "kcc_resolve_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_verify_otp",
+      "kcc_resolve_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kcc_parallel_multiple_005",
+    "usecase": "kcc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: kcc_close_grievance and kcc_get_grievance_history.",
+    "required_tools": [
+      "kcc_close_grievance",
+      "kcc_get_grievance_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "kcc_close_grievance",
+      "kcc_get_grievance_history"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kcc_irrelevance_001",
+    "usecase": "kcc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "kcc_generate_otp",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kcc_irrelevance_002",
+    "usecase": "kcc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "kcc_generate_otp",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kcc_irrelevance_003",
+    "usecase": "kcc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "kcc_generate_otp",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kcc_irrelevance_004",
+    "usecase": "kcc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "kcc_generate_otp",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kcc_irrelevance_005",
+    "usecase": "kcc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "kcc_generate_otp",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kcc_base_001",
+    "usecase": "kcc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: kcc_generate_otp, kcc_verify_otp.",
+    "required_tools": [
+      "kcc_generate_otp",
+      "kcc_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kcc_base_002",
+    "usecase": "kcc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: kcc_track_response_status, kcc_resolve_category_ambiguity.",
+    "required_tools": [
+      "kcc_track_response_status",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kcc_base_003",
+    "usecase": "kcc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: kcc_generate_otp, kcc_raise_grievance.",
+    "required_tools": [
+      "kcc_generate_otp",
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kcc_base_004",
+    "usecase": "kcc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: kcc_generate_otp, kcc_verify_otp, kcc_raise_grievance.",
+    "required_tools": [
+      "kcc_generate_otp",
+      "kcc_verify_otp",
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kcc_base_005",
+    "usecase": "kcc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: kcc_verify_otp, kcc_raise_grievance.",
+    "required_tools": [
+      "kcc_verify_otp",
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kcc_miss_param_001",
+    "usecase": "kcc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform kcc_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "kcc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "kcc_miss_param_002",
+    "usecase": "kcc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform kcc_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "kcc_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "kcc_miss_param_003",
+    "usecase": "kcc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform kcc_raise_grievance but do not provide the necessary session_token.",
+    "required_tools": [
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "kcc_miss_func_001",
+    "usecase": "kcc",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "kcc_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "kcc_long_context_001",
+    "usecase": "kcc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: kcc_generate_otp, kcc_verify_otp.",
+    "required_tools": [
+      "kcc_generate_otp",
+      "kcc_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kcc_long_context_002",
+    "usecase": "kcc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: kcc_track_response_status, kcc_resolve_category_ambiguity.",
+    "required_tools": [
+      "kcc_track_response_status",
+      "kcc_resolve_category_ambiguity"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kcc_long_context_003",
+    "usecase": "kcc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: kcc_generate_otp, kcc_raise_grievance.",
+    "required_tools": [
+      "kcc_generate_otp",
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kcc_long_context_004",
+    "usecase": "kcc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: kcc_generate_otp, kcc_verify_otp, kcc_raise_grievance.",
+    "required_tools": [
+      "kcc_generate_otp",
+      "kcc_verify_otp",
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kcc_long_context_005",
+    "usecase": "kcc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: kcc_verify_otp, kcc_raise_grievance.",
+    "required_tools": [
+      "kcc_verify_otp",
+      "kcc_raise_grievance"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

@@ -1,0 +1,287 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+AgriStack Farmer Registry (digital farmer identity and land records)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Farmer profile registration and retrieval
+- Land parcel linking and registration
+- Fetching land records from state databases
+- Ownership verification
+- Crop declaration per land parcel
+- Updating farmer profile details
+- Consent-based data sharing
+- Registry status tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED for all personal data access:
+  Aadhaar + OTP verification must be completed first.
+  Authentication returns a session_token.
+
+- Aadhaar uniqueness:
+  Each Aadhaar can have ONLY one farmer registry profile.
+  Duplicate registrations must be rejected.
+
+- Land ownership verification:
+  Land parcels must be verified against state land records.
+  Unverified or self-declared land is not valid for scheme usage.
+
+- One-to-many mapping:
+  A farmer can own multiple land parcels.
+
+- State integration dependency:
+  Land records are fetched from state systems (e.g., Bhulekh).
+  Data availability may vary across states.
+
+- Immutable government records:
+  Verified land ownership data cannot be edited directly.
+
+- Crop declaration dependency:
+  Crops must be declared per land parcel, not globally.
+
+- Consent-based sharing:
+  Farmer must explicitly grant permission before sharing data with other services.
+
+- Grievances should ONLY be raised after checking registry or land status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- profile_status:
+  not_registered → registered → verified
+
+- land_record_status:
+  unverified → pending_verification → verified → rejected
+
+- consent_status:
+  not_given → granted → revoked
+
+Tools must clearly define:
+- when they are valid to call
+- when they are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- duplicate Aadhaar registration attempt
+- land parcel not found in state records
+- mismatched ownership (Aadhaar does not match land owner)
+- multiple land parcels with partial verification
+- attempting crop declaration on unverified land
+- state system unavailable or delayed response
+- invalid land parcel ID
+- missing consent for data sharing
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (Aadhaar format, land ID validity)
+- rejection conditions (duplicate profile, invalid ownership)
+- failure scenarios (state API unavailable, verification delay)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- new farmer registration
+- existing farmer retrieving profile
+- linking multiple land parcels
+- land verification success/failure
+- crop declaration scenarios
+- consent granting and revocation
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: agristack_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer. Used as the unique identifier."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"land_parcel_id": {
+  "type": "string",
+  "description": "Unique identifier for a land parcel as per state records."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"land_record_status": [
+  "unverified",
+  "pending_verification",
+  "verified",
+  "rejected"
+]
+
+"ownership_type": [
+  "individual",
+  "joint",
+  "leased"
+]
+
+"crop_type": [
+  "paddy", "wheat", "maize", "cotton",
+  "pulses", "oilseeds", "horticulture"
+]
+
+"consent_status": [
+  "not_given",
+  "granted",
+  "revoked"
+]
+
+"grievance_category": [
+  "land_record_mismatch",
+  "ownership_issue",
+  "profile_not_found",
+  "verification_delay",
+  "consent_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. agristack_generate_otp  
+2. agristack_verify_otp  
+3. agristack_register_farmer  
+4. agristack_get_farmer_profile  
+5. agristack_fetch_land_records  
+6. agristack_verify_land_ownership  
+7. agristack_check_land_status  
+8. agristack_declare_crop  
+9. agristack_manage_consent  
+10. agristack_get_registry_status  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- agristack_register_land_parcel  
+- agristack_update_profile  
+- agristack_get_linked_land_parcels  
+- agristack_revoke_consent  
+- agristack_raise_grievance  
+- agristack_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (authentication, verification, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - agristack_generate_otp
+  - agristack_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "agristack_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multiple user intents and workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

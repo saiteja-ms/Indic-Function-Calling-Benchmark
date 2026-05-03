@@ -1,0 +1,937 @@
+[
+  {
+    "intent_id": "fms_simple_001",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for FMS custom hiring authentication.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_002",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "fms_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_003",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Returns list of available farm services (ploughing, harvesting, sowing, spraying, tilling) in a region with pricing.",
+    "required_tools": [
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_004",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Searches for service providers by service type and location.",
+    "required_tools": [
+      "fms_search_providers"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_005",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Checks if a service is available for a specific date and location.",
+    "required_tools": [
+      "fms_check_service_availability"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_006",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Books a farm service (service + machine + operator).",
+    "required_tools": [
+      "fms_create_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_007",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Assigns an available service provider to a confirmed booking.",
+    "required_tools": [
+      "fms_assign_provider"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_008",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Tracks service execution status ('not_started', 'scheduled', 'in_progress', 'completed').",
+    "required_tools": [
+      "fms_track_service"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_009",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Verifies that service has been completed satisfactorily.",
+    "required_tools": [
+      "fms_verify_completion"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_010",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Tracks payment_status ('not_initiated', 'pending', 'completed', 'failed').",
+    "required_tools": [
+      "fms_track_payment"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_011",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Retrieves all past service bookings.",
+    "required_tools": [
+      "fms_get_booking_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_012",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Reschedules a service booking to a new date.",
+    "required_tools": [
+      "fms_reschedule_service"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_013",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Cancels a service booking.",
+    "required_tools": [
+      "fms_cancel_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_014",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Estimates service cost based on service type, land area, and duration.",
+    "required_tools": [
+      "fms_estimate_cost"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_015",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Returns detailed info about a specific service offering.",
+    "required_tools": [
+      "fms_get_service_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_016",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Raises FMS grievance.",
+    "required_tools": [
+      "fms_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_simple_017",
+    "usecase": "fms",
+    "category": "simple",
+    "abstract_goal": "Tracks FMS grievance.",
+    "required_tools": [
+      "fms_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "fms_multiple_001",
+    "usecase": "fms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for FMS custom hiring authentication.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "fms_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "fms_multiple_002",
+    "usecase": "fms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for FMS custom hiring authentication.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "fms_get_service_list"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "fms_multiple_003",
+    "usecase": "fms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for FMS custom hiring authentication.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "fms_search_providers"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "fms_multiple_004",
+    "usecase": "fms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for FMS custom hiring authentication.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "fms_check_service_availability"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "fms_multiple_005",
+    "usecase": "fms",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for FMS custom hiring authentication.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "fms_create_booking"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "fms_parallel_001",
+    "usecase": "fms",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: fms_generate_otp.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "fms_parallel_002",
+    "usecase": "fms",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: fms_verify_otp.",
+    "required_tools": [
+      "fms_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "fms_parallel_003",
+    "usecase": "fms",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: fms_get_service_list.",
+    "required_tools": [
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_get_service_list"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "fms_parallel_multiple_001",
+    "usecase": "fms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: fms_check_service_availability and fms_cancel_booking.",
+    "required_tools": [
+      "fms_check_service_availability",
+      "fms_cancel_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_check_service_availability",
+      "fms_cancel_booking"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "fms_parallel_multiple_002",
+    "usecase": "fms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: fms_generate_otp and fms_cancel_booking.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_cancel_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_generate_otp",
+      "fms_cancel_booking"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "fms_parallel_multiple_003",
+    "usecase": "fms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: fms_search_providers and fms_estimate_cost.",
+    "required_tools": [
+      "fms_search_providers",
+      "fms_estimate_cost"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_search_providers",
+      "fms_estimate_cost"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "fms_parallel_multiple_004",
+    "usecase": "fms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: fms_generate_otp and fms_get_booking_history.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_get_booking_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_generate_otp",
+      "fms_get_booking_history"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "fms_parallel_multiple_005",
+    "usecase": "fms",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: fms_get_booking_history and fms_get_service_details.",
+    "required_tools": [
+      "fms_get_booking_history",
+      "fms_get_service_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "fms_get_booking_history",
+      "fms_get_service_details"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "fms_irrelevance_001",
+    "usecase": "fms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "fms_generate_otp",
+      "fms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "fms_irrelevance_002",
+    "usecase": "fms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "fms_generate_otp",
+      "fms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "fms_irrelevance_003",
+    "usecase": "fms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "fms_generate_otp",
+      "fms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "fms_irrelevance_004",
+    "usecase": "fms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "fms_generate_otp",
+      "fms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "fms_irrelevance_005",
+    "usecase": "fms",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "fms_generate_otp",
+      "fms_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "fms_base_001",
+    "usecase": "fms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: fms_generate_otp, fms_verify_otp.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "fms_base_002",
+    "usecase": "fms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: fms_raise_grievance, fms_track_grievance_status.",
+    "required_tools": [
+      "fms_raise_grievance",
+      "fms_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "fms_base_003",
+    "usecase": "fms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: fms_generate_otp, fms_get_service_list.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "fms_base_004",
+    "usecase": "fms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: fms_generate_otp, fms_verify_otp, fms_get_service_list.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_verify_otp",
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "fms_base_005",
+    "usecase": "fms",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: fms_verify_otp, fms_get_service_list.",
+    "required_tools": [
+      "fms_verify_otp",
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "fms_miss_param_001",
+    "usecase": "fms",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform fms_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "fms_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "fms_miss_param_002",
+    "usecase": "fms",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform fms_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "fms_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "fms_miss_param_003",
+    "usecase": "fms",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform fms_get_service_list but do not provide the necessary location.",
+    "required_tools": [
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "fms_miss_func_001",
+    "usecase": "fms",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "fms_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "fms_long_context_001",
+    "usecase": "fms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: fms_generate_otp, fms_verify_otp.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "fms_long_context_002",
+    "usecase": "fms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: fms_raise_grievance, fms_track_grievance_status.",
+    "required_tools": [
+      "fms_raise_grievance",
+      "fms_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "fms_long_context_003",
+    "usecase": "fms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: fms_generate_otp, fms_get_service_list.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "fms_long_context_004",
+    "usecase": "fms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: fms_generate_otp, fms_verify_otp, fms_get_service_list.",
+    "required_tools": [
+      "fms_generate_otp",
+      "fms_verify_otp",
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "fms_long_context_005",
+    "usecase": "fms",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: fms_verify_otp, fms_get_service_list.",
+    "required_tools": [
+      "fms_verify_otp",
+      "fms_get_service_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

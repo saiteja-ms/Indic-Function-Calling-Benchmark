@@ -1,0 +1,865 @@
+[
+  {
+    "intent_id": "dealerlookup_simple_001",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Searches for pesticide and seed dealers in a specified location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_002",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Filters dealers by product type and crop compatibility.",
+    "required_tools": [
+      "dealer_filter_by_product"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_003",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Retrieves detailed information about a specific dealer including name, address, contact, products carried, and license status.",
+    "required_tools": [
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_004",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Verifies the government-issued license status of a dealer.",
+    "required_tools": [
+      "dealer_verify_license"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_005",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Checks product availability at a specific dealer.",
+    "required_tools": [
+      "dealer_check_inventory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_006",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Compares multiple dealers by product availability, license status, distance, and ratings.",
+    "required_tools": [
+      "dealer_compare_options"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_007",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous location names to precise district/state matches.",
+    "required_tools": [
+      "dealer_resolve_location_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_008",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Identifies and flags potential duplicate dealer entries that may appear due to data inconsistencies.",
+    "required_tools": [
+      "dealer_resolve_duplicate_entries"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_009",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Returns nearest dealers sorted by distance from farmer's location.",
+    "required_tools": [
+      "dealer_get_nearest"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_010",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Provides dealer recommendations based on crop type, location, and product needs.",
+    "required_tools": [
+      "dealer_get_recommendations"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_011",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Saves a dealer as a preferred/favorite dealer for the farmer.",
+    "required_tools": [
+      "dealer_save_preference"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_012",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about a dealer.",
+    "required_tools": [
+      "dealer_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_simple_013",
+    "usecase": "dealerlookup",
+    "category": "simple",
+    "abstract_goal": "Tracks dealer grievance status.",
+    "required_tools": [
+      "dealer_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "dealerlookup_multiple_001",
+    "usecase": "dealerlookup",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Searches for pesticide and seed dealers in a specified location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "dealer_filter_by_product"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "dealerlookup_multiple_002",
+    "usecase": "dealerlookup",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Searches for pesticide and seed dealers in a specified location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "dealer_get_details"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "dealerlookup_multiple_003",
+    "usecase": "dealerlookup",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Searches for pesticide and seed dealers in a specified location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "dealer_verify_license"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "dealerlookup_multiple_004",
+    "usecase": "dealerlookup",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Searches for pesticide and seed dealers in a specified location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "dealer_check_inventory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "dealerlookup_multiple_005",
+    "usecase": "dealerlookup",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Searches for pesticide and seed dealers in a specified location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "dealer_compare_options"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_001",
+    "usecase": "dealerlookup",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: dealer_search_by_location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_search_by_location"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_002",
+    "usecase": "dealerlookup",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: dealer_filter_by_product.",
+    "required_tools": [
+      "dealer_filter_by_product"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_filter_by_product"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_003",
+    "usecase": "dealerlookup",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: dealer_get_details.",
+    "required_tools": [
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_get_details"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_multiple_001",
+    "usecase": "dealerlookup",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: dealer_filter_by_product and dealer_get_recommendations.",
+    "required_tools": [
+      "dealer_filter_by_product",
+      "dealer_get_recommendations"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_filter_by_product",
+      "dealer_get_recommendations"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_multiple_002",
+    "usecase": "dealerlookup",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: dealer_get_details and dealer_check_inventory.",
+    "required_tools": [
+      "dealer_get_details",
+      "dealer_check_inventory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_get_details",
+      "dealer_check_inventory"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_multiple_003",
+    "usecase": "dealerlookup",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: dealer_search_by_location and dealer_compare_options.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_compare_options"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_search_by_location",
+      "dealer_compare_options"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_multiple_004",
+    "usecase": "dealerlookup",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: dealer_resolve_location_ambiguity and dealer_get_recommendations.",
+    "required_tools": [
+      "dealer_resolve_location_ambiguity",
+      "dealer_get_recommendations"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_resolve_location_ambiguity",
+      "dealer_get_recommendations"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "dealerlookup_parallel_multiple_005",
+    "usecase": "dealerlookup",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: dealer_search_by_location and dealer_get_details.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "dealer_search_by_location",
+      "dealer_get_details"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "dealerlookup_irrelevance_001",
+    "usecase": "dealerlookup",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "dealer_search_by_location",
+      "dealer_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "dealerlookup_irrelevance_002",
+    "usecase": "dealerlookup",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "dealer_search_by_location",
+      "dealer_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "dealerlookup_irrelevance_003",
+    "usecase": "dealerlookup",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "dealer_search_by_location",
+      "dealer_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "dealerlookup_irrelevance_004",
+    "usecase": "dealerlookup",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "dealer_search_by_location",
+      "dealer_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "dealerlookup_irrelevance_005",
+    "usecase": "dealerlookup",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "dealer_search_by_location",
+      "dealer_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "dealerlookup_base_001",
+    "usecase": "dealerlookup",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: dealer_search_by_location, dealer_filter_by_product.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_filter_by_product"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "dealerlookup_base_002",
+    "usecase": "dealerlookup",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: dealer_raise_grievance, dealer_track_grievance_status.",
+    "required_tools": [
+      "dealer_raise_grievance",
+      "dealer_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "dealerlookup_base_003",
+    "usecase": "dealerlookup",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: dealer_search_by_location, dealer_get_details.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "dealerlookup_base_004",
+    "usecase": "dealerlookup",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: dealer_search_by_location, dealer_filter_by_product, dealer_get_details.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_filter_by_product",
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "dealerlookup_base_005",
+    "usecase": "dealerlookup",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: dealer_filter_by_product, dealer_get_details.",
+    "required_tools": [
+      "dealer_filter_by_product",
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "dealerlookup_miss_param_001",
+    "usecase": "dealerlookup",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform dealer_search_by_location but do not provide the necessary location.",
+    "required_tools": [
+      "dealer_search_by_location"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "dealerlookup_miss_param_002",
+    "usecase": "dealerlookup",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform dealer_filter_by_product but do not provide the necessary location.",
+    "required_tools": [
+      "dealer_filter_by_product"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "dealerlookup_miss_param_003",
+    "usecase": "dealerlookup",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform dealer_get_details but do not provide the necessary dealer_id.",
+    "required_tools": [
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "dealer_id",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "dealerlookup_miss_func_001",
+    "usecase": "dealerlookup",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "dealer_search_by_location"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "dealerlookup_long_context_001",
+    "usecase": "dealerlookup",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: dealer_search_by_location, dealer_filter_by_product.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_filter_by_product"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "dealerlookup_long_context_002",
+    "usecase": "dealerlookup",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: dealer_raise_grievance, dealer_track_grievance_status.",
+    "required_tools": [
+      "dealer_raise_grievance",
+      "dealer_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "dealerlookup_long_context_003",
+    "usecase": "dealerlookup",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: dealer_search_by_location, dealer_get_details.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "dealerlookup_long_context_004",
+    "usecase": "dealerlookup",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: dealer_search_by_location, dealer_filter_by_product, dealer_get_details.",
+    "required_tools": [
+      "dealer_search_by_location",
+      "dealer_filter_by_product",
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "dealerlookup_long_context_005",
+    "usecase": "dealerlookup",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: dealer_filter_by_product, dealer_get_details.",
+    "required_tools": [
+      "dealer_filter_by_product",
+      "dealer_get_details"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

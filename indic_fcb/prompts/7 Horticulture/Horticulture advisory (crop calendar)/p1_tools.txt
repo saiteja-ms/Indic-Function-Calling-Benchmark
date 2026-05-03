@@ -1,0 +1,332 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Horticulture Advisory (Crop Calendar and cultivation guidance)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication (optional for personalization)
+- Selecting crop and region
+- Retrieving crop calendar (stage-wise schedule)
+- Getting stage-specific advisory (sowing, irrigation, harvesting)
+- Weather-aware advisory adjustments
+- Pest and disease advisory
+- Fertilizer and input recommendations
+- Crop stage tracking
+- Seasonal planning
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Public vs personalized access:
+  - General advisory is PUBLIC
+  - Personalized advisory requires authentication
+
+- Region dependency:
+  Advisory depends on:
+    - state/district
+    - agro-climatic zone
+
+- Crop dependency:
+  Advisory must match selected crop.
+
+- Time dependency:
+  Crop calendar depends on:
+    - season (kharif, rabi, zaid)
+    - current date or growth stage
+
+- Stage-based advisory:
+  Guidance must be linked to crop stages:
+    - land preparation
+    - sowing
+    - vegetative
+    - flowering
+    - harvesting
+
+- Weather dependency:
+  Advisory may change based on:
+    - rainfall
+    - temperature
+    - extreme weather
+
+- Dynamic advisory:
+  Recommendations are NOT static; they vary by:
+    - stage
+    - region
+    - conditions
+
+- No execution guarantee:
+  Advisory does NOT guarantee yield or outcomes.
+
+- Grievances should ONLY be raised after checking advisory outputs.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- advisory_status:
+  not_requested → generated → updated → outdated
+
+- crop_stage:
+  not_started → sowing → vegetative → flowering → harvesting → completed
+
+- planning_status:
+  not_planned → planned → in_progress → completed
+
+Tools must define:
+- when advisory is valid
+- when advisory is outdated or invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- invalid or unsupported crop
+- missing or incorrect location
+- advisory requested outside season
+- mismatch between crop and region
+- outdated crop stage information
+- weather conditions conflicting with advisory
+- ambiguous farmer input (no crop specified)
+- incorrect stage selection
+- conflicting advisory sources
+- unrealistic expectations from advisory
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (crop, region, stage)
+- rejection conditions (invalid input, unsupported scenario)
+- failure scenarios (no advisory available, outdated data)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- retrieving crop calendar
+- getting stage-specific advisory
+- adjusting advisory based on weather
+- tracking crop stage
+- planning seasonal activities
+- handling invalid or missing inputs
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: horti_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after authentication. Required for personalized advisory tools."
+}
+
+"location": {
+  "type": "string",
+  "description": "State, district, or agro-climatic region."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"crop_type": [
+  "mango",
+  "banana",
+  "tomato",
+  "potato",
+  "onion",
+  "chilli",
+  "grapes",
+  "flowers"
+]
+
+"season_type": [
+  "kharif",
+  "rabi",
+  "zaid"
+]
+
+"crop_stage": [
+  "land_preparation",
+  "sowing",
+  "vegetative",
+  "flowering",
+  "fruiting",
+  "harvesting"
+]
+
+"advisory_type": [
+  "general",
+  "weather_based",
+  "pest_management",
+  "nutrient_management"
+]
+
+"advisory_status": [
+  "not_requested",
+  "generated",
+  "updated",
+  "outdated"
+]
+
+"grievance_category": [
+  "incorrect_advisory",
+  "outdated_information",
+  "crop_mismatch",
+  "weather_conflict",
+  "missing_guidance"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. horti_get_crop_calendar  
+2. horti_get_stage_advisory  
+3. horti_get_weather_adjusted_advisory  
+4. horti_get_pest_advisory  
+5. horti_get_nutrient_advisory  
+6. horti_track_crop_stage  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- horti_get_seasonal_plan  
+- horti_resolve_crop_ambiguity  
+- horti_resolve_location_ambiguity  
+- horti_get_next_stage_guidance  
+- horti_update_crop_stage  
+- horti_get_region_specific_calendar  
+- horti_raise_grievance  
+- horti_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (crop, region, stage, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be required ONLY for:
+  - personalized or tracking tools
+- It MUST NOT be required for general advisory tools
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "horti_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

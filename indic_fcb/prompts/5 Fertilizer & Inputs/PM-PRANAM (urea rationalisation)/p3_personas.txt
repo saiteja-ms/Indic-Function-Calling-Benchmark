@@ -1,0 +1,143 @@
+You are building test personas for a function-calling
+benchmark for the PM-PRANAM (urea rationalisation)
+incentive-based fertilizer reduction service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\5 Fertilizer & Inputs\PM-PRANAM (urea rationalisation)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\5 Fertilizer & Inputs\PM-PRANAM (urea rationalisation)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific fertilizer usage and incentive scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Farmer not enrolled in PM-PRANAM
+  enrollment_status: NOT_ENROLLED
+
+PATH 2 — Enrolled but no reduction in urea usage
+  enrollment_status: ENROLLED
+  urea_usage_reduction: NONE
+
+PATH 3 — Moderate reduction in urea usage
+  urea_usage_reduction: PARTIAL
+
+PATH 4 — Significant reduction achieved
+  urea_usage_reduction: SIGNIFICANT
+
+PATH 5 — Eligible for incentive, pending approval
+  incentive_status: PENDING
+
+PATH 6 — Incentive credited successfully
+  incentive_status: CREDITED
+
+PATH 7 — Ineligible due to excessive urea usage
+  incentive_status: REJECTED
+  rejection_reason: EXCESS_USAGE
+
+PATH 8 — Farmer using alternative fertilizers (organic/bio)
+  fertilizer_type: ALTERNATIVE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ENROLLMENT RULE
+   - NOT_ENROLLED → no incentive eligibility
+
+2. REDUCTION RULE
+   - NONE → no incentive
+   - PARTIAL/SIGNIFICANT → eligible
+
+3. INCENTIVE RULE
+   - CREDITED only if reduction achieved
+   - PENDING → under evaluation
+
+4. REJECTION RULE
+   - REJECTED → must include rejection_reason
+   - Valid reasons:
+     EXCESS_USAGE
+     NO_REDUCTION
+     INVALID_DATA
+
+5. FERTILIZER TYPE RULE
+   - ALTERNATIVE → must indicate reduced urea usage
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Urea usage:
+  realistic seasonal values (kg)
+
+- Reduction:
+  expressed as percentage or category
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed fertilizer usage values
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Dinesh Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — enrolled, no reduction",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer enrolled but continues heavy urea usage",
+  "stub_test_assertion": "incentive_status should become CREDITED after reduction criteria met",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

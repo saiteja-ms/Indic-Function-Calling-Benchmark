@@ -1,0 +1,901 @@
+[
+  {
+    "intent_id": "pmkusum_simple_001",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_002",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Verifies the OTP and returns a session_token for PM-KUSUM operations.",
+    "required_tools": [
+      "pmkusum_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_003",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Checks farmer's eligibility for PM-KUSUM solar pump subsidy based on land ownership, irrigation land access, and non-duplication criteria.",
+    "required_tools": [
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_004",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Submits a solar pump subsidy application under PM-KUSUM.",
+    "required_tools": [
+      "pmkusum_apply_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_005",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Calculates the subsidy breakdown for a PM-KUSUM application showing central share, state share, and farmer contribution.",
+    "required_tools": [
+      "pmkusum_calculate_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_006",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Returns the current application_status ('not_applied', 'submitted', 'under_review', 'approved', 'rejected') with remarks.",
+    "required_tools": [
+      "pmkusum_check_application_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_007",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Returns a list of empanelled vendors available in the farmer's region for solar pump installation.",
+    "required_tools": [
+      "pmkusum_get_vendor_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_008",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Selects an empanelled vendor for solar pump installation.",
+    "required_tools": [
+      "pmkusum_select_vendor"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_009",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Schedules the solar pump installation with the selected vendor.",
+    "required_tools": [
+      "pmkusum_schedule_installation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_010",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Tracks the installation progress of the solar pump.",
+    "required_tools": [
+      "pmkusum_track_installation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_011",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Records the physical verification/inspection result for the installed solar pump.",
+    "required_tools": [
+      "pmkusum_verify_installation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_012",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Tracks the subsidy disbursement status.",
+    "required_tools": [
+      "pmkusum_track_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_013",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Checks the grid connection status for grid-connected solar pump installations.",
+    "required_tools": [
+      "pmkusum_get_grid_connection_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_014",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance related to PM-KUSUM.",
+    "required_tools": [
+      "pmkusum_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_simple_015",
+    "usecase": "pmkusum",
+    "category": "simple",
+    "abstract_goal": "Tracks a previously raised PM-KUSUM grievance.",
+    "required_tools": [
+      "pmkusum_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmkusum_multiple_001",
+    "usecase": "pmkusum",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "pmkusum_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmkusum_multiple_002",
+    "usecase": "pmkusum",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "pmkusum_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmkusum_multiple_003",
+    "usecase": "pmkusum",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmkusum_apply_subsidy"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmkusum_multiple_004",
+    "usecase": "pmkusum",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "pmkusum_calculate_subsidy"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmkusum_multiple_005",
+    "usecase": "pmkusum",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmkusum_check_application_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmkusum_parallel_001",
+    "usecase": "pmkusum",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmkusum_generate_otp.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmkusum_parallel_002",
+    "usecase": "pmkusum",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmkusum_verify_otp.",
+    "required_tools": [
+      "pmkusum_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmkusum_parallel_003",
+    "usecase": "pmkusum",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmkusum_check_eligibility.",
+    "required_tools": [
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_check_eligibility"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmkusum_parallel_multiple_001",
+    "usecase": "pmkusum",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmkusum_verify_otp and pmkusum_verify_installation.",
+    "required_tools": [
+      "pmkusum_verify_otp",
+      "pmkusum_verify_installation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_verify_otp",
+      "pmkusum_verify_installation"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmkusum_parallel_multiple_002",
+    "usecase": "pmkusum",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmkusum_check_application_status and pmkusum_get_vendor_list.",
+    "required_tools": [
+      "pmkusum_check_application_status",
+      "pmkusum_get_vendor_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_check_application_status",
+      "pmkusum_get_vendor_list"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmkusum_parallel_multiple_003",
+    "usecase": "pmkusum",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmkusum_check_eligibility and pmkusum_track_grievance_status.",
+    "required_tools": [
+      "pmkusum_check_eligibility",
+      "pmkusum_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_check_eligibility",
+      "pmkusum_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmkusum_parallel_multiple_004",
+    "usecase": "pmkusum",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmkusum_verify_otp and pmkusum_track_subsidy.",
+    "required_tools": [
+      "pmkusum_verify_otp",
+      "pmkusum_track_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_verify_otp",
+      "pmkusum_track_subsidy"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmkusum_parallel_multiple_005",
+    "usecase": "pmkusum",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmkusum_select_vendor and pmkusum_track_installation.",
+    "required_tools": [
+      "pmkusum_select_vendor",
+      "pmkusum_track_installation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmkusum_select_vendor",
+      "pmkusum_track_installation"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmkusum_irrelevance_001",
+    "usecase": "pmkusum",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmkusum_irrelevance_002",
+    "usecase": "pmkusum",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmkusum_irrelevance_003",
+    "usecase": "pmkusum",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmkusum_irrelevance_004",
+    "usecase": "pmkusum",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmkusum_irrelevance_005",
+    "usecase": "pmkusum",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmkusum_base_001",
+    "usecase": "pmkusum",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmkusum_generate_otp, pmkusum_verify_otp.",
+    "required_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmkusum_base_002",
+    "usecase": "pmkusum",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmkusum_raise_grievance, pmkusum_track_grievance_status.",
+    "required_tools": [
+      "pmkusum_raise_grievance",
+      "pmkusum_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmkusum_base_003",
+    "usecase": "pmkusum",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmkusum_generate_otp, pmkusum_check_eligibility.",
+    "required_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmkusum_base_004",
+    "usecase": "pmkusum",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmkusum_generate_otp, pmkusum_verify_otp, pmkusum_check_eligibility.",
+    "required_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_verify_otp",
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmkusum_base_005",
+    "usecase": "pmkusum",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmkusum_verify_otp, pmkusum_check_eligibility.",
+    "required_tools": [
+      "pmkusum_verify_otp",
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmkusum_miss_param_001",
+    "usecase": "pmkusum",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmkusum_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmkusum_miss_param_002",
+    "usecase": "pmkusum",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmkusum_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmkusum_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmkusum_miss_param_003",
+    "usecase": "pmkusum",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmkusum_check_eligibility but do not provide the necessary session_token.",
+    "required_tools": [
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmkusum_miss_func_001",
+    "usecase": "pmkusum",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "pmkusum_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "pmkusum_long_context_001",
+    "usecase": "pmkusum",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmkusum_generate_otp, pmkusum_verify_otp.",
+    "required_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmkusum_long_context_002",
+    "usecase": "pmkusum",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmkusum_raise_grievance, pmkusum_track_grievance_status.",
+    "required_tools": [
+      "pmkusum_raise_grievance",
+      "pmkusum_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmkusum_long_context_003",
+    "usecase": "pmkusum",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmkusum_generate_otp, pmkusum_check_eligibility.",
+    "required_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmkusum_long_context_004",
+    "usecase": "pmkusum",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmkusum_generate_otp, pmkusum_verify_otp, pmkusum_check_eligibility.",
+    "required_tools": [
+      "pmkusum_generate_otp",
+      "pmkusum_verify_otp",
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmkusum_long_context_005",
+    "usecase": "pmkusum",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmkusum_verify_otp, pmkusum_check_eligibility.",
+    "required_tools": [
+      "pmkusum_verify_otp",
+      "pmkusum_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

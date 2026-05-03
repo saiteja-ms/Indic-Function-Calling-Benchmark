@@ -1,0 +1,289 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Kisan Call Centre (farmer grievance and support system)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Raising grievances across multiple services
+- Categorizing and routing issues
+- Assigning support agents or experts
+- Tracking grievance status
+- Providing responses and resolutions
+- Escalating unresolved issues
+- Closing grievances
+- Feedback submission
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Multi-domain support:
+  Grievances can relate to:
+    - PM-KISAN
+    - PMFBY
+    - PM-KUSUM
+    - Weather/Advisory
+    - Market/Trade
+    - Soil Health
+
+- Categorization dependency:
+  Grievance must be categorized correctly before routing.
+
+- Ticket-based system:
+  Each grievance generates a unique ticket_id.
+
+- Assignment dependency:
+  Grievance must be assigned to an appropriate expert/department.
+
+- Response dependency:
+  Resolution depends on investigation or system validation.
+
+- Escalation logic:
+  Unresolved grievances can be escalated to higher authorities.
+
+- Closure requirement:
+  Grievance can only be closed after resolution or user confirmation.
+
+- Feedback loop:
+  Farmers can provide feedback after resolution.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- grievance_status:
+  raised → assigned → in_progress → resolved → closed → escalated
+
+- assignment_status:
+  not_assigned → assigned → reassigned
+
+- response_status:
+  not_provided → provided → acknowledged
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- invalid or unclear grievance description
+- incorrect categorization
+- duplicate grievance submission
+- grievance raised without checking prior status
+- unassigned or delayed assignment
+- no response from expert
+- incorrect resolution
+- repeated escalation
+- grievance closed prematurely
+- conflicting information across systems
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (category, description required)
+- rejection conditions (duplicate or invalid grievance)
+- failure scenarios (no assignment, delayed response)
+
+Tools must NOT assume successful resolution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer raising grievance
+- tracking grievance status
+- receiving responses
+- escalation of unresolved issues
+- closing grievance
+- feedback submission
+- handling incorrect or unresolved cases
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: kcc_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"ticket_id": {
+  "type": "string",
+  "description": "Unique identifier of the grievance ticket."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"grievance_category": [
+  "pmkisan",
+  "pmfby",
+  "pmkusum",
+  "weather",
+  "market",
+  "soil",
+  "other"
+]
+
+"grievance_status": [
+  "raised",
+  "assigned",
+  "in_progress",
+  "resolved",
+  "closed",
+  "escalated"
+]
+
+"assignment_status": [
+  "not_assigned",
+  "assigned",
+  "reassigned"
+]
+
+"priority_level": ["low", "medium", "high", "critical"]
+
+"feedback_status": ["not_given", "given"]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. kcc_generate_otp  
+2. kcc_verify_otp  
+3. kcc_raise_grievance  
+4. kcc_get_grievance_status  
+5. kcc_assign_grievance  
+6. kcc_provide_response  
+7. kcc_escalate_grievance  
+8. kcc_close_grievance  
+9. kcc_submit_feedback  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- kcc_get_grievance_history  
+- kcc_update_grievance_details  
+- kcc_resolve_grievance  
+- kcc_reassign_grievance  
+- kcc_set_priority  
+- kcc_track_response_status  
+- kcc_resolve_category_ambiguity  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (authentication, ticket status, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - kcc_generate_otp
+  - kcc_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "kcc_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support full grievance lifecycle workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

@@ -1,0 +1,901 @@
+[
+  {
+    "intent_id": "atma_simple_001",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for ATMA Crop Advisory authentication.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_002",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "atma_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_003",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Fetches crop-specific advisory for the farmer's location including best practices, input recommendations, and seasonal guidance.",
+    "required_tools": [
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_004",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Provides growth-stage-specific farming recommendations.",
+    "required_tools": [
+      "atma_get_stage_based_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_005",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Generates advisory adjusted for current/forecasted weather conditions.",
+    "required_tools": [
+      "atma_get_weather_based_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_006",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Reports a crop issue (pest, disease, nutrient deficiency, weather damage) with structured symptom inputs.",
+    "required_tools": [
+      "atma_report_crop_issue"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_007",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Analyzes reported symptoms and returns pest/disease diagnosis with confidence level ('low', 'medium', 'high').",
+    "required_tools": [
+      "atma_diagnose_pest_disease"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_008",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Provides fertilizer and input recommendations based on crop type, growth stage, and soil conditions.",
+    "required_tools": [
+      "atma_get_fertilizer_recommendation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_009",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Returns recommended irrigation schedule based on crop, stage, soil type, and weather.",
+    "required_tools": [
+      "atma_get_irrigation_schedule"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_010",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Generates a full-season crop plan with stage-wise milestones, input schedule, and expected yield.",
+    "required_tools": [
+      "atma_get_crop_plan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_011",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Requests expert consultation when automated advisory is insufficient.",
+    "required_tools": [
+      "atma_request_expert_consultation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_012",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Checks the status of an expert consultation request.",
+    "required_tools": [
+      "atma_get_consultation_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_013",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Retrieves past advisories received by the farmer.",
+    "required_tools": [
+      "atma_get_advisory_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_014",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about ATMA advisory.",
+    "required_tools": [
+      "atma_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_simple_015",
+    "usecase": "atma",
+    "category": "simple",
+    "abstract_goal": "Tracks ATMA grievance status.",
+    "required_tools": [
+      "atma_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "atma_multiple_001",
+    "usecase": "atma",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for ATMA Crop Advisory authentication.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "atma_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "atma_multiple_002",
+    "usecase": "atma",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for ATMA Crop Advisory authentication.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "atma_get_crop_advisory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "atma_multiple_003",
+    "usecase": "atma",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for ATMA Crop Advisory authentication.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "atma_get_stage_based_advisory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "atma_multiple_004",
+    "usecase": "atma",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for ATMA Crop Advisory authentication.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "atma_get_weather_based_advisory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "atma_multiple_005",
+    "usecase": "atma",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for ATMA Crop Advisory authentication.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "atma_report_crop_issue"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "atma_parallel_001",
+    "usecase": "atma",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: atma_generate_otp.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "atma_parallel_002",
+    "usecase": "atma",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: atma_verify_otp.",
+    "required_tools": [
+      "atma_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "atma_parallel_003",
+    "usecase": "atma",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: atma_get_crop_advisory.",
+    "required_tools": [
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_get_crop_advisory"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "atma_parallel_multiple_001",
+    "usecase": "atma",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: atma_verify_otp and atma_request_expert_consultation.",
+    "required_tools": [
+      "atma_verify_otp",
+      "atma_request_expert_consultation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_verify_otp",
+      "atma_request_expert_consultation"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "atma_parallel_multiple_002",
+    "usecase": "atma",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: atma_report_crop_issue and atma_diagnose_pest_disease.",
+    "required_tools": [
+      "atma_report_crop_issue",
+      "atma_diagnose_pest_disease"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_report_crop_issue",
+      "atma_diagnose_pest_disease"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "atma_parallel_multiple_003",
+    "usecase": "atma",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: atma_get_crop_advisory and atma_track_grievance_status.",
+    "required_tools": [
+      "atma_get_crop_advisory",
+      "atma_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_get_crop_advisory",
+      "atma_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "atma_parallel_multiple_004",
+    "usecase": "atma",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: atma_verify_otp and atma_get_consultation_status.",
+    "required_tools": [
+      "atma_verify_otp",
+      "atma_get_consultation_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_verify_otp",
+      "atma_get_consultation_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "atma_parallel_multiple_005",
+    "usecase": "atma",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: atma_get_fertilizer_recommendation and atma_get_crop_plan.",
+    "required_tools": [
+      "atma_get_fertilizer_recommendation",
+      "atma_get_crop_plan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "atma_get_fertilizer_recommendation",
+      "atma_get_crop_plan"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "atma_irrelevance_001",
+    "usecase": "atma",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "atma_generate_otp",
+      "atma_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "atma_irrelevance_002",
+    "usecase": "atma",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "atma_generate_otp",
+      "atma_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "atma_irrelevance_003",
+    "usecase": "atma",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "atma_generate_otp",
+      "atma_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "atma_irrelevance_004",
+    "usecase": "atma",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "atma_generate_otp",
+      "atma_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "atma_irrelevance_005",
+    "usecase": "atma",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "atma_generate_otp",
+      "atma_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "atma_base_001",
+    "usecase": "atma",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: atma_generate_otp, atma_verify_otp.",
+    "required_tools": [
+      "atma_generate_otp",
+      "atma_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "atma_base_002",
+    "usecase": "atma",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: atma_raise_grievance, atma_track_grievance_status.",
+    "required_tools": [
+      "atma_raise_grievance",
+      "atma_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "atma_base_003",
+    "usecase": "atma",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: atma_generate_otp, atma_get_crop_advisory.",
+    "required_tools": [
+      "atma_generate_otp",
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "atma_base_004",
+    "usecase": "atma",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: atma_generate_otp, atma_verify_otp, atma_get_crop_advisory.",
+    "required_tools": [
+      "atma_generate_otp",
+      "atma_verify_otp",
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "atma_base_005",
+    "usecase": "atma",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: atma_verify_otp, atma_get_crop_advisory.",
+    "required_tools": [
+      "atma_verify_otp",
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "atma_miss_param_001",
+    "usecase": "atma",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform atma_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "atma_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "atma_miss_param_002",
+    "usecase": "atma",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform atma_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "atma_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "atma_miss_param_003",
+    "usecase": "atma",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform atma_get_crop_advisory but do not provide the necessary session_token.",
+    "required_tools": [
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "atma_miss_func_001",
+    "usecase": "atma",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "atma_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "atma_long_context_001",
+    "usecase": "atma",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: atma_generate_otp, atma_verify_otp.",
+    "required_tools": [
+      "atma_generate_otp",
+      "atma_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "atma_long_context_002",
+    "usecase": "atma",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: atma_raise_grievance, atma_track_grievance_status.",
+    "required_tools": [
+      "atma_raise_grievance",
+      "atma_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "atma_long_context_003",
+    "usecase": "atma",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: atma_generate_otp, atma_get_crop_advisory.",
+    "required_tools": [
+      "atma_generate_otp",
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "atma_long_context_004",
+    "usecase": "atma",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: atma_generate_otp, atma_verify_otp, atma_get_crop_advisory.",
+    "required_tools": [
+      "atma_generate_otp",
+      "atma_verify_otp",
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "atma_long_context_005",
+    "usecase": "atma",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: atma_verify_otp, atma_get_crop_advisory.",
+    "required_tools": [
+      "atma_verify_otp",
+      "atma_get_crop_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

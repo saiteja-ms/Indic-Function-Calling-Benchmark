@@ -1,0 +1,135 @@
+You are merging two files into one final Python module.
+
+FILE 1 — stub_logic.py (the complete stub logic):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Soil Health Card Portal (test results)\stub_logic.py 
+
+FILE 2 — personas.json (around 8-10 personas): 
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Soil Health Card Portal (test results)\personas.json
+
+
+Your task: Produce the final stubs.py by inserting
+the persona data into the stub logic module.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL FILE LOADING INSTRUCTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Read stub_logic.py FULLY
+2. Read personas.json FULLY
+
+3. From personas.json:
+   - Extract ONLY the "state_values" field
+   - Ignore all other fields:
+     persona_id, display_name, code_path, etc.
+
+4. Ensure:
+   - state_values EXACTLY matches INITIAL_STATE schema
+   - No missing fields
+   - No extra fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSERTION LOCATION (VERY IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Insert the persona block:
+
+✔ AFTER the INITIAL_STATE definition  
+✔ BEFORE the StubContext class  
+
+DO NOT place it anywhere else.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PERSONA GENERATION RULES (DYNAMIC)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Let N = number of personas in personas.json
+
+- Generate:
+  PERSONA_A, PERSONA_B, ..., PERSONA_<N>
+
+- Naming rule:
+  - PERSONA_A → personas[0]
+  - PERSONA_B → personas[1]
+  - ...
+  - Continue alphabetically:
+    A, B, C, ..., Z, AA, AB, AC ...
+
+- DO NOT drop any persona
+- Preserve exact ordering
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSERT THIS BLOCK (DYNAMIC)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  # ── PERSONA STATES ──────────────────────────────
+  # Each persona is a filled INITIAL_STATE instance.
+  # Pass one of these to StubContext() at scenario start.
+
+  PERSONA_A = { ...state_values from personas[0]... }
+  PERSONA_B = { ...state_values from personas[1]... }
+  ...
+  (continue for all personas)
+
+  ALL_PERSONAS = {
+      "PERSONA_A": PERSONA_A,
+      "PERSONA_B": PERSONA_B,
+      ...
+  }
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ADD THIS FUNCTION AFTER ALL_PERSONAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  def get_persona(persona_id: str) -> dict:
+      """Return a fresh copy of the named persona state."""
+      if persona_id not in ALL_PERSONAS:
+          raise ValueError(
+              f"Unknown persona '{persona_id}'. "
+              f"Valid: {list(ALL_PERSONAS.keys())}")
+      return ALL_PERSONAS[persona_id].copy()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT IMPLEMENTATION RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Do NOT change any function in Part D
+- Do NOT change INITIAL_STATE
+- Do NOT change the STUBS registry
+- Do NOT change StubContext
+- Do NOT change validation logic
+- Do NOT reformat existing code
+
+- ONLY insert:
+  1. PERSONA_* variables
+  2. ALL_PERSONAS dict
+  3. get_persona() function
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA FORMATTING RULES (VERY IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output must be VALID Python
+- Use double quotes consistently
+- No trailing commas
+- Maintain exact indentation from file
+- Preserve key order from INITIAL_STATE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DETERMINISM & SAFETY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Do NOT shuffle personas
+- Do NOT modify values
+- Do NOT infer or add data
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output ONLY the complete merged Python module.
+
+- NO markdown fences
+- NO explanation
+- NO truncation
+
+Failure to follow ANY rule = INVALID OUTPUT

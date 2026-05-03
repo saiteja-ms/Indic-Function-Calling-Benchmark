@@ -1,0 +1,847 @@
+[
+  {
+    "intent_id": "enam_simple_001",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Fetches current commodity prices for a specific mandi.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_002",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Searches for mandis by location (state/district).",
+    "required_tools": [
+      "enam_search_mandis"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_003",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Compares prices of a commodity across multiple mandis to help identify best selling opportunity.",
+    "required_tools": [
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_004",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Retrieves historical price trends for a commodity at a mandi over a specified time range.",
+    "required_tools": [
+      "enam_get_price_trends"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_005",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Identifies the mandi offering the best (highest) price for a commodity within a state or district.",
+    "required_tools": [
+      "enam_get_best_price"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_006",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Retrieves arrival quantities and demand trends for a commodity at a mandi.",
+    "required_tools": [
+      "enam_get_arrival_data"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_007",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Returns details of a specific mandi including address, timings, supported commodities, and contact info.",
+    "required_tools": [
+      "enam_get_mandi_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_008",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Filters commodity prices by multiple criteria: quality grade, price type, date range.",
+    "required_tools": [
+      "enam_filter_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_009",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous mandi names matching multiple locations.",
+    "required_tools": [
+      "enam_resolve_mandi_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_010",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Sets user preferences for commodity and mandi notifications.",
+    "required_tools": [
+      "enam_set_preferences"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_011",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about eNAM data.",
+    "required_tools": [
+      "enam_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_simple_012",
+    "usecase": "enam",
+    "category": "simple",
+    "abstract_goal": "Tracks eNAM grievance status.",
+    "required_tools": [
+      "enam_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "enam_multiple_001",
+    "usecase": "enam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches current commodity prices for a specific mandi.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "enam_search_mandis"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "enam_multiple_002",
+    "usecase": "enam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches current commodity prices for a specific mandi.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "enam_compare_prices"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "enam_multiple_003",
+    "usecase": "enam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches current commodity prices for a specific mandi.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "enam_get_price_trends"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "enam_multiple_004",
+    "usecase": "enam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches current commodity prices for a specific mandi.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "enam_get_best_price"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "enam_multiple_005",
+    "usecase": "enam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches current commodity prices for a specific mandi.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "enam_get_arrival_data"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "enam_parallel_001",
+    "usecase": "enam",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: enam_get_mandi_prices.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "enam_parallel_002",
+    "usecase": "enam",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: enam_search_mandis.",
+    "required_tools": [
+      "enam_search_mandis"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_search_mandis"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "enam_parallel_003",
+    "usecase": "enam",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: enam_compare_prices.",
+    "required_tools": [
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_compare_prices"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "enam_parallel_multiple_001",
+    "usecase": "enam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: enam_search_mandis and enam_compare_prices.",
+    "required_tools": [
+      "enam_search_mandis",
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_search_mandis",
+      "enam_compare_prices"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "enam_parallel_multiple_002",
+    "usecase": "enam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: enam_compare_prices and enam_set_preferences.",
+    "required_tools": [
+      "enam_compare_prices",
+      "enam_set_preferences"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_compare_prices",
+      "enam_set_preferences"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "enam_parallel_multiple_003",
+    "usecase": "enam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: enam_search_mandis and enam_track_grievance_status.",
+    "required_tools": [
+      "enam_search_mandis",
+      "enam_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_search_mandis",
+      "enam_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "enam_parallel_multiple_004",
+    "usecase": "enam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: enam_get_arrival_data and enam_raise_grievance.",
+    "required_tools": [
+      "enam_get_arrival_data",
+      "enam_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_get_arrival_data",
+      "enam_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "enam_parallel_multiple_005",
+    "usecase": "enam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: enam_get_mandi_details and enam_resolve_mandi_ambiguity.",
+    "required_tools": [
+      "enam_get_mandi_details",
+      "enam_resolve_mandi_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "enam_get_mandi_details",
+      "enam_resolve_mandi_ambiguity"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "enam_irrelevance_001",
+    "usecase": "enam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "enam_get_mandi_prices",
+      "enam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "enam_irrelevance_002",
+    "usecase": "enam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "enam_get_mandi_prices",
+      "enam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "enam_irrelevance_003",
+    "usecase": "enam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "enam_get_mandi_prices",
+      "enam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "enam_irrelevance_004",
+    "usecase": "enam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "enam_get_mandi_prices",
+      "enam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "enam_irrelevance_005",
+    "usecase": "enam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "enam_get_mandi_prices",
+      "enam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "enam_base_001",
+    "usecase": "enam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: enam_get_mandi_prices, enam_search_mandis.",
+    "required_tools": [
+      "enam_get_mandi_prices",
+      "enam_search_mandis"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "enam_base_002",
+    "usecase": "enam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: enam_raise_grievance, enam_track_grievance_status.",
+    "required_tools": [
+      "enam_raise_grievance",
+      "enam_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "enam_base_003",
+    "usecase": "enam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: enam_get_mandi_prices, enam_compare_prices.",
+    "required_tools": [
+      "enam_get_mandi_prices",
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "enam_base_004",
+    "usecase": "enam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: enam_get_mandi_prices, enam_search_mandis, enam_compare_prices.",
+    "required_tools": [
+      "enam_get_mandi_prices",
+      "enam_search_mandis",
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "enam_base_005",
+    "usecase": "enam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: enam_search_mandis, enam_compare_prices.",
+    "required_tools": [
+      "enam_search_mandis",
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "enam_miss_param_001",
+    "usecase": "enam",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform enam_get_mandi_prices but do not provide the necessary commodity.",
+    "required_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "commodity",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "enam_miss_param_002",
+    "usecase": "enam",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform enam_search_mandis but do not provide the necessary location.",
+    "required_tools": [
+      "enam_search_mandis"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "enam_miss_param_003",
+    "usecase": "enam",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform enam_compare_prices but do not provide the necessary commodity.",
+    "required_tools": [
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "commodity",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "enam_miss_func_001",
+    "usecase": "enam",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "enam_get_mandi_prices"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "enam_long_context_001",
+    "usecase": "enam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: enam_get_mandi_prices, enam_search_mandis.",
+    "required_tools": [
+      "enam_get_mandi_prices",
+      "enam_search_mandis"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "enam_long_context_002",
+    "usecase": "enam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: enam_raise_grievance, enam_track_grievance_status.",
+    "required_tools": [
+      "enam_raise_grievance",
+      "enam_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "enam_long_context_003",
+    "usecase": "enam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: enam_get_mandi_prices, enam_compare_prices.",
+    "required_tools": [
+      "enam_get_mandi_prices",
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "enam_long_context_004",
+    "usecase": "enam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: enam_get_mandi_prices, enam_search_mandis, enam_compare_prices.",
+    "required_tools": [
+      "enam_get_mandi_prices",
+      "enam_search_mandis",
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "enam_long_context_005",
+    "usecase": "enam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: enam_search_mandis, enam_compare_prices.",
+    "required_tools": [
+      "enam_search_mandis",
+      "enam_compare_prices"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

@@ -1,0 +1,151 @@
+You are building test personas for a function-calling
+benchmark for the CHC Farm Machinery (rental portal)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\8 Farm Machinery\CHC Farm Machinery (rental portal)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\8 Farm Machinery\CHC Farm Machinery (rental portal)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific machinery rental scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not registered on CHC portal
+  registration_status: NOT_REGISTERED
+
+PATH 2 — Registered, browsing machinery options
+  registration_status: REGISTERED
+  browsing_status: ACTIVE
+
+PATH 3 — Machinery booked successfully
+  booking_status: BOOKED
+
+PATH 4 — Machinery usage completed
+  usage_status: COMPLETED
+
+PATH 5 — Booking failed due to unavailability
+  booking_status: FAILED
+  failure_reason: NOT_AVAILABLE
+
+PATH 6 — Payment pending for booked machinery
+  payment_status: PENDING
+
+PATH 7 — Multiple machinery bookings
+  multiple_bookings: TRUE
+
+PATH 8 — Booking cancelled by farmer
+  booking_status: CANCELLED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REGISTRATION RULE
+   - NOT_REGISTERED → cannot book machinery
+
+2. BOOKING RULE
+   - BOOKED → must include:
+     - machinery_id
+     - booking_date
+     - rental_duration
+
+3. USAGE RULE
+   - COMPLETED → machinery used successfully
+
+4. PAYMENT RULE
+   - PENDING → payment not completed
+   - SUCCESS → payment completed
+
+5. FAILURE RULE
+   - FAILED → must include failure_reason
+   - Valid reasons:
+     NOT_AVAILABLE
+     PAYMENT_FAILED
+     SLOT_FULL
+
+6. MULTI-BOOKING RULE
+   - Each booking must have unique machinery_id
+
+7. CANCELLATION RULE
+   - CANCELLED → booking terminated by farmer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Machinery types:
+  TRACTOR, HARVESTER, ROTAVATOR, SEED_DRILL
+
+- Rental duration:
+  1–10 days
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed booking scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ram Prasad — UP, PATH 2",
+  "code_path": "PATH 2 — browsing machinery",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer exploring rental options instead of buying machinery",
+  "stub_test_assertion": "booking_status should become BOOKED after machinery_booking tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

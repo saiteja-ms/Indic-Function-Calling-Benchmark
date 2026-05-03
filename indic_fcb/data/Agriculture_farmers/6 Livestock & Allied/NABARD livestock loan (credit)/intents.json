@@ -1,0 +1,937 @@
+[
+  {
+    "intent_id": "nabard_simple_001",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for NABARD livestock loan authentication.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_002",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "nabard_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_003",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Checks farmer's eligibility for NABARD livestock loan based on credit history, repayment capacity, and project feasibility.",
+    "required_tools": [
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_004",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Submits a livestock loan application.",
+    "required_tools": [
+      "nabard_submit_application"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_005",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Initiates document verification for a submitted loan application.",
+    "required_tools": [
+      "nabard_verify_documents"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_006",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Returns application_status ('not_applied', 'submitted', 'under_review', 'approved', 'rejected') with details.",
+    "required_tools": [
+      "nabard_track_application_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_007",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Records loan approval decision.",
+    "required_tools": [
+      "nabard_approve_loan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_008",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Initiates loan disbursement to the farmer's bank account.",
+    "required_tools": [
+      "nabard_disburse_loan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_009",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Tracks repayment_status ('not_started', 'ongoing', 'overdue', 'completed') with EMI details, amount paid, and remaining balance.",
+    "required_tools": [
+      "nabard_track_repayment"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_010",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Returns current loan_status ('not_sanctioned', 'sanctioned', 'disbursed', 'active', 'closed', 'defaulted') with details.",
+    "required_tools": [
+      "nabard_track_loan_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_011",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Returns the full EMI schedule with due dates, amounts, and payment status for each installment.",
+    "required_tools": [
+      "nabard_get_emi_schedule"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_012",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Calculates eligible loan amount based on project type, cost, and farmer's repayment capacity.",
+    "required_tools": [
+      "nabard_calculate_loan_amount"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_013",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Records a default event when EMI payments are overdue beyond threshold.",
+    "required_tools": [
+      "nabard_handle_default"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_014",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Initiates loan restructuring for a defaulted or overdue loan.",
+    "required_tools": [
+      "nabard_restructure_loan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_015",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Closes a fully repaid loan.",
+    "required_tools": [
+      "nabard_close_loan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_016",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Raises a NABARD loan grievance.",
+    "required_tools": [
+      "nabard_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_simple_017",
+    "usecase": "nabard",
+    "category": "simple",
+    "abstract_goal": "Tracks NABARD grievance.",
+    "required_tools": [
+      "nabard_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "nabard_multiple_001",
+    "usecase": "nabard",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for NABARD livestock loan authentication.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "nabard_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "nabard_multiple_002",
+    "usecase": "nabard",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for NABARD livestock loan authentication.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "nabard_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "nabard_multiple_003",
+    "usecase": "nabard",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for NABARD livestock loan authentication.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "nabard_submit_application"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "nabard_multiple_004",
+    "usecase": "nabard",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for NABARD livestock loan authentication.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "nabard_verify_documents"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "nabard_multiple_005",
+    "usecase": "nabard",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for NABARD livestock loan authentication.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "nabard_track_application_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "nabard_parallel_001",
+    "usecase": "nabard",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: nabard_generate_otp.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "nabard_parallel_002",
+    "usecase": "nabard",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: nabard_verify_otp.",
+    "required_tools": [
+      "nabard_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "nabard_parallel_003",
+    "usecase": "nabard",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: nabard_check_eligibility.",
+    "required_tools": [
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_check_eligibility"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "nabard_parallel_multiple_001",
+    "usecase": "nabard",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: nabard_verify_documents and nabard_handle_default.",
+    "required_tools": [
+      "nabard_verify_documents",
+      "nabard_handle_default"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_verify_documents",
+      "nabard_handle_default"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "nabard_parallel_multiple_002",
+    "usecase": "nabard",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: nabard_generate_otp and nabard_handle_default.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_handle_default"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_generate_otp",
+      "nabard_handle_default"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "nabard_parallel_multiple_003",
+    "usecase": "nabard",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: nabard_submit_application and nabard_restructure_loan.",
+    "required_tools": [
+      "nabard_submit_application",
+      "nabard_restructure_loan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_submit_application",
+      "nabard_restructure_loan"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "nabard_parallel_multiple_004",
+    "usecase": "nabard",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: nabard_generate_otp and nabard_get_emi_schedule.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_get_emi_schedule"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_generate_otp",
+      "nabard_get_emi_schedule"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "nabard_parallel_multiple_005",
+    "usecase": "nabard",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: nabard_get_emi_schedule and nabard_close_loan.",
+    "required_tools": [
+      "nabard_get_emi_schedule",
+      "nabard_close_loan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "nabard_get_emi_schedule",
+      "nabard_close_loan"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "nabard_irrelevance_001",
+    "usecase": "nabard",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "nabard_generate_otp",
+      "nabard_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "nabard_irrelevance_002",
+    "usecase": "nabard",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "nabard_generate_otp",
+      "nabard_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "nabard_irrelevance_003",
+    "usecase": "nabard",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "nabard_generate_otp",
+      "nabard_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "nabard_irrelevance_004",
+    "usecase": "nabard",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "nabard_generate_otp",
+      "nabard_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "nabard_irrelevance_005",
+    "usecase": "nabard",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "nabard_generate_otp",
+      "nabard_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "nabard_base_001",
+    "usecase": "nabard",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: nabard_generate_otp, nabard_verify_otp.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "nabard_base_002",
+    "usecase": "nabard",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: nabard_raise_grievance, nabard_track_grievance_status.",
+    "required_tools": [
+      "nabard_raise_grievance",
+      "nabard_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "nabard_base_003",
+    "usecase": "nabard",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: nabard_generate_otp, nabard_check_eligibility.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "nabard_base_004",
+    "usecase": "nabard",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: nabard_generate_otp, nabard_verify_otp, nabard_check_eligibility.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_verify_otp",
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "nabard_base_005",
+    "usecase": "nabard",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: nabard_verify_otp, nabard_check_eligibility.",
+    "required_tools": [
+      "nabard_verify_otp",
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "nabard_miss_param_001",
+    "usecase": "nabard",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform nabard_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "nabard_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "nabard_miss_param_002",
+    "usecase": "nabard",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform nabard_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "nabard_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "nabard_miss_param_003",
+    "usecase": "nabard",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform nabard_check_eligibility but do not provide the necessary session_token.",
+    "required_tools": [
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "nabard_miss_func_001",
+    "usecase": "nabard",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "nabard_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "nabard_long_context_001",
+    "usecase": "nabard",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: nabard_generate_otp, nabard_verify_otp.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "nabard_long_context_002",
+    "usecase": "nabard",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: nabard_raise_grievance, nabard_track_grievance_status.",
+    "required_tools": [
+      "nabard_raise_grievance",
+      "nabard_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "nabard_long_context_003",
+    "usecase": "nabard",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: nabard_generate_otp, nabard_check_eligibility.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "nabard_long_context_004",
+    "usecase": "nabard",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: nabard_generate_otp, nabard_verify_otp, nabard_check_eligibility.",
+    "required_tools": [
+      "nabard_generate_otp",
+      "nabard_verify_otp",
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "nabard_long_context_005",
+    "usecase": "nabard",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: nabard_verify_otp, nabard_check_eligibility.",
+    "required_tools": [
+      "nabard_verify_otp",
+      "nabard_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

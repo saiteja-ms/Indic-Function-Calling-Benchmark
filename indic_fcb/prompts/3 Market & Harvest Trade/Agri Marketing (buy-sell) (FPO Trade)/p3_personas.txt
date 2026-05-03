@@ -1,0 +1,158 @@
+You are building test personas for a function-calling
+benchmark for the Agri Marketing (buy–sell) (FPO Trade)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\Agri Marketing (buy-sell) (FPO Trade)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\Agri Marketing (buy-sell) (FPO Trade)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific FPO-based trading scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not part of any FPO
+  fpo_membership_status: NOT_MEMBER
+
+PATH 2 — Joined FPO, not trading yet
+  fpo_membership_status: MEMBER
+  trading_status: INACTIVE
+
+PATH 3 — Listing produce through FPO
+  listing_status: LISTED
+
+PATH 4 — Bulk sale coordinated by FPO
+  trade_type: BULK
+  trade_status: INITIATED
+
+PATH 5 — Successful trade via FPO
+  trade_status: COMPLETED
+  payment_status: SUCCESS
+
+PATH 6 — Trade failed due to quality issue
+  trade_status: FAILED
+  failure_reason: QUALITY_ISSUE
+
+PATH 7 — Farmer both buying inputs and selling produce
+  usage_type: BUY_AND_SELL
+
+PATH 8 — FPO inactive or non-functional
+  fpo_status: INACTIVE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. MEMBERSHIP RULE
+   - NOT_MEMBER → cannot trade via FPO
+   - MEMBER → eligible for listing/trade
+
+2. LISTING RULE
+   - LISTED → must include:
+     - crop
+     - quantity
+     - expected_price
+
+3. TRADE RULE
+   - COMPLETED → payment_status must be SUCCESS
+   - FAILED → failure_reason required
+
+4. TRADE TYPES
+   - INDIVIDUAL
+   - BULK
+
+5. FAILURE REASONS
+   - QUALITY_ISSUE
+   - PRICE_DISPUTE
+   - BUYER_WITHDRAWAL
+
+6. BUY/SELL RULE
+   - BUY_AND_SELL → must include both:
+     - input_purchase
+     - produce_sale
+
+7. FPO STATUS RULE
+   - INACTIVE → no trades possible
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  wheat, rice, cotton, pulses, vegetables
+
+- Quantity:
+  5–200 quintals
+
+- Price:
+  ₹1000–₹8000 per quintal
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed trade values
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Vikas Yadav — UP, PATH 2",
+  "code_path": "PATH 2 — FPO member, not trading",
+  "language_preference": "hi",
+  "interesting_characteristic": "Recently joined FPO but unsure how to start trading",
+  "stub_test_assertion": "listing_status should become LISTED after crop_listing tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

@@ -1,0 +1,146 @@
+You are building test personas for a function-calling
+benchmark for the Soil Health Card (soil information)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific soil testing / soil health situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No soil test ever done
+  soil_test_status: NOT_TESTED
+
+PATH 2 — Sample collected, test pending
+  soil_test_status: SAMPLE_COLLECTED
+  report_status: PENDING
+
+PATH 3 — Test completed, report generated
+  report_status: GENERATED
+
+PATH 4 — Soil highly deficient (nutrient deficiency)
+  report_status: GENERATED
+  soil_health_status: DEFICIENT
+
+PATH 5 — Soil healthy (balanced nutrients)
+  soil_health_status: HEALTHY
+
+PATH 6 — Incorrect sample submitted
+  report_status: REJECTED
+  rejection_reason: INVALID_SAMPLE
+
+PATH 7 — Farmer has multiple land parcels with different soil reports
+  multiple soil reports present
+
+PATH 8 — Old report (outdated)
+  report_status: GENERATED
+  report_age > 3 years
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. TEST FLOW
+   - NOT_TESTED → SAMPLE_COLLECTED → GENERATED
+
+2. REPORT STRUCTURE
+   - Must include:
+     - nitrogen (N)
+     - phosphorus (P)
+     - potassium (K)
+     - pH level
+   - Values must be realistic
+
+3. SOIL STATUS RULE
+   - DEFICIENT if any major nutrient low
+   - HEALTHY if all within range
+
+4. REJECTION RULE
+   - INVALID_SAMPLE only if improper collection
+
+5. MULTI-LAND RULE
+   - Each land parcel must have separate report
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Land size: 0.5–8 acres
+- Soil nutrients:
+  - N: 0–500 kg/ha
+  - P: 0–100 kg/ha
+  - K: 0–400 kg/ha
+- pH: 4.5–9.0
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed nutrient values
+- Reproducible outputs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Suresh Yadav — UP, PATH 2",
+  "code_path": "PATH 2 — sample collected, report pending",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer recently submitted soil sample for first-time testing",
+  "stub_test_assertion": "report_status should become GENERATED after soil test processing",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

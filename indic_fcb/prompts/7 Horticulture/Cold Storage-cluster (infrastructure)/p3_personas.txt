@@ -1,0 +1,150 @@
+You are building test personas for a function-calling
+benchmark for the Cold Storage–cluster (infrastructure)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific cold storage usage / access scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No access to cold storage facility
+  storage_access_status: NOT_AVAILABLE
+
+PATH 2 — Facility available but not booked
+  storage_access_status: AVAILABLE
+  booking_status: NOT_BOOKED
+
+PATH 3 — Storage slot booked
+  booking_status: BOOKED
+
+PATH 4 — Produce stored successfully
+  storage_status: STORED
+
+PATH 5 — Storage full / unavailable at time of booking
+  booking_status: FAILED
+  failure_reason: NO_CAPACITY
+
+PATH 6 — Produce spoiled due to delay or improper storage
+  storage_status: FAILED
+  failure_reason: SPOILAGE
+
+PATH 7 — Farmer using multiple storage units
+  multiple_storage_units: TRUE
+
+PATH 8 — Subsidized storage scheme applied
+  subsidy_status: APPLIED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ACCESS RULE
+   - NOT_AVAILABLE → no booking possible
+
+2. BOOKING RULE
+   - BOOKED → must include:
+     - storage_id
+     - booking_date
+     - duration
+
+3. STORAGE RULE
+   - STORED → produce details must exist
+   - FAILED → must include failure_reason
+
+4. FAILURE REASONS
+   - NO_CAPACITY
+   - SPOILAGE
+   - EQUIPMENT_FAILURE
+
+5. MULTI-STORAGE RULE
+   - Each storage must have unique storage_id
+
+6. SUBSIDY RULE
+   - APPLIED → subsidy process initiated
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  potatoes, onions, fruits, vegetables
+
+- Storage duration:
+  1–6 months
+
+- Quantity:
+  5–200 quintals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed storage scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ramesh Patel — MP, PATH 2",
+  "code_path": "PATH 2 — facility available, not booked",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer exploring cold storage options for perishable crops",
+  "stub_test_assertion": "booking_status should become BOOKED after storage_booking tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

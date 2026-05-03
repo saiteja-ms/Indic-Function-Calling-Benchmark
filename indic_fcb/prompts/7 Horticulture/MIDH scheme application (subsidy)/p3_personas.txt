@@ -1,0 +1,151 @@
+You are building test personas for a function-calling
+benchmark for the MIDH (Mission for Integrated Development of Horticulture)
+scheme application (subsidy) service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\MIDH Scheme application (subsidy)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\MIDH Scheme application (subsidy)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific subsidy application scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not applied for MIDH subsidy
+  application_status: NOT_APPLIED
+
+PATH 2 — Application submitted, under review
+  application_status: SUBMITTED
+  verification_status: PENDING
+
+PATH 3 — Application approved, subsidy pending
+  application_status: APPROVED
+  subsidy_status: PENDING
+
+PATH 4 — Subsidy credited successfully
+  subsidy_status: CREDITED
+
+PATH 5 — Application rejected due to invalid project details
+  application_status: REJECTED
+  rejection_reason: INVALID_PROJECT
+
+PATH 6 — Subsidy delayed due to administrative backlog
+  subsidy_status: DELAYED
+
+PATH 7 — Farmer applied for multiple horticulture components
+  multi_component_application: TRUE
+
+PATH 8 — Ineligible farmer (does not meet criteria)
+  application_status: REJECTED
+  rejection_reason: NOT_ELIGIBLE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. APPLICATION FLOW
+   - NOT_APPLIED → SUBMITTED → APPROVED/REJECTED
+
+2. VERIFICATION RULE
+   - PENDING → under evaluation
+   - VERIFIED → eligible for approval
+
+3. SUBSIDY RULE
+   - CREDITED only if APPROVED
+   - DELAYED → processing issue
+
+4. REJECTION RULE
+   - REJECTED → must include rejection_reason
+   - Valid reasons:
+     INVALID_PROJECT
+     NOT_ELIGIBLE
+     DOCUMENT_MISSING
+
+5. COMPONENT TYPES
+   - ORCHARD
+   - GREENHOUSE
+   - DRIP_IRRIGATION
+   - NURSERY
+
+6. MULTI-COMPONENT RULE
+   - Each component must be listed separately
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Project cost:
+  ₹50,000–₹10,00,000
+
+- Subsidy:
+  realistic percentage of project cost
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed application scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Suresh Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — application submitted, under review",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer applied for greenhouse subsidy to improve yield",
+  "stub_test_assertion": "application_status should become APPROVED after subsidy_approval tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

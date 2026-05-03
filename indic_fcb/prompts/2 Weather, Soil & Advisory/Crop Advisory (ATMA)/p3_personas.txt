@@ -1,0 +1,141 @@
+You are building test personas for a function-calling
+benchmark for the Crop Advisory (ATMA)
+agricultural advisory service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific advisory usage situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No advisory requested yet
+  advisory_status: NOT_REQUESTED
+
+PATH 2 — Advisory requested, awaiting response
+  advisory_status: REQUESTED
+  response_status: PENDING
+
+PATH 3 — Advisory received successfully
+  response_status: RECEIVED
+
+PATH 4 — Advisory suggests crop change
+  advisory_type: CROP_CHANGE
+
+PATH 5 — Advisory suggests fertilizer optimization
+  advisory_type: FERTILIZER_GUIDANCE
+
+PATH 6 — Advisory suggests pest management
+  advisory_type: PEST_MANAGEMENT
+
+PATH 7 — Multiple advisories for different crops
+  multiple_advisories: TRUE
+
+PATH 8 — Advisory outdated (no longer valid)
+  advisory_status: EXPIRED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ADVISORY FLOW
+   - NOT_REQUESTED → REQUESTED → RECEIVED
+
+2. RESPONSE RULE
+   - RECEIVED only if REQUESTED
+   - PENDING → no advisory content
+
+3. ADVISORY TYPES (VALID ENUM)
+   - CROP_CHANGE
+   - FERTILIZER_GUIDANCE
+   - PEST_MANAGEMENT
+   - IRRIGATION_GUIDANCE
+
+4. MULTIPLE ADVISORY RULE
+   - Each advisory must map to a crop
+
+5. EXPIRY RULE
+   - EXPIRED if advisory older than season
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  wheat, rice, cotton, maize, sugarcane
+
+- Advisory content must be realistic:
+  - fertilizer suggestions (NPK values)
+  - pest names (e.g., bollworm, aphids)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed advisory outputs
+- Reproducible
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Anil Singh — UP, PATH 2",
+  "code_path": "PATH 2 — advisory requested, pending",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer seeking advice after crop yield decline",
+  "stub_test_assertion": "response_status must become RECEIVED after advisory_fetch tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

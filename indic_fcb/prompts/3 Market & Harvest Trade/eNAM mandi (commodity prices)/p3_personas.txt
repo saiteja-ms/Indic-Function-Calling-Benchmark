@@ -1,0 +1,150 @@
+You are building test personas for a function-calling
+benchmark for the eNAM mandi (commodity prices)
+agricultural market service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\eNAM mandi (commodity prices)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\eNAM mandi (commodity prices)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific market price discovery / trading situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not registered on eNAM
+  registration_status: NOT_REGISTERED
+
+PATH 2 — Registered, browsing prices only
+  registration_status: REGISTERED
+  trading_status: NOT_TRADING
+
+PATH 3 — Checking mandi prices for a crop
+  price_check_status: CHECKED
+
+PATH 4 — Comparing prices across mandis
+  comparison_status: ACTIVE
+
+PATH 5 — Listed crop for sale
+  listing_status: LISTED
+
+PATH 6 — Trade executed successfully
+  trade_status: COMPLETED
+
+PATH 7 — Trade failed due to price mismatch
+  trade_status: FAILED
+  failure_reason: PRICE_MISMATCH
+
+PATH 8 — Farmer using eNAM but prefers local mandi (partial adoption)
+  usage_pattern: HYBRID
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REGISTRATION RULE
+   - NOT_REGISTERED → no trading/listing possible
+
+2. PRICE STRUCTURE
+   - Must include:
+     - crop
+     - mandi_name
+     - price_per_quintal
+     - date
+
+3. COMPARISON RULE
+   - Multiple mandis must be present
+
+4. LISTING RULE
+   - LISTED → crop + quantity must exist
+
+5. TRADE RULE
+   - COMPLETED → payment_status must be SUCCESS
+   - FAILED → failure_reason required
+
+6. VALID FAILURE REASONS
+   - PRICE_MISMATCH
+   - BUYER_WITHDRAWAL
+   - QUALITY_ISSUE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  wheat, rice, maize, cotton, pulses
+
+- Price range:
+  ₹1000–₹7000 per quintal
+
+- Quantity:
+  5–100 quintals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed mandi prices
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Sanjay Yadav — UP, PATH 2",
+  "code_path": "PATH 2 — registered, browsing prices",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer uses eNAM only for price awareness before selling locally",
+  "stub_test_assertion": "listing_status must become LISTED after crop_listing tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

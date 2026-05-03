@@ -1,0 +1,1032 @@
+\documentclass[11pt]{article}
+
+% ── NeurIPS 2024 style ─────────────────────────────────────────────────────
+
+% ── Core packages ──────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{rotating}
+\usepackage{colortbl}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{tcolorbox}
+\usepackage{mdframed}
+\usepackage{longtable}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage[numbers]{natbib}
+
+% ── Colour palette ─────────────────────────────────────────────────────────
+\definecolor{headerbg}{RGB}{220,235,248}
+\definecolor{altrow}{RGB}{240,245,250}
+\definecolor{accentblue}{RGB}{31,78,145}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{60,60,60}
+\definecolor{indicoprange}{RGB}{204,85,0}
+\definecolor{successgreen}{RGB}{0,128,0}
+
+% ── tcolorbox styles ──────────────────────────────────────────────────────
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{abstractbox}{
+  enhanced,
+  breakable,
+  colback=lightgray,
+  colframe=accentblue!60,
+  arc=2pt,
+  boxrule=0.6pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  title={\textbf{Abstract}},
+  fonttitle=\small\bfseries,
+  coltitle=accentblue,
+  attach boxed title to top left={yshift=-2mm, xshift=6pt},
+  boxed title style={colback=white, colframe=accentblue!60, arc=2pt, boxrule=0.4pt}
+}
+
+\newtcolorbox{researchbox}[1]{
+  enhanced,
+  breakable,
+  colback=indicoprange!5,
+  colframe=indicoprange!50,
+  arc=2pt,
+  boxrule=0.6pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  title={#1},
+  fonttitle=\small\bfseries,
+  coltitle=indicoprange,
+}
+
+% ── Hyperref setup ─────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accentblue,
+  citecolor=accentblue,
+  urlcolor=accentblue,
+  pdftitle={Tool Calling in LLMs: A Survey from English-Centric Benchmarks to Indic Frontiers},
+  pdfauthor={Anonymous}
+}
+
+% ── Column type for tables ────────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% ── Misc macros ───────────────────────────────────────────────────────────
+\newcommand{\taubench}{$\tau$-bench}
+\newcommand{\tautwobench}{$\tau^2$-bench}
+\newcommand{\bfcl}{\textsc{bfcl}}
+\newcommand{\yes}{\textcolor{successgreen}{\checkmark}}
+\newcommand{\no}{\textcolor{red}{$\times$}}
+\newcommand{\partialmark}{\textcolor{orange}{$\sim$}}
+\newcommand{\eg}{\textit{e.g.},\xspace}
+\newcommand{\ie}{\textit{i.e.},\xspace}
+\newcommand{\cf}{\textit{cf.}\xspace}
+
+% ══════════════════════════════════════════════════════════════════════════
+\title{%
+  Tool Calling in Large Language Models:\\
+  A Survey from English-Centric Benchmarks\\
+  to Indic Frontiers%
+}
+
+\author{%
+  Sai Teja M S\\
+  AI4Bharat, IIT Madras\\
+  \texttt{me21b171@smail.iitm.ac.in}
+}
+
+% ══════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\maketitle
+
+% ── ABSTRACT ──────────────────────────────────────────────────────────────
+\begin{abstractbox}
+Tool calling --- the ability of Large Language Models (LLMs) to invoke external APIs, functions, and
+databases in response to natural language queries --- has become the foundational capability for agentic
+AI systems. Since Toolformer~\citep{schick2023toolformer} demonstrated self-supervised tool learning
+and Gorilla~\citep{patil2023gorilla} showed that fine-tuned models can surpass GPT-4 on API call
+accuracy, the field has rapidly expanded to cover parallel function calls, multi-turn agent
+interactions, policy-adherent workflows, and real-world deployment benchmarks. This survey provides
+the first systematic overview of the tool-calling literature across three dimensions:
+(1)~\textbf{foundational approaches} from early prompting to reinforcement learning;
+(2)~\textbf{evaluation benchmarks} from stateless single-turn tests to stateful dual-control
+environments; and (3)~\textbf{the critical gap in Indic language coverage}, where despite representing
+over 1.4 billion speakers across 22 scheduled languages, tool-calling research remains almost entirely
+English-centric. We survey 45+ papers spanning 2022--2026, introduce the newly proposed International
+Tool Calling (ITC) dataset~\citep{itc2025} into the multilingual picture, and present a concrete
+research roadmap for Indic tool calling, including a benchmark specification
+(\textsc{IndicFuncBench}) covering 10 Indic languages and four India-specific API domains.
+\end{abstractbox}
+
+\vspace{4pt}
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+\label{sec:intro}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{Motivation and Scope}
+
+Large Language Models are increasingly deployed not as standalone conversational systems but as
+\emph{agents} --- systems that perceive their environment through API calls and natural language,
+reason about goals, and take actions with real-world consequences. The capability enabling this shift
+is \textbf{tool calling} (also called \emph{function calling} or \emph{tool use}): the model
+generates structured calls to external functions, databases, web services, or specialised APIs,
+receives results, and uses them to compose a response or plan further actions.
+
+The economic stakes are high. Agentic AI is being deployed in customer service (booking,
+cancellations, refunds), enterprise workflow automation, government citizen services, and healthcare
+triage. Whether a model correctly calls \texttt{cancel\_reservation(id=X)} versus
+\texttt{modify\_reservation(id=X)} --- or knows to ask for clarification before calling either ---
+has direct financial and safety consequences.
+
+This survey covers the tool-calling literature from 2022 to April 2026, spanning foundational
+methods, evaluation frameworks, training paradigms, and the nascent but critical area of multilingual
+and Indic-language tool calling.
+
+\subsection{Why an Indic Extension Matters}
+
+India has 1.4 billion people, 22 constitutionally scheduled languages, and hundreds of dialects.
+Hindi alone has 600 million speakers; Bengali, Tamil, Telugu, Marathi, Kannada, Gujarati, Odia,
+Malayalam, and Punjabi each have tens to hundreds of millions. Yet the dominant benchmarks remain
+strikingly English-centric:
+
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+  \item \textbf{\bfcl{}} --- the dominant function-calling leaderboard --- is English-only except
+        for Java/JavaScript programming language tests~\citep{patil2025bfcl}.
+  \item \textbf{\taubench{}} and \textbf{\tautwobench{}} contain English-only user simulators and
+        task annotations~\citep{yao2024taubench,barres2025tau2}.
+  \item \textbf{MASSIVE-Agents} (ACL 2025) includes Hindi but limits Indic script coverage;
+        non-Hindi Indic languages are largely absent~\citep{massiveagents2025}.
+  \item Indic LLMs (Sarvam-1, Krutrim, Airavata, OpenHathi) have no dedicated tool-calling
+        benchmarks.
+  \item Real deployments --- government citizen services (Aadhaar, IRCTC, NPCI), UPI payments,
+        e-commerce (Flipkart, Meesho), healthcare (Practo, PharmEasy) --- urgently need agents that
+        handle tool calling in Hindi, Tamil, Telugu, Bengali, and other Indic languages.
+\end{itemize}
+
+\begin{researchbox}{Positioning Statement}
+This survey is the first to systematically connect the global tool-calling literature with the Indic
+NLP ecosystem. Prior tool-calling surveys~\citep{wangsurvey2024,springersurvey2025} are
+English-centric; prior Indic LLM surveys~\citep{indicanalysis2025} cover no tool calling. We bridge
+this gap with a complete survey and a concrete research roadmap.
+\end{researchbox}
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{A Taxonomy of Tool Calling}
+\label{sec:taxonomy}
+% ══════════════════════════════════════════════════════════════════════════
+
+We propose a five-dimensional taxonomy (Table~\ref{tab:taxonomy}) that unifies the fragmented
+vocabulary used across the literature.
+
+\begin{table}[h]
+\centering
+\caption{Five-dimensional taxonomy of tool calling in LLMs.}
+\label{tab:taxonomy}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{L{2.8cm} L{9.8cm}}
+\toprule
+\rowcolor{headerbg}
+\textbf{Dimension} & \textbf{Values} \\
+\midrule
+\textbf{D1: Interaction Mode}
+  & Single-turn stateless $\cdot$ Single-turn multi-call $\cdot$
+    Multi-turn conversational $\cdot$ Agentic multi-step \\
+\rowcolor{altrow}
+\textbf{D2: Tool Selection}
+  & Given single tool $\cdot$ Select from small pool $\cdot$
+    Retrieve from large pool (1000+ APIs) $\cdot$ Dynamic tool creation \\
+\textbf{D3: Control Structure}
+  & Single-control (agent only) $\cdot$
+    Dual-control (agent + user, Dec-POMDP) \\
+\rowcolor{altrow}
+\textbf{D4: Evaluation}
+  & AST matching $\cdot$ Executable evaluation $\cdot$
+    State-based evaluation $\cdot$ LLM-as-judge \\
+\textbf{D5: Training}
+  & Prompting-only (zero/few-shot) $\cdot$ SFT $\cdot$
+    Retriever-Aware Training (RAT) $\cdot$ Reinforcement learning \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{D1 -- Interaction Mode.}
+The simplest setting is \emph{single-turn stateless}: one natural-language query produces one
+structured call. \emph{Single-turn multi-call} settings (parallel function calling) require
+simultaneous independent calls. \emph{Multi-turn} settings carry state across turns, while fully
+\emph{agentic} settings have the model taking autonomous sequential actions without per-step user
+input.
+
+\paragraph{D2 -- Tool Selection Complexity.}
+Selection complexity ranges from trivially filling arguments for a single given tool, through
+choosing among a handful of candidates with distractors, to retrieving the correct API from pools of
+thousands (ToolBench: 16,000+ APIs from RapidAPI Hub~\citep{qin2024toolllm}). The most demanding
+setting requires the model to \emph{synthesise} a new tool specification when no existing tool
+satisfies the query.
+
+\paragraph{D3 -- Control Structure.}
+Standard benchmarks assume \emph{single-control}: only the agent has tools.
+\tautwobench{}~\citep{barres2025tau2} introduced the \emph{dual-control} setting formalised as a
+Decentralised Partially Observable Markov Decision Process (Dec-POMDP), where both the agent and the
+user possess separate tool sets acting on a shared world state. The best model achieves only 49\%
+pass@1 in this setting versus 61--80\% in single-control benchmarks.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Foundational Methods: A Chronological Survey}
+\label{sec:methods}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{Pre-2023: Early Tool Augmentation}
+
+\paragraph{TALM \citep{parisi2022talm}.}
+One of the first systematic studies showing that augmenting LLMs with tool calls significantly
+expands capability. Used a self-play loop to generate training data for a fixed set of calculators
+and search tools.
+
+\paragraph{LaMDA \citep{thoppilan2022lamda}.}
+Google's dialogue model demonstrated early tool use (calculator, search) via fine-tuning on
+tool-augmented demonstrations, establishing that structured tool calls can be embedded in
+conversational turns.
+
+\paragraph{ReAct \citep{yao2023react}.}
+Proposed interleaving \emph{Thought} (reasoning trace) and \emph{Action} (tool call) in LLM output.
+The Thought $\rightarrow$ Action $\rightarrow$ Observation chain substantially outperforms
+Act-only prompting and remains the de facto prompting paradigm for all subsequent agent benchmarks.
+
+\paragraph{WebShop \citep{yao2022webshop}.}
+Simulated an e-commerce environment where agents must browse web pages and execute purchase actions,
+establishing the grounded language-agent paradigm.
+
+\subsection{2023: The Grammar of Tool Use}
+
+\paragraph{Toolformer \citep{schick2023toolformer}.}
+Introduced self-supervised learning of when and how to call tools. The model learns to insert API
+calls as special tokens by bootstrapping: it generates candidate call positions, executes the calls,
+and retains those that reduce perplexity on the continuation. While limited to a small fixed set
+(calculator, search, Wikipedia, calendar, translation), it demonstrated that tool use can be learned
+without human annotation of call positions.
+
+\paragraph{Gorilla \citep{patil2023gorilla}.}
+Introduced Retriever-Aware Training (RAT), fine-tuning LLaMA-7B to write accurate API calls from
+HuggingFace, TorchHub, and TensorHub documentation. On APIBench (1,645 ML API calls), Gorilla
+surpasses GPT-4 on API call accuracy, especially with a document retriever handling API version
+changes. Crucially, Gorilla introduced Abstract Syntax Tree (AST) comparison for measuring API
+hallucination --- a methodology later adopted by \bfcl{}.
+
+\paragraph{HuggingGPT \citep{shen2023hugginggpt}.}
+Used ChatGPT as a controller to plan, dispatch, and integrate calls to specialised HuggingFace
+models as tools, establishing the ``LLM as orchestrator of specialist models'' paradigm.
+
+\paragraph{API-Bank \citep{li2023apibank}.}
+Introduced a three-level evaluation hierarchy: (1) Call, (2) Retrieve+Call, and (3)
+Plan+Retrieve+Call, across 73 frequently-used APIs. GPT-4 excels at planning; GPT-3.5 struggles at
+Plan+Retrieve+Call.
+
+\paragraph{ToolLLM / ToolBench \citep{qin2024toolllm}.}
+Fine-tuned LLaMA on 16,000+ real-world APIs from RapidAPI Hub using a novel Depth-First Search
+Decision Tree (DFSDT) reasoning strategy allowing backtracking across solution paths. With 120,000+
+instruction-API pairs, ToolBench catalysed the tool-learning fine-tuning ecosystem.
+
+\paragraph{NexusRaven \citep{srinivasan2023nexusraven}.}
+A commercially permissive (Apache 2.0) function-calling model. NexusRaven-13B was the first
+open-source model to claim surpassing GPT-4 on zero-shot function calling benchmarks using a
+multi-step data generation pipeline.
+
+\paragraph{MetaTool \citep{huang2023metatool}.}
+Tested whether LLMs can decide \emph{when} to use tools (not just how), establishing the
+relevance/irrelevance detection evaluation axis later adopted by \bfcl{}.
+
+\paragraph{ToolAlpaca \citep{tang2023toolalpaca}.}
+Used a multi-agent simulation environment to automatically generate a tool-use corpus with
+$\sim$3,000 simulated tools, demonstrating generalised tool learning without needing real API access.
+
+\subsection{2024: Scale, Multi-Turn, and Reliability}
+
+\paragraph{BFCL v1$\rightarrow$v3 \citep{patil2025bfcl}.}
+The Berkeley Function Calling Leaderboard evolved from a static AST-evaluated benchmark
+(v1: 2,000 examples) to a live community-contribution dataset (v2: 2,251 examples with
+contamination detection) to a full multi-turn state-based evaluation framework (v3: 5,551 pairs
+across Base, Missing-Params, Missing-Funcs, Long-Context, and Composite categories). No model
+exceeds $\sim$75\% overall on v3.
+
+\paragraph{\taubench{} \citep{yao2024taubench}.}
+Introduced LM-simulated users, domain policy compliance, and the \texttt{pass}$^k$ reliability
+metric (probability all $k$ trials succeed). GPT-4o achieves 61\% pass@1 in $\tau$-retail but
+below 25\% pass@8, exposing dramatic consistency failures at scale. Trajectory analysis reveals:
+wrong argument (33\%), wrong decision/policy violation (25\%), wrong info (22\%), partial
+resolution (19\%).
+
+\paragraph{ToolACE \citep{liu2025toolace}.}
+Introduced Tool Self-Evolution Synthesis (TSS), generating diverse APIs from scratch using
+speciation-adaptation-evolution, and Self-Guided Dialog Generation (SDG) for complexity
+calibration. ToolACE-8B achieves competitive \bfcl{} scores versus GPT-4, setting the state of
+the art for 8B open-source models.
+
+\paragraph{ToolSandbox \citep{lu2025toolsandbox}.}
+Introduced stateful tool execution with implicit state dependencies between tools, on-policy
+conversational evaluation, and a dynamic milestone/minefield evaluation strategy. Reveals a
+significant open-source vs.\ proprietary performance gap on stateful tasks.
+
+\paragraph{xLAM \citep{liu2024xlam}.}
+A family of Large Action Models fine-tuned on diverse tool-use datasets across 21 domains,
+establishing a scalable fine-tuning pipeline for open-source tool-using agents.
+
+\paragraph{StableToolBench \citep{guo2024stabletoolbench}.}
+Addresses API instability in ToolBench with a virtual API server implementing caching and
+LLM-powered simulation for reproducible evaluation.
+
+\paragraph{HammerBench \citep{wang2024hammerbench}.}
+Fine-grained function-calling evaluation in real mobile device scenarios, testing temporal
+parsing, implicit user preference, and contextual instruction following.
+
+\subsection{2025: Dual Control, Reinforcement Learning, MCP, and International Scope}
+
+\paragraph{\tautwobench{} \citep{barres2025tau2}.}
+Formalised the dual-control setting as a Dec-POMDP. In the telecom domain (agent CRM tools + user
+phone tools, 30 total), the best model (claude-3.7-sonnet) achieves only 49\% pass@1, dropping
+below 25\% at pass@4.
+
+\paragraph{ReTool \citep{feng2025retool}.}
+Applied reinforcement learning to tool-use, training models to decide when tool calling is more
+efficient than chain-of-thought reasoning alone. Demonstrates significant gains on multi-step
+mathematical reasoning.
+
+\paragraph{MCPVerse / MCPToolBench \citep{mcpverse2025}.}
+Evaluation over real-world APIs via the Model Context Protocol (MCP, Anthropic 2024), the emerging
+standard for tool discovery and context management. The largest real-API benchmark to date.
+
+\paragraph{International Tool Calling (ITC) \citep{itc2025}.}
+A large-scale multilingual benchmark covering 3,571 real APIs and 17,540 tool-calling tasks across
+20 API categories and 40 countries. Fine-tuning on the full multilingual ITC dataset improves
+cross-lingual generalisation substantially: tool selection recall improves by up to 42\% on
+non-English tasks versus English-only training (22.6\% improvement). Among open-source models,
+DeepSeek-V3 and Qwen2.5-Coder-32B perform strongly; Watt-tool-8B scores high on task accuracy but
+poorly on language matching, revealing weaknesses in multilingual structural adherence.
+
+\paragraph{MASSIVE-Agents \citep{massiveagents2025}.}
+The first truly multilingual function-calling benchmark covering 51 languages including Hindi, built
+by converting the MASSIVE NLU dataset into function-call format. GPT-4-class models achieve
+$\sim$50--60\% in Hindi versus $\sim$80\% in English; smaller open-source models fall to
+15--30\% in Hindi.
+
+\paragraph{ComplexFuncBench \citep{zhong2025complexfuncbench}.}
+Evaluates nested calls, constraint-aware argument generation, and context-window management under
+long-context scenarios.
+
+\paragraph{When2Call \citep{when2call2025}.}
+Explicitly tests the model's decision among: (a) call a tool, (b) ask for more info, (c) say it
+cannot help, or (d) answer directly. Fills the gap between \bfcl{}'s binary irrelevance test and
+real production behaviour.
+
+\paragraph{Pre-Act \citep{preact2025}.}
+Structured multi-step planning before action generation. Plans with per-step reasoning outperform
+ReAct in agentic settings.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Benchmarks and Evaluation}
+\label{sec:benchmarks}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{Benchmark Landscape}
+
+Table~\ref{tab:benchmarks} provides a systematic comparison of major benchmarks across the key
+design dimensions introduced in Section~\ref{sec:taxonomy}.
+
+\begin{table}[h]
+\centering
+\caption{Systematic comparison of major tool-calling benchmarks (2023--2025).
+\yes~= yes, \no~= no, $\sim$~= partial.}
+\label{tab:benchmarks}
+\renewcommand{\arraystretch}{1.2}
+\small
+\begin{tabular}{L{2.4cm} C{0.6cm} L{1.7cm} L{1.6cm} C{0.9cm} C{0.9cm} C{0.7cm} L{2.0cm}}
+\toprule
+\rowcolor{headerbg}
+\textbf{Benchmark} & \textbf{Year} & \textbf{Scale} & \textbf{Eval Method}
+  & \textbf{Multi-Turn} & \textbf{User Sim.} & \textbf{Policy} & \textbf{Multilingual} \\
+\midrule
+APIBench (Gorilla)   & 2023 & 1,645 APIs     & AST         & \no  & \no      & \no  & \no \\
+\rowcolor{altrow}
+API-Bank             & 2023 & 73 APIs        & Execution   & \yes & \no      & \no  & \no \\
+ToolBench            & 2023 & 16K+ APIs      & LLM judge   & \yes & \no      & \no  & \no \\
+\rowcolor{altrow}
+\bfcl{} v1           & 2024 & 2,000 pairs    & AST+Exec    & \no  & \no      & \no  & \no \\
+\bfcl{} v3           & 2024 & 5,551 pairs    & AST+State   & \yes & \no      & \no  & \no \\
+\rowcolor{altrow}
+\taubench{}          & 2024 & 165 tasks      & State (DB)  & \yes & LLM sim  & \yes & \no \\
+ToolSandbox          & 2024/25 & Custom      & Milestone   & \yes & LLM sim  & $\sim$ & \no \\
+\rowcolor{altrow}
+ITC Dataset          & 2025 & 17,540 tasks   & AST+Exec    & \no  & \no      & \no  & \yes (40 countries) \\
+\tautwobench{}       & 2025 & 114 tasks      & Assertions  & \yes & LLM sim  & \yes & \no \\
+\rowcolor{altrow}
+MASSIVE-Agents       & 2025 & 51 langs       & AST         & \no  & \no      & \no  & \yes (incl.\ Hindi) \\
+Arabic \bfcl{}       & 2025 & \bfcl{}-scale  & AST         & \no  & \no      & \no  & Arabic \\
+\rowcolor{altrow}
+ACEBench             & 2025 & Multi-domain   & Rule+LLM    & \yes & Partial  & \no  & Chinese+EN \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Evaluation Methods Compared}
+
+\paragraph{AST Evaluation.}
+Fast, scalable, and deterministic with no LLM-judge bias. Cannot catch semantic errors where the
+call is syntactically valid but semantically wrong; requires exhaustive labelling of synonym values.
+
+\paragraph{Executable Evaluation.}
+Catches semantic errors; ground truth is the execution result. Requires real or simulated API
+implementations. API stability is a persistent challenge, addressed by
+StableToolBench~\citep{guo2024stabletoolbench}.
+
+\paragraph{State-Based Evaluation.}
+Checks outcomes rather than calls; path-agnostic (alternative valid action sequences pass). Requires
+a full simulation environment and does not penalise inefficient paths.
+
+\paragraph{LLM-as-Judge.}
+Flexible and handles open-ended outputs, but exhibits GPT-family bias, verbosity bias, and is not
+reproducible across model versions. ToolBench's ChatGPT-based ToolEval has been widely criticised on
+these grounds.
+
+\subsection{Key Empirical Findings Across Benchmarks}
+
+\begin{enumerate}[leftmargin=1.4em, itemsep=3pt]
+  \item \textbf{Simple single-turn is near-saturated.} Top models exceed 90\% on \bfcl{} simple
+        Python. This category no longer discriminates frontier models.
+  \item \textbf{Parallel and multiple function calls remain hard.} A 70--80 percentage-point gap
+        exists between proprietary and open-source models on \bfcl{} parallel-multiple.
+  \item \textbf{Multi-turn is the real frontier.} \bfcl{} composite multi-turn and \taubench{}
+        both show 40--60~pp drops from simple single-turn performance.
+  \item \textbf{Dual control is dramatically harder.} \tautwobench{} telecom drops 22--40~pp
+        versus retail/airline for the same model family.
+  \item \textbf{Consistency collapses at $k \geq 4$.} GPT-4o: 61\% pass@1 $\rightarrow$
+        $<$25\% pass@8 on \taubench{} retail.
+  \item \textbf{Irrelevance detection is a persistent failure.} Even GPT-4o generates hallucinated
+        tool calls when no tool is appropriate ($\sim$15--25\% error rate).
+  \item \textbf{Native FC mode outperforms prompt injection.} Models using native function-calling
+        APIs consistently outperform text-injection approaches on the same base model.
+  \item \textbf{Cross-lingual generalisation requires multilingual training.} ITC~\citep{itc2025}
+        demonstrates that restricting training to English reduces non-English tool selection recall
+        by up to 42\% compared to full multilingual training.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Training Methods for Tool Calling}
+\label{sec:training}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{Supervised Fine-Tuning (SFT)}
+
+SFT remains the dominant training approach. Three primary data sources are used:
+
+\textbf{Distillation from closed models.} GPT-4 generates (query, tool\_call) pairs; open-source
+models are fine-tuned on these. Used by ToolLLM, ToolAlpaca, and early Gorilla. Licensing
+restrictions limit commercial deployment.
+
+\textbf{Synthetic data with self-evolved APIs.} ToolACE's TSS generates tools from scratch; quality
+is verified by rule checkers and model checkers. Avoids licensing issues entirely.
+
+\textbf{Real API data.} ToolBench scraped RapidAPI. Quality issues ($\approx$50\% of queries and
+75\% of trajectories had errors in the original release) were addressed by StableToolBench and
+ToolBench-V.
+
+Key SFT challenges include: (1)~\emph{catastrophic forgetting} --- fine-tuning for tool use
+degrades general capability, mitigated by mixing general instruction data; (2)~\emph{data quality
+vs.\ quantity} --- 10K high-quality examples outperform 100K noisy ones; and
+(3)~\emph{complexity calibration} --- training data slightly above model capability improves
+generalisation (the self-guided approach in ToolACE).
+
+\subsection{Reinforcement Learning}
+
+2025 saw a major shift from SFT to RL for tool calling.
+ReTool~\citep{feng2025retool} trains models to decide when tool calling is more efficient than
+chain-of-thought reasoning alone, achieving significant gains on multi-step mathematical reasoning.
+ToolACE-R uses self-refinement based on internal confidence signals without external oracle feedback.
+TRICE-style second-stage RL uses execution success as a reward signal.
+
+The key advantage of RL is its ability to discover non-obvious tool-call strategies absent from
+training demonstrations, particularly effective for multi-step and long-horizon tasks.
+
+\subsection{Retrieval-Augmented Tool Selection}
+
+When the tool pool spans thousands of APIs, embedding-based retrieval selects candidate APIs before
+passing them to the LLM. ToolLLM's neural API retriever achieves 90\%+ retrieval precision on
+ToolBench. Progressive retrieval (ProTIP) uses multi-stage contrastive training for context-aware
+tool selection. Gorilla's RAT jointly fine-tunes retriever and generator so the generator produces
+calls compatible with retrieved API documentation.
+
+\emph{Challenge:} Long-context models with 128K+ context windows may reduce the need for retrieval,
+but introduce needle-in-haystack accuracy degradation for large tool pools.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Failure Modes and Error Taxonomies}
+\label{sec:failures}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{Single-Turn Failures}
+
+From \bfcl{} and related benchmarks, failures cluster into seven categories:
+(1)~wrong function name; (2)~wrong argument name; (3)~wrong argument value;
+(4)~wrong argument type (string vs.\ integer, list vs.\ scalar); (5)~hallucinated arguments
+(parameters invented that do not exist in schema); (6)~missing required arguments; and
+(7)~irrelevance hallucination (a call generated when no function is applicable).
+
+\subsection{Multi-Turn Failures}
+
+From \taubench{} trajectory analysis (GPT-4o on $\tau$-retail, $n=36$):
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+  \item \textbf{Wrong argument (33\%):} Correct API, wrong values --- often from failure to reason
+        over complex nested database structures.
+  \item \textbf{Wrong decision / policy violation (25\%):} Calls the wrong API by failing to apply
+        domain policy (\eg calling \texttt{exchange} twice when policy allows only once).
+  \item \textbf{Wrong info (22\%):} Omits required output information or provides incorrect totals.
+  \item \textbf{Partial resolution (19\%):} Handles some but not all user requests.
+\end{itemize}
+
+\subsection{Multilingual Failures}
+
+From \emph{Lost in Execution}~\citep{lostinexecution2025}, MASSIVE-Agents~\citep{massiveagents2025},
+and ITC~\citep{itc2025}:
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+  \item \textbf{Cross-lingual schema mismatch:} When function descriptions are in English but
+        queries are in non-English scripts, argument extraction error rates increase substantially.
+  \item \textbf{Parameter hallucination:} Higher hallucination rates for non-English queries even
+        when English function schemas are used.
+  \item \textbf{Tokenisation inefficiency:} Indic languages exhibit high token fertility
+        (3--6 subwords per word in standard tokenisers), reducing effective context for tool schemas.
+  \item \textbf{Execution-level violations:} Output fails formatting requirements specific to
+        non-English scripts (mixed-direction text, script-specific tokenisation).
+  \item \textbf{Structural non-adherence:} Models like Watt-tool-8B achieve strong task-level
+        performance but poor language matching (LM) and format matching (FM) in multilingual
+        settings~\citep{itc2025}.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Multilingual Tool Calling: The State of the Art}
+\label{sec:multilingual}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{MASSIVE-Agents and the Multilingual Frontier}
+
+MASSIVE-Agents~\citep{massiveagents2025} is the first truly multilingual function-calling benchmark
+covering 51 languages including Hindi. Built on the MASSIVE NLU dataset, each intent becomes a
+function name and each slot becomes a parameter; function descriptions are maintained in English
+while queries appear in the target language. GPT-4-class models achieve approximately 50--60\% in
+Hindi versus 80\% in English; smaller open-source models fall to 15--30\% in Hindi compared to
+50--60\% in English.
+
+MASSIVE-Agents is nonetheless limited to a slot-filling style derived from NLU data, not from real
+production APIs. Multi-turn scenarios, parallel calling, and policy adherence are absent.
+
+\subsection{International Tool Calling (ITC)}
+
+The ITC dataset~\citep{itc2025} is the most geographically diverse tool-calling benchmark to date.
+It covers 3,571 real APIs and 17,540 tasks across 20 API categories and 40 countries, constructed
+through a four-stage pipeline: API collection, query generation, scoring/filtering, and QA pair
+generation. Key findings:
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+  \item Among closed-source models, GPT-4o achieves 97.95\% language matching (LM); DeepSeek-R1
+        achieves 100\% format matching (FM).
+  \item Models trained on the full multilingual ITC dataset improve tool selection recall by 42\%
+        on non-English tasks, versus 22.6\% for English-only training.
+  \item Tool invocation F1 for Qwen2.5-Coder-7B increased 34.6\% with multilingual training,
+        outperforming the English-only gain by 9.3\%.
+\end{itemize}
+
+\subsection{Language-Specific Benchmarks}
+
+\textbf{Arabic \bfcl{} Extension (2025):} Translates \bfcl{} queries to Arabic and evaluates
+open-source Arabic LLMs. All models show significant degradation versus English, attributable to
+tokenisation inefficiency, insufficient Arabic tool-use training data, and suboptimal internal
+representations~\citep{arabicbfcl2025}.
+
+\textbf{FunctionChat-Bench (Korean):} Multi-turn Korean function-calling evaluation. Demonstrates
+that language-specific benchmarks are necessary: Korean-specific models outperform generic
+multilingual models on Korean function calling.
+
+\textbf{ACEBench (Chinese + English):} Systematic robustness assessment across diverse scenarios
+with rule-based and LLM-based evaluation.
+
+\subsection{Structural Challenges for Non-English Tool Calling}
+
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+  \item \textbf{Token fertility:} Indic and Arabic scripts have 3--6 subwords per word in standard
+        BPE tokenisers, effectively reducing the context window available for tool schemas by a
+        comparable factor.
+  \item \textbf{Morphological complexity:} Agglutinative morphology in Dravidian languages (Tamil,
+        Telugu, Kannada, Malayalam) makes entity boundary detection harder.
+  \item \textbf{Script diversity:} Nine distinct scripts across India's scheduled languages, plus
+        code-switching (Hinglish, Tanglish), create unpredictable tokenisation patterns.
+  \item \textbf{Training data scarcity:} No publicly available (query, function\_schema,
+        ground\_truth\_call) triples exist in any Indic language, creating a circular dependency
+        between model quality and data availability.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{The Indic Tool Calling Frontier}
+\label{sec:indic}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Indic LLM Ecosystem}
+
+\paragraph{AI4Bharat (IIT Madras).}
+AI4Bharat has produced IndicBERT, IndicBART, IndicTrans2 (110+ translation directions across all
+22 scheduled languages), Airavata~\citep{gala2024airavata} (Hindi instruction-tuned model),
+and IndicLLMSuite~\citep{indicllmsuite2024}. Research focus has been on NLU, translation, and
+generation --- no tool-calling capability has been published.
+
+\paragraph{Sarvam AI.}
+Sarvam has released OpenHathi (a 7B Hindi-English bilingual model based on LLaMA-2), Sarvam-1
+\citep{sarvam12024} (a 2B parameter model supporting 10 Indic languages, trained on 4T tokens with
+a custom tokeniser reducing token fertility), and Sarvam-M (a 24B multilingual reasoning model).
+No tool-calling evaluation has been published.
+
+\paragraph{Krutrim (Ola).}
+Krutrim-1 (7B Mistral-based, 2T+ tokens) and Krutrim-2 (13 languages) represent the proprietary
+Indic LLM track. The \textit{Kruti} assistant (2025) --- booking rides, paying bills, ordering
+food across 13 Indian languages --- is the closest production deployment to Indic tool calling, but
+no academic benchmark has been published.
+
+\paragraph{Other Ecosystem Players.}
+Tech Mahindra's Project Indus processes $\sim$100M queries/month. Two AI's SUTRA supports 50+
+languages. Academic monolingual models include Tamil-LLaMA, Kannada LLaMA, and Odia-Llama.
+IndicGenBench~\citep{indicgenbench2024} (ACL 2024) covers 29 Indic languages for generation tasks.
+IndicMMLU-Pro~\citep{indicmmlupro2025} benchmarks nine Indic languages on academic knowledge.
+IBM's MILU~\citep{milu2025} covers 11 Indic languages across 41 subjects from Indian competitive
+examinations. The Indic-QA Benchmark~\citep{indicqa2025} (NAACL 2025) targets context-grounded
+question answering in 11 Indic languages. \emph{None of these includes tool-calling tasks.}
+
+\subsection{Real-World Indic Tool-Calling Deployments}
+
+\begin{itemize}[leftmargin=1.2em, itemsep=3pt]
+  \item \textbf{BharatGPT / CoRover.ai:} Deployed for IRCTC (Indian Railways), banking, and
+        government services. Claims 1B+ users across Hindi, Tamil, Bengali, and other Indic
+        languages for booking, enquiry, and transaction workflows. Proprietary; no academic benchmark.
+  \item \textbf{Kruti (Krutrim):} Agentic assistant in 13 Indian languages --- the first
+        commercially deployed Indic agent. No academic benchmark paper.
+  \item \textbf{Sarvam + Aadhaar (UIDAI):} Voice-based multilingual AI for identity verification
+        queries in regional languages.
+  \item \textbf{India AI Mission:} Rs.\,10,371 crore investment with 27 AI labs in Tier~2/3
+        cities. ``Citizen Connect 2047'' and ``AI4Pragati'' use cases require multilingual agentic
+        AI at scale.
+\end{itemize}
+
+\subsection{Gap Analysis: What Exists vs.\ What Is Missing}
+
+\textbf{What exists:}
+MASSIVE-Agents Hindi component (slot-filling style, single-turn only);
+\emph{Lost in Execution}~\citep{lostinexecution2025} (10 languages including Hindi, single-turn
+only); ITC dataset (real APIs, 40 countries, but no explicit Indic language subsection or
+India-specific API domains).
+
+\textbf{What is missing:}
+(1)~No Indic tool-calling benchmark covering real India-specific APIs (UPI, Aadhaar, IRCTC, mandi
+prices). (2)~No multi-turn Indic benchmark. (3)~No code-switching (Hinglish/Tanglish) evaluation.
+(4)~No voice-to-tool pipeline evaluation for low-literacy users. (5)~No systematic evaluation of
+any Indic LLM on tool calling. (6)~No study of culturally-specific API design as function-calling
+schemas.
+
+\subsection{Proposed Benchmark: \textsc{IndicFuncBench}}
+
+\begin{researchbox}{IndicFuncBench Specification}
+We propose \textsc{IndicFuncBench}, the first function-calling benchmark designed for Indic
+languages, covering:
+\begin{itemize}[leftmargin=1.0em, itemsep=2pt, topsep=2pt]
+  \item \textbf{Languages:} Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Gujarati, Marathi,
+        Odia, Punjabi (10 languages, 4 script families).
+  \item \textbf{Domains:} (1)~Financial (UPI transfer, EMI calculator, bank balance);
+        (2)~Government services (Aadhaar lookup, ration card, PAN verification);
+        (3)~Commerce (railway PNR, bus booking, grocery delivery);
+        (4)~Agriculture/Rural (mandi price query, crop disease detection, kisan credit).
+  \item \textbf{Categories:} Simple $\cdot$ Multiple $\cdot$ Parallel $\cdot$ Irrelevance
+        $\cdot$ Multi-Turn (mirroring \bfcl{} structure).
+  \item \textbf{Evaluation:} Executable evaluation + AST; human annotation by native speakers;
+        not machine-translated from English.
+  \item \textbf{Key design choices:} Function schemas in English (matching production);
+        code-switched queries (Hinglish, Tanglish) included explicitly;
+        pass@$k$ with $k \geq 4$ for consistency measurement.
+\end{itemize}
+\end{researchbox}
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Open Problems and Future Directions}
+\label{sec:openproblems}
+% ══════════════════════════════════════════════════════════════════════════
+
+\subsection{Evaluation Gaps}
+
+\textbf{Safety-aware tool calling.} What happens when a model calls the wrong tool with financial
+or medical consequences? Safety-critical evaluation (privacy leaks, wrong transactions, medical
+contraindications) remains largely unexplored.
+
+\textbf{Long-context tool calling.} As context windows grow to 1M tokens, how does multi-step tool
+sequence performance change? ComplexFuncBench~\citep{zhong2025complexfuncbench} begins to address
+this.
+
+\textbf{Dynamic tool creation.} When no existing tool can answer a query, can a model generate a
+new tool specification? UltraTool explores this but it remains underexplored.
+
+\textbf{MCP ecosystem evaluation.} With Model Context Protocol adoption, evaluation must move from
+simulated to real-world API calls. MCPVerse and MCPBench are early steps.
+
+\subsection{Training Gaps}
+
+\textbf{RL from real execution.} Most RL work uses simulated environments. Training on real API
+outcomes with sandboxing remains an open problem.
+
+\textbf{Sample efficiency.} Current fine-tuning requires thousands of examples. Few-shot
+in-context tool learning for new domains without fine-tuning is underdeveloped.
+
+\textbf{Compositional generalisation.} Models trained on individual tools often fail when two tools
+must be composed in a novel way.
+
+\textbf{Forgetting mitigation at scale.} Fine-tuning for tool calling degrades general capability.
+Principled solutions beyond data mixing are needed.
+
+\subsection{Indic-Specific Research Priorities}
+
+\begin{enumerate}[leftmargin=1.4em, itemsep=3pt]
+  \item \textbf{IndicFuncBench:} Create the first public Indic tool-calling benchmark
+        (Section~\ref{sec:indic}).
+  \item \textbf{Tokeniser improvement:} Indic-script-aware BPE reducing token fertility.
+        Sarvam-1's custom tokeniser is a step forward.
+  \item \textbf{Tool-calling SFT data:} Create (query, schema, call) triples for 10 Indic
+        languages, starting with translation + human verification.
+  \item \textbf{Code-switching robustness:} Explicitly include Hinglish/Tanglish training
+        examples; real users code-switch extensively.
+  \item \textbf{Voice-to-tool pipelines:} For low-literacy users, the practical pipeline is
+        ASR $\rightarrow$ language ID $\rightarrow$ normalisation $\rightarrow$ tool call.
+        IndicWav2Vec + Sarvam-1 + function calling is an unexplored combination.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Related Surveys}
+\label{sec:related}
+% ══════════════════════════════════════════════════════════════════════════
+
+\textbf{Tool-calling surveys.}
+\citet{wangsurvey2024} and the Springer 2025 comprehensive survey~\citep{springersurvey2025} cover
+SFT, RL, and retrieval approaches systematically, but are entirely English-centric.
+
+\textbf{Agent evaluation surveys.}
+\citet{agentsurvey2025} provide a broad agent evaluation survey including tool use, but with no
+multilingual analysis.
+
+\textbf{Indic LLM surveys.}
+\citet{indicanalysis2025} review 14 papers evaluating LLMs on Indic languages, covering no tool
+calling. IndicMMLU-Pro~\citep{indicmmlupro2025} and the Indic-QA Benchmark~\citep{indicqa2025}
+represent the frontier of Indic NLU evaluation but neither touches tool calling.
+
+This survey is the first to bridge all three, providing a complete map of the global tool-calling
+literature and a concrete roadmap for Indic tool calling.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+\label{sec:conclusion}
+% ══════════════════════════════════════════════════════════════════════════
+
+Tool calling has emerged as the foundational capability for agentic AI, evolving rapidly from
+Toolformer's self-supervised five-tool system in 2023 to today's ecosystem of dual-control agents,
+reinforcement-learned decision making, real-API evaluation over the Model Context Protocol, and
+internationally diverse benchmarks like ITC spanning 40 countries. The frontier has shifted from
+simple single-turn function selection --- now near-saturated at 90\%+ for top models --- to
+multi-turn consistency, policy adherence, and cross-lingual robustness.
+
+Yet 1.4 billion speakers of India's 22 scheduled languages remain almost entirely unserved by
+existing tool-calling research. The Indic LLM ecosystem has produced capable multilingual foundation
+models (Sarvam-1, Krutrim-2, Airavata), and production deployments (Kruti, BharatGPT) demonstrate
+clear demand. What is missing is the evaluation infrastructure: no tool-calling benchmark covers
+India-specific APIs in Indic languages, no systematic comparison of Indic LLMs on tool calling
+exists, and no work addresses the full voice-to-tool pipeline critical for rural and low-literacy
+users.
+
+We present \textsc{IndicFuncBench} as a concrete specification for addressing this gap, designed to
+cover 10 Indic languages, four India-specific domain clusters, and the full \bfcl{} evaluation
+category spectrum. We hope this survey serves as both a reference for researchers entering the field
+and a catalyst for the Indic tool-calling research community.
+
+% ══════════════════════════════════════════════════════════════════════════
+% REFERENCES
+% ══════════════════════════════════════════════════════════════════════════
+\bibliographystyle{plainnat}
+\begin{thebibliography}{99}
+
+\bibitem[Barres et al.(2025)]{barres2025tau2}
+Barres, V. et al.\ (2025).
+\newblock $\tau^2$-bench: Evaluating Conversational Agents in a Dual-Control Environment.
+\newblock \textit{arXiv:2506.07982}.
+
+\bibitem[Feng et al.(2025)]{feng2025retool}
+Feng, Y. et al.\ (2025).
+\newblock ReTool: Reinforcement Learning for Strategic Tool Use in LLMs.
+\newblock \textit{arXiv:2504.11536}.
+
+\bibitem[Gala et al.(2024)]{gala2024airavata}
+Gala, J. et al.\ (2024).
+\newblock Airavata: Introducing Hindi Instruction-tuned LLM.
+\newblock \textit{arXiv:2401.15006}.
+
+\bibitem[Guo et al.(2024)]{guo2024stabletoolbench}
+Guo, L. et al.\ (2024).
+\newblock StableToolBench: Towards Stable Large-Scale Benchmarking on Tool Learning of Large Language Models.
+\newblock \textit{arXiv:2403.07714}.
+
+\bibitem[Huang et al.(2023)]{huang2023metatool}
+Huang, Y. et al.\ (2023).
+\newblock MetaTool Benchmark for Large Language Models: Deciding Whether to Use Tools and Which to Use.
+\newblock \textit{arXiv:2310.03128}.
+
+\bibitem[ITC(2025)]{itc2025}
+Anonymous (2025).
+\newblock Enhancing Tool Calling in LLMs with the International Tool Calling Dataset.
+\newblock \textit{ICLR 2026 Submission, arXiv:2603.05515}.
+
+\bibitem[Kunchukuttan et al.(2024)]{indicllmsuite2024}
+AI4Bharat (2024).
+\newblock IndicLLMSuite: A Blueprint for Creating Pre-training and Fine-Tuning Datasets for Indian Languages.
+\newblock \textit{arXiv:2403.06350}.
+
+\bibitem[Li et al.(2023)]{li2023apibank}
+Li, M. et al.\ (2023).
+\newblock API-Bank: A Comprehensive Benchmark for Tool-Augmented LLMs.
+\newblock In \textit{EMNLP 2023}.
+
+\bibitem[Liu et al.(2024)]{liu2024xlam}
+Liu, W. et al.\ (2024).
+\newblock xLAM: A Family of Large Action Models to Empower AI Agent Systems.
+\newblock \textit{arXiv:2409.03215}.
+
+\bibitem[Liu et al.(2025)]{liu2025toolace}
+Liu, W. et al.\ (2025).
+\newblock ToolACE: Winning the Points of LLM Function Calling.
+\newblock In \textit{ICLR 2025}.
+
+\bibitem[Lu et al.(2025)]{lu2025toolsandbox}
+Lu, J. et al.\ (2025).
+\newblock ToolSandbox: A Stateful, Conversational, Interactive Evaluation Benchmark for LLM Tool Use Capabilities.
+\newblock In \textit{NAACL 2025}.
+
+\bibitem[MASSIVE-Agents(2025)]{massiveagents2025}
+Anonymous (2025).
+\newblock MASSIVE-Agents: A Benchmark for Multilingual Function Calling.
+\newblock In \textit{ACL 2025 Findings}.
+
+\bibitem[MCPVerse(2025)]{mcpverse2025}
+Anonymous (2025).
+\newblock MCPVerse: Evaluation of LLMs over Real-World APIs via Model Context Protocol.
+\newblock \textit{arXiv:2025}.
+
+\bibitem[LostInExecution(2025)]{lostinexecution2025}
+Anonymous (2025).
+\newblock Lost in Execution: On the Multilingual Robustness of Tool Calling in LLMs.
+\newblock \textit{arXiv:2601.05366}.
+
+\bibitem[ArabicBFCL(2025)]{arabicbfcl2025}
+Anonymous (2025).
+\newblock Arabic Prompts with English Tools: A Function Calling Benchmark.
+\newblock \textit{arXiv:2601.05101}.
+
+\bibitem[Parisi et al.(2022)]{parisi2022talm}
+Parisi, A., Zhao, Y., and Fiedel, N. (2022).
+\newblock TALM: Tool Augmented Language Models.
+\newblock \textit{arXiv:2205.12255}.
+
+\bibitem[Patil et al.(2023)]{patil2023gorilla}
+Patil, S.~G. et al.\ (2023).
+\newblock Gorilla: Large Language Model Connected with Massive APIs.
+\newblock In \textit{NeurIPS 2024}.
+
+\bibitem[Patil et al.(2025)]{patil2025bfcl}
+Patil, S.~G. et al.\ (2025).
+\newblock The Berkeley Function Calling Leaderboard.
+\newblock In \textit{ICML 2025, PMLR 267}.
+
+\bibitem[PreAct(2025)]{preact2025}
+Anonymous (2025).
+\newblock Pre-Act: Multi-Step Planning Before Action in Agentic LLMs.
+\newblock \textit{arXiv:2025}.
+
+\bibitem[Qin et al.(2024)]{qin2024toolllm}
+Qin, Y. et al.\ (2024).
+\newblock ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs.
+\newblock In \textit{ICLR 2024}.
+
+\bibitem[Sarvam(2024)]{sarvam12024}
+Sarvam AI (2024).
+\newblock Sarvam-1: A Language Model for Indian Languages.
+\newblock Technical Report.
+
+\bibitem[Schick et al.(2023)]{schick2023toolformer}
+Schick, T. et al.\ (2023).
+\newblock Toolformer: Language Models Can Teach Themselves to Use Tools.
+\newblock In \textit{NeurIPS 2023}.
+
+\bibitem[Shen et al.(2023)]{shen2023hugginggpt}
+Shen, Y. et al.\ (2023).
+\newblock HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in Hugging Face.
+\newblock In \textit{NeurIPS 2023}.
+
+\bibitem[Singh et al.(2024)]{indicgenbench2024}
+Singh, H. et al.\ (2024).
+\newblock IndicGenBench: A Multilingual Benchmark to Evaluate Generation Capabilities of LLMs on Indic Languages.
+\newblock In \textit{ACL 2024}.
+
+\bibitem[Singh et al.(2025)]{indicqa2025}
+Singh, A.~K. et al.\ (2025).
+\newblock INDIC QA BENCHMARK: A Multilingual Benchmark to Evaluate Question Answering Capability of LLMs for Indic Languages.
+\newblock In \textit{NAACL 2025 Findings}.
+
+\bibitem[Srinivasan et al.(2023)]{srinivasan2023nexusraven}
+Srinivasan, V. et al.\ (2023).
+\newblock NexusRaven: A Commercially-Permissive Language Model for Function Calling.
+\newblock In \textit{NeurIPS 2023 Workshop}.
+
+\bibitem[Tang et al.(2023)]{tang2023toolalpaca}
+Tang, Q. et al.\ (2023).
+\newblock ToolAlpaca: Generalized Tool Learning for Language Models with 3000 Simulated Cases.
+\newblock \textit{arXiv:2306.05301}.
+
+\bibitem[Thoppilan et al.(2022)]{thoppilan2022lamda}
+Thoppilan, R. et al.\ (2022).
+\newblock LaMDA: Language Models for Dialog Applications.
+\newblock \textit{arXiv:2201.08239}.
+
+\bibitem[IndicAnalysis(2025)]{indicanalysis2025}
+Anonymous (2025).
+\newblock Analysis of Indic Language Capabilities in LLMs.
+\newblock \textit{arXiv:2501.13912}.
+
+\bibitem[IndicMMLUPro(2025)]{indicmmlupro2025}
+Anonymous (2025).
+\newblock IndicMMLU-Pro: Benchmarking Indic Large Language Models on Multi-Task Language Understanding.
+\newblock \textit{arXiv:2501.15747}.
+
+\bibitem[MILU(2025)]{milu2025}
+Verma, S. et al.\ (2025).
+\newblock MILU: A Multi-Task Indic Language Understanding Benchmark.
+\newblock In \textit{NAACL 2025}.
+
+\bibitem[Wang et al.(2024)]{wangsurvey2024}
+Wang, L. et al.\ (2024).
+\newblock Tool Learning with Large Language Models: A Survey.
+\newblock \textit{arXiv:2405.17935}.
+
+\bibitem[Wang et al.(2024)]{wang2024hammerbench}
+Wang, Y. et al.\ (2024).
+\newblock HammerBench: Fine-Grained Function-Calling Evaluation in Real Mobile Device Scenarios.
+\newblock \textit{arXiv:2410.04587}.
+
+\bibitem[When2Call(2025)]{when2call2025}
+Anonymous (2025).
+\newblock When2Call: A Benchmark for Tool-Use Decision Making in LLMs.
+\newblock \textit{arXiv:2025}.
+
+\bibitem[Springer(2025)]{springersurvey2025}
+Anonymous (2025).
+\newblock Tool Learning with Language Models: A Comprehensive Survey of Methods, Pipelines, and Benchmarks.
+\newblock \textit{Springer 2025}.
+
+\bibitem[AgentSurvey(2025)]{agentsurvey2025}
+Anonymous (2025).
+\newblock Evaluation and Benchmarking of LLM Agents: A Survey.
+\newblock \textit{arXiv:2507.21504}.
+
+\bibitem[Yao et al.(2022a)]{yao2022webshop}
+Yao, S. et al.\ (2022).
+\newblock WebShop: Towards Scalable Real-World Web Interaction with Grounded Language Agents.
+\newblock In \textit{NeurIPS 2022}.
+
+\bibitem[Yao et al.(2023)]{yao2023react}
+Yao, S. et al.\ (2023).
+\newblock ReAct: Synergizing Reasoning and Acting in Language Models.
+\newblock In \textit{ICLR 2023}.
+
+\bibitem[Yao et al.(2024)]{yao2024taubench}
+Yao, S. et al.\ (2024).
+\newblock $\tau$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains.
+\newblock \textit{arXiv:2406.12045}.      
+
+\bibitem[Zhong et al.(2025)]{zhong2025complexfuncbench}
+Zhong, W. et al.\ (2025).
+\newblock ComplexFuncBench: Exploring Multi-Step and Constrained Function Calling under Long-Context Scenario.
+\newblock \textit{arXiv:2501.10132}.
+
+\end{thebibliography}
+
+\end{document}

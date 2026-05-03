@@ -1,0 +1,147 @@
+You are building test personas for a function-calling
+benchmark for the MSP Procurement (government purchase)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\MSP procurement (govt. purchase)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\MSP procurement (govt. purchase)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific MSP procurement scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not registered for MSP procurement
+  registration_status: NOT_REGISTERED
+
+PATH 2 — Registered, slot not booked
+  registration_status: REGISTERED
+  slot_status: NOT_BOOKED
+
+PATH 3 — Slot booked, waiting for procurement day
+  slot_status: BOOKED
+  procurement_status: PENDING
+
+PATH 4 — Crop delivered, quality check pending
+  procurement_status: QUALITY_CHECK_PENDING
+
+PATH 5 — Procurement completed successfully
+  procurement_status: COMPLETED
+  payment_status: PENDING
+
+PATH 6 — Payment credited successfully
+  payment_status: CREDITED
+
+PATH 7 — Procurement rejected due to quality issues
+  procurement_status: REJECTED
+  rejection_reason: QUALITY_FAIL
+
+PATH 8 — Farmer partially sold via MSP and rest in open market
+  procurement_type: PARTIAL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REGISTRATION RULE
+   - NOT_REGISTERED → cannot book slot
+
+2. SLOT RULE
+   - BOOKED → must have date and procurement center
+
+3. PROCUREMENT FLOW
+   - BOOKED → PENDING → QUALITY_CHECK → COMPLETED/REJECTED
+
+4. QUALITY RULE
+   - REJECTED → must include rejection_reason
+   - Valid reasons:
+     QUALITY_FAIL, MOISTURE_EXCESS, IMPURITY_HIGH
+
+5. PAYMENT RULE
+   - CREDITED only if procurement COMPLETED
+
+6. PARTIAL SALE RULE
+   - PARTIAL → portion sold via MSP + portion outside
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  wheat, rice, paddy
+
+- MSP price:
+  realistic govt rates (₹1800–₹2500/quintal)
+
+- Quantity:
+  5–200 quintals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed procurement flow
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Rajesh Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — registered, slot not booked",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer registered for MSP but hasn't booked a slot yet",
+  "stub_test_assertion": "slot_status should become BOOKED after slot_booking tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

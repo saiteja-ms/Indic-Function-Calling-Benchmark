@@ -1,0 +1,150 @@
+You are building test personas for a function-calling
+benchmark for the iFMS Fertilizer Subsidy (DBT)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\5 Fertilizer & Inputs\iFMS fertilizer subsidy (DBT)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\5 Fertilizer & Inputs\iFMS fertilizer subsidy (DBT)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific fertilizer purchase/subsidy scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not registered for DBT fertilizer subsidy
+  registration_status: NOT_REGISTERED
+
+PATH 2 — Registered but no purchase made
+  registration_status: REGISTERED
+  purchase_status: NONE
+
+PATH 3 — Fertilizer purchased, subsidy pending
+  purchase_status: COMPLETED
+  subsidy_status: PENDING
+
+PATH 4 — Subsidy credited successfully
+  subsidy_status: CREDITED
+
+PATH 5 — Purchase rejected due to authentication failure
+  purchase_status: FAILED
+  failure_reason: AUTHENTICATION_FAILED
+
+PATH 6 — Subsidy delayed due to bank issues
+  subsidy_status: DELAYED
+
+PATH 7 — Multiple purchases across season
+  multiple_purchases: TRUE
+
+PATH 8 — Dealer mismatch or invalid dealer
+  purchase_status: FAILED
+  failure_reason: INVALID_DEALER
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REGISTRATION RULE
+   - NOT_REGISTERED → cannot purchase via DBT
+
+2. PURCHASE RULE
+   - COMPLETED → must include:
+     - fertilizer_type
+     - quantity
+     - purchase_date
+
+3. SUBSIDY RULE
+   - CREDITED only if purchase COMPLETED
+   - DELAYED → bank/payment issue
+
+4. FAILURE RULE
+   - FAILED → must include failure_reason
+   - Valid reasons:
+     AUTHENTICATION_FAILED
+     INVALID_DEALER
+     STOCK_UNAVAILABLE
+
+5. MULTI-PURCHASE RULE
+   - Each purchase must have unique purchase_id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Fertilizer types:
+  UREA, DAP, MOP, NPK
+
+- Quantity:
+  10–500 kg
+
+- Subsidy:
+  realistic DBT values
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed purchase scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Mukesh Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — registered, no purchase",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer registered but has not yet bought fertilizer this season",
+  "stub_test_assertion": "purchase_status should become COMPLETED after fertilizer_purchase tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

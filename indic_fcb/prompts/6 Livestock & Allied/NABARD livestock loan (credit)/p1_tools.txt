@@ -1,0 +1,348 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+NABARD Livestock Loan (credit support for dairy, poultry, and allied activities)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Loan eligibility checking
+- Credit scoring and assessment
+- Loan application submission
+- Document verification
+- Loan approval or rejection
+- Loan disbursement tracking
+- EMI and repayment tracking
+- Default handling and restructuring
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Credit eligibility:
+  Loan approval depends on:
+    - credit history
+    - repayment capacity
+    - project feasibility
+
+- Bank dependency:
+  Loan processing is handled by banks/NBFCs supported by NABARD.
+
+- Project linkage:
+  Loan must be tied to a valid livestock project:
+    - dairy
+    - poultry
+    - goat/sheep rearing
+
+- Document verification:
+  Required documents may include:
+    - identity proof
+    - land records
+    - project proposal
+
+- Loan approval is NOT guaranteed:
+  Applications may be rejected based on risk assessment.
+
+- Disbursement dependency:
+  Loan is disbursed only after approval and verification.
+
+- Repayment lifecycle:
+  Borrower must repay via scheduled EMIs.
+
+- Default handling:
+  Non-payment may lead to:
+    - penalty
+    - restructuring
+    - recovery action
+
+- No direct subsidy:
+  This is a credit product, not a direct subsidy (unless linked separately).
+
+- Grievances should ONLY be raised after checking loan or repayment status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- application_status:
+  not_applied → submitted → under_review → approved → rejected
+
+- verification_status:
+  not_started → in_progress → verified → failed
+
+- loan_status:
+  not_sanctioned → sanctioned → disbursed → active → closed → defaulted
+
+- repayment_status:
+  not_started → ongoing → overdue → completed
+
+- disbursement_status:
+  not_initiated → initiated → completed → failed
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- farmer not eligible but applies
+- incomplete or invalid documentation
+- poor credit history leading to rejection
+- mismatch between project and loan purpose
+- loan approved but not disbursed
+- delayed disbursement
+- EMI not paid leading to overdue/default
+- incorrect repayment schedule
+- loan closure issues
+- multiple loan applications causing conflict
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (eligibility, documentation, project linkage)
+- rejection conditions (credit risk, invalid application)
+- failure scenarios (verification failure, disbursement delay, default)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking loan eligibility
+- applying for livestock loan
+- document verification and approval
+- loan disbursement tracking
+- EMI and repayment tracking
+- handling defaults or delays
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: nabard_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"application_id": {
+  "type": "string",
+  "description": "Unique identifier of the loan application."
+}
+
+"loan_id": {
+  "type": "string",
+  "description": "Unique identifier of the sanctioned loan."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"project_type": [
+  "dairy",
+  "poultry",
+  "goat_rearing",
+  "sheep_rearing"
+]
+
+"application_status": [
+  "not_applied",
+  "submitted",
+  "under_review",
+  "approved",
+  "rejected"
+]
+
+"loan_status": [
+  "not_sanctioned",
+  "sanctioned",
+  "disbursed",
+  "active",
+  "closed",
+  "defaulted"
+]
+
+"repayment_status": [
+  "not_started",
+  "ongoing",
+  "overdue",
+  "completed"
+]
+
+"verification_status": [
+  "not_started",
+  "in_progress",
+  "verified",
+  "failed"
+]
+
+"grievance_category": [
+  "loan_rejected",
+  "disbursement_delay",
+  "repayment_issue",
+  "default_issue",
+  "documentation_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. nabard_generate_otp  
+2. nabard_verify_otp  
+3. nabard_check_eligibility  
+4. nabard_submit_application  
+5. nabard_verify_documents  
+6. nabard_track_application_status  
+7. nabard_approve_loan  
+8. nabard_disburse_loan  
+9. nabard_track_repayment  
+10. nabard_track_loan_status  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- nabard_get_emi_schedule  
+- nabard_calculate_loan_amount  
+- nabard_handle_default  
+- nabard_restructure_loan  
+- nabard_close_loan  
+- nabard_resolve_application_ambiguity  
+- nabard_raise_grievance  
+- nabard_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (eligibility, approval, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - nabard_generate_otp
+  - nabard_verify_otp
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "nabard_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

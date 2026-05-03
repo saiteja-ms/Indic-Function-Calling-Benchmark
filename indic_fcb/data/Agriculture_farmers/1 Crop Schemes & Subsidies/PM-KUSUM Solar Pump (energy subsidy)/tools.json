@@ -1,0 +1,77 @@
+[
+  {
+    "name": "pmkusum_generate_otp",
+    "description": "Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication. First step in authentication flow. Does NOT verify the OTP or create a session. Fails if Aadhaar is invalid or mobile not registered.",
+    "parameters": { "type": "dict", "properties": { "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." }, "mobile_number": { "type": "string", "description": "10-digit mobile number linked with Aadhaar." } }, "required": ["aadhaar_number", "mobile_number"] }
+  },
+  {
+    "name": "pmkusum_verify_otp",
+    "description": "Verifies the OTP and returns a session_token for PM-KUSUM operations. Does NOT check eligibility or application status. Fails if OTP is expired, incorrect, or not generated via pmkusum_generate_otp.",
+    "parameters": { "type": "dict", "properties": { "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." }, "otp": { "type": "string", "description": "6-digit OTP received on registered mobile." } }, "required": ["aadhaar_number", "otp"] }
+  },
+  {
+    "name": "pmkusum_check_eligibility",
+    "description": "Checks farmer's eligibility for PM-KUSUM solar pump subsidy based on land ownership, irrigation land access, and non-duplication criteria. Returns eligibility_status ('eligible' or 'not_eligible') with reasons. Requires session_token. Does NOT submit application. Fails if farmer has no valid land records or has already received a solar pump subsidy.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." }, "state": { "type": "string", "description": "State where the farmer's land is located." }, "land_area_hectares": { "type": "number", "description": "Total irrigable land area in hectares." } }, "required": ["session_token", "aadhaar_number", "state"] }
+  },
+  {
+    "name": "pmkusum_apply_subsidy",
+    "description": "Submits a solar pump subsidy application under PM-KUSUM. Transitions application_status from 'not_applied' to 'submitted'. Requires eligibility check first. Requires session_token. Does NOT approve the application or select vendors. Fails if farmer is not eligible, a duplicate application exists, or land details are invalid.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." }, "pump_type": { "type": "string", "description": "Type of solar pump. Allowed: 'surface_pump', 'submersible_pump'." }, "pump_capacity_hp": { "type": "number", "description": "Capacity of the solar pump in HP." }, "grid_type": { "type": "string", "description": "Connection type. Allowed: 'off_grid', 'grid_connected'." }, "land_parcel_id": { "type": "string", "description": "Unique identifier of the irrigation land parcel." } }, "required": ["session_token", "aadhaar_number", "pump_type", "pump_capacity_hp", "grid_type", "land_parcel_id"] }
+  },
+  {
+    "name": "pmkusum_calculate_subsidy",
+    "description": "Calculates the subsidy breakdown for a PM-KUSUM application showing central share, state share, and farmer contribution. Subsidy percentage and rules vary by state. Requires session_token. Does NOT process payment or approve application. Fails if application_id is invalid or application is in 'rejected' state.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." } }, "required": ["session_token", "application_id"] }
+  },
+  {
+    "name": "pmkusum_check_application_status",
+    "description": "Returns the current application_status ('not_applied', 'submitted', 'under_review', 'approved', 'rejected') with remarks. Requires session_token. Does NOT modify the application. Fails if application_id is invalid or does not belong to the authenticated farmer.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." } }, "required": ["session_token", "application_id"] }
+  },
+  {
+    "name": "pmkusum_get_vendor_list",
+    "description": "Returns a list of empanelled vendors available in the farmer's region for solar pump installation. Requires session_token. Does NOT select or assign a vendor. Fails if no vendors are available in the specified region.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "state": { "type": "string", "description": "State where installation is needed." }, "district": { "type": "string", "description": "District where installation is needed." } }, "required": ["session_token", "state", "district"] }
+  },
+  {
+    "name": "pmkusum_select_vendor",
+    "description": "Selects an empanelled vendor for solar pump installation. Transitions vendor_status from 'not_selected' to 'selected'. Requires session_token. Application must be in 'approved' state. Does NOT schedule installation. Fails if vendor_id is invalid, vendor is not empanelled, or application is not approved.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." }, "vendor_id": { "type": "string", "description": "Unique identifier of the empanelled vendor." } }, "required": ["session_token", "application_id", "vendor_id"] }
+  },
+  {
+    "name": "pmkusum_schedule_installation",
+    "description": "Schedules the solar pump installation with the selected vendor. Transitions installation_status from 'not_started' to 'scheduled'. Requires session_token. Vendor must be selected first. Does NOT perform installation or verify it. Fails if vendor is not selected or scheduling conflicts exist.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." }, "preferred_date": { "type": "string", "description": "Preferred installation date in YYYY-MM-DD format." } }, "required": ["session_token", "application_id", "preferred_date"] }
+  },
+  {
+    "name": "pmkusum_track_installation",
+    "description": "Tracks the installation progress of the solar pump. Returns installation_status ('not_started', 'scheduled', 'in_progress', 'completed', 'verified') and vendor details. Requires session_token. Does NOT verify installation or release subsidy. Fails if application_id is invalid.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." } }, "required": ["session_token", "application_id"] }
+  },
+  {
+    "name": "pmkusum_verify_installation",
+    "description": "Records the physical verification/inspection result for the installed solar pump. Transitions installation_status from 'completed' to 'verified' upon passing. Verification is REQUIRED before subsidy disbursement. Requires session_token. Does NOT disburse subsidy. Fails if installation is not 'completed', inspection finds defects, or installation is incomplete.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." }, "inspection_result": { "type": "string", "description": "Result of physical inspection: 'passed' or 'failed'." }, "remarks": { "type": "string", "description": "Inspector's remarks or observations." } }, "required": ["session_token", "application_id", "inspection_result"] }
+  },
+  {
+    "name": "pmkusum_track_subsidy",
+    "description": "Tracks the subsidy disbursement status. Returns subsidy_status ('not_initiated', 'pending', 'disbursed', 'failed') with transaction details. Subsidy is released ONLY after verified installation. Requires session_token. Does NOT initiate disbursement. Fails if installation is not verified.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." } }, "required": ["session_token", "application_id"] }
+  },
+  {
+    "name": "pmkusum_get_grid_connection_status",
+    "description": "Checks the grid connection status for grid-connected solar pump installations. Only applicable for 'grid_connected' type. Requires session_token. Does NOT establish grid connection. Fails if the installation is 'off_grid' type or not yet completed.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "application_id": { "type": "string", "description": "Unique identifier of the subsidy application." } }, "required": ["session_token", "application_id"] }
+  },
+  {
+    "name": "pmkusum_raise_grievance",
+    "description": "Raises a grievance related to PM-KUSUM. Valid categories: 'application_rejected', 'installation_delay', 'vendor_issue', 'subsidy_not_received', 'inspection_failure'. Farmer must check application/subsidy status first. Requires session_token. Does NOT resolve grievances. Fails if category is invalid or duplicate exists.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." }, "grievance_category": { "type": "string", "description": "Category: 'application_rejected', 'installation_delay', 'vendor_issue', 'subsidy_not_received', 'inspection_failure'." }, "description": { "type": "string", "description": "Detailed description of the issue." } }, "required": ["session_token", "aadhaar_number", "grievance_category", "description"] }
+  },
+  {
+    "name": "pmkusum_track_grievance_status",
+    "description": "Tracks a previously raised PM-KUSUM grievance. Returns resolution status, assigned officer, and remarks. Requires session_token. Does NOT raise new grievances. Fails if grievance_id is invalid.",
+    "parameters": { "type": "dict", "properties": { "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." }, "grievance_id": { "type": "string", "description": "Unique identifier of the grievance." } }, "required": ["session_token", "grievance_id"] }
+  }
+]

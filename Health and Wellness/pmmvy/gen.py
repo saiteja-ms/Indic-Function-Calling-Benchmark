@@ -1,0 +1,150 @@
+import json
+import os
+
+with open(r"C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\Health and Wellness\pmmvy\tools\pmmvy_tools.json", "r", encoding="utf-8") as f:
+    tools = json.load(f)
+
+tool_dict = {t["name"]: t for t in tools}
+
+cases = [
+    {
+        "id": "IFCB_v1_pmmvy_simple_001",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I registered for pregnancy under PMMVY. My application number is APP-MH-982. Has my first installment been approved yet?"}]],
+        "function": [tool_dict["pmmvy_check_installment_status"], tool_dict["pmmvy_check_payment_status"], tool_dict["pmmvy_track_application_status"]],
+        "ground_truth": ["pmmvy_check_installment_status(application_id='APP-MH-982', installment_number='installment_1')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_002",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I submitted my ANC details for PMMVY (App ID: PMMVY-KA-777). Please tell me if the second installment is cleared."}]],
+        "function": [tool_dict["pmmvy_check_installment_status"], tool_dict["pmmvy_check_anc_status"]],
+        "ground_truth": ["pmmvy_check_installment_status(application_id='PMMVY-KA-777', installment_number='installment_2')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_003",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "My baby received the first round of vaccines. Application ID PMMVY-UP-1122. I want to know the approval stage of my third installment."}]],
+        "function": [tool_dict["pmmvy_check_installment_status"], tool_dict["pmmvy_raise_grievance"]],
+        "ground_truth": ["pmmvy_check_installment_status(application_id='PMMVY-UP-1122', installment_number='installment_3')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_004",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I belong to the SC category and am pregnant with my first child. Am I eligible to apply for PMMVY benefits?"}]],
+        "function": [tool_dict["pmmvy_check_eligibility"], tool_dict["pmmvy_register_beneficiary"]],
+        "ground_truth": ["pmmvy_check_eligibility(eligibility_category='sc_st', child_order='first_child')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_005",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "We have a BPL ration card and we are expecting our second child, a girl. Does the new PMMVY 2.0 scheme cover us?"}]],
+        "function": [tool_dict["pmmvy_check_eligibility"], tool_dict["pmmvy_verify_beneficiary"]],
+        "ground_truth": ["pmmvy_check_eligibility(eligibility_category='bpl_ration_card', child_order='second_child_girl')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_006",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I applied at the Anganwadi centre last month. Can you check where my application APP-RJ-3321 has reached?"}]],
+        "function": [tool_dict["pmmvy_track_application_status"], tool_dict["pmmvy_check_payment_status"]],
+        "ground_truth": ["pmmvy_track_application_status(application_id='APP-RJ-3321')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_007",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "What is the status of my PMMVY form? The Asha worker gave me this number: PM-BR-9900."}]],
+        "function": [tool_dict["pmmvy_track_application_status"], tool_dict["pmmvy_check_installment_status"]],
+        "ground_truth": ["pmmvy_track_application_status(application_id='PM-BR-9900')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_008",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "The officer told me my first installment was approved. But has the bank credited the money via PFMS? Application PM-MP-445."}]],
+        "function": [tool_dict["pmmvy_check_payment_status"], tool_dict["pmmvy_check_installment_status"]],
+        "ground_truth": ["pmmvy_check_payment_status(application_id='PM-MP-445', installment_number='installment_1')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_009",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I got a message that installment 3 is done, but my account balance hasn't increased. Can you check the actual bank payment status? App ID is PMMVY-TN-88."}]],
+        "function": [tool_dict["pmmvy_check_payment_status"], tool_dict["pmmvy_track_application_status"]],
+        "ground_truth": ["pmmvy_check_payment_status(application_id='PMMVY-TN-88', installment_number='installment_3')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_010",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "My second installment is pending. The hospital said they uploaded my checkup details. Has my ANC completion status been updated for App PM-AP-101?"}]],
+        "function": [tool_dict["pmmvy_check_anc_status"], tool_dict["pmmvy_check_installment_status"]],
+        "ground_truth": ["pmmvy_check_anc_status(application_id='PM-AP-101')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_011",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I want to complain about not getting the second installment, but first I need to check if my ANC status is marked complete. App ID: PM-GJ-55."}]],
+        "function": [tool_dict["pmmvy_check_anc_status"], tool_dict["pmmvy_raise_grievance"]],
+        "ground_truth": ["pmmvy_check_anc_status(application_id='PM-GJ-55')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_012",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I filed a complaint about payment delay. The reference number is GRV-MH-112. Is it resolved yet?"}]],
+        "function": [tool_dict["pmmvy_track_grievance_status"], tool_dict["pmmvy_raise_grievance"]],
+        "ground_truth": ["pmmvy_track_grievance_status(grievance_id='GRV-MH-112')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_013",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "My old bank account was closed. My PMMVY app ID is APP-DL-77 and my session token is sTok99. Can you update my details to new account 9876543210 with IFSC SBIN0001234?"}]],
+        "function": [tool_dict["pmmvy_update_bank_details"], tool_dict["pmmvy_update_mobile_number"]],
+        "ground_truth": ["pmmvy_update_bank_details(session_token='sTok99', application_id='APP-DL-77', new_bank_account_number='9876543210', new_ifsc_code='SBIN0001234')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_014",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I need to login to raise a complaint. My mobile is 9876500000 and the OTP I just got is 4567."}]],
+        "function": [tool_dict["pmmvy_verify_beneficiary"], tool_dict["pmmvy_register_beneficiary"]],
+        "ground_truth": ["pmmvy_verify_beneficiary(mobile_number='9876500000', otp='4567')"]
+    },
+    {
+        "id": "IFCB_v1_pmmvy_simple_015",
+        "usecase": "pmmvy",
+        "language": "en",
+        "intent_type": "simple",
+        "question": [[{"role": "user", "content": "I already checked and my installment 1 is approved but it's delayed. My session token is auth77 and my app ID is PM-HR-33. Please log a payment_delay grievance saying 'Money not received since 3 months'."}]],
+        "function": [tool_dict["pmmvy_raise_grievance"], tool_dict["pmmvy_track_grievance_status"]],
+        "ground_truth": ["pmmvy_raise_grievance(session_token='auth77', application_id='PM-HR-33', grievance_category='payment_delay', description='Money not received since 3 months')"]
+    }
+]
+
+out_path = r"C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\Health and Wellness\pmmvy\data\single_turn\pmmvy_simple.jsonl"
+with open(out_path, "w", encoding="utf-8") as f:
+    for case in cases:
+        f.write(json.dumps(case) + "\n")

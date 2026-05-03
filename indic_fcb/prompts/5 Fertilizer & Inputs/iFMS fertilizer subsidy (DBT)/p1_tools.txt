@@ -1,0 +1,310 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+iFMS (Integrated Fertilizer Management System - fertilizer subsidy DBT)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Checking subsidy eligibility
+- Fertilizer availability lookup
+- Retailer/point-of-sale identification
+- Purchase transaction recording
+- Subsidy calculation and application
+- Transaction validation (Aadhaar-based)
+- Subsidy disbursement tracking
+- Purchase history retrieval
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Aadhaar-linked purchase:
+  Fertilizer purchase must be authenticated using Aadhaar at POS.
+
+- Subsidy is purchase-linked:
+  Subsidy is applied ONLY when:
+    - fertilizer is purchased from authorized retailer
+    - transaction is recorded in system
+
+- Retailer dependency:
+  Purchase must occur through registered fertilizer dealers.
+
+- Subsidy type:
+  Subsidy is provided directly to fertilizer companies,
+  not as direct cash transfer to farmer (price is reduced upfront).
+
+- Quantity limits:
+  Subsidy may be limited based on:
+    - crop type
+    - land size
+    - season
+
+- Inventory dependency:
+  Fertilizer availability depends on stock at retailer.
+
+- Duplicate transaction prevention:
+  Same purchase cannot be recorded multiple times.
+
+- Grievances should ONLY be raised after checking transaction or subsidy status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- transaction_status:
+  initiated → validated → completed → failed
+
+- subsidy_status:
+  not_applied → applied → verified → settled
+
+- inventory_status:
+  available → low_stock → out_of_stock
+
+- purchase_status:
+  not_recorded → recorded → verified
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- farmer not eligible but attempts purchase subsidy
+- invalid Aadhaar authentication at POS
+- purchase from unauthorized retailer
+- insufficient stock at retailer
+- exceeding subsidy quantity limits
+- duplicate transaction attempt
+- mismatch between land/crop and fertilizer usage
+- transaction failure at POS
+- subsidy calculation mismatch
+- delayed or missing subsidy application
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (Aadhaar, retailer validity, quantity limits)
+- rejection conditions (invalid purchase, ineligible farmer)
+- failure scenarios (transaction failure, subsidy mismatch)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking fertilizer availability
+- purchasing fertilizer with subsidy
+- validating transaction
+- tracking subsidy application
+- retrieving purchase history
+- handling failed or invalid transactions
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: ifms_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"transaction_id": {
+  "type": "string",
+  "description": "Unique identifier of the fertilizer purchase transaction."
+}
+
+"retailer_id": {
+  "type": "string",
+  "description": "Unique identifier of the authorized fertilizer retailer."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"fertilizer_type": [
+  "urea",
+  "dap",
+  "mop",
+  "npk",
+  "complex_fertilizer"
+]
+
+"transaction_status": [
+  "initiated",
+  "validated",
+  "completed",
+  "failed"
+]
+
+"subsidy_status": [
+  "not_applied",
+  "applied",
+  "verified",
+  "settled"
+]
+
+"inventory_status": [
+  "available",
+  "low_stock",
+  "out_of_stock"
+]
+
+"eligibility_status": [
+  "eligible",
+  "not_eligible"
+]
+
+"grievance_category": [
+  "transaction_failed",
+  "subsidy_not_applied",
+  "retailer_issue",
+  "stock_unavailable",
+  "quantity_limit_exceeded"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. ifms_generate_otp  
+2. ifms_verify_otp  
+3. ifms_check_eligibility  
+4. ifms_get_fertilizer_availability  
+5. ifms_get_retailer_list  
+6. ifms_initiate_purchase  
+7. ifms_validate_transaction  
+8. ifms_complete_purchase  
+9. ifms_apply_subsidy  
+10. ifms_track_transaction  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- ifms_get_purchase_history  
+- ifms_check_inventory_status  
+- ifms_resolve_transaction_ambiguity  
+- ifms_cancel_transaction  
+- ifms_calculate_subsidy  
+- ifms_raise_grievance  
+- ifms_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (eligibility, retailer validity, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - ifms_generate_otp
+  - ifms_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "ifms_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support transaction + subsidy lifecycle workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

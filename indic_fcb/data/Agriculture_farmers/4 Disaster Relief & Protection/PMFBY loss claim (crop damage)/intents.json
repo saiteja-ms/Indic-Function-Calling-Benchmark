@@ -1,0 +1,883 @@
+[
+  {
+    "intent_id": "pmfbyloss_simple_001",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for PMFBY loss claim authentication.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_002",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "pmfbyclaim_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_003",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Validates whether farmer has an active PMFBY policy for the specified crop and land.",
+    "required_tools": [
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_004",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Checks whether the claim reporting window is still open.",
+    "required_tools": [
+      "pmfbyclaim_check_claim_window"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_005",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Reports a crop loss event.",
+    "required_tools": [
+      "pmfbyclaim_report_loss_event"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_006",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Submits formal claim for reported loss.",
+    "required_tools": [
+      "pmfbyclaim_submit_claim"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_007",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Uploads structured evidence for a claim.",
+    "required_tools": [
+      "pmfbyclaim_upload_evidence"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_008",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Tracks claim lifecycle status ('not_reported' through 'compensated').",
+    "required_tools": [
+      "pmfbyclaim_track_claim_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_009",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Tracks field survey status for claim.",
+    "required_tools": [
+      "pmfbyclaim_track_survey_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_010",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Retrieves damage assessment results including loss percentage, affected area, and assessment_status.",
+    "required_tools": [
+      "pmfbyclaim_get_assessment_result"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_011",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Calculates compensation amount based on assessment results.",
+    "required_tools": [
+      "pmfbyclaim_calculate_compensation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_012",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Tracks compensation payment status ('not_initiated', 'pending', 'credited', 'failed').",
+    "required_tools": [
+      "pmfbyclaim_track_payment"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_013",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Raises grievance.",
+    "required_tools": [
+      "pmfbyclaim_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_simple_014",
+    "usecase": "pmfbyloss",
+    "category": "simple",
+    "abstract_goal": "Tracks grievance status.",
+    "required_tools": [
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_multiple_001",
+    "usecase": "pmfbyloss",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PMFBY loss claim authentication.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmfbyclaim_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfbyloss_multiple_002",
+    "usecase": "pmfbyloss",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PMFBY loss claim authentication.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmfbyclaim_validate_policy"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfbyloss_multiple_003",
+    "usecase": "pmfbyloss",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PMFBY loss claim authentication.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmfbyclaim_check_claim_window"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfbyloss_multiple_004",
+    "usecase": "pmfbyloss",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PMFBY loss claim authentication.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "pmfbyclaim_report_loss_event"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfbyloss_multiple_005",
+    "usecase": "pmfbyloss",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PMFBY loss claim authentication.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "pmfbyclaim_submit_claim"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_001",
+    "usecase": "pmfbyloss",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfbyclaim_generate_otp.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_002",
+    "usecase": "pmfbyloss",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfbyclaim_verify_otp.",
+    "required_tools": [
+      "pmfbyclaim_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_003",
+    "usecase": "pmfbyloss",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfbyclaim_validate_policy.",
+    "required_tools": [
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_validate_policy"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_multiple_001",
+    "usecase": "pmfbyloss",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfbyclaim_check_claim_window and pmfbyclaim_calculate_compensation.",
+    "required_tools": [
+      "pmfbyclaim_check_claim_window",
+      "pmfbyclaim_calculate_compensation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_check_claim_window",
+      "pmfbyclaim_calculate_compensation"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_multiple_002",
+    "usecase": "pmfbyloss",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfbyclaim_check_claim_window and pmfbyclaim_report_loss_event.",
+    "required_tools": [
+      "pmfbyclaim_check_claim_window",
+      "pmfbyclaim_report_loss_event"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_check_claim_window",
+      "pmfbyclaim_report_loss_event"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_multiple_003",
+    "usecase": "pmfbyloss",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfbyclaim_track_survey_status and pmfbyclaim_raise_grievance.",
+    "required_tools": [
+      "pmfbyclaim_track_survey_status",
+      "pmfbyclaim_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_track_survey_status",
+      "pmfbyclaim_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_multiple_004",
+    "usecase": "pmfbyloss",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfbyclaim_submit_claim and pmfbyclaim_track_payment.",
+    "required_tools": [
+      "pmfbyclaim_submit_claim",
+      "pmfbyclaim_track_payment"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_submit_claim",
+      "pmfbyclaim_track_payment"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfbyloss_parallel_multiple_005",
+    "usecase": "pmfbyloss",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfbyclaim_calculate_compensation and pmfbyclaim_track_grievance_status.",
+    "required_tools": [
+      "pmfbyclaim_calculate_compensation",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfbyclaim_calculate_compensation",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfbyloss_irrelevance_001",
+    "usecase": "pmfbyloss",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_irrelevance_002",
+    "usecase": "pmfbyloss",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_irrelevance_003",
+    "usecase": "pmfbyloss",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_irrelevance_004",
+    "usecase": "pmfbyloss",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_irrelevance_005",
+    "usecase": "pmfbyloss",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_base_001",
+    "usecase": "pmfbyloss",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfbyclaim_generate_otp, pmfbyclaim_verify_otp.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_base_002",
+    "usecase": "pmfbyloss",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfbyclaim_raise_grievance, pmfbyclaim_track_grievance_status.",
+    "required_tools": [
+      "pmfbyclaim_raise_grievance",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_base_003",
+    "usecase": "pmfbyloss",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfbyclaim_generate_otp, pmfbyclaim_validate_policy.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_base_004",
+    "usecase": "pmfbyloss",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfbyclaim_generate_otp, pmfbyclaim_verify_otp, pmfbyclaim_validate_policy.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_verify_otp",
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_base_005",
+    "usecase": "pmfbyloss",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfbyclaim_verify_otp, pmfbyclaim_validate_policy.",
+    "required_tools": [
+      "pmfbyclaim_verify_otp",
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_miss_param_001",
+    "usecase": "pmfbyloss",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmfbyclaim_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_miss_param_002",
+    "usecase": "pmfbyloss",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmfbyclaim_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmfbyclaim_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_miss_param_003",
+    "usecase": "pmfbyloss",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmfbyclaim_validate_policy but do not provide the necessary session_token.",
+    "required_tools": [
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_miss_func_001",
+    "usecase": "pmfbyloss",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmfbyclaim_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_long_context_001",
+    "usecase": "pmfbyloss",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfbyclaim_generate_otp, pmfbyclaim_verify_otp.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_long_context_002",
+    "usecase": "pmfbyloss",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfbyclaim_raise_grievance, pmfbyclaim_track_grievance_status.",
+    "required_tools": [
+      "pmfbyclaim_raise_grievance",
+      "pmfbyclaim_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_long_context_003",
+    "usecase": "pmfbyloss",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfbyclaim_generate_otp, pmfbyclaim_validate_policy.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_long_context_004",
+    "usecase": "pmfbyloss",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfbyclaim_generate_otp, pmfbyclaim_verify_otp, pmfbyclaim_validate_policy.",
+    "required_tools": [
+      "pmfbyclaim_generate_otp",
+      "pmfbyclaim_verify_otp",
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfbyloss_long_context_005",
+    "usecase": "pmfbyloss",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfbyclaim_verify_otp, pmfbyclaim_validate_policy.",
+    "required_tools": [
+      "pmfbyclaim_verify_otp",
+      "pmfbyclaim_validate_policy"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

@@ -1,0 +1,289 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+MSP Procurement (Minimum Support Price government procurement)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Farmer registration for MSP procurement
+- Crop declaration for a procurement season
+- Token generation for mandi visit
+- Checking MSP rates for crops
+- Scheduling procurement slot
+- Delivering produce at mandi
+- Quality inspection and grading
+- Procurement acceptance/rejection
+- Payment processing and tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED for all procurement actions:
+  Aadhaar + OTP verification must be completed first.
+  Authentication returns a session_token.
+
+- Farmer registration is MANDATORY:
+  Only registered farmers can participate in MSP procurement.
+
+- Crop declaration is REQUIRED before procurement:
+  Farmer must declare crop and expected quantity for the season.
+
+- MSP rates are FIXED by government:
+  Farmers cannot negotiate MSP prices.
+
+- Procurement is mandi-based:
+  Produce must be delivered to a registered procurement center.
+
+- Token system:
+  Farmers must obtain a procurement token before visiting mandi.
+
+- Quality check is STRICT:
+  Produce must meet Fair Average Quality (FAQ) standards.
+  Substandard produce is rejected.
+
+- Payment is post-procurement:
+  Payment is processed only after successful acceptance of produce.
+
+- State-specific rules:
+  Procurement policies may vary across states.
+
+- Grievances should ONLY be raised after checking procurement/payment status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- registration_status:
+  unregistered → registered
+
+- procurement_status:
+  not_declared → declared → scheduled → delivered → inspected → accepted/rejected → payment_processed
+
+- payment_status:
+  pending → initiated → completed → failed
+
+Tools must clearly define:
+- when they are valid to call
+- when they are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- farmer is not registered
+- crop not declared but trying to schedule
+- invalid crop or unsupported commodity
+- exceeding declared quantity
+- duplicate token requests
+- poor quality produce rejection
+- payment delays or failures
+- wrong mandi selection
+- expired procurement window
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (e.g., crop must be declared before scheduling)
+- rejection conditions (e.g., quality below FAQ)
+- failure scenarios (e.g., payment processing failure)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- new farmer onboarding
+- returning farmer procurement
+- successful procurement flow
+- rejected procurement flow
+- delayed payment scenario
+- grievance escalation scenario
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: msp_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"mandi_id": {
+  "type": "string",
+  "description": "Unique identifier of the procurement mandi."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"crop_type": [
+  "paddy", "wheat", "maize", "bajra", "barley", "pulses", "oilseeds"
+]
+
+"quality_grade": ["FAQ", "below_FAQ"]
+
+"procurement_status": [
+  "not_declared",
+  "declared",
+  "scheduled",
+  "delivered",
+  "inspected",
+  "accepted",
+  "rejected",
+  "payment_processed"
+]
+
+"payment_status": [
+  "pending",
+  "initiated",
+  "completed",
+  "failed"
+]
+
+"grievance_category": [
+  "payment_delay",
+  "procurement_rejection",
+  "quantity_mismatch",
+  "mandi_issue",
+  "registration_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. msp_generate_otp  
+2. msp_verify_otp  
+3. msp_register_farmer  
+4. msp_check_msp_rates  
+5. msp_declare_crop  
+6. msp_generate_procurement_token  
+7. msp_schedule_mandi_visit  
+8. msp_record_produce_delivery  
+9. msp_check_procurement_status  
+10. msp_track_payment  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- msp_get_mandi_list  
+- msp_check_quality_status  
+- msp_cancel_token  
+- msp_update_crop_declaration  
+- msp_raise_grievance  
+- msp_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (authentication, declaration, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - msp_generate_otp
+  - msp_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "msp_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multiple user intents and workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

@@ -1,0 +1,257 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+eNAM (National Agriculture Market) mandi price discovery service
+on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer and trader interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Fetching commodity prices across mandis
+- Searching mandis by location
+- Comparing prices across regions
+- Viewing historical price trends
+- Filtering by commodity, quality, and date
+- Discovering best price (decision support)
+- Viewing arrival quantities and demand trends
+- Accessing mandi details and timings
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is OPTIONAL:
+  Price discovery is public.
+  Authentication is required only for preferences and grievances.
+
+- Location specificity:
+  Prices are mandi-specific.
+  Queries must include state/district/mandi.
+
+- Commodity standardization:
+  Only supported commodities can be queried.
+
+- Price variation:
+  Prices depend on:
+    - mandi
+    - quality grade
+    - arrival quantity
+    - date/time
+
+- Real-time limitation:
+  Prices may be delayed depending on mandi updates.
+
+- Historical data limitation:
+  Historical trends are limited to available records.
+
+- Informational system ONLY:
+  These tools do NOT execute buying/selling transactions.
+
+- Grievances should ONLY be raised after verifying price or mandi data.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid data query states:
+
+- query_state:
+  invalid_query → valid_query → filtered → aggregated
+
+- data_availability:
+  not_found → partial_data → complete_data
+
+Tools must define:
+- when queries are valid
+- when results may be empty or partial
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- invalid commodity name
+- unsupported mandi/location
+- no price data available
+- partial data (some mandis missing)
+- conflicting filters (e.g., wrong date range)
+- empty results
+- stale/outdated prices
+- ambiguous queries (multiple mandis with same name)
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (commodity, location, time range)
+- failure conditions (no data, invalid filters)
+- ambiguity handling (multiple matches)
+
+Tools must NOT assume successful data retrieval.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking current mandi prices
+- comparing prices across mandis
+- identifying best mandi to sell
+- analyzing historical price trends
+- handling missing or invalid data scenarios
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: enam_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after optional authentication. Required for preference and grievance tools."
+}
+
+"location": {
+  "type": "string",
+  "description": "State, district, or mandi name."
+}
+
+"commodity": {
+  "type": "string",
+  "description": "Standardized commodity name (e.g., paddy, wheat, cotton)."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"price_type": ["modal", "minimum", "maximum"]
+
+"quality_grade": ["A", "B", "C", "FAQ", "premium"]
+
+"time_range": ["today", "3_day", "7_day", "30_day"]
+
+"data_status": ["available", "partial", "not_available"]
+
+"grievance_category": [
+  "incorrect_price",
+  "missing_mandi_data",
+  "delayed_update",
+  "wrong_location",
+  "commodity_not_found"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. enam_get_mandi_prices  
+2. enam_search_mandis  
+3. enam_compare_prices  
+4. enam_get_price_trends  
+5. enam_get_best_price  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- enam_get_arrival_data  
+- enam_get_mandi_details  
+- enam_filter_prices  
+- enam_resolve_mandi_ambiguity  
+- enam_set_preferences  
+- enam_raise_grievance  
+- enam_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (valid commodity/location inputs)  
+3. What it does NOT do  
+4. Failure conditions (no data, invalid query, ambiguity)
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be required ONLY for:
+  - preference tools
+  - grievance tools
+- It MUST NOT be required for public tools
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "enam_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multiple user intents and workflows  
+4. Clearly define query/data state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

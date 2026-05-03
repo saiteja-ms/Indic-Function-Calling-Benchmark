@@ -1,0 +1,158 @@
+You are building test personas for a function-calling
+benchmark for the PMFBY (Pradhan Mantri Fasal Bima Yojana)
+crop insurance service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PMFBY crop insurance (risk cover)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PMFBY crop insurance (risk cover)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific insurance situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not enrolled
+  enrollment_status: NOT_ENROLLED
+
+PATH 2 — Enrolled, premium unpaid
+  enrollment_status: ENROLLED
+  premium_status: PENDING
+  policy inactive
+
+PATH 3 — Active policy, no claims
+  enrollment_status: ENROLLED
+  premium_status: PAID
+  policy_status: ACTIVE
+  claims: []
+
+PATH 4 — Claim rejected (invalid reason)
+  claim_status: REJECTED
+  rejection_reason: INVALID_CLAIM_REASON
+
+PATH 5 — Claim under verification
+  claim_status: UNDER_VERIFICATION
+
+PATH 6 — Claim approved, payout pending
+  claim_status: APPROVED
+  payout_status: PENDING
+
+PATH 7 — Claim settled successfully
+  claim_status: APPROVED
+  payout_status: COMPLETED
+
+PATH 8 — Multiple claims, one disputed
+  multiple claims present
+  one claim_status: DISPUTED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. POLICY LOGIC
+   - Policy active ONLY if premium PAID
+   - If premium PENDING → no claim allowed
+
+2. CLAIM STRUCTURE
+   - claim_id format: "PMFBY-CLM-XXXX"
+   - Each claim must include:
+     - crop
+     - loss_type
+     - claim_amount
+     - status
+
+3. LOSS TYPES (VALID ENUM)
+   - drought
+   - flood
+   - pest_attack
+   - cyclone
+   - unseasonal_rain
+
+4. REJECTION RULE
+   - INVALID_CLAIM_REASON only if loss_type not valid
+   OR outside coverage period
+
+5. PAYOUT RULE
+   - payout only if claim APPROVED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  wheat, rice, cotton, sugarcane, maize
+
+- Premium amount:
+  realistic (500–3000)
+
+- Claim amount:
+  5000–50000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed values for claims and timelines
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ramesh Yadav — UP, PATH 2",
+  "code_path": "PATH 2 — enrolled, premium unpaid",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer could not pay premium due to crop loss",
+  "stub_test_assertion": "claim submission should fail when premium_status != PAID",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

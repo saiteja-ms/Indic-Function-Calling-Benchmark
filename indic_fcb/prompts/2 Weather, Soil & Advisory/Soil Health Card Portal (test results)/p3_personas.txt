@@ -1,0 +1,146 @@
+You are building test personas for a function-calling
+benchmark for the Soil Health Card Portal (test results)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Soil Health Card Portal (test results)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Soil Health Card Portal (test results)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific soil report retrieval / portal usage situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No report available in portal
+  report_availability: NOT_AVAILABLE
+
+PATH 2 — Report exists but not yet downloaded
+  report_availability: AVAILABLE
+  download_status: NOT_DOWNLOADED
+
+PATH 3 — Report successfully downloaded
+  download_status: DOWNLOADED
+
+PATH 4 — Report partially available (missing fields)
+  report_status: INCOMPLETE
+
+PATH 5 — Report shows nutrient deficiency
+  soil_health_status: DEFICIENT
+
+PATH 6 — Report shows balanced soil
+  soil_health_status: HEALTHY
+
+PATH 7 — Multiple reports for multiple land parcels
+  multiple_reports: TRUE
+
+PATH 8 — Report retrieval failed due to ID mismatch
+  report_status: ERROR
+  error_reason: ID_MISMATCH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REPORT AVAILABILITY
+   - NOT_AVAILABLE → no report data
+   - AVAILABLE → report must exist
+
+2. DOWNLOAD LOGIC
+   - DOWNLOADED only if AVAILABLE
+   - NOT_DOWNLOADED otherwise
+
+3. REPORT STRUCTURE
+   - Must include:
+     - nitrogen (N)
+     - phosphorus (P)
+     - potassium (K)
+     - pH level
+
+4. INCOMPLETE REPORT RULE
+   - At least one nutrient missing
+
+5. ERROR RULE
+   - ID_MISMATCH only when farmer_id does not match record
+
+6. MULTIPLE REPORT RULE
+   - Each land parcel must have separate report entry
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Soil nutrients:
+  - N: 0–500 kg/ha
+  - P: 0–100 kg/ha
+  - K: 0–400 kg/ha
+- pH: 4.5–9.0
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed report values
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ravi Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — report available but not downloaded",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer unaware that report is available online",
+  "stub_test_assertion": "download_status should become DOWNLOADED after report download tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

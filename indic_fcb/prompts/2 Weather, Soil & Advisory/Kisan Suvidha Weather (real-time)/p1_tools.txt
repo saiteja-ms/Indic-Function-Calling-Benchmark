@@ -1,0 +1,274 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Kisan Suvidha Weather (real-time weather information)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Fetching current weather conditions
+- Retrieving hourly and daily forecasts
+- Querying weather by location (village/district)
+- Accessing extreme weather alerts
+- Viewing historical weather summaries
+- Generating weather-based advisories
+- Managing alert subscriptions
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Public vs authenticated access:
+  - Weather data (current + forecast) is PUBLIC
+  - Subscriptions, preferences, and grievances REQUIRE authentication
+
+- Location specificity:
+  Weather queries must include a valid location (village/district/GPS).
+  Generic queries without location are INVALID.
+
+- Forecast limits:
+  Forecasts are reliable only up to ~7–10 days.
+
+- Real-time vs forecast distinction:
+  - Current weather reflects near real-time data
+  - Forecast is predictive and may change
+
+- Historical data limitation:
+  Only recent past data (e.g., last 7–30 days) is available.
+
+- Data variability:
+  Weather data may differ across sources and updates.
+
+- Advisory nature:
+  Weather tools provide information ONLY — no direct farm actions.
+
+- Grievances should ONLY be raised after verifying weather data.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- query_state:
+  invalid_location → valid_query → data_available / data_not_available
+
+- data_freshness:
+  real_time → recent → stale
+
+- forecast_state:
+  generated → updated → expired
+
+- subscription_status:
+  not_subscribed → subscribed → unsubscribed
+
+Tools must define:
+- when data is valid
+- when data is stale or unavailable
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- missing or invalid location
+- no weather data available for region
+- stale or outdated data
+- conflicting forecast results
+- incorrect or partial data
+- extreme weather not reflected in forecast
+- ambiguous location names
+- duplicate or delayed updates
+- user expecting alerts without subscription
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (location required, valid query inputs)
+- failure conditions (no data, invalid query)
+- ambiguity handling (multiple matching locations)
+
+Tools must NOT assume successful data retrieval.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking current weather
+- planning using forecasts
+- checking rainfall before irrigation
+- handling missing or delayed data
+- subscribing to weather alerts
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: ksweather_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after authentication. Required for subscription and grievance tools."
+}
+
+"location": {
+  "type": "string",
+  "description": "Village, district, or GPS-based location."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"forecast_type": ["current", "hourly", "daily"]
+
+"time_range": ["today", "3_day", "7_day", "10_day"]
+
+"weather_parameter": [
+  "temperature",
+  "rainfall",
+  "humidity",
+  "wind_speed",
+  "pressure"
+]
+
+"data_status": ["available", "partial", "not_available"]
+
+"subscription_status": ["not_subscribed", "subscribed", "unsubscribed"]
+
+"grievance_category": [
+  "incorrect_forecast",
+  "missing_weather_data",
+  "delayed_update",
+  "wrong_location",
+  "alert_not_received"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. ksweather_get_current_weather  
+2. ksweather_get_weather_forecast  
+3. ksweather_get_weather_alerts  
+4. ksweather_get_location_weather  
+5. ksweather_get_weather_parameters  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- ksweather_get_historical_weather  
+- ksweather_resolve_location_ambiguity  
+- ksweather_get_weather_advisory  
+- ksweather_subscribe_alerts  
+- ksweather_unsubscribe_alerts  
+- ksweather_set_location_preferences  
+- ksweather_raise_grievance  
+- ksweather_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (location, authentication if needed)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be required ONLY for:
+  - subscription tools
+  - grievance tools
+- It MUST NOT be required for public tools
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "ksweather_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multiple user intents and workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

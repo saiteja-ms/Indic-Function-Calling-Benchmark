@@ -1,0 +1,151 @@
+You are building test personas for a function-calling
+benchmark for the Meghdoot / Damini (weather alerts)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Meghdoot Damini (alerts)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Meghdoot Damini (alerts)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific alert/notification scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No alerts subscribed
+  alert_subscription_status: NOT_SUBSCRIBED
+
+PATH 2 — Subscribed but no alerts received yet
+  alert_subscription_status: SUBSCRIBED
+  alert_status: NONE
+
+PATH 3 — Lightning alert received (Damini)
+  alert_type: LIGHTNING
+  alert_status: ACTIVE
+
+PATH 4 — Heavy rainfall alert received (Meghdoot)
+  alert_type: HEAVY_RAIN
+  alert_status: ACTIVE
+
+PATH 5 — Alert acknowledged by farmer
+  alert_status: ACKNOWLEDGED
+
+PATH 6 — Alert ignored / expired
+  alert_status: EXPIRED
+
+PATH 7 — Multiple alerts received (compound weather risk)
+  multiple_alerts: TRUE
+
+PATH 8 — Incorrect location leading to wrong alerts
+  alert_status: ERROR
+  error_reason: LOCATION_MISMATCH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. SUBSCRIPTION RULE
+   - NOT_SUBSCRIBED → no alerts possible
+   - SUBSCRIBED → alerts may exist
+
+2. ALERT STRUCTURE
+   - Must include:
+     - alert_id
+     - alert_type
+     - severity
+     - timestamp
+
+3. ALERT TYPES (VALID ENUM)
+   - LIGHTNING
+   - HEAVY_RAIN
+   - DROUGHT
+   - CYCLONE
+   - HEATWAVE
+
+4. STATUS LOGIC
+   - ACTIVE → valid alert present
+   - ACKNOWLEDGED → previously ACTIVE
+   - EXPIRED → older alert
+
+5. MULTI-ALERT RULE
+   - Each alert must have unique alert_id
+
+6. ERROR RULE
+   - LOCATION_MISMATCH if wrong geo-tag/location
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Timestamp format: YYYY-MM-DD HH:MM
+- Severity levels:
+  LOW, MEDIUM, HIGH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed alert data
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Rakesh Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — subscribed, no alerts yet",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer recently subscribed to weather alerts but hasn't received any yet",
+  "stub_test_assertion": "alert_status should become ACTIVE after alert_fetch tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

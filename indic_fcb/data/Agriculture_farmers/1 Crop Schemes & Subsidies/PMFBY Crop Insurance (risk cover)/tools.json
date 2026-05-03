@@ -1,0 +1,198 @@
+[
+  {
+    "name": "pmfby_generate_otp",
+    "description": "Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication. This is the first step in the authentication flow. It does NOT verify the OTP or create a session. Fails if Aadhaar is not 12 digits or mobile number is not registered with Aadhaar.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." },
+        "mobile_number": { "type": "string", "description": "10-digit mobile number linked with Aadhaar." }
+      },
+      "required": ["aadhaar_number", "mobile_number"]
+    }
+  },
+  {
+    "name": "pmfby_verify_otp",
+    "description": "Verifies the OTP and returns a session_token for PMFBY operations. The OTP must have been generated via pmfby_generate_otp. This tool does NOT check policy status or process claims — it only authenticates. Fails if OTP is expired, incorrect, or not generated.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." },
+        "otp": { "type": "string", "description": "6-digit OTP received on the registered mobile number." }
+      },
+      "required": ["aadhaar_number", "otp"]
+    }
+  },
+  {
+    "name": "pmfby_check_eligibility",
+    "description": "Checks whether the farmer is eligible to enroll in PMFBY for the current season based on land ownership, crop type, and region. Returns eligibility status and reasons. Requires session_token. This tool does NOT enroll the farmer — use pmfby_enroll_policy. Fails if farmer is not registered or land records are unavailable.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." },
+        "crop_type": { "type": "string", "description": "Crop to be insured. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds'." },
+        "land_parcel_id": { "type": "string", "description": "Unique identifier of the land parcel to be insured." }
+      },
+      "required": ["session_token", "aadhaar_number", "crop_type", "land_parcel_id"]
+    }
+  },
+  {
+    "name": "pmfby_get_season_window",
+    "description": "Returns the enrollment window dates for the current crop season. Enrollment is allowed ONLY within this predefined window. Requires session_token. This tool does NOT enroll the farmer. Fails if no active season window exists or the region is unsupported.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "state": { "type": "string", "description": "State for which the season window is queried." },
+        "crop_type": { "type": "string", "description": "Crop type for which season window is needed." }
+      },
+      "required": ["session_token", "state"]
+    }
+  },
+  {
+    "name": "pmfby_enroll_policy",
+    "description": "Enrolls the farmer in PMFBY crop insurance for a specific crop and land parcel for the current season. Transitions policy_status from 'not_enrolled' to 'enrolled'. Requires session_token. Enrollment must be within the season window. This tool does NOT calculate or collect premium — use pmfby_calculate_premium and pmfby_pay_premium. Fails if: enrollment window has closed, farmer is ineligible, crop-land mapping is invalid, or a duplicate enrollment exists.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." },
+        "crop_type": { "type": "string", "description": "Crop to be insured. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds'." },
+        "land_parcel_id": { "type": "string", "description": "Unique identifier of the land parcel to be insured." },
+        "sowing_date": { "type": "string", "description": "Expected sowing date in YYYY-MM-DD format." },
+        "area_hectares": { "type": "number", "description": "Area under cultivation in hectares." }
+      },
+      "required": ["session_token", "aadhaar_number", "crop_type", "land_parcel_id", "sowing_date", "area_hectares"]
+    }
+  },
+  {
+    "name": "pmfby_calculate_premium",
+    "description": "Calculates the insurance premium for an enrolled PMFBY policy. Returns total premium, farmer's share, and government subsidy breakdown. Requires session_token. This tool does NOT collect payment — use pmfby_pay_premium. Fails if policy_status is not 'enrolled' or policy_id is invalid.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "policy_id": { "type": "string", "description": "Unique identifier of the insurance policy." }
+      },
+      "required": ["session_token", "policy_id"]
+    }
+  },
+  {
+    "name": "pmfby_pay_premium",
+    "description": "Processes the farmer's premium payment for PMFBY. Transitions policy_status from 'enrolled' to 'active' upon successful payment. Requires session_token. This tool does NOT calculate premium — use pmfby_calculate_premium first. Fails if premium has already been paid, policy is not in 'enrolled' state, or payment processing encounters an error.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "policy_id": { "type": "string", "description": "Unique identifier of the insurance policy." },
+        "payment_mode": { "type": "string", "description": "Payment mode: 'upi', 'netbanking', 'debit_card'." }
+      },
+      "required": ["session_token", "policy_id", "payment_mode"]
+    }
+  },
+  {
+    "name": "pmfby_get_policy_status",
+    "description": "Retrieves the current status and details of a PMFBY policy including policy_status ('not_enrolled', 'enrolled', 'active', 'expired'), crop, land parcel, premium paid, and coverage amount. Requires session_token. This tool does NOT modify the policy or process claims. Fails if policy_id is invalid or does not belong to the authenticated farmer.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "policy_id": { "type": "string", "description": "Unique identifier of the insurance policy." }
+      },
+      "required": ["session_token", "policy_id"]
+    }
+  },
+  {
+    "name": "pmfby_report_crop_loss",
+    "description": "Reports a crop loss event for a specific policy and land parcel. Transitions claim_status to 'reported'. Loss must be reported within 72 hours of the event. Valid loss_type values: 'drought', 'flood', 'pest_attack', 'cyclone', 'unseasonal_rainfall'. Requires session_token. This tool does NOT submit a formal claim — use pmfby_submit_claim. Fails if: policy is not 'active', reporting window expired, loss_type is unsupported, or a duplicate report exists for the same event.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "policy_id": { "type": "string", "description": "Unique identifier of the insurance policy." },
+        "land_parcel_id": { "type": "string", "description": "Unique identifier of the insured land parcel." },
+        "loss_type": { "type": "string", "description": "Type of crop loss. Allowed: 'drought', 'flood', 'pest_attack', 'cyclone', 'unseasonal_rainfall'." },
+        "loss_date": { "type": "string", "description": "Date of the loss event in YYYY-MM-DD format." },
+        "loss_description": { "type": "string", "description": "Brief description of the crop damage observed." }
+      },
+      "required": ["session_token", "policy_id", "land_parcel_id", "loss_type", "loss_date"]
+    }
+  },
+  {
+    "name": "pmfby_submit_claim",
+    "description": "Submits a formal insurance claim for a reported crop loss event. Transitions claim_status from 'reported' to 'submitted'. Requires session_token. Loss must have been reported first using pmfby_report_crop_loss. This tool does NOT approve claims or process compensation. Fails if: no loss event is reported, policy is not active, claim_status is not 'reported', or a duplicate claim exists for the same loss.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "policy_id": { "type": "string", "description": "Unique identifier of the insurance policy." },
+        "claim_id": { "type": "string", "description": "Unique identifier of the crop loss claim generated during reporting." },
+        "estimated_loss_percentage": { "type": "number", "description": "Farmer's estimated percentage of crop loss (0-100)." }
+      },
+      "required": ["session_token", "policy_id", "claim_id"]
+    }
+  },
+  {
+    "name": "pmfby_track_claim_status",
+    "description": "Tracks the current status of a submitted PMFBY claim. Returns claim_status ('not_reported', 'reported', 'submitted', 'under_review', 'approved', 'rejected', 'compensated') and processing details. Requires session_token. This tool does NOT modify the claim or process payments. Fails if claim_id is invalid or does not belong to the authenticated farmer.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "claim_id": { "type": "string", "description": "Unique identifier of the insurance claim." }
+      },
+      "required": ["session_token", "claim_id"]
+    }
+  },
+  {
+    "name": "pmfby_track_survey_status",
+    "description": "Tracks the field survey status for a PMFBY claim. Returns survey_status ('not_started', 'in_progress', 'completed') and surveyor details. Survey/assessment is required before claim approval. Requires session_token. This tool does NOT initiate surveys or modify results. Fails if claim_id is invalid or no survey has been assigned.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "claim_id": { "type": "string", "description": "Unique identifier of the insurance claim." }
+      },
+      "required": ["session_token", "claim_id"]
+    }
+  },
+  {
+    "name": "pmfby_track_compensation",
+    "description": "Tracks the compensation payment status for an approved PMFBY claim. Returns payment_status ('pending', 'initiated', 'completed', 'failed'), amount, and transaction details. Compensation depends on severity of loss (partial vs full). Requires session_token. This tool does NOT initiate compensation — it only tracks. Fails if claim is not in 'approved' or 'compensated' status.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "claim_id": { "type": "string", "description": "Unique identifier of the insurance claim." }
+      },
+      "required": ["session_token", "claim_id"]
+    }
+  },
+  {
+    "name": "pmfby_raise_grievance",
+    "description": "Raises a grievance related to PMFBY. Valid categories: 'claim_rejected', 'payment_delay', 'incorrect_assessment', 'policy_issue', 'enrollment_failure'. Farmer MUST check claim or policy status first. Requires session_token. This tool does NOT resolve grievances. Fails if category is invalid, description is empty, or duplicate grievance exists.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "aadhaar_number": { "type": "string", "description": "12-digit Aadhaar number of the farmer." },
+        "grievance_category": { "type": "string", "description": "Category: 'claim_rejected', 'payment_delay', 'incorrect_assessment', 'policy_issue', 'enrollment_failure'." },
+        "description": { "type": "string", "description": "Detailed description of the issue." }
+      },
+      "required": ["session_token", "aadhaar_number", "grievance_category", "description"]
+    }
+  },
+  {
+    "name": "pmfby_track_grievance_status",
+    "description": "Tracks the status of a previously raised PMFBY grievance. Returns resolution status, assigned officer, and remarks. Requires session_token. This tool does NOT raise new grievances. Fails if grievance_id is invalid.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": { "type": "string", "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication." },
+        "grievance_id": { "type": "string", "description": "Unique identifier of the grievance." }
+      },
+      "required": ["session_token", "grievance_id"]
+    }
+  }
+]

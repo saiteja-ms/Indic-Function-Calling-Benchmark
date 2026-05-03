@@ -1,0 +1,321 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+PM-PRANAM (Promotion of Alternate Nutrients for Agriculture Management)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Tracking fertilizer usage (especially urea)
+- Checking eligibility for incentive programs
+- Recommending alternative fertilizers
+- Monitoring reduction in chemical fertilizer usage
+- Incentive calculation (indirect / state-driven)
+- Awareness and advisory dissemination
+- Reporting compliance
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED for personalized tracking:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Aggregate incentive model:
+  PM-PRANAM incentives are primarily calculated at
+  state/district level, not purely individual farmer level.
+
+- Behavioral dependency:
+  Benefits depend on reduction in urea usage compared to baseline.
+
+- Baseline requirement:
+  Historical fertilizer usage must exist to measure reduction.
+
+- Advisory-driven system:
+  Scheme promotes:
+    - organic fertilizers
+    - biofertilizers
+    - balanced nutrient usage
+
+- No direct cash transfer:
+  Incentives are not directly transferred to farmers in most cases;
+  benefits may be indirect (subsidy support, infrastructure, etc.).
+
+- Data dependency:
+  Usage tracking may rely on:
+    - fertilizer purchase records (iFMS)
+    - declared crop patterns
+
+- Compliance requirement:
+  Farmers must adhere to recommended usage patterns.
+
+- Grievances should ONLY be raised after checking usage or incentive status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- usage_status:
+  not_recorded → recorded → analyzed
+
+- compliance_status:
+  non_compliant → partially_compliant → compliant
+
+- incentive_status:
+  not_eligible → eligible → calculated → allocated
+
+- advisory_status:
+  not_requested → generated → updated → obsolete
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- no baseline data available
+- farmer not reducing urea usage
+- excessive or imbalanced fertilizer usage
+- mismatch between crop and fertilizer recommendation
+- incorrect or missing usage data
+- attempting to claim direct benefit (not supported)
+- conflicting data from purchase vs declared usage
+- partial compliance scenarios
+- outdated advisory applied
+- state-level incentive not applicable to individual farmer
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (usage data availability, crop linkage)
+- rejection conditions (no reduction, non-compliance)
+- failure scenarios (data mismatch, invalid advisory)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking fertilizer usage
+- receiving alternative recommendations
+- tracking reduction in urea usage
+- assessing compliance status
+- viewing incentive eligibility (if applicable)
+- handling mismatch or incorrect data
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: pmpranam_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"land_parcel_id": {
+  "type": "string",
+  "description": "Unique identifier of the land parcel."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"fertilizer_type": [
+  "urea",
+  "dap",
+  "mop",
+  "npk",
+  "organic",
+  "biofertilizer"
+]
+
+"usage_status": [
+  "not_recorded",
+  "recorded",
+  "analyzed"
+]
+
+"compliance_status": [
+  "non_compliant",
+  "partially_compliant",
+  "compliant"
+]
+
+"incentive_status": [
+  "not_eligible",
+  "eligible",
+  "calculated",
+  "allocated"
+]
+
+"advisory_type": [
+  "urea_reduction",
+  "balanced_nutrition",
+  "organic_alternative"
+]
+
+"grievance_category": [
+  "incorrect_usage_data",
+  "no_incentive_received",
+  "advisory_issue",
+  "data_mismatch",
+  "eligibility_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. pmpranam_generate_otp  
+2. pmpranam_verify_otp  
+3. pmpranam_get_fertilizer_usage  
+4. pmpranam_analyze_usage_pattern  
+5. pmpranam_get_recommendation  
+6. pmpranam_check_compliance  
+7. pmpranam_check_incentive_eligibility  
+8. pmpranam_track_incentive_status  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- pmpranam_get_alternative_fertilizers  
+- pmpranam_get_usage_history  
+- pmpranam_resolve_usage_ambiguity  
+- pmpranam_get_state_incentive_details  
+- pmpranam_report_usage  
+- pmpranam_raise_grievance  
+- pmpranam_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (usage data, authentication, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - pmpranam_generate_otp
+  - pmpranam_verify_otp
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "pmpranam_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

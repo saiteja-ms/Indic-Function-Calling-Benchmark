@@ -1,0 +1,319 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Agri Marketing (buy-sell platform for farmers/FPOs)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer, buyer, and FPO interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer/FPO authentication
+- Creating and managing crop listings
+- Searching and browsing listings
+- Price discovery and comparison
+- Placing and managing orders
+- Bid-based (auction) participation
+- Order fulfillment and delivery tracking
+- Payment processing and tracking
+- Cancellation and refund handling
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED for all transactional actions:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Role distinction:
+  Users can act as:
+    - seller (farmer/FPO)
+    - buyer (trader/consumer)
+
+- Listing ownership:
+  Only the creator of a listing can modify or delete it.
+
+- Commodity standardization:
+  Listings must include:
+    - commodity
+    - quality grade
+    - quantity
+    - unit
+
+- Pricing model:
+  Listings can be:
+    - fixed price
+    - auction-based
+
+- Order lifecycle:
+  Orders must follow strict states:
+    created → confirmed → dispatched → delivered → completed
+
+- Payment dependency:
+  Payment must be successful before order completion.
+
+- Logistics constraint:
+  Delivery tracking exists only after dispatch.
+
+- Cancellation rules:
+  Orders cannot be cancelled after dispatch.
+
+- Partial fulfillment:
+  Large orders may be partially fulfilled.
+
+- Grievances should ONLY be raised after checking order/payment status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- listing_status:
+  active → updated → inactive → deleted
+
+- order_status:
+  created → confirmed → dispatched → delivered → completed → cancelled
+
+- payment_status:
+  pending → paid → failed → refunded
+
+- auction_status:
+  open → bidding → closed → awarded
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- duplicate listing creation
+- invalid commodity or unsupported crop
+- insufficient quantity for order
+- placing order on inactive listing
+- bid lower than minimum price
+- multiple buyers bidding simultaneously
+- order cancellation after dispatch attempt
+- payment failure or timeout
+- delivery delay or mismatch
+- partial delivery
+- fraudulent or incorrect listing
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (quantity, price, listing status)
+- rejection conditions (invalid order, unauthorized modification)
+- failure scenarios (payment failure, delivery issues)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer creating and managing listings
+- buyer searching and placing orders
+- auction participation and bidding
+- successful order lifecycle
+- failed order/payment scenarios
+- delivery tracking and disputes
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: agrimarket_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the user (farmer/FPO/buyer)."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+}
+
+"listing_id": {
+  "type": "string",
+  "description": "Unique identifier of a crop listing."
+}
+
+"order_id": {
+  "type": "string",
+  "description": "Unique identifier of an order."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"commodity_type": [
+  "paddy", "wheat", "maize", "cotton",
+  "pulses", "oilseeds", "fruits", "vegetables"
+]
+
+"quality_grade": ["A", "B", "C", "premium"]
+
+"unit": ["kg", "quintal", "ton"]
+
+"listing_type": ["fixed_price", "auction"]
+
+"listing_status": ["active", "inactive", "deleted"]
+
+"order_status": [
+  "created",
+  "confirmed",
+  "dispatched",
+  "delivered",
+  "completed",
+  "cancelled"
+]
+
+"payment_status": [
+  "pending",
+  "paid",
+  "failed",
+  "refunded"
+]
+
+"auction_status": ["open", "bidding", "closed", "awarded"]
+
+"grievance_category": [
+  "payment_issue",
+  "order_not_delivered",
+  "wrong_quality",
+  "price_mismatch",
+  "listing_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. agrimarket_generate_otp  
+2. agrimarket_verify_otp  
+3. agrimarket_create_listing  
+4. agrimarket_search_listings  
+5. agrimarket_get_listing_details  
+6. agrimarket_place_order  
+7. agrimarket_track_order  
+8. agrimarket_track_payment  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- agrimarket_update_listing  
+- agrimarket_delete_listing  
+- agrimarket_bid_on_listing  
+- agrimarket_get_auction_status  
+- agrimarket_cancel_order  
+- agrimarket_track_delivery  
+- agrimarket_handle_partial_fulfillment  
+- agrimarket_get_price_trends  
+- agrimarket_raise_grievance  
+- agrimarket_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (authentication, ownership, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - agrimarket_generate_otp
+  - agrimarket_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "agrimarket_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multiple user roles and workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

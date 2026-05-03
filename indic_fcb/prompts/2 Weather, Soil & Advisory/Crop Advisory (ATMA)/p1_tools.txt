@@ -1,0 +1,292 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Crop Advisory (ATMA - Agricultural Technology Management Agency)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Fetching crop-specific advisories
+- Stage-based farming recommendations
+- Weather-based advisory guidance
+- Pest and disease diagnosis
+- Fertilizer and irrigation recommendations
+- Crop planning support
+- Expert consultation requests
+- Advisory history tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED for personalized advisory:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Location dependency:
+  Advisory depends on district/state/agro-climatic zone.
+
+- Crop specificity:
+  Advisory must be tied to a specific crop.
+
+- Growth stage dependency:
+  Advisory varies by stage:
+    sowing → vegetative → flowering → harvesting
+
+- Weather dependency:
+  Advisory must consider current or forecasted weather.
+
+- Diagnosis requirement:
+  Pest/disease advisory requires symptoms or structured inputs.
+
+- Advisory limitation:
+  Tools provide recommendations ONLY — no direct farm execution.
+
+- Expert escalation:
+  Expert consultation should be used when automated advisory is insufficient.
+
+- Grievances should ONLY be raised after attempting advisory retrieval.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- advisory_state:
+  requested → generated → updated → obsolete
+
+- diagnosis_state:
+  symptoms_provided → analyzed → diagnosed → recommendation_generated
+
+- consultation_state:
+  not_requested → requested → assigned → resolved
+
+Tools must define:
+- when advisory is valid
+- when advisory becomes outdated
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- invalid or unsupported crop
+- missing growth stage
+- conflicting inputs (crop vs location mismatch)
+- insufficient data for diagnosis
+- multiple possible diagnoses (ambiguity)
+- outdated advisory used
+- weather mismatch affecting advisory
+- expert not available
+- incorrect or irrelevant recommendation
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (crop, stage, location required)
+- failure conditions (insufficient input, no advisory available)
+- ambiguity handling (multiple diagnoses or advisories)
+
+Tools must NOT assume successful advisory generation.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer requesting advisory for crop
+- stage-specific recommendations
+- pest/disease diagnosis
+- weather-adjusted advisory
+- escalation to expert consultation
+- handling incorrect or missing advisory
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: atma_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"location": {
+  "type": "string",
+  "description": "Village, district, or agro-climatic region."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"crop_type": [
+  "paddy", "wheat", "maize", "cotton",
+  "sugarcane", "pulses", "oilseeds", "horticulture"
+]
+
+"growth_stage": [
+  "sowing",
+  "germination",
+  "vegetative",
+  "flowering",
+  "fruiting",
+  "harvesting"
+]
+
+"advisory_type": [
+  "irrigation",
+  "fertilizer",
+  "pest_control",
+  "disease_management",
+  "weather_based"
+]
+
+"issue_type": [
+  "pest",
+  "disease",
+  "nutrient_deficiency",
+  "weather_damage"
+]
+
+"diagnosis_confidence": ["low", "medium", "high"]
+
+"grievance_category": [
+  "incorrect_advisory",
+  "no_advisory_available",
+  "delayed_response",
+  "expert_not_assigned",
+  "irrelevant_recommendation"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. atma_generate_otp  
+2. atma_verify_otp  
+3. atma_get_crop_advisory  
+4. atma_get_stage_based_advisory  
+5. atma_get_weather_based_advisory  
+6. atma_report_crop_issue  
+7. atma_diagnose_pest_disease  
+8. atma_get_fertilizer_recommendation  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- atma_get_irrigation_schedule  
+- atma_get_crop_plan  
+- atma_request_expert_consultation  
+- atma_get_consultation_status  
+- atma_get_advisory_history  
+- atma_resolve_diagnosis_ambiguity  
+- atma_raise_grievance  
+- atma_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (authentication, crop/stage input, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - atma_generate_otp
+  - atma_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "atma_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multi-dimensional advisory workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

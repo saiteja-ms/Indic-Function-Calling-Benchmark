@@ -1,0 +1,140 @@
+You are building test personas for a function-calling
+benchmark for the Kisan Suvidha Weather (real-time)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Kisan Suvidha Weather (real-time)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Kisan Suvidha Weather (real-time)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific weather-awareness / forecast usage situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No weather data accessed
+  weather_access_status: NOT_ACCESSED
+
+PATH 2 — Current weather fetched only
+  weather_access_status: CURRENT_FETCHED
+
+PATH 3 — Forecast accessed (short-term)
+  forecast_type: SHORT_TERM
+
+PATH 4 — Forecast accessed (long-term planning)
+  forecast_type: LONG_TERM
+
+PATH 5 — Heavy rainfall alert received
+  alert_status: ACTIVE
+  alert_type: HEAVY_RAIN
+
+PATH 6 — Drought alert scenario
+  alert_type: DROUGHT
+
+PATH 7 — Farmer using weather for irrigation planning
+  usage_type: IRRIGATION_PLANNING
+
+PATH 8 — Farmer using weather for harvesting decision
+  usage_type: HARVEST_PLANNING
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. WEATHER STRUCTURE
+   - Must include:
+     - temperature (°C)
+     - humidity (%)
+     - rainfall (mm)
+     - wind_speed (km/h)
+
+2. FORECAST RULE
+   - SHORT_TERM: 1–3 days
+   - LONG_TERM: 5–10 days
+
+3. ALERT RULE
+   - Alerts must correspond to realistic weather:
+     - HEAVY_RAIN → rainfall > 50mm
+     - DROUGHT → rainfall ≈ 0
+
+4. USAGE LOGIC
+   - IRRIGATION → low rainfall scenario
+   - HARVEST → no rain / stable weather
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Temperature: 10–45°C
+- Humidity: 20–95%
+- Rainfall: 0–200 mm
+- Wind speed: 0–40 km/h
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed weather values
+- Reproducible outputs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Mahesh Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — current weather fetched",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer checks weather daily before irrigation decisions",
+  "stub_test_assertion": "forecast data must be available after weather_fetch_forecast tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

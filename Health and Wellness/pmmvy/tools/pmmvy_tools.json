@@ -1,0 +1,298 @@
+[
+  {
+    "name": "pmmvy_verify_beneficiary",
+    "description": "Authenticates the beneficiary via mobile OTP and returns a session_token. Prerequisite: None. Must be called before pmmvy_register_beneficiary, pmmvy_update_bank_details, pmmvy_update_mobile_number, and pmmvy_raise_grievance. Does NOT register the beneficiary.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "mobile_number": {
+          "type": "string",
+          "description": "The 10-digit mobile number of the beneficiary."
+        },
+        "otp": {
+          "type": "string",
+          "description": "The OTP received on the mobile number."
+        }
+      },
+      "required": [
+        "mobile_number",
+        "otp"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_check_eligibility",
+    "description": "Checks if a woman meets PMMVY criteria before registration. Prerequisite: None. Must be called before pmmvy_register_beneficiary for new applicants — confirms the woman meets PMMVY criteria before registration. Does NOT register the beneficiary or require authentication.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "eligibility_category": {
+          "type": "string",
+          "description": "The eligibility category of the woman.",
+          "enum": [
+            "sc_st",
+            "bpl_ration_card",
+            "pmjay_beneficiary",
+            "disabled_40_percent",
+            "other"
+          ]
+        },
+        "child_order": {
+          "type": "string",
+          "description": "The order of the child for which benefits are being claimed. second_child_girl only available under PMMVY 2.0.",
+          "enum": [
+            "first_child",
+            "second_child_girl"
+          ]
+        }
+      },
+      "required": [
+        "eligibility_category",
+        "child_order"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_register_beneficiary",
+    "description": "Registers a new beneficiary for PMMVY benefits. Prerequisite: Requires a session_token from pmmvy_verify_beneficiary. pmmvy_check_eligibility must be called before this for new applicants to confirm they meet criteria. Does NOT check eligibility, application status, or handle grievances.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by pmmvy_verify_beneficiary.\n    Required for all authenticated tools. NOT required for\n    the 6 public tools listed above."
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the beneficiary."
+        },
+        "aadhaar_number": {
+          "type": "string",
+          "description": "The 12-digit Aadhaar number of the beneficiary."
+        },
+        "eligibility_category": {
+          "type": "string",
+          "description": "The eligibility category of the beneficiary.",
+          "enum": [
+            "sc_st",
+            "bpl_ration_card",
+            "pmjay_beneficiary",
+            "disabled_40_percent",
+            "other"
+          ]
+        },
+        "child_order": {
+          "type": "string",
+          "description": "The order of the child for which benefits are being claimed. second_child_girl only available under PMMVY 2.0.",
+          "enum": [
+            "first_child",
+            "second_child_girl"
+          ]
+        }
+      },
+      "required": [
+        "session_token",
+        "name",
+        "aadhaar_number",
+        "eligibility_category",
+        "child_order"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_track_application_status",
+    "description": "Tracks the overall status of a PMMVY application. Prerequisite: None. Does NOT provide specific installment stages or actual payment status.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "application_id": {
+          "type": "string",
+          "description": "PMMVY application ID generated at\n    registration. Used for tracking and grievance tools."
+        }
+      },
+      "required": [
+        "application_id"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_check_installment_status",
+    "description": "Checks the approval stage of a specific installment inside the PMMVY system. Prerequisite: Must be called before pmmvy_raise_grievance for payment delay complaints — confirm the installment is actually pending before filing. Does NOT confirm actual bank credit via PFMS (use pmmvy_check_payment_status for that).",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "application_id": {
+          "type": "string",
+          "description": "PMMVY application ID generated at\n    registration. Used for tracking and grievance tools."
+        },
+        "installment_number": {
+          "type": "string",
+          "description": "The specific installment number to check. 1 = pregnancy registration, 2 = ANC completion, 3 = child birth + first immunisation cycle.",
+          "enum": [
+            "installment_1",
+            "installment_2",
+            "installment_3"
+          ]
+        }
+      },
+      "required": [
+        "application_id",
+        "installment_number"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_check_payment_status",
+    "description": "Checks PFMS bank credit confirmation for an installment. Prerequisite: None. Does NOT show approval stages inside the PMMVY system; payment_status confirms actual bank credit via PFMS. Different from pmmvy_check_installment_status.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "application_id": {
+          "type": "string",
+          "description": "PMMVY application ID generated at\n    registration. Used for tracking and grievance tools."
+        },
+        "installment_number": {
+          "type": "string",
+          "description": "The specific installment number to check. 1 = pregnancy registration, 2 = ANC completion, 3 = child birth + first immunisation cycle.",
+          "enum": [
+            "installment_1",
+            "installment_2",
+            "installment_3"
+          ]
+        }
+      },
+      "required": [
+        "application_id",
+        "installment_number"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_update_bank_details",
+    "description": "Updates the bank account details of an existing beneficiary. Prerequisite: Requires a session_token from pmmvy_verify_beneficiary. Does NOT update mobile number or eligibility.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by pmmvy_verify_beneficiary.\n    Required for all authenticated tools. NOT required for\n    the 6 public tools listed above."
+        },
+        "application_id": {
+          "type": "string",
+          "description": "PMMVY application ID generated at\n    registration. Used for tracking and grievance tools."
+        },
+        "new_bank_account_number": {
+          "type": "string",
+          "description": "The new bank account number of the beneficiary."
+        },
+        "new_ifsc_code": {
+          "type": "string",
+          "description": "The IFSC code of the new bank branch."
+        }
+      },
+      "required": [
+        "session_token",
+        "application_id",
+        "new_bank_account_number",
+        "new_ifsc_code"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_update_mobile_number",
+    "description": "Updates the registered mobile number of an existing beneficiary. Prerequisite: Requires a session_token from pmmvy_verify_beneficiary. Does NOT update bank details or other application data.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by pmmvy_verify_beneficiary.\n    Required for all authenticated tools. NOT required for\n    the 6 public tools listed above."
+        },
+        "application_id": {
+          "type": "string",
+          "description": "PMMVY application ID generated at\n    registration. Used for tracking and grievance tools."
+        },
+        "new_mobile_number": {
+          "type": "string",
+          "description": "The new 10-digit mobile number to update."
+        }
+      },
+      "required": [
+        "session_token",
+        "application_id",
+        "new_mobile_number"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_check_anc_status",
+    "description": "Checks the Antenatal Care (ANC) completion status for the beneficiary. Prerequisite: None. Must be called before pmmvy_raise_grievance when the complaint is about installment 2 being withheld — ANC incompletion is the most common cause of installment 2 delay. Does NOT raise a grievance or register ANC.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "application_id": {
+          "type": "string",
+          "description": "PMMVY application ID generated at\n    registration. Used for tracking and grievance tools."
+        }
+      },
+      "required": [
+        "application_id"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_raise_grievance",
+    "description": "Raises a grievance for PMMVY related issues. Prerequisite: Requires a session_token from pmmvy_verify_beneficiary. Must call pmmvy_check_installment_status first for payment delay complaints. Must call pmmvy_check_anc_status first when the complaint is about installment 2 being withheld. Does NOT track an existing grievance.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "description": "Token returned by pmmvy_verify_beneficiary.\n    Required for all authenticated tools. NOT required for\n    the 6 public tools listed above."
+        },
+        "application_id": {
+          "type": "string",
+          "description": "PMMVY application ID generated at\n    registration. Used for tracking and grievance tools."
+        },
+        "grievance_category": {
+          "type": "string",
+          "description": "The category of the grievance.",
+          "enum": [
+            "payment_delay",
+            "payment_rejected",
+            "anc_not_updated",
+            "bank_account_mismatch",
+            "registration_rejected",
+            "wrong_amount_credited"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the grievance."
+        }
+      },
+      "required": [
+        "session_token",
+        "application_id",
+        "grievance_category",
+        "description"
+      ]
+    }
+  },
+  {
+    "name": "pmmvy_track_grievance_status",
+    "description": "Tracks the status of an existing grievance. Prerequisite: None. Does NOT raise a new grievance or check regular application status.",
+    "parameters": {
+      "type": "dict",
+      "properties": {
+        "grievance_id": {
+          "type": "string",
+          "description": "The ID of the previously submitted grievance."
+        }
+      },
+      "required": [
+        "grievance_id"
+      ]
+    }
+  }
+]

@@ -1,0 +1,919 @@
+[
+  {
+    "intent_id": "epashu_simple_001",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for e-Pashu Haat authentication.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_002",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "epashu_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_003",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Registers a livestock animal with breed, age, health, and vaccination details.",
+    "required_tools": [
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_004",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Creates a sale listing for a registered livestock.",
+    "required_tools": [
+      "epashu_create_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_005",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Searches available livestock listings by animal type, breed, location, and price range.",
+    "required_tools": [
+      "epashu_search_listings"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_006",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Retrieves full details of a specific listing including animal details, health records, seller info, and verification status.",
+    "required_tools": [
+      "epashu_get_listing_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_007",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Verifies the breed certification and health records of a listed animal.",
+    "required_tools": [
+      "epashu_verify_livestock"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_008",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Places a purchase order on an active listing.",
+    "required_tools": [
+      "epashu_place_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_009",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Tracks order_status ('requested', 'confirmed', 'payment_done', 'transferred', 'completed', 'cancelled').",
+    "required_tools": [
+      "epashu_track_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_010",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Records the transfer of livestock ownership from seller to buyer after successful payment.",
+    "required_tools": [
+      "epashu_transfer_ownership"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_011",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Updates an existing listing (price, description, status).",
+    "required_tools": [
+      "epashu_update_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_012",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Tracks transport and delivery logistics for a purchased animal.",
+    "required_tools": [
+      "epashu_track_logistics"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_013",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Cancels an order.",
+    "required_tools": [
+      "epashu_cancel_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_014",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Sends a counter-offer on a negotiable listing.",
+    "required_tools": [
+      "epashu_negotiate_price"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_015",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance.",
+    "required_tools": [
+      "epashu_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_simple_016",
+    "usecase": "epashu",
+    "category": "simple",
+    "abstract_goal": "Tracks grievance status.",
+    "required_tools": [
+      "epashu_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "epashu_multiple_001",
+    "usecase": "epashu",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for e-Pashu Haat authentication.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "epashu_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "epashu_multiple_002",
+    "usecase": "epashu",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for e-Pashu Haat authentication.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "epashu_register_livestock"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "epashu_multiple_003",
+    "usecase": "epashu",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for e-Pashu Haat authentication.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "epashu_create_listing"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "epashu_multiple_004",
+    "usecase": "epashu",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for e-Pashu Haat authentication.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "epashu_search_listings"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "epashu_multiple_005",
+    "usecase": "epashu",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for e-Pashu Haat authentication.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "epashu_get_listing_details"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "epashu_parallel_001",
+    "usecase": "epashu",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: epashu_generate_otp.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "epashu_parallel_002",
+    "usecase": "epashu",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: epashu_verify_otp.",
+    "required_tools": [
+      "epashu_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "epashu_parallel_003",
+    "usecase": "epashu",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: epashu_register_livestock.",
+    "required_tools": [
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_register_livestock"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "epashu_parallel_multiple_001",
+    "usecase": "epashu",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: epashu_verify_otp and epashu_raise_grievance.",
+    "required_tools": [
+      "epashu_verify_otp",
+      "epashu_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_verify_otp",
+      "epashu_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "epashu_parallel_multiple_002",
+    "usecase": "epashu",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: epashu_get_listing_details and epashu_cancel_order.",
+    "required_tools": [
+      "epashu_get_listing_details",
+      "epashu_cancel_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_get_listing_details",
+      "epashu_cancel_order"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "epashu_parallel_multiple_003",
+    "usecase": "epashu",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: epashu_get_listing_details and epashu_transfer_ownership.",
+    "required_tools": [
+      "epashu_get_listing_details",
+      "epashu_transfer_ownership"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_get_listing_details",
+      "epashu_transfer_ownership"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "epashu_parallel_multiple_004",
+    "usecase": "epashu",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: epashu_generate_otp and epashu_negotiate_price.",
+    "required_tools": [
+      "epashu_generate_otp",
+      "epashu_negotiate_price"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_generate_otp",
+      "epashu_negotiate_price"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "epashu_parallel_multiple_005",
+    "usecase": "epashu",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: epashu_create_listing and epashu_update_listing.",
+    "required_tools": [
+      "epashu_create_listing",
+      "epashu_update_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "epashu_create_listing",
+      "epashu_update_listing"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "epashu_irrelevance_001",
+    "usecase": "epashu",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "epashu_generate_otp",
+      "epashu_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "epashu_irrelevance_002",
+    "usecase": "epashu",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "epashu_generate_otp",
+      "epashu_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "epashu_irrelevance_003",
+    "usecase": "epashu",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "epashu_generate_otp",
+      "epashu_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "epashu_irrelevance_004",
+    "usecase": "epashu",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "epashu_generate_otp",
+      "epashu_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "epashu_irrelevance_005",
+    "usecase": "epashu",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "epashu_generate_otp",
+      "epashu_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "epashu_base_001",
+    "usecase": "epashu",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: epashu_generate_otp, epashu_verify_otp.",
+    "required_tools": [
+      "epashu_generate_otp",
+      "epashu_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "epashu_base_002",
+    "usecase": "epashu",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: epashu_raise_grievance, epashu_track_grievance_status.",
+    "required_tools": [
+      "epashu_raise_grievance",
+      "epashu_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "epashu_base_003",
+    "usecase": "epashu",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: epashu_generate_otp, epashu_register_livestock.",
+    "required_tools": [
+      "epashu_generate_otp",
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "epashu_base_004",
+    "usecase": "epashu",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: epashu_generate_otp, epashu_verify_otp, epashu_register_livestock.",
+    "required_tools": [
+      "epashu_generate_otp",
+      "epashu_verify_otp",
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "epashu_base_005",
+    "usecase": "epashu",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: epashu_verify_otp, epashu_register_livestock.",
+    "required_tools": [
+      "epashu_verify_otp",
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "epashu_miss_param_001",
+    "usecase": "epashu",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform epashu_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "epashu_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "epashu_miss_param_002",
+    "usecase": "epashu",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform epashu_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "epashu_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "epashu_miss_param_003",
+    "usecase": "epashu",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform epashu_register_livestock but do not provide the necessary session_token.",
+    "required_tools": [
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "epashu_miss_func_001",
+    "usecase": "epashu",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "epashu_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "epashu_long_context_001",
+    "usecase": "epashu",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: epashu_generate_otp, epashu_verify_otp.",
+    "required_tools": [
+      "epashu_generate_otp",
+      "epashu_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "epashu_long_context_002",
+    "usecase": "epashu",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: epashu_raise_grievance, epashu_track_grievance_status.",
+    "required_tools": [
+      "epashu_raise_grievance",
+      "epashu_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "epashu_long_context_003",
+    "usecase": "epashu",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: epashu_generate_otp, epashu_register_livestock.",
+    "required_tools": [
+      "epashu_generate_otp",
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "epashu_long_context_004",
+    "usecase": "epashu",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: epashu_generate_otp, epashu_verify_otp, epashu_register_livestock.",
+    "required_tools": [
+      "epashu_generate_otp",
+      "epashu_verify_otp",
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "epashu_long_context_005",
+    "usecase": "epashu",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: epashu_verify_otp, epashu_register_livestock.",
+    "required_tools": [
+      "epashu_verify_otp",
+      "epashu_register_livestock"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

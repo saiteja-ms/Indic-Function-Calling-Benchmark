@@ -1,0 +1,865 @@
+[
+  {
+    "intent_id": "soilportal_simple_001",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for Soil Health Card Portal authentication.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_002",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token for SHC Portal.",
+    "required_tools": [
+      "shcportal_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_003",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Searches for available Soil Health Card reports for a farmer.",
+    "required_tools": [
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_004",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Retrieves full details of a specific SHC report including nutrient values, recommendations, and lab details.",
+    "required_tools": [
+      "shcportal_get_report_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_005",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Checks the processing status of a soil sample.",
+    "required_tools": [
+      "shcportal_check_sample_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_006",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Initiates download of a Soil Health Card report.",
+    "required_tools": [
+      "shcportal_download_report"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_007",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Retrieves specific nutrient analysis values from a generated report.",
+    "required_tools": [
+      "shcportal_get_nutrient_values"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_008",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Generates fertilizer recommendations based on SHC test results and target crop.",
+    "required_tools": [
+      "shcportal_get_fertilizer_recommendation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_009",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Retrieves all historical SHC reports for a farmer.",
+    "required_tools": [
+      "shcportal_get_historical_reports"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_010",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Filters SHC reports for a specific land parcel across all available years.",
+    "required_tools": [
+      "shcportal_filter_reports_by_land"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_011",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Returns details of the laboratory assigned to test the soil sample.",
+    "required_tools": [
+      "shcportal_get_lab_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_012",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about SHC Portal.",
+    "required_tools": [
+      "shcportal_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_simple_013",
+    "usecase": "soilportal",
+    "category": "simple",
+    "abstract_goal": "Tracks a SHC Portal grievance.",
+    "required_tools": [
+      "shcportal_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "soilportal_multiple_001",
+    "usecase": "soilportal",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "shcportal_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "soilportal_multiple_002",
+    "usecase": "soilportal",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "shcportal_search_reports"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "soilportal_multiple_003",
+    "usecase": "soilportal",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "shcportal_get_report_details"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "soilportal_multiple_004",
+    "usecase": "soilportal",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "shcportal_check_sample_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "soilportal_multiple_005",
+    "usecase": "soilportal",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "shcportal_download_report"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "soilportal_parallel_001",
+    "usecase": "soilportal",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: shcportal_generate_otp.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "soilportal_parallel_002",
+    "usecase": "soilportal",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: shcportal_verify_otp.",
+    "required_tools": [
+      "shcportal_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "soilportal_parallel_003",
+    "usecase": "soilportal",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_search_reports"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "soilportal_parallel_multiple_001",
+    "usecase": "soilportal",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: shcportal_verify_otp and shcportal_filter_reports_by_land.",
+    "required_tools": [
+      "shcportal_verify_otp",
+      "shcportal_filter_reports_by_land"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_verify_otp",
+      "shcportal_filter_reports_by_land"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "soilportal_parallel_multiple_002",
+    "usecase": "soilportal",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: shcportal_search_reports and shcportal_check_sample_status.",
+    "required_tools": [
+      "shcportal_search_reports",
+      "shcportal_check_sample_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_search_reports",
+      "shcportal_check_sample_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "soilportal_parallel_multiple_003",
+    "usecase": "soilportal",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: shcportal_generate_otp and shcportal_download_report.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_download_report"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_generate_otp",
+      "shcportal_download_report"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "soilportal_parallel_multiple_004",
+    "usecase": "soilportal",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: shcportal_get_nutrient_values and shcportal_filter_reports_by_land.",
+    "required_tools": [
+      "shcportal_get_nutrient_values",
+      "shcportal_filter_reports_by_land"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_get_nutrient_values",
+      "shcportal_filter_reports_by_land"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "soilportal_parallel_multiple_005",
+    "usecase": "soilportal",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: shcportal_generate_otp and shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "shcportal_generate_otp",
+      "shcportal_search_reports"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "soilportal_irrelevance_001",
+    "usecase": "soilportal",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "shcportal_generate_otp",
+      "shcportal_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "soilportal_irrelevance_002",
+    "usecase": "soilportal",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "shcportal_generate_otp",
+      "shcportal_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "soilportal_irrelevance_003",
+    "usecase": "soilportal",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "shcportal_generate_otp",
+      "shcportal_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "soilportal_irrelevance_004",
+    "usecase": "soilportal",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "shcportal_generate_otp",
+      "shcportal_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "soilportal_irrelevance_005",
+    "usecase": "soilportal",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "shcportal_generate_otp",
+      "shcportal_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "soilportal_base_001",
+    "usecase": "soilportal",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: shcportal_generate_otp, shcportal_verify_otp.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "soilportal_base_002",
+    "usecase": "soilportal",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: shcportal_raise_grievance, shcportal_track_grievance_status.",
+    "required_tools": [
+      "shcportal_raise_grievance",
+      "shcportal_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "soilportal_base_003",
+    "usecase": "soilportal",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: shcportal_generate_otp, shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "soilportal_base_004",
+    "usecase": "soilportal",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: shcportal_generate_otp, shcportal_verify_otp, shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_verify_otp",
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "soilportal_base_005",
+    "usecase": "soilportal",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: shcportal_verify_otp, shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_verify_otp",
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "soilportal_miss_param_001",
+    "usecase": "soilportal",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform shcportal_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "shcportal_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "soilportal_miss_param_002",
+    "usecase": "soilportal",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform shcportal_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "shcportal_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "soilportal_miss_param_003",
+    "usecase": "soilportal",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform shcportal_search_reports but do not provide the necessary session_token.",
+    "required_tools": [
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "soilportal_miss_func_001",
+    "usecase": "soilportal",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "shcportal_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "soilportal_long_context_001",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_generate_otp, shcportal_verify_otp.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "soilportal_long_context_002",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_raise_grievance, shcportal_track_grievance_status.",
+    "required_tools": [
+      "shcportal_raise_grievance",
+      "shcportal_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "soilportal_long_context_003",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_generate_otp, shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "soilportal_long_context_004",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_generate_otp, shcportal_verify_otp, shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_generate_otp",
+      "shcportal_verify_otp",
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "soilportal_long_context_005",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_verify_otp, shcportal_search_reports.",
+    "required_tools": [
+      "shcportal_verify_otp",
+      "shcportal_search_reports"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

@@ -1,0 +1,317 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+PM-KUSUM (Pradhan Mantri Kisan Urja Suraksha evam Utthaan Mahabhiyan)
+solar pump subsidy service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Eligibility checking for solar pump subsidy
+- Application submission for solar pump installation
+- Subsidy calculation and beneficiary contribution
+- Vendor selection and approval
+- Installation scheduling and tracking
+- Physical inspection and verification
+- Subsidy disbursement tracking
+- Grid connection (if applicable)
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Eligibility dependency:
+  Farmer must satisfy:
+    - land ownership or valid lease
+    - access to irrigation land
+    - non-duplication (cannot receive multiple subsidies for same asset)
+
+- Application requirement:
+  Subsidy can only be applied after eligibility check.
+
+- Subsidy structure:
+  Subsidy is shared between:
+    - central government
+    - state government
+    - farmer contribution
+
+- Vendor dependency:
+  Installation must be carried out by empanelled vendors.
+
+- Installation requirement:
+  Subsidy is released ONLY after successful installation.
+
+- Inspection dependency:
+  Physical verification must confirm installation before payment.
+
+- Grid/off-grid distinction:
+  Some pumps may be grid-connected, others standalone.
+
+- State-specific variation:
+  Subsidy percentage and rules may vary across states.
+
+- Grievances should ONLY be raised after checking application or subsidy status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- application_status:
+  not_applied → submitted → under_review → approved → rejected
+
+- installation_status:
+  not_started → scheduled → in_progress → completed → verified
+
+- subsidy_status:
+  not_initiated → pending → disbursed → failed
+
+- vendor_status:
+  not_selected → selected → assigned
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- farmer not eligible but attempts application
+- duplicate subsidy request
+- invalid or missing land details
+- vendor not available in region
+- installation delay or failure
+- inspection failure (installation incomplete or incorrect)
+- subsidy calculation mismatch
+- partial installation
+- grid connection failure
+- subsidy payment delay or failure
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (eligibility, land ownership, duplication)
+- rejection conditions (ineligible farmer, invalid application)
+- failure scenarios (installation failure, subsidy delay)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking eligibility
+- applying for subsidy
+- vendor selection and installation tracking
+- successful installation and subsidy release
+- rejection or failure scenarios
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: pmkusum_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"application_id": {
+  "type": "string",
+  "description": "Unique identifier of the subsidy application."
+}
+
+"vendor_id": {
+  "type": "string",
+  "description": "Unique identifier of the empanelled vendor."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"pump_type": [
+  "surface_pump",
+  "submersible_pump"
+]
+
+"installation_status": [
+  "not_started",
+  "scheduled",
+  "in_progress",
+  "completed",
+  "verified"
+]
+
+"application_status": [
+  "not_applied",
+  "submitted",
+  "under_review",
+  "approved",
+  "rejected"
+]
+
+"subsidy_status": [
+  "not_initiated",
+  "pending",
+  "disbursed",
+  "failed"
+]
+
+"grid_type": [
+  "off_grid",
+  "grid_connected"
+]
+
+"eligibility_status": [
+  "eligible",
+  "not_eligible"
+]
+
+"grievance_category": [
+  "application_rejected",
+  "installation_delay",
+  "vendor_issue",
+  "subsidy_not_received",
+  "inspection_failure"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. pmkusum_generate_otp  
+2. pmkusum_verify_otp  
+3. pmkusum_check_eligibility  
+4. pmkusum_apply_subsidy  
+5. pmkusum_calculate_subsidy  
+6. pmkusum_select_vendor  
+7. pmkusum_schedule_installation  
+8. pmkusum_track_installation  
+9. pmkusum_verify_installation  
+10. pmkusum_track_subsidy  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- pmkusum_get_vendor_list  
+- pmkusum_check_application_status  
+- pmkusum_get_grid_connection_status  
+- pmkusum_resolve_application_ambiguity  
+- pmkusum_cancel_application  
+- pmkusum_raise_grievance  
+- pmkusum_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (eligibility, application status, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - pmkusum_generate_otp
+  - pmkusum_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "pmkusum_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support infrastructure lifecycle workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

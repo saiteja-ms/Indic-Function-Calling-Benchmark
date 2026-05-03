@@ -1,0 +1,349 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+CHC (Custom Hiring Centre) Farm Machinery Rental Portal
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Discovering nearby CHC centres
+- Searching available farm machinery
+- Checking availability for specific dates/time slots
+- Booking machinery
+- Scheduling usage
+- Tracking booking status
+- Cancelling or modifying bookings
+- Payment tracking (if applicable)
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Public vs authenticated access:
+  - Browsing machinery is PUBLIC
+  - Booking requires authentication
+
+- Location dependency:
+  Machinery availability depends on:
+    - nearest CHC centre
+    - region/district
+
+- Time-slot dependency:
+  Machinery must be booked for:
+    - specific date
+    - time duration
+
+- Availability constraint:
+  Machinery can be booked ONLY if:
+    - available for selected slot
+    - not already reserved
+
+- Equipment type:
+  Machinery includes:
+    - tractor
+    - harvester
+    - rotavator
+    - seed drill
+    - sprayer
+
+- Booking lifecycle:
+  booking_requested → confirmed → active → completed → cancelled
+
+- Usage constraint:
+  Booking duration must not exceed allowed limits.
+
+- Conflict handling:
+  Overlapping bookings are NOT allowed.
+
+- Payment dependency:
+  Some bookings may require advance payment.
+
+- Grievances should ONLY be raised after checking booking status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- booking_status:
+  requested → confirmed → active → completed → cancelled → failed
+
+- availability_status:
+  available → reserved → unavailable
+
+- payment_status:
+  not_initiated → pending → completed → failed
+
+- machinery_status:
+  operational → in_use → maintenance → unavailable
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- no CHC available in location
+- machinery not available for selected time
+- overlapping booking attempt
+- invalid or past date selection
+- excessive booking duration
+- machinery under maintenance
+- booking cancelled after confirmation
+- payment failure
+- incorrect booking details
+- double booking attempts
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (location, availability, time slot)
+- rejection conditions (invalid booking, overlap conflict)
+- failure scenarios (payment failure, booking failure)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer searching machinery
+- checking availability
+- booking machinery
+- modifying or cancelling booking
+- tracking usage and booking status
+- handling booking conflicts
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: chc_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after authentication. Required for booking tools."
+}
+
+"booking_id": {
+  "type": "string",
+  "description": "Unique identifier of the machinery booking."
+}
+
+"machinery_id": {
+  "type": "string",
+  "description": "Unique identifier of the farm machinery."
+}
+
+"chc_id": {
+  "type": "string",
+  "description": "Unique identifier of the CHC centre."
+}
+
+"location": {
+  "type": "string",
+  "description": "Village, district, or region."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"machinery_type": [
+  "tractor",
+  "harvester",
+  "rotavator",
+  "seed_drill",
+  "sprayer"
+]
+
+"booking_status": [
+  "requested",
+  "confirmed",
+  "active",
+  "completed",
+  "cancelled",
+  "failed"
+]
+
+"availability_status": [
+  "available",
+  "reserved",
+  "unavailable"
+]
+
+"machinery_status": [
+  "operational",
+  "in_use",
+  "maintenance",
+  "unavailable"
+]
+
+"payment_status": [
+  "not_initiated",
+  "pending",
+  "completed",
+  "failed"
+]
+
+"grievance_category": [
+  "booking_failure",
+  "machinery_unavailable",
+  "payment_issue",
+  "scheduling_conflict",
+  "service_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. chc_generate_otp  
+2. chc_verify_otp  
+3. chc_get_chc_list  
+4. chc_search_machinery  
+5. chc_check_availability  
+6. chc_create_booking  
+7. chc_track_booking  
+8. chc_modify_booking  
+9. chc_cancel_booking  
+10. chc_track_payment  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- chc_get_booking_history  
+- chc_resolve_booking_conflict  
+- chc_get_nearest_chc  
+- chc_get_machinery_details  
+- chc_validate_time_slot  
+- chc_raise_grievance  
+- chc_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (availability, authentication, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be required ONLY for:
+  - booking and modification tools
+- It MUST NOT be required for browsing tools
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "chc_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

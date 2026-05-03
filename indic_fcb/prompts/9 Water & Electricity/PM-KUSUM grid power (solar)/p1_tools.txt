@@ -1,0 +1,353 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+PM-KUSUM (solar grid power / feeder-based solarization)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Applying for solar plant installation (grid-connected)
+- Eligibility checking
+- Capacity allocation (kW-based)
+- Installation tracking
+- Energy generation monitoring
+- Net metering and grid export tracking
+- Revenue / payment tracking for surplus energy
+- Maintenance and fault reporting
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Eligibility dependency:
+  Farmer must satisfy:
+    - land ownership or lease
+    - grid connectivity availability
+    - scheme-specific eligibility
+
+- Capacity constraint:
+  Solar capacity is limited by:
+    - land size
+    - feeder capacity
+    - regulatory caps (kW limits)
+
+- Grid dependency:
+  System requires:
+    - grid connection
+    - DISCOM approval
+
+- Installation dependency:
+  System must be installed and verified before energy generation.
+
+- Energy generation lifecycle:
+  installed → generating → exporting → idle/fault
+
+- Net metering:
+  Energy exported to grid is measured and recorded.
+
+- Revenue dependency:
+  Payments are based on:
+    - units exported
+    - tariff rates
+
+- Payment delay:
+  Revenue payments may be delayed due to DISCOM processing.
+
+- Maintenance requirement:
+  Faults or downtime must be handled.
+
+- No guaranteed revenue:
+  Revenue depends on:
+    - generation levels
+    - grid conditions
+    - policy rates
+
+- Grievances should ONLY be raised after checking generation or payment status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- application_status:
+  not_applied → submitted → under_review → approved → rejected
+
+- installation_status:
+  not_started → in_progress → installed → verified → operational
+
+- generation_status:
+  not_generating → generating → exporting → idle → fault
+
+- payment_status:
+  not_initiated → pending → processed → credited → failed
+
+- grid_status:
+  not_connected → connected → active → disrupted
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- farmer not eligible but applies
+- grid not available in area
+- capacity exceeds allowed limits
+- installation delay or failure
+- system installed but not generating
+- incorrect net metering readings
+- low or zero generation due to weather
+- payment not received or delayed
+- mismatch in exported units vs recorded units
+- system fault or downtime
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (eligibility, grid connectivity, capacity limits)
+- rejection conditions (invalid application, capacity exceeded)
+- failure scenarios (installation delay, payment failure, system fault)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer applying for solar grid system
+- tracking installation
+- monitoring energy generation
+- tracking exported energy
+- checking payments/revenue
+- reporting faults
+- handling delays or failures
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: pmkusumgrid_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"application_id": {
+  "type": "string",
+  "description": "Unique identifier of the PM-KUSUM application."
+}
+
+"plant_id": {
+  "type": "string",
+  "description": "Unique identifier of the installed solar plant."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"application_status": [
+  "not_applied",
+  "submitted",
+  "under_review",
+  "approved",
+  "rejected"
+]
+
+"installation_status": [
+  "not_started",
+  "in_progress",
+  "installed",
+  "verified",
+  "operational"
+]
+
+"generation_status": [
+  "not_generating",
+  "generating",
+  "exporting",
+  "idle",
+  "fault"
+]
+
+"payment_status": [
+  "not_initiated",
+  "pending",
+  "processed",
+  "credited",
+  "failed"
+]
+
+"grid_status": [
+  "not_connected",
+  "connected",
+  "active",
+  "disrupted"
+]
+
+"grievance_category": [
+  "installation_delay",
+  "low_generation",
+  "payment_delay",
+  "metering_issue",
+  "system_fault"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. pmkusumgrid_generate_otp  
+2. pmkusumgrid_verify_otp  
+3. pmkusumgrid_check_eligibility  
+4. pmkusumgrid_apply_system  
+5. pmkusumgrid_track_application_status  
+6. pmkusumgrid_track_installation  
+7. pmkusumgrid_monitor_generation  
+8. pmkusumgrid_track_exported_energy  
+9. pmkusumgrid_track_payment  
+10. pmkusumgrid_report_fault  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- pmkusumgrid_get_tariff_details  
+- pmkusumgrid_calculate_revenue  
+- pmkusumgrid_resolve_metering_ambiguity  
+- pmkusumgrid_get_grid_status  
+- pmkusumgrid_schedule_maintenance  
+- pmkusumgrid_raise_grievance  
+- pmkusumgrid_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (eligibility, installation, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - pmkusumgrid_generate_otp
+  - pmkusumgrid_verify_otp
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "pmkusumgrid_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

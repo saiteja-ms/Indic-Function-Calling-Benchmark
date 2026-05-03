@@ -1,0 +1,919 @@
+[
+  {
+    "intent_id": "deds_simple_001",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for DEDS authentication.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_002",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "deds_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_003",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Checks farmer's eligibility for DEDS/poultry subsidy based on category (general/SC-ST/women), project type, and prior subsidy history.",
+    "required_tools": [
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_004",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Submits a detailed project proposal for DEDS subsidy.",
+    "required_tools": [
+      "deds_submit_project"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_005",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Submits a loan application to a bank for the DEDS project.",
+    "required_tools": [
+      "deds_apply_loan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_006",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Tracks loan_status ('not_applied', 'applied', 'sanctioned', 'rejected', 'disbursed').",
+    "required_tools": [
+      "deds_track_loan_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_007",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Calculates subsidy amount based on project cost, beneficiary category, and project type.",
+    "required_tools": [
+      "deds_calculate_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_008",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Tracks project_status ('not_started', 'in_progress', 'completed', 'verified').",
+    "required_tools": [
+      "deds_track_project_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_009",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Records verification/inspection result for the implemented DEDS project.",
+    "required_tools": [
+      "deds_verify_project"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_010",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Tracks subsidy_status ('not_initiated', 'pending', 'approved', 'disbursed', 'failed').",
+    "required_tools": [
+      "deds_track_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_011",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Returns detailed information about DEDS scheme including eligible projects, subsidy percentages, caps, and bank requirements.",
+    "required_tools": [
+      "deds_get_scheme_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_012",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Returns list of banks and financial institutions supporting DEDS loans in a region.",
+    "required_tools": [
+      "deds_get_bank_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_013",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Schedules a physical inspection of the implemented project.",
+    "required_tools": [
+      "deds_schedule_inspection"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_014",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Cancels a DEDS application.",
+    "required_tools": [
+      "deds_cancel_application"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_015",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Raises a DEDS grievance.",
+    "required_tools": [
+      "deds_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_simple_016",
+    "usecase": "deds",
+    "category": "simple",
+    "abstract_goal": "Tracks DEDS grievance.",
+    "required_tools": [
+      "deds_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "deds_multiple_001",
+    "usecase": "deds",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for DEDS authentication.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "deds_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "deds_multiple_002",
+    "usecase": "deds",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for DEDS authentication.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "deds_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "deds_multiple_003",
+    "usecase": "deds",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for DEDS authentication.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "deds_submit_project"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "deds_multiple_004",
+    "usecase": "deds",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for DEDS authentication.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "deds_apply_loan"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "deds_multiple_005",
+    "usecase": "deds",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for DEDS authentication.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "deds_track_loan_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "deds_parallel_001",
+    "usecase": "deds",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: deds_generate_otp.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "deds_parallel_002",
+    "usecase": "deds",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: deds_verify_otp.",
+    "required_tools": [
+      "deds_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "deds_parallel_003",
+    "usecase": "deds",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: deds_check_eligibility.",
+    "required_tools": [
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_check_eligibility"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "deds_parallel_multiple_001",
+    "usecase": "deds",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: deds_verify_otp and deds_raise_grievance.",
+    "required_tools": [
+      "deds_verify_otp",
+      "deds_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_verify_otp",
+      "deds_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "deds_parallel_multiple_002",
+    "usecase": "deds",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: deds_track_loan_status and deds_schedule_inspection.",
+    "required_tools": [
+      "deds_track_loan_status",
+      "deds_schedule_inspection"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_track_loan_status",
+      "deds_schedule_inspection"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "deds_parallel_multiple_003",
+    "usecase": "deds",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: deds_track_loan_status and deds_track_subsidy.",
+    "required_tools": [
+      "deds_track_loan_status",
+      "deds_track_subsidy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_track_loan_status",
+      "deds_track_subsidy"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "deds_parallel_multiple_004",
+    "usecase": "deds",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: deds_generate_otp and deds_cancel_application.",
+    "required_tools": [
+      "deds_generate_otp",
+      "deds_cancel_application"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_generate_otp",
+      "deds_cancel_application"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "deds_parallel_multiple_005",
+    "usecase": "deds",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: deds_submit_project and deds_get_scheme_details.",
+    "required_tools": [
+      "deds_submit_project",
+      "deds_get_scheme_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "deds_submit_project",
+      "deds_get_scheme_details"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "deds_irrelevance_001",
+    "usecase": "deds",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "deds_generate_otp",
+      "deds_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "deds_irrelevance_002",
+    "usecase": "deds",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "deds_generate_otp",
+      "deds_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "deds_irrelevance_003",
+    "usecase": "deds",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "deds_generate_otp",
+      "deds_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "deds_irrelevance_004",
+    "usecase": "deds",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "deds_generate_otp",
+      "deds_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "deds_irrelevance_005",
+    "usecase": "deds",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "deds_generate_otp",
+      "deds_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "deds_base_001",
+    "usecase": "deds",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: deds_generate_otp, deds_verify_otp.",
+    "required_tools": [
+      "deds_generate_otp",
+      "deds_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "deds_base_002",
+    "usecase": "deds",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: deds_raise_grievance, deds_track_grievance_status.",
+    "required_tools": [
+      "deds_raise_grievance",
+      "deds_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "deds_base_003",
+    "usecase": "deds",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: deds_generate_otp, deds_check_eligibility.",
+    "required_tools": [
+      "deds_generate_otp",
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "deds_base_004",
+    "usecase": "deds",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: deds_generate_otp, deds_verify_otp, deds_check_eligibility.",
+    "required_tools": [
+      "deds_generate_otp",
+      "deds_verify_otp",
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "deds_base_005",
+    "usecase": "deds",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: deds_verify_otp, deds_check_eligibility.",
+    "required_tools": [
+      "deds_verify_otp",
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "deds_miss_param_001",
+    "usecase": "deds",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform deds_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "deds_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "deds_miss_param_002",
+    "usecase": "deds",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform deds_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "deds_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "deds_miss_param_003",
+    "usecase": "deds",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform deds_check_eligibility but do not provide the necessary session_token.",
+    "required_tools": [
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "deds_miss_func_001",
+    "usecase": "deds",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "deds_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "deds_long_context_001",
+    "usecase": "deds",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: deds_generate_otp, deds_verify_otp.",
+    "required_tools": [
+      "deds_generate_otp",
+      "deds_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "deds_long_context_002",
+    "usecase": "deds",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: deds_raise_grievance, deds_track_grievance_status.",
+    "required_tools": [
+      "deds_raise_grievance",
+      "deds_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "deds_long_context_003",
+    "usecase": "deds",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: deds_generate_otp, deds_check_eligibility.",
+    "required_tools": [
+      "deds_generate_otp",
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "deds_long_context_004",
+    "usecase": "deds",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: deds_generate_otp, deds_verify_otp, deds_check_eligibility.",
+    "required_tools": [
+      "deds_generate_otp",
+      "deds_verify_otp",
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "deds_long_context_005",
+    "usecase": "deds",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: deds_verify_otp, deds_check_eligibility.",
+    "required_tools": [
+      "deds_verify_otp",
+      "deds_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

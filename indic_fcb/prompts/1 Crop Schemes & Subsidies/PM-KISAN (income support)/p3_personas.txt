@@ -1,0 +1,184 @@
+You are building test personas for a function-calling
+benchmark for the PM-KISAN government service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names (for reasoning context)
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- DO NOT invent fields
+- DO NOT rename fields
+- DO NOT omit required fields
+- DO NOT introduce new schema keys
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — your 8 personas must cover these
+8 distinct code paths through the stubs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not registered at all
+  registration_status: NOT_REGISTERED
+
+PATH 2 — Registered, eKYC pending
+  registration_status: REGISTERED
+  ekyc_status: PENDING
+  2 installments credited, 1 pending
+
+PATH 3 — Registered, everything complete
+  registration_status: REGISTERED
+  ekyc_status: COMPLETE
+  All installments CREDITED
+
+PATH 4 — Name mismatch causing rejection
+  registration_status: REGISTERED
+  ekyc_status: COMPLETE
+  name mismatch between records and Aadhaar
+  installment rejected with NAME_MISMATCH
+
+PATH 5 — Payment delayed
+  registration_status: REGISTERED
+  ekyc_status: COMPLETE
+  installment PENDING > 90 days
+  active_complaints: []
+
+PATH 6 — Complaint already filed
+  registration_status: REGISTERED
+  active_complaints has OPEN complaint
+
+PATH 7 — Migrated farmer
+  registration_status: REGISTERED
+  state updated to new state
+  bank updated accordingly
+
+PATH 8 — Urban farmer (edge case)
+  farmer_type: URBAN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+These MUST hold, otherwise output is INVALID:
+
+1. INSTALLMENT CONSISTENCY
+   - Exactly 3 installments
+   - Dates MUST be:
+     - 2024-04-15
+     - 2024-08-10
+     - 2024-12-05
+   - Amount ALWAYS 2000
+
+2. STATUS LOGIC
+   - CREDITED → must have valid date
+   - PENDING → no credit date
+   - REJECTED → must include rejection_reason
+
+3. ekyc_status IMPACT
+   - If PENDING → latest installment must be PENDING
+   - If COMPLETE → no system-level blocking
+
+4. COMPLAINT STRUCTURE
+   - complaint_id format: "PMKISAN-CMP-XXXX"
+   - status: OPEN or CLOSED
+   - linked_installment_id must exist
+
+5. NAME MISMATCH RULE
+   - Only 1–2 character typo allowed
+   - Must be realistic (drop letter / swap letters)
+
+6. MIGRATION RULE
+   - state must change from original
+   - bank IFSC must correspond to new state
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → Hindi belt (UP, Bihar, MP)
+PATH 3-4 → Punjab / Haryana
+PATH 5-6 → Maharashtra / Rajasthan
+PATH 7-8 → Tamil Nadu / Andhra Pradesh
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA GENERATION RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits, NOT repeating
+- Mobile: starts with 6/7/8/9
+- Bank format:
+  "IFSC0123456|00112233445566"
+
+- Names must:
+  - match region
+  - be realistic Indian names
+  - not repeated across personas
+
+- Language preference:
+  - hi (Hindi belt)
+  - pa (Punjab)
+  - mr (Maharashtra)
+  - ta (Tamil Nadu)
+  - te (Andhra)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM REQUIREMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Personas MUST be reproducible
+- No randomness in:
+  - dates
+  - installment ordering
+  - complaint structure
+
+- Output must be stable across runs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT (STRICT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output each persona as:
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ramesh Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — registered, eKYC pending",
+  "language_preference": "hi",
+  "interesting_characteristic": "one sentence describing real-world context",
+  "stub_test_assertion": "clear expected state change after a tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be a JSON array
+- NO markdown
+- NO explanation
+- NO comments
+- NO trailing commas
+- NO missing fields
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

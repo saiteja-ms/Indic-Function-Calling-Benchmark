@@ -1,0 +1,359 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+FMS (Farm Machinery Service / Custom Hiring Service)
+booking system on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Discovering available farm services (ploughing, harvesting, spraying, etc.)
+- Searching service providers
+- Checking service availability
+- Booking service (not just machinery)
+- Scheduling job execution
+- Tracking service progress
+- Completion verification
+- Payment tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Public vs authenticated access:
+  - Service browsing is PUBLIC
+  - Booking requires authentication
+
+- Service-based model:
+  Farmers are booking:
+    - service + machine + operator
+  NOT just equipment rental.
+
+- Location dependency:
+  Service availability depends on:
+    - service provider location
+    - travel feasibility
+
+- Task-based pricing:
+  Pricing may depend on:
+    - land area (acre/hectare)
+    - duration
+    - type of operation
+
+- Scheduling dependency:
+  Service must be booked for:
+    - specific date
+    - estimated duration
+
+- Provider assignment:
+  Service provider must be assigned before execution.
+
+- Execution lifecycle:
+  booking_requested → confirmed → assigned → in_progress → completed → verified
+
+- Completion verification:
+  Service must be verified before final closure.
+
+- Payment dependency:
+  Payment may be:
+    - advance
+    - post-service
+
+- No guaranteed availability:
+  Service may not be available due to:
+    - high demand
+    - weather conditions
+    - provider constraints
+
+- Grievances should ONLY be raised after checking service status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- booking_status:
+  requested → confirmed → assigned → in_progress → completed → verified → cancelled → failed
+
+- service_status:
+  not_started → scheduled → in_progress → completed
+
+- provider_status:
+  available → assigned → busy → unavailable
+
+- payment_status:
+  not_initiated → pending → completed → failed
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- no service providers available in location
+- service requested outside feasible area
+- invalid or unrealistic land area
+- scheduling conflict
+- provider unavailable after booking
+- weather disruption
+- service not completed properly
+- incorrect service execution
+- payment failure
+- duplicate booking attempts
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (location, feasibility, scheduling)
+- rejection conditions (invalid request, no provider)
+- failure scenarios (provider failure, incomplete service)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer discovering services
+- checking availability
+- booking service
+- tracking execution
+- verifying completion
+- handling failed or incomplete services
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: fms_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after authentication. Required for booking tools."
+}
+
+"booking_id": {
+  "type": "string",
+  "description": "Unique identifier of the service booking."
+}
+
+"service_id": {
+  "type": "string",
+  "description": "Unique identifier of the service type."
+}
+
+"provider_id": {
+  "type": "string",
+  "description": "Unique identifier of the service provider."
+}
+
+"location": {
+  "type": "string",
+  "description": "Village, district, or region."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"service_type": [
+  "ploughing",
+  "harvesting",
+  "sowing",
+  "spraying",
+  "tilling"
+]
+
+"booking_status": [
+  "requested",
+  "confirmed",
+  "assigned",
+  "in_progress",
+  "completed",
+  "verified",
+  "cancelled",
+  "failed"
+]
+
+"service_status": [
+  "not_started",
+  "scheduled",
+  "in_progress",
+  "completed"
+]
+
+"provider_status": [
+  "available",
+  "assigned",
+  "busy",
+  "unavailable"
+]
+
+"payment_status": [
+  "not_initiated",
+  "pending",
+  "completed",
+  "failed"
+]
+
+"grievance_category": [
+  "service_not_completed",
+  "poor_quality_service",
+  "provider_issue",
+  "payment_issue",
+  "scheduling_conflict"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. fms_generate_otp  
+2. fms_verify_otp  
+3. fms_get_service_list  
+4. fms_search_providers  
+5. fms_check_service_availability  
+6. fms_create_booking  
+7. fms_assign_provider  
+8. fms_track_service  
+9. fms_verify_completion  
+10. fms_track_payment  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- fms_get_booking_history  
+- fms_reschedule_service  
+- fms_cancel_booking  
+- fms_resolve_provider_conflict  
+- fms_get_service_details  
+- fms_estimate_cost  
+- fms_raise_grievance  
+- fms_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (availability, provider assignment, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be required ONLY for:
+  - booking and execution tools
+- It MUST NOT be required for browsing tools
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "fms_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

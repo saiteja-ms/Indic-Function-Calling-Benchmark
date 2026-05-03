@@ -1,0 +1,146 @@
+You are building test personas for a function-calling
+benchmark for the Kisan Call Centre (grievance redressal)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\4 Disaster Relief & Protection\Kisan Call Centre (grievance)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\4 Disaster Relief & Protection\Kisan Call Centre (grievance)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific grievance / support scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No grievance raised
+  grievance_status: NOT_RAISED
+
+PATH 2 — Grievance raised, awaiting response
+  grievance_status: RAISED
+  response_status: PENDING
+
+PATH 3 — Grievance acknowledged by support
+  response_status: ACKNOWLEDGED
+
+PATH 4 — Grievance resolved successfully
+  grievance_status: RESOLVED
+
+PATH 5 — Grievance escalated to higher authority
+  escalation_status: ESCALATED
+
+PATH 6 — Grievance rejected due to invalid issue
+  grievance_status: REJECTED
+  rejection_reason: INVALID_GRIEVANCE
+
+PATH 7 — Multiple grievances raised by farmer
+  multiple_grievances: TRUE
+
+PATH 8 — Delayed response beyond expected time
+  response_status: DELAYED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. GRIEVANCE FLOW
+   - NOT_RAISED → RAISED → ACKNOWLEDGED → RESOLVED/ESCALATED/REJECTED
+
+2. GRIEVANCE STRUCTURE
+   - Must include:
+     - grievance_id (format: KCC-GRV-XXXX)
+     - issue_type
+     - description
+     - created_date
+
+3. ISSUE TYPES (VALID ENUM)
+   - PAYMENT_ISSUE
+   - SCHEME_QUERY
+   - TECHNICAL_ISSUE
+   - LAND_RECORD_PROBLEM
+   - INSURANCE_CLAIM_ISSUE
+
+4. RESPONSE RULE
+   - ACKNOWLEDGED → support has received grievance
+   - DELAYED → response time exceeded threshold
+
+5. ESCALATION RULE
+   - ESCALATED → unresolved at initial level
+
+6. MULTI-GRIEVANCE RULE
+   - Each grievance must have unique grievance_id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Dates: YYYY-MM-DD format
+- Grievance descriptions must be realistic farmer issues
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed grievance flows
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Sunil Yadav — UP, PATH 2",
+  "code_path": "PATH 2 — grievance raised, pending response",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer raised complaint about delayed subsidy payment",
+  "stub_test_assertion": "response_status should become ACKNOWLEDGED after grievance_response tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

@@ -1,0 +1,301 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Pesticide and Seed Dealer Lookup service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Searching for nearby pesticide/seed dealers
+- Filtering dealers by location, crop, or product type
+- Verifying dealer authenticity and license status
+- Checking product availability (seeds/pesticides)
+- Viewing dealer details (contact, address, license)
+- Comparing dealers
+- Safety and compliance checks
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Public vs authenticated access:
+  - Dealer lookup is PUBLIC
+  - Saving preferences, history, and grievances REQUIRE authentication
+
+- Location dependency:
+  Dealer search MUST include location (village/district/state).
+  Queries without location are INVALID.
+
+- Licensing requirement:
+  Dealers must have valid government-issued licenses.
+  Unlicensed dealers must be flagged as invalid.
+
+- Product regulation:
+  Certain pesticides are regulated and require proper authorization.
+
+- Availability uncertainty:
+  Product availability is dynamic and may not be guaranteed.
+
+- Crop-product compatibility:
+  Seeds/pesticides must match crop type.
+
+- Duplicate listings:
+  Same dealer may appear multiple times due to data inconsistencies.
+
+- Safety advisory:
+  Tools must emphasize safe usage and compliance.
+
+- Grievances should ONLY be raised after verifying dealer details.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- query_state:
+  invalid_query → valid_query → results_found / no_results
+
+- dealer_status:
+  active → inactive → suspended
+
+- license_status:
+  valid → expired → suspended
+
+- inventory_status:
+  available → limited → unavailable
+
+Tools must define:
+- when results are valid
+- when results are unreliable or unavailable
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- missing or invalid location
+- no dealers found in region
+- dealer with expired or suspended license
+- product not available at dealer
+- mismatch between crop and product
+- duplicate or conflicting dealer entries
+- ambiguous dealer names
+- incorrect contact details
+- regulated pesticide without authorization
+- stale or outdated inventory data
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (location required, valid filters)
+- failure conditions (no results, invalid dealer)
+- ambiguity handling (duplicate or conflicting entries)
+
+Tools must NOT assume successful retrieval.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer searching for nearby dealers
+- filtering dealers by product or crop
+- verifying dealer license
+- checking product availability
+- comparing multiple dealers
+- handling no-result scenarios
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: dealer_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after authentication. Required for preference and grievance tools."
+}
+
+"location": {
+  "type": "string",
+  "description": "Village, district, or state."
+}
+
+"dealer_id": {
+  "type": "string",
+  "description": "Unique identifier of the dealer."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"product_type": [
+  "seeds",
+  "pesticides",
+  "fertilizers"
+]
+
+"crop_type": [
+  "paddy",
+  "wheat",
+  "maize",
+  "cotton",
+  "pulses",
+  "oilseeds",
+  "horticulture"
+]
+
+"license_status": [
+  "valid",
+  "expired",
+  "suspended"
+]
+
+"dealer_status": [
+  "active",
+  "inactive",
+  "suspended"
+]
+
+"inventory_status": [
+  "available",
+  "limited",
+  "unavailable"
+]
+
+"grievance_category": [
+  "fake_dealer",
+  "expired_license",
+  "wrong_information",
+  "product_not_available",
+  "safety_violation"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. dealer_search_by_location  
+2. dealer_filter_by_product  
+3. dealer_get_details  
+4. dealer_verify_license  
+5. dealer_check_inventory  
+6. dealer_compare_options  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- dealer_resolve_location_ambiguity  
+- dealer_resolve_duplicate_entries  
+- dealer_get_nearest  
+- dealer_get_recommendations  
+- dealer_save_preference  
+- dealer_raise_grievance  
+- dealer_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (location, filters, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be required ONLY for:
+  - preference tools
+  - grievance tools
+- It MUST NOT be required for public lookup tools
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "dealer_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support retrieval and filtering workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

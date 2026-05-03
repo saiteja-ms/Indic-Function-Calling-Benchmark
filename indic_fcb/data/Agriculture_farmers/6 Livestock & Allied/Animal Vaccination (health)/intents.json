@@ -1,0 +1,919 @@
+[
+  {
+    "intent_id": "animalvacc_simple_001",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Sends OTP to the Aadhaar-linked mobile number for livestock vaccination service authentication.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_002",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Verifies the OTP and returns a session_token for livestock vaccination operations.",
+    "required_tools": [
+      "livestock_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_003",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Registers a new animal in the livestock registry linked to the farmer's profile.",
+    "required_tools": [
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_004",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Retrieves the vaccination schedule for a registered animal based on species, age, and disease type.",
+    "required_tools": [
+      "livestock_get_vaccination_schedule"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_005",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Books a vaccination service for a registered animal.",
+    "required_tools": [
+      "livestock_book_vaccination"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_006",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Tracks the service request status for a booked vaccination.",
+    "required_tools": [
+      "livestock_track_service"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_007",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Records that a vaccination has been administered by authorized personnel.",
+    "required_tools": [
+      "livestock_record_vaccination"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_008",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Retrieves complete vaccination history for a registered animal including all past vaccinations, dates, and vaccines used.",
+    "required_tools": [
+      "livestock_get_vaccination_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_009",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Reschedules a missed or upcoming vaccination to a new date.",
+    "required_tools": [
+      "livestock_reschedule_vaccination"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_010",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Returns the current vaccination_status ('not_scheduled', 'scheduled', 'administered', 'missed', 'rescheduled') for a specific booking.",
+    "required_tools": [
+      "livestock_track_vaccination_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_011",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Provides disease-specific advisory for livestock including symptoms, prevention, and vaccination importance.",
+    "required_tools": [
+      "livestock_get_disease_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_012",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Checks whether a vaccination request is valid based on the animal's age, species, and last vaccination date.",
+    "required_tools": [
+      "livestock_check_schedule_validity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_013",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Returns nearby veterinary service centres and field workers available for vaccination.",
+    "required_tools": [
+      "livestock_get_nearest_veterinary_service"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_014",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Cancels a booked vaccination service.",
+    "required_tools": [
+      "livestock_cancel_service"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_015",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about livestock vaccination services.",
+    "required_tools": [
+      "livestock_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_simple_016",
+    "usecase": "animalvacc",
+    "category": "simple",
+    "abstract_goal": "Tracks a previously raised grievance.",
+    "required_tools": [
+      "livestock_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "animalvacc_multiple_001",
+    "usecase": "animalvacc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for livestock vaccination service authentication.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "livestock_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "animalvacc_multiple_002",
+    "usecase": "animalvacc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for livestock vaccination service authentication.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "livestock_register_animal"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "animalvacc_multiple_003",
+    "usecase": "animalvacc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for livestock vaccination service authentication.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "livestock_get_vaccination_schedule"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "animalvacc_multiple_004",
+    "usecase": "animalvacc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for livestock vaccination service authentication.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "livestock_book_vaccination"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "animalvacc_multiple_005",
+    "usecase": "animalvacc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the Aadhaar-linked mobile number for livestock vaccination service authentication.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "livestock_track_service"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "animalvacc_parallel_001",
+    "usecase": "animalvacc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: livestock_generate_otp.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "animalvacc_parallel_002",
+    "usecase": "animalvacc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: livestock_verify_otp.",
+    "required_tools": [
+      "livestock_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "animalvacc_parallel_003",
+    "usecase": "animalvacc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: livestock_register_animal.",
+    "required_tools": [
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_register_animal"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "animalvacc_parallel_multiple_001",
+    "usecase": "animalvacc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: livestock_verify_otp and livestock_raise_grievance.",
+    "required_tools": [
+      "livestock_verify_otp",
+      "livestock_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_verify_otp",
+      "livestock_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "animalvacc_parallel_multiple_002",
+    "usecase": "animalvacc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: livestock_track_service and livestock_get_nearest_veterinary_service.",
+    "required_tools": [
+      "livestock_track_service",
+      "livestock_get_nearest_veterinary_service"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_track_service",
+      "livestock_get_nearest_veterinary_service"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "animalvacc_parallel_multiple_003",
+    "usecase": "animalvacc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: livestock_track_service and livestock_track_vaccination_status.",
+    "required_tools": [
+      "livestock_track_service",
+      "livestock_track_vaccination_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_track_service",
+      "livestock_track_vaccination_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "animalvacc_parallel_multiple_004",
+    "usecase": "animalvacc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: livestock_generate_otp and livestock_cancel_service.",
+    "required_tools": [
+      "livestock_generate_otp",
+      "livestock_cancel_service"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_generate_otp",
+      "livestock_cancel_service"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "animalvacc_parallel_multiple_005",
+    "usecase": "animalvacc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: livestock_get_vaccination_schedule and livestock_get_disease_advisory.",
+    "required_tools": [
+      "livestock_get_vaccination_schedule",
+      "livestock_get_disease_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "livestock_get_vaccination_schedule",
+      "livestock_get_disease_advisory"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "animalvacc_irrelevance_001",
+    "usecase": "animalvacc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "livestock_generate_otp",
+      "livestock_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "animalvacc_irrelevance_002",
+    "usecase": "animalvacc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "livestock_generate_otp",
+      "livestock_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "animalvacc_irrelevance_003",
+    "usecase": "animalvacc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "livestock_generate_otp",
+      "livestock_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "animalvacc_irrelevance_004",
+    "usecase": "animalvacc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "livestock_generate_otp",
+      "livestock_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "animalvacc_irrelevance_005",
+    "usecase": "animalvacc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "livestock_generate_otp",
+      "livestock_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "animalvacc_base_001",
+    "usecase": "animalvacc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: livestock_generate_otp, livestock_verify_otp.",
+    "required_tools": [
+      "livestock_generate_otp",
+      "livestock_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "animalvacc_base_002",
+    "usecase": "animalvacc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: livestock_raise_grievance, livestock_track_grievance_status.",
+    "required_tools": [
+      "livestock_raise_grievance",
+      "livestock_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "animalvacc_base_003",
+    "usecase": "animalvacc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: livestock_generate_otp, livestock_register_animal.",
+    "required_tools": [
+      "livestock_generate_otp",
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "animalvacc_base_004",
+    "usecase": "animalvacc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: livestock_generate_otp, livestock_verify_otp, livestock_register_animal.",
+    "required_tools": [
+      "livestock_generate_otp",
+      "livestock_verify_otp",
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "animalvacc_base_005",
+    "usecase": "animalvacc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: livestock_verify_otp, livestock_register_animal.",
+    "required_tools": [
+      "livestock_verify_otp",
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "animalvacc_miss_param_001",
+    "usecase": "animalvacc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform livestock_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "livestock_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "animalvacc_miss_param_002",
+    "usecase": "animalvacc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform livestock_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "livestock_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "animalvacc_miss_param_003",
+    "usecase": "animalvacc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform livestock_register_animal but do not provide the necessary session_token.",
+    "required_tools": [
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "animalvacc_miss_func_001",
+    "usecase": "animalvacc",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "livestock_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "animalvacc_long_context_001",
+    "usecase": "animalvacc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: livestock_generate_otp, livestock_verify_otp.",
+    "required_tools": [
+      "livestock_generate_otp",
+      "livestock_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "animalvacc_long_context_002",
+    "usecase": "animalvacc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: livestock_raise_grievance, livestock_track_grievance_status.",
+    "required_tools": [
+      "livestock_raise_grievance",
+      "livestock_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "animalvacc_long_context_003",
+    "usecase": "animalvacc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: livestock_generate_otp, livestock_register_animal.",
+    "required_tools": [
+      "livestock_generate_otp",
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "animalvacc_long_context_004",
+    "usecase": "animalvacc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: livestock_generate_otp, livestock_verify_otp, livestock_register_animal.",
+    "required_tools": [
+      "livestock_generate_otp",
+      "livestock_verify_otp",
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "animalvacc_long_context_005",
+    "usecase": "animalvacc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: livestock_verify_otp, livestock_register_animal.",
+    "required_tools": [
+      "livestock_verify_otp",
+      "livestock_register_animal"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

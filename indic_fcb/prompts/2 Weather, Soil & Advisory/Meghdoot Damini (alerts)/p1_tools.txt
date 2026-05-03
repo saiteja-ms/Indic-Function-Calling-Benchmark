@@ -1,0 +1,276 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Meghdoot (agro-advisory alerts) and Damini (lightning alerts)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Retrieving real-time lightning alerts (Damini)
+- Fetching weather-based agro advisories (Meghdoot)
+- Location-based alert queries
+- Severe weather warnings (rain, storm, heatwave)
+- Safety advisory recommendations
+- Alert subscription and notification preferences
+- Alert history retrieval
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Public vs authenticated access:
+  - Basic alerts (lightning proximity, weather alerts) are PUBLIC
+  - Subscription, preferences, and history REQUIRE authentication
+
+- Location specificity:
+  Alerts are generated based on precise location (village/district/GPS).
+  Alerts without location are INVALID.
+
+- Real-time lightning alerts (Damini):
+  - Based on satellite/sensor data
+  - Valid only within a short time window (~minutes)
+  - Alerts expire quickly
+
+- Agro-advisory alerts (Meghdoot):
+  - Based on crop + weather + location
+  - Generated periodically (not real-time like lightning)
+
+- Alert validity:
+  Old alerts MUST NOT be treated as active alerts.
+
+- Subscription requirement:
+  Farmers must subscribe to receive notifications.
+
+- Safety-critical nature:
+  Lightning alerts MUST include safety recommendations.
+
+- Grievances should ONLY be raised after verifying alert availability/status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- alert_status:
+  generated → active → expired
+
+- subscription_status:
+  not_subscribed → subscribed → unsubscribed
+
+- alert_query_state:
+  invalid_location → valid_query → alert_available / alert_not_available
+
+Tools must define:
+- when alerts are valid
+- when alerts are expired or unavailable
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- invalid or missing location
+- no alerts available for region
+- expired alerts being queried
+- conflicting alert types (multiple alerts simultaneously)
+- delayed or missing alert updates
+- subscription not active but user expecting alerts
+- incorrect location mapping
+- duplicate alert notifications
+- stale advisory data
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (location required, valid alert type)
+- failure conditions (no alerts, expired alerts)
+- ambiguity handling (multiple alerts)
+
+Tools must NOT assume alerts always exist.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking real-time lightning alert
+- receiving agro-advisory for crops
+- reacting to severe weather alerts
+- subscribing/unsubscribing to alerts
+- handling no-alert scenarios
+- grievance escalation for missed alerts
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format:
+  - damini_verb_noun for lightning tools
+  - meghdoot_verb_noun for advisory tools
+- Lowercase, underscores only
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after authentication. Required for subscription and grievance tools."
+}
+
+"location": {
+  "type": "string",
+  "description": "Village, district, or GPS-based location."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"alert_type": [
+  "lightning",
+  "rainfall",
+  "storm",
+  "heatwave",
+  "cold_wave",
+  "frost"
+]
+
+"alert_severity": ["low", "moderate", "high", "extreme"]
+
+"time_window": ["current", "1_hour", "3_hour", "24_hour"]
+
+"alert_status": ["active", "expired"]
+
+"subscription_status": ["not_subscribed", "subscribed", "unsubscribed"]
+
+"grievance_category": [
+  "alert_not_received",
+  "incorrect_alert",
+  "delayed_alert",
+  "location_mismatch",
+  "notification_failure"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. damini_get_lightning_alert  
+2. damini_get_safety_advisory  
+3. meghdoot_get_weather_alert  
+4. meghdoot_get_agro_advisory  
+5. meghdoot_get_alert_history  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- meghdoot_subscribe_alerts  
+- meghdoot_unsubscribe_alerts  
+- meghdoot_set_location_preferences  
+- damini_check_alert_validity  
+- meghdoot_resolve_alert_conflict  
+- meghdoot_raise_grievance  
+- meghdoot_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (location, authentication if needed)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be required ONLY for:
+  - subscription tools
+  - grievance tools
+- It MUST NOT be required for public alert tools
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "meghdoot_or_damini_tool_name",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multiple user intents and workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

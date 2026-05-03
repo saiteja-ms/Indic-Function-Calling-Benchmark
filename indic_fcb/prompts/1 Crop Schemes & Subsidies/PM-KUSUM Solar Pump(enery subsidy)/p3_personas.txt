@@ -1,0 +1,144 @@
+You are building test personas for a function-calling
+benchmark for the PM-KUSUM Solar Pump (energy subsidy)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific subsidy/application situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Not applied
+  application_status: NOT_APPLIED
+
+PATH 2 — Application submitted, pending approval
+  application_status: SUBMITTED
+  approval_status: PENDING
+
+PATH 3 — Approved, installation not started
+  approval_status: APPROVED
+  installation_status: NOT_STARTED
+
+PATH 4 — Approved, installation in progress
+  installation_status: IN_PROGRESS
+
+PATH 5 — Installed, subsidy pending
+  installation_status: COMPLETED
+  subsidy_status: PENDING
+
+PATH 6 — Subsidy credited successfully
+  subsidy_status: CREDITED
+
+PATH 7 — Application rejected
+  application_status: REJECTED
+  rejection_reason: DOCUMENT_INVALID
+
+PATH 8 — Beneficiary opted for grid-connected model
+  pump_type: GRID_CONNECTED
+  subsidy_status: CREDITED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. APPLICATION FLOW
+   - NOT_APPLIED → cannot have approval_status
+   - SUBMITTED → approval must be PENDING/REJECTED/APPROVED
+
+2. INSTALLATION LOGIC
+   - Installation only if APPROVED
+   - NOT_STARTED → IN_PROGRESS → COMPLETED
+
+3. SUBSIDY RULE
+   - Subsidy only after installation COMPLETED
+   - CREDITED only if approved + installed
+
+4. REJECTION RULE
+   - Rejection_reason must exist if REJECTED
+   - Valid reasons:
+     DOCUMENT_INVALID, LAND_VERIFICATION_FAILED, DUPLICATE_APPLICATION
+
+5. PUMP TYPES
+   - STANDALONE
+   - GRID_CONNECTED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Land size: 0.5 to 10 acres
+- Pump capacity: 2HP, 3HP, 5HP, 7.5HP
+- Subsidy amount: realistic (50,000–2,50,000)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed logical transitions
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ram Prasad — UP, PATH 2",
+  "code_path": "PATH 2 — application submitted, pending approval",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer recently applied for solar pump due to unreliable electricity",
+  "stub_test_assertion": "approval_status must become APPROVED before installation_status changes",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

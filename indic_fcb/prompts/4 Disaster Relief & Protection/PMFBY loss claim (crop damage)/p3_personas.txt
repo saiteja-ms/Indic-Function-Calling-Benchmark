@@ -1,0 +1,155 @@
+You are building test personas for a function-calling
+benchmark for the PMFBY Loss Claim (crop damage)
+insurance claim service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\4 Disaster Relief & Protection\PMFBY loss claim (crop damage)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\4 Disaster Relief & Protection\PMFBY loss claim (crop damage)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific crop loss claim situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No claim filed
+  claim_status: NOT_FILED
+
+PATH 2 — Claim filed, awaiting verification
+  claim_status: FILED
+  verification_status: PENDING
+
+PATH 3 — Claim verified successfully
+  verification_status: VERIFIED
+
+PATH 4 — Claim rejected due to invalid loss type
+  claim_status: REJECTED
+  rejection_reason: INVALID_LOSS_TYPE
+
+PATH 5 — Claim approved, payout pending
+  claim_status: APPROVED
+  payout_status: PENDING
+
+PATH 6 — Claim settled, payout credited
+  payout_status: CREDITED
+
+PATH 7 — Late claim submission beyond deadline
+  claim_status: REJECTED
+  rejection_reason: LATE_SUBMISSION
+
+PATH 8 — Partial loss claim (only part of land affected)
+  claim_type: PARTIAL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CLAIM FLOW
+   - NOT_FILED → FILED → VERIFIED → APPROVED/REJECTED
+
+2. LOSS TYPES (VALID ENUM)
+   - DROUGHT
+   - FLOOD
+   - PEST_ATTACK
+   - CYCLONE
+   - HAILSTORM
+
+3. CLAIM STRUCTURE
+   - Must include:
+     - claim_id (format: PMFBY-CLM-XXXX)
+     - crop
+     - loss_type
+     - affected_area
+     - estimated_loss
+
+4. VERIFICATION RULE
+   - VERIFIED → survey confirms damage
+   - REJECTED → must include rejection_reason
+
+5. PAYOUT RULE
+   - CREDITED only if APPROVED
+
+6. PARTIAL CLAIM RULE
+   - PARTIAL → affected_area < total_land_area
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  wheat, rice, cotton, maize
+
+- Affected area:
+  0.5–10 acres
+
+- Estimated loss:
+  ₹5000–₹80000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed claim scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ramesh Patel — MP, PATH 2",
+  "code_path": "PATH 2 — claim filed, pending verification",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer filed claim after pest attack damaged crops",
+  "stub_test_assertion": "verification_status should become VERIFIED after claim_verification tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

@@ -1,0 +1,937 @@
+[
+  {
+    "intent_id": "chc_simple_001",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for CHC Farm Machinery rental authentication.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_002",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "chc_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_003",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Returns list of Custom Hiring Centres in a region with location, contact, and supported machinery.",
+    "required_tools": [
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_004",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Searches available farm machinery at CHC centres by type, location, and date.",
+    "required_tools": [
+      "chc_search_machinery"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_005",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Checks if specific machinery is available for a given date and time slot.",
+    "required_tools": [
+      "chc_check_availability"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_006",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Books farm machinery for a specific date and duration.",
+    "required_tools": [
+      "chc_create_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_007",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Tracks booking_status ('requested', 'confirmed', 'active', 'completed', 'cancelled', 'failed').",
+    "required_tools": [
+      "chc_track_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_008",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Modifies an existing booking (date, duration).",
+    "required_tools": [
+      "chc_modify_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_009",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Cancels a booking.",
+    "required_tools": [
+      "chc_cancel_booking"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_010",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Tracks payment_status ('not_initiated', 'pending', 'completed', 'failed').",
+    "required_tools": [
+      "chc_track_payment"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_011",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Retrieves all past bookings for the farmer.",
+    "required_tools": [
+      "chc_get_booking_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_012",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Resolves overlapping or conflicting booking requests by suggesting alternative slots.",
+    "required_tools": [
+      "chc_resolve_booking_conflict"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_013",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Returns the nearest CHC centres with distance and availability summary.",
+    "required_tools": [
+      "chc_get_nearest_chc"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_014",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Returns detailed info about specific machinery (type, capacity, hourly rate, condition).",
+    "required_tools": [
+      "chc_get_machinery_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_015",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Validates whether a requested time slot is available without creating a booking.",
+    "required_tools": [
+      "chc_validate_time_slot"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_016",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance.",
+    "required_tools": [
+      "chc_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_simple_017",
+    "usecase": "chc",
+    "category": "simple",
+    "abstract_goal": "Tracks CHC grievance.",
+    "required_tools": [
+      "chc_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "chc_multiple_001",
+    "usecase": "chc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for CHC Farm Machinery rental authentication.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "chc_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "chc_multiple_002",
+    "usecase": "chc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for CHC Farm Machinery rental authentication.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "chc_get_chc_list"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "chc_multiple_003",
+    "usecase": "chc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for CHC Farm Machinery rental authentication.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "chc_search_machinery"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "chc_multiple_004",
+    "usecase": "chc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for CHC Farm Machinery rental authentication.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "chc_check_availability"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "chc_multiple_005",
+    "usecase": "chc",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for CHC Farm Machinery rental authentication.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "chc_create_booking"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "chc_parallel_001",
+    "usecase": "chc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: chc_generate_otp.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "chc_parallel_002",
+    "usecase": "chc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: chc_verify_otp.",
+    "required_tools": [
+      "chc_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "chc_parallel_003",
+    "usecase": "chc",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: chc_get_chc_list.",
+    "required_tools": [
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_get_chc_list"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "chc_parallel_multiple_001",
+    "usecase": "chc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: chc_check_availability and chc_get_nearest_chc.",
+    "required_tools": [
+      "chc_check_availability",
+      "chc_get_nearest_chc"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_check_availability",
+      "chc_get_nearest_chc"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "chc_parallel_multiple_002",
+    "usecase": "chc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: chc_generate_otp and chc_get_nearest_chc.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_get_nearest_chc"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_generate_otp",
+      "chc_get_nearest_chc"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "chc_parallel_multiple_003",
+    "usecase": "chc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: chc_search_machinery and chc_get_machinery_details.",
+    "required_tools": [
+      "chc_search_machinery",
+      "chc_get_machinery_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_search_machinery",
+      "chc_get_machinery_details"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "chc_parallel_multiple_004",
+    "usecase": "chc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: chc_generate_otp and chc_get_booking_history.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_get_booking_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_generate_otp",
+      "chc_get_booking_history"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "chc_parallel_multiple_005",
+    "usecase": "chc",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: chc_get_booking_history and chc_validate_time_slot.",
+    "required_tools": [
+      "chc_get_booking_history",
+      "chc_validate_time_slot"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "chc_get_booking_history",
+      "chc_validate_time_slot"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "chc_irrelevance_001",
+    "usecase": "chc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "chc_generate_otp",
+      "chc_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "chc_irrelevance_002",
+    "usecase": "chc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "chc_generate_otp",
+      "chc_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "chc_irrelevance_003",
+    "usecase": "chc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "chc_generate_otp",
+      "chc_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "chc_irrelevance_004",
+    "usecase": "chc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "chc_generate_otp",
+      "chc_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "chc_irrelevance_005",
+    "usecase": "chc",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "chc_generate_otp",
+      "chc_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "chc_base_001",
+    "usecase": "chc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: chc_generate_otp, chc_verify_otp.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "chc_base_002",
+    "usecase": "chc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: chc_raise_grievance, chc_track_grievance_status.",
+    "required_tools": [
+      "chc_raise_grievance",
+      "chc_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "chc_base_003",
+    "usecase": "chc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: chc_generate_otp, chc_get_chc_list.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "chc_base_004",
+    "usecase": "chc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: chc_generate_otp, chc_verify_otp, chc_get_chc_list.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_verify_otp",
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "chc_base_005",
+    "usecase": "chc",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: chc_verify_otp, chc_get_chc_list.",
+    "required_tools": [
+      "chc_verify_otp",
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "chc_miss_param_001",
+    "usecase": "chc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform chc_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "chc_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "chc_miss_param_002",
+    "usecase": "chc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform chc_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "chc_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "chc_miss_param_003",
+    "usecase": "chc",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform chc_get_chc_list but do not provide the necessary location.",
+    "required_tools": [
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "chc_miss_func_001",
+    "usecase": "chc",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "chc_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "chc_long_context_001",
+    "usecase": "chc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: chc_generate_otp, chc_verify_otp.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "chc_long_context_002",
+    "usecase": "chc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: chc_raise_grievance, chc_track_grievance_status.",
+    "required_tools": [
+      "chc_raise_grievance",
+      "chc_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "chc_long_context_003",
+    "usecase": "chc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: chc_generate_otp, chc_get_chc_list.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "chc_long_context_004",
+    "usecase": "chc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: chc_generate_otp, chc_verify_otp, chc_get_chc_list.",
+    "required_tools": [
+      "chc_generate_otp",
+      "chc_verify_otp",
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "chc_long_context_005",
+    "usecase": "chc",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: chc_verify_otp, chc_get_chc_list.",
+    "required_tools": [
+      "chc_verify_otp",
+      "chc_get_chc_list"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

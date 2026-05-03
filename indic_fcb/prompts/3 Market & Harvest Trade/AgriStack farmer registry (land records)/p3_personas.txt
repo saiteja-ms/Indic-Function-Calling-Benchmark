@@ -1,0 +1,148 @@
+You are building test personas for a function-calling
+benchmark for the AgriStack Farmer Registry (land records)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\AgriStack farmer registry (land records)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\3 Market & Harvest Trade\AgriStack farmer registry (land records)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific land record / registry situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Farmer not registered in registry
+  registry_status: NOT_REGISTERED
+
+PATH 2 — Registered, basic details incomplete
+  registry_status: PARTIAL
+  profile_status: INCOMPLETE
+
+PATH 3 — Fully registered with verified land records
+  registry_status: COMPLETE
+  land_verification_status: VERIFIED
+
+PATH 4 — Land record mismatch detected
+  land_verification_status: FAILED
+  failure_reason: LAND_MISMATCH
+
+PATH 5 — Multiple land parcels registered
+  multiple_land_parcels: TRUE
+
+PATH 6 — Recently updated land ownership
+  update_status: RECENTLY_UPDATED
+
+PATH 7 — Farmer migrated and updated state records
+  state_update_status: UPDATED
+
+PATH 8 — Disputed land ownership case
+  land_status: DISPUTED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REGISTRATION RULE
+   - NOT_REGISTERED → no land records
+
+2. PROFILE RULE
+   - PARTIAL → incomplete personal or land details
+   - COMPLETE → all mandatory fields present
+
+3. LAND RECORD STRUCTURE
+   - Must include:
+     - land_id
+     - area (in acres)
+     - location (village/district)
+     - ownership_type
+
+4. VERIFICATION RULE
+   - VERIFIED → records match govt database
+   - FAILED → must include failure_reason
+
+5. MULTIPLE LAND RULE
+   - Each parcel must have unique land_id
+
+6. MIGRATION RULE
+   - state must reflect updated location
+
+7. DISPUTE RULE
+   - DISPUTED → ownership unclear or contested
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Land area: 0.5–20 acres
+- Ownership types:
+  OWNED, LEASED, SHARED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed land records
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Kumar Sinha — Bihar, PATH 2",
+  "code_path": "PATH 2 — registered, incomplete profile",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer started registration but did not upload land documents",
+  "stub_test_assertion": "profile_status should become COMPLETE after document_upload tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

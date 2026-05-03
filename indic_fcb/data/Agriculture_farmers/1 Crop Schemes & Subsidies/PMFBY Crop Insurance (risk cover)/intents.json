@@ -1,0 +1,901 @@
+[
+  {
+    "intent_id": "pmfby_simple_001",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_002",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Verifies the OTP and returns a session_token for PMFBY operations.",
+    "required_tools": [
+      "pmfby_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_003",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Checks whether the farmer is eligible to enroll in PMFBY for the current season based on land ownership, crop type, and region.",
+    "required_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_004",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Returns the enrollment window dates for the current crop season.",
+    "required_tools": [
+      "pmfby_get_season_window"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_005",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Enrolls the farmer in PMFBY crop insurance for a specific crop and land parcel for the current season.",
+    "required_tools": [
+      "pmfby_enroll_policy"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_006",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Calculates the insurance premium for an enrolled PMFBY policy.",
+    "required_tools": [
+      "pmfby_calculate_premium"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_007",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Processes the farmer's premium payment for PMFBY.",
+    "required_tools": [
+      "pmfby_pay_premium"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_008",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Retrieves the current status and details of a PMFBY policy including policy_status ('not_enrolled', 'enrolled', 'active', 'expired'), crop, land parcel, premium paid, and coverage amount.",
+    "required_tools": [
+      "pmfby_get_policy_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_009",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Reports a crop loss event for a specific policy and land parcel.",
+    "required_tools": [
+      "pmfby_report_crop_loss"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_010",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Submits a formal insurance claim for a reported crop loss event.",
+    "required_tools": [
+      "pmfby_submit_claim"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_011",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Tracks the current status of a submitted PMFBY claim.",
+    "required_tools": [
+      "pmfby_track_claim_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_012",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Tracks the field survey status for a PMFBY claim.",
+    "required_tools": [
+      "pmfby_track_survey_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_013",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Tracks the compensation payment status for an approved PMFBY claim.",
+    "required_tools": [
+      "pmfby_track_compensation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_014",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance related to PMFBY.",
+    "required_tools": [
+      "pmfby_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_simple_015",
+    "usecase": "pmfby",
+    "category": "simple",
+    "abstract_goal": "Tracks the status of a previously raised PMFBY grievance.",
+    "required_tools": [
+      "pmfby_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmfby_multiple_001",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmfby_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfby_multiple_002",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfby_multiple_003",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmfby_get_season_window"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfby_multiple_004",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "pmfby_enroll_policy"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfby_multiple_005",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "pmfby_calculate_premium"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmfby_parallel_001",
+    "usecase": "pmfby",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfby_generate_otp.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmfby_parallel_002",
+    "usecase": "pmfby",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfby_verify_otp.",
+    "required_tools": [
+      "pmfby_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmfby_parallel_003",
+    "usecase": "pmfby",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfby_check_eligibility.",
+    "required_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmfby_parallel_multiple_001",
+    "usecase": "pmfby",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfby_verify_otp and pmfby_track_claim_status.",
+    "required_tools": [
+      "pmfby_verify_otp",
+      "pmfby_track_claim_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_verify_otp",
+      "pmfby_track_claim_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfby_parallel_multiple_002",
+    "usecase": "pmfby",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfby_calculate_premium and pmfby_pay_premium.",
+    "required_tools": [
+      "pmfby_calculate_premium",
+      "pmfby_pay_premium"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_calculate_premium",
+      "pmfby_pay_premium"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfby_parallel_multiple_003",
+    "usecase": "pmfby",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfby_check_eligibility and pmfby_track_grievance_status.",
+    "required_tools": [
+      "pmfby_check_eligibility",
+      "pmfby_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_check_eligibility",
+      "pmfby_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfby_parallel_multiple_004",
+    "usecase": "pmfby",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfby_verify_otp and pmfby_track_survey_status.",
+    "required_tools": [
+      "pmfby_verify_otp",
+      "pmfby_track_survey_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_verify_otp",
+      "pmfby_track_survey_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfby_parallel_multiple_005",
+    "usecase": "pmfby",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmfby_get_policy_status and pmfby_submit_claim.",
+    "required_tools": [
+      "pmfby_get_policy_status",
+      "pmfby_submit_claim"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_get_policy_status",
+      "pmfby_submit_claim"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmfby_irrelevance_001",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmfby_generate_otp",
+      "pmfby_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfby_irrelevance_002",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmfby_generate_otp",
+      "pmfby_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfby_irrelevance_003",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmfby_generate_otp",
+      "pmfby_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfby_irrelevance_004",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmfby_generate_otp",
+      "pmfby_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfby_irrelevance_005",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmfby_generate_otp",
+      "pmfby_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmfby_base_001",
+    "usecase": "pmfby",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfby_generate_otp, pmfby_verify_otp.",
+    "required_tools": [
+      "pmfby_generate_otp",
+      "pmfby_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfby_base_002",
+    "usecase": "pmfby",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfby_raise_grievance, pmfby_track_grievance_status.",
+    "required_tools": [
+      "pmfby_raise_grievance",
+      "pmfby_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfby_base_003",
+    "usecase": "pmfby",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfby_generate_otp, pmfby_check_eligibility.",
+    "required_tools": [
+      "pmfby_generate_otp",
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfby_base_004",
+    "usecase": "pmfby",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfby_generate_otp, pmfby_verify_otp, pmfby_check_eligibility.",
+    "required_tools": [
+      "pmfby_generate_otp",
+      "pmfby_verify_otp",
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfby_base_005",
+    "usecase": "pmfby",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmfby_verify_otp, pmfby_check_eligibility.",
+    "required_tools": [
+      "pmfby_verify_otp",
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmfby_miss_param_001",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmfby_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmfby_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmfby_miss_param_002",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmfby_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmfby_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmfby_miss_param_003",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmfby_check_eligibility but do not provide the necessary session_token.",
+    "required_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmfby_miss_func_001",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "pmfby_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "pmfby_long_context_001",
+    "usecase": "pmfby",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_generate_otp, pmfby_verify_otp.",
+    "required_tools": [
+      "pmfby_generate_otp",
+      "pmfby_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfby_long_context_002",
+    "usecase": "pmfby",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_raise_grievance, pmfby_track_grievance_status.",
+    "required_tools": [
+      "pmfby_raise_grievance",
+      "pmfby_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfby_long_context_003",
+    "usecase": "pmfby",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_generate_otp, pmfby_check_eligibility.",
+    "required_tools": [
+      "pmfby_generate_otp",
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfby_long_context_004",
+    "usecase": "pmfby",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_generate_otp, pmfby_verify_otp, pmfby_check_eligibility.",
+    "required_tools": [
+      "pmfby_generate_otp",
+      "pmfby_verify_otp",
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmfby_long_context_005",
+    "usecase": "pmfby",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_verify_otp, pmfby_check_eligibility.",
+    "required_tools": [
+      "pmfby_verify_otp",
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

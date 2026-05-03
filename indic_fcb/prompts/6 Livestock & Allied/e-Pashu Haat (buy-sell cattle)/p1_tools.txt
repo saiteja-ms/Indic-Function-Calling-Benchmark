@@ -1,0 +1,363 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+e-Pashu Haat (online livestock marketplace for buying and selling cattle)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic buyer/seller interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- User authentication
+- Registering livestock for sale
+- Searching livestock listings
+- Filtering by breed, location, price, and purpose
+- Viewing detailed livestock information
+- Verifying animal health and certification
+- Placing purchase requests
+- Negotiation or bid-based interactions
+- Order confirmation and ownership transfer
+- Logistics and transport coordination
+- Payment tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED for transactional actions:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Role distinction:
+  Users can act as:
+    - seller (livestock owner)
+    - buyer (farmer/trader)
+
+- Livestock registration requirement:
+  Animals must be registered with:
+    - breed
+    - age
+    - health status
+    - vaccination records
+
+- Certification dependency:
+  Verified listings may include:
+    - breed certification
+    - health certificate
+
+- Listing ownership:
+  Only the seller can modify or delete their listing.
+
+- Animal uniqueness:
+  Each livestock_id must represent a unique animal.
+
+- Price and negotiation:
+  Listings may support:
+    - fixed price
+    - negotiable price
+
+- Order lifecycle:
+  purchase_requested → confirmed → payment_done → ownership_transferred
+
+- Ownership transfer:
+  Ownership must be updated after successful transaction.
+
+- Logistics dependency:
+  Transport coordination is required post-purchase.
+
+- No illegal trade:
+  Unverified or restricted animals must not be listed.
+
+- Grievances should ONLY be raised after checking transaction status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- listing_status:
+  active → updated → inactive → deleted
+
+- order_status:
+  requested → confirmed → payment_done → transferred → completed → cancelled
+
+- verification_status:
+  unverified → verified → rejected
+
+- logistics_status:
+  not_started → arranged → in_transit → delivered
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- unregistered livestock listed
+- invalid or incomplete livestock details
+- duplicate livestock listing
+- unverified or fake certification
+- buyer attempts purchase on inactive listing
+- conflicting or ambiguous listings
+- negotiation conflicts
+- payment failure
+- logistics delay or failure
+- ownership transfer not completed
+- fraudulent listing or misleading data
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (livestock registration, certification, ownership)
+- rejection conditions (invalid listing, unauthorized modification)
+- failure scenarios (payment failure, logistics delay)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- seller listing livestock
+- buyer searching and filtering livestock
+- verifying animal details
+- initiating and completing purchase
+- ownership transfer
+- logistics tracking
+- failure or dispute scenarios
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: epashu_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the user."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after authentication. Required for all transactional tools."
+}
+
+"livestock_id": {
+  "type": "string",
+  "description": "Unique identifier of the livestock."
+}
+
+"listing_id": {
+  "type": "string",
+  "description": "Unique identifier of the livestock listing."
+}
+
+"order_id": {
+  "type": "string",
+  "description": "Unique identifier of the purchase order."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"animal_type": [
+  "cow",
+  "buffalo",
+  "goat",
+  "sheep"
+]
+
+"breed_type": [
+  "indigenous",
+  "crossbred",
+  "exotic"
+]
+
+"listing_status": [
+  "active",
+  "inactive",
+  "deleted"
+]
+
+"verification_status": [
+  "unverified",
+  "verified",
+  "rejected"
+]
+
+"order_status": [
+  "requested",
+  "confirmed",
+  "payment_done",
+  "transferred",
+  "completed",
+  "cancelled"
+]
+
+"logistics_status": [
+  "not_started",
+  "arranged",
+  "in_transit",
+  "delivered"
+]
+
+"price_type": [
+  "fixed",
+  "negotiable"
+]
+
+"grievance_category": [
+  "fraudulent_listing",
+  "payment_issue",
+  "delivery_issue",
+  "incorrect_details",
+  "ownership_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. epashu_generate_otp  
+2. epashu_verify_otp  
+3. epashu_register_livestock  
+4. epashu_create_listing  
+5. epashu_search_listings  
+6. epashu_get_listing_details  
+7. epashu_verify_livestock  
+8. epashu_place_order  
+9. epashu_track_order  
+10. epashu_transfer_ownership  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- epashu_update_listing  
+- epashu_delete_listing  
+- epashu_negotiate_price  
+- epashu_track_logistics  
+- epashu_cancel_order  
+- epashu_resolve_listing_ambiguity  
+- epashu_raise_grievance  
+- epashu_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (authentication, ownership, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - epashu_generate_otp
+  - epashu_verify_otp
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "epashu_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

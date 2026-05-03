@@ -1,0 +1,154 @@
+You are building test personas for a function-calling
+benchmark for the Pesticide–Seed Dealer (lookup)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\5 Fertilizer & Inputs\Pesticide-seed dealer (lookup)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\5 Fertilizer & Inputs\Pesticide-seed dealer (lookup)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific dealer lookup / purchase decision scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No dealer lookup performed
+  lookup_status: NOT_SEARCHED
+
+PATH 2 — Dealer search performed
+  lookup_status: SEARCHED
+  results_found: TRUE
+
+PATH 3 — No dealers found in area
+  lookup_status: SEARCHED
+  results_found: FALSE
+
+PATH 4 — Dealer selected for purchase
+  dealer_selection_status: SELECTED
+
+PATH 5 — Purchase completed successfully
+  purchase_status: COMPLETED
+
+PATH 6 — Purchase failed due to stock unavailability
+  purchase_status: FAILED
+  failure_reason: STOCK_UNAVAILABLE
+
+PATH 7 — Multiple dealers compared before selection
+  comparison_status: ACTIVE
+
+PATH 8 — Dealer flagged as invalid or unlicensed
+  dealer_status: INVALID
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. LOOKUP RULE
+   - NOT_SEARCHED → no dealer results
+   - SEARCHED → results must exist or be empty
+
+2. DEALER STRUCTURE
+   - Must include:
+     - dealer_id
+     - dealer_name
+     - license_number
+     - location
+
+3. VALID DEALER RULE
+   - VALID → license_number present
+   - INVALID → missing or incorrect license
+
+4. PURCHASE RULE
+   - COMPLETED → must include:
+     - product_type
+     - quantity
+     - purchase_date
+
+5. FAILURE RULE
+   - FAILED → must include failure_reason
+   - Valid reasons:
+     STOCK_UNAVAILABLE
+     INVALID_DEALER
+     PAYMENT_FAILED
+
+6. COMPARISON RULE
+   - Multiple dealers must be present
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Products:
+  SEEDS, PESTICIDES, HERBICIDES
+
+- Quantity:
+  realistic values (1–100 units)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed dealer data
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Amit Kumar — UP, PATH 2",
+  "code_path": "PATH 2 — dealer search performed",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer searching for certified pesticide dealers nearby",
+  "stub_test_assertion": "dealer_selection_status should become SELECTED after dealer_select tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

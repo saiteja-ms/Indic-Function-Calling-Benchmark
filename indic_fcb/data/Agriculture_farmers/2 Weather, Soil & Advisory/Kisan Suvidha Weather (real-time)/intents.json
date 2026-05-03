@@ -1,0 +1,847 @@
+[
+  {
+    "intent_id": "kisansuvidha_simple_001",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_002",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Retrieves weather forecast for a location for up to 10 days.",
+    "required_tools": [
+      "ksweather_get_weather_forecast"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_003",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Fetches active extreme weather alerts (storms, heavy rainfall, heatwaves, cold waves, frost) for a location.",
+    "required_tools": [
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_004",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Fetches comprehensive weather data for a specific location combining current conditions and short-term outlook.",
+    "required_tools": [
+      "ksweather_get_location_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_005",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Retrieves specific weather parameters for a location with detailed measurements.",
+    "required_tools": [
+      "ksweather_get_weather_parameters"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_006",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Retrieves historical weather data for a location for the recent past (last 7-30 days only).",
+    "required_tools": [
+      "ksweather_get_historical_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_007",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous location names that match multiple regions.",
+    "required_tools": [
+      "ksweather_resolve_location_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_008",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Generates weather-based advisory for farming activities (irrigation timing, spraying, harvesting) based on current and forecasted weather.",
+    "required_tools": [
+      "ksweather_get_weather_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_009",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Subscribes the farmer to weather alerts for a specific location.",
+    "required_tools": [
+      "ksweather_subscribe_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_010",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Unsubscribes the farmer from weather alerts.",
+    "required_tools": [
+      "ksweather_unsubscribe_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_011",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about weather data quality.",
+    "required_tools": [
+      "ksweather_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_simple_012",
+    "usecase": "kisansuvidha",
+    "category": "simple",
+    "abstract_goal": "Tracks a previously raised weather grievance.",
+    "required_tools": [
+      "ksweather_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_multiple_001",
+    "usecase": "kisansuvidha",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "ksweather_get_weather_forecast"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kisansuvidha_multiple_002",
+    "usecase": "kisansuvidha",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "ksweather_get_weather_alerts"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kisansuvidha_multiple_003",
+    "usecase": "kisansuvidha",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "ksweather_get_location_weather"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kisansuvidha_multiple_004",
+    "usecase": "kisansuvidha",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "ksweather_get_weather_parameters"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kisansuvidha_multiple_005",
+    "usecase": "kisansuvidha",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "ksweather_get_historical_weather"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_001",
+    "usecase": "kisansuvidha",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: ksweather_get_current_weather.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_002",
+    "usecase": "kisansuvidha",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: ksweather_get_weather_forecast.",
+    "required_tools": [
+      "ksweather_get_weather_forecast"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_get_weather_forecast"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_003",
+    "usecase": "kisansuvidha",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_get_weather_alerts"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_multiple_001",
+    "usecase": "kisansuvidha",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ksweather_get_weather_forecast and ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_weather_forecast",
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_get_weather_forecast",
+      "ksweather_get_weather_alerts"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_multiple_002",
+    "usecase": "kisansuvidha",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ksweather_get_weather_alerts and ksweather_unsubscribe_alerts.",
+    "required_tools": [
+      "ksweather_get_weather_alerts",
+      "ksweather_unsubscribe_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_get_weather_alerts",
+      "ksweather_unsubscribe_alerts"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_multiple_003",
+    "usecase": "kisansuvidha",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ksweather_get_weather_forecast and ksweather_track_grievance_status.",
+    "required_tools": [
+      "ksweather_get_weather_forecast",
+      "ksweather_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_get_weather_forecast",
+      "ksweather_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_multiple_004",
+    "usecase": "kisansuvidha",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ksweather_get_historical_weather and ksweather_raise_grievance.",
+    "required_tools": [
+      "ksweather_get_historical_weather",
+      "ksweather_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_get_historical_weather",
+      "ksweather_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kisansuvidha_parallel_multiple_005",
+    "usecase": "kisansuvidha",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: ksweather_resolve_location_ambiguity and ksweather_subscribe_alerts.",
+    "required_tools": [
+      "ksweather_resolve_location_ambiguity",
+      "ksweather_subscribe_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "ksweather_resolve_location_ambiguity",
+      "ksweather_subscribe_alerts"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "kisansuvidha_irrelevance_001",
+    "usecase": "kisansuvidha",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_irrelevance_002",
+    "usecase": "kisansuvidha",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_irrelevance_003",
+    "usecase": "kisansuvidha",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_irrelevance_004",
+    "usecase": "kisansuvidha",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_irrelevance_005",
+    "usecase": "kisansuvidha",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_base_001",
+    "usecase": "kisansuvidha",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ksweather_get_current_weather, ksweather_get_weather_forecast.",
+    "required_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_get_weather_forecast"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_base_002",
+    "usecase": "kisansuvidha",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ksweather_raise_grievance, ksweather_track_grievance_status.",
+    "required_tools": [
+      "ksweather_raise_grievance",
+      "ksweather_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_base_003",
+    "usecase": "kisansuvidha",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ksweather_get_current_weather, ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_base_004",
+    "usecase": "kisansuvidha",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ksweather_get_current_weather, ksweather_get_weather_forecast, ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_get_weather_forecast",
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_base_005",
+    "usecase": "kisansuvidha",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: ksweather_get_weather_forecast, ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_weather_forecast",
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_miss_param_001",
+    "usecase": "kisansuvidha",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform ksweather_get_current_weather but do not provide the necessary location.",
+    "required_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_miss_param_002",
+    "usecase": "kisansuvidha",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform ksweather_get_weather_forecast but do not provide the necessary location.",
+    "required_tools": [
+      "ksweather_get_weather_forecast"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_miss_param_003",
+    "usecase": "kisansuvidha",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform ksweather_get_weather_alerts but do not provide the necessary location.",
+    "required_tools": [
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "location",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_miss_func_001",
+    "usecase": "kisansuvidha",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "ksweather_get_current_weather"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_long_context_001",
+    "usecase": "kisansuvidha",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ksweather_get_current_weather, ksweather_get_weather_forecast.",
+    "required_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_get_weather_forecast"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_long_context_002",
+    "usecase": "kisansuvidha",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ksweather_raise_grievance, ksweather_track_grievance_status.",
+    "required_tools": [
+      "ksweather_raise_grievance",
+      "ksweather_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_long_context_003",
+    "usecase": "kisansuvidha",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ksweather_get_current_weather, ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_long_context_004",
+    "usecase": "kisansuvidha",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ksweather_get_current_weather, ksweather_get_weather_forecast, ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_current_weather",
+      "ksweather_get_weather_forecast",
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "kisansuvidha_long_context_005",
+    "usecase": "kisansuvidha",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: ksweather_get_weather_forecast, ksweather_get_weather_alerts.",
+    "required_tools": [
+      "ksweather_get_weather_forecast",
+      "ksweather_get_weather_alerts"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

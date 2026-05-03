@@ -1,0 +1,332 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+SDRF/NDRF (State Disaster Response Fund / National Disaster Response Fund)
+relief claim service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Reporting disaster-related crop damage
+- Checking disaster declaration status
+- Submitting relief claim applications
+- Uploading damage evidence (structured inputs)
+- Verifying location eligibility
+- Survey and damage assessment tracking
+- Relief approval/rejection
+- Compensation calculation and tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Disaster declaration dependency:
+  Relief claims are valid ONLY if:
+    - disaster (flood/drought/etc.) is officially declared
+    - location falls within affected area
+
+- Location specificity:
+  Claims must be tied to:
+    - village/district
+    - land parcel
+
+- Relief vs insurance:
+  SDRF/NDRF relief is separate from insurance (PMFBY).
+  Duplicate compensation for same loss may be restricted.
+
+- Time-bound reporting:
+  Damage must be reported within a specified window after the disaster.
+
+- Evidence requirement:
+  Claim must include structured damage details (simulated inputs).
+
+- Survey dependency:
+  Government or local authority verification is required.
+
+- Severity-based compensation:
+  Relief depends on:
+    - extent of damage
+    - type of disaster
+
+- Payment dependency:
+  Relief is disbursed only after approval.
+
+- Grievances should ONLY be raised after checking claim status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- claim_status:
+  not_reported → reported → submitted → under_review → approved → rejected → compensated
+
+- disaster_status:
+  not_declared → declared → active → closed
+
+- survey_status:
+  not_started → scheduled → in_progress → completed
+
+- payment_status:
+  not_initiated → pending → credited → failed
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- disaster not declared but claim attempted
+- location not in affected zone
+- reporting outside allowed time window
+- incorrect or missing land/location details
+- duplicate relief claim
+- insufficient or conflicting damage information
+- survey delay or missing verification
+- claim rejected due to low damage severity
+- overlapping insurance claim (PMFBY conflict)
+- payment delay or failure
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (disaster declaration, location eligibility)
+- rejection conditions (invalid claim, ineligible region)
+- failure scenarios (survey delay, payment failure)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer reporting disaster damage
+- checking disaster eligibility
+- submitting relief claim
+- tracking claim and survey status
+- receiving compensation
+- rejection scenarios
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: sdrfndrf_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"claim_id": {
+  "type": "string",
+  "description": "Unique identifier of the relief claim."
+}
+
+"land_parcel_id": {
+  "type": "string",
+  "description": "Unique identifier of the affected land parcel."
+}
+
+"location": {
+  "type": "string",
+  "description": "Village, district, or affected region."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"disaster_type": [
+  "flood",
+  "drought",
+  "cyclone",
+  "landslide",
+  "hailstorm"
+]
+
+"disaster_status": [
+  "not_declared",
+  "declared",
+  "active",
+  "closed"
+]
+
+"claim_status": [
+  "not_reported",
+  "reported",
+  "submitted",
+  "under_review",
+  "approved",
+  "rejected",
+  "compensated"
+]
+
+"survey_status": [
+  "not_started",
+  "scheduled",
+  "in_progress",
+  "completed"
+]
+
+"payment_status": [
+  "not_initiated",
+  "pending",
+  "credited",
+  "failed"
+]
+
+"damage_severity": [
+  "low",
+  "moderate",
+  "high",
+  "severe"
+]
+
+"grievance_category": [
+  "claim_rejected",
+  "survey_delay",
+  "incorrect_assessment",
+  "payment_delay",
+  "eligibility_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. sdrfndrf_generate_otp  
+2. sdrfndrf_verify_otp  
+3. sdrfndrf_check_disaster_status  
+4. sdrfndrf_check_location_eligibility  
+5. sdrfndrf_report_damage  
+6. sdrfndrf_submit_claim  
+7. sdrfndrf_track_claim_status  
+8. sdrfndrf_track_survey_status  
+9. sdrfndrf_get_assessment_result  
+10. sdrfndrf_track_payment  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- sdrfndrf_upload_evidence  
+- sdrfndrf_calculate_relief_amount  
+- sdrfndrf_resolve_location_ambiguity  
+- sdrfndrf_cancel_claim  
+- sdrfndrf_check_claim_window  
+- sdrfndrf_raise_grievance  
+- sdrfndrf_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (disaster declared, location eligible, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - sdrfndrf_generate_otp
+  - sdrfndrf_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "sdrfndrf_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support full disaster relief lifecycle workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

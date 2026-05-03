@@ -1,0 +1,333 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+PMFBY (Pradhan Mantri Fasal Bima Yojana - crop insurance)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Policy enrollment for a crop season
+- Premium calculation and payment
+- Policy status tracking
+- Crop loss reporting
+- Claim submission and processing
+- Survey and assessment tracking
+- Claim approval/rejection
+- Compensation payout tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Enrollment window:
+  Farmers can enroll ONLY within a predefined season window.
+
+- Crop and land linkage:
+  Insurance must be tied to:
+    - specific crop
+    - specific land parcel
+
+- Premium rules:
+  Farmer pays only a portion of premium; rest is subsidized.
+
+- Claim dependency:
+  Claims can be filed ONLY if:
+    - policy is active
+    - crop loss event has occurred
+
+- Loss types:
+  Claims can be triggered by:
+    - drought
+    - flood
+    - pest attack
+    - cyclone
+    - unseasonal rainfall
+
+- Survey dependency:
+  Claim approval depends on:
+    - field survey
+    - remote sensing / official assessment
+
+- Partial vs full loss:
+  Compensation depends on severity of loss.
+
+- Payment flow:
+  Claim must be approved before compensation is processed.
+
+- Grievances should ONLY be raised after checking claim or policy status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- policy_status:
+  not_enrolled → enrolled → active → expired
+
+- claim_status:
+  not_reported → reported → under_review → approved → rejected → compensated
+
+- payment_status:
+  pending → initiated → completed → failed
+
+- survey_status:
+  not_started → in_progress → completed
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- farmer tries to enroll after deadline
+- invalid crop or unsupported region
+- policy not active but claim attempted
+- duplicate enrollment attempt
+- incorrect land-crop mapping
+- claim without valid loss event
+- multiple claims for same loss
+- survey delay or missing report
+- claim rejection due to insufficient loss
+- partial compensation disputes
+- payment delay or failure
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (season window, eligibility)
+- rejection conditions (invalid enrollment, no active policy)
+- failure scenarios (claim rejection, payment failure)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer enrolling for insurance
+- calculating and paying premium
+- reporting crop loss
+- claim processing lifecycle
+- claim approval and compensation
+- claim rejection scenarios
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: pmfby_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"land_parcel_id": {
+  "type": "string",
+  "description": "Unique identifier of the insured land parcel."
+}
+
+"policy_id": {
+  "type": "string",
+  "description": "Unique identifier of the insurance policy."
+}
+
+"claim_id": {
+  "type": "string",
+  "description": "Unique identifier of the insurance claim."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"crop_type": [
+  "paddy", "wheat", "maize", "cotton",
+  "pulses", "oilseeds"
+]
+
+"loss_type": [
+  "drought",
+  "flood",
+  "pest_attack",
+  "cyclone",
+  "unseasonal_rainfall"
+]
+
+"policy_status": [
+  "not_enrolled",
+  "enrolled",
+  "active",
+  "expired"
+]
+
+"claim_status": [
+  "not_reported",
+  "reported",
+  "under_review",
+  "approved",
+  "rejected",
+  "compensated"
+]
+
+"survey_status": [
+  "not_started",
+  "in_progress",
+  "completed"
+]
+
+"payment_status": [
+  "pending",
+  "initiated",
+  "completed",
+  "failed"
+]
+
+"grievance_category": [
+  "claim_rejected",
+  "payment_delay",
+  "incorrect_assessment",
+  "policy_issue",
+  "enrollment_failure"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. pmfby_generate_otp  
+2. pmfby_verify_otp  
+3. pmfby_enroll_policy  
+4. pmfby_calculate_premium  
+5. pmfby_pay_premium  
+6. pmfby_get_policy_status  
+7. pmfby_report_crop_loss  
+8. pmfby_submit_claim  
+9. pmfby_track_claim_status  
+10. pmfby_track_compensation  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- pmfby_check_eligibility  
+- pmfby_get_season_window  
+- pmfby_track_survey_status  
+- pmfby_resolve_claim_ambiguity  
+- pmfby_cancel_policy  
+- pmfby_raise_grievance  
+- pmfby_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (policy status, eligibility, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - pmfby_generate_otp
+  - pmfby_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "pmfby_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support full insurance lifecycle workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

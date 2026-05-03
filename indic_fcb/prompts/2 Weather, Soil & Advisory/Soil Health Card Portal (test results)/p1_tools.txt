@@ -1,0 +1,279 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+Soil Health Card Portal (soil test results and report retrieval)
+service on the UMANG app.
+
+The number of tools should be sufficient (typically 10–14 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Searching Soil Health Card reports
+- Retrieving and downloading soil test reports
+- Viewing nutrient analysis (N, P, K, pH, etc.)
+- Tracking soil sample processing status
+- Accessing historical reports
+- Filtering reports by land parcel
+- Viewing lab/testing center details
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED for accessing personal soil data:
+  Aadhaar + OTP verification must be completed first.
+  Authentication returns a session_token.
+
+- Land-parcel dependency:
+  Each Soil Health Card report is tied to a specific land parcel.
+
+- Lab dependency:
+  Reports are available ONLY after lab testing is complete.
+
+- Periodicity:
+  Soil Health Cards are typically generated once every 2 years.
+
+- Data immutability:
+  Nutrient values (N, P, K, pH, etc.) are lab-measured and cannot be modified.
+
+- Recommendation dependency:
+  Fertilizer recommendations depend strictly on soil test reports.
+
+- Multiple reports:
+  A farmer can have multiple reports across years and land parcels.
+
+- Grievances should ONLY be raised after checking report or sample status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- sample_status:
+  registered → collected → in_transit → under_testing → report_ready
+
+- report_status:
+  not_available → available → downloaded
+
+- query_state:
+  invalid_query → valid_query → filtered → result_found / result_empty
+
+Tools must define:
+- when data is accessible
+- when access is invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- no report exists for given Aadhaar
+- invalid or missing land_parcel_id
+- report requested before testing completion
+- partial reports (some nutrients missing)
+- multiple reports for same land parcel (ambiguity)
+- outdated reports being requested
+- lab delay or stalled testing
+- incorrect mapping of land parcel to farmer
+- download failure
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (Aadhaar format, land parcel linkage)
+- failure conditions (report not ready, invalid query)
+- ambiguity handling (multiple reports)
+
+Tools must NOT assume successful retrieval.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking latest report
+- accessing historical reports
+- checking sample status before report availability
+- retrieving nutrient values
+- handling missing or delayed reports
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: shcportal_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"land_parcel_id": {
+  "type": "string",
+  "description": "Unique identifier for a land parcel."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"sample_status": [
+  "registered",
+  "collected",
+  "in_transit",
+  "under_testing",
+  "report_ready"
+]
+
+"report_status": [
+  "not_available",
+  "available",
+  "downloaded"
+]
+
+"nutrient_type": [
+  "nitrogen",
+  "phosphorus",
+  "potassium",
+  "organic_carbon",
+  "ph",
+  "micronutrients"
+]
+
+"report_type": ["latest", "historical"]
+
+"grievance_category": [
+  "report_not_found",
+  "incorrect_values",
+  "lab_delay",
+  "wrong_land_mapping",
+  "download_issue"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. shcportal_generate_otp  
+2. shcportal_verify_otp  
+3. shcportal_search_reports  
+4. shcportal_get_report_details  
+5. shcportal_check_sample_status  
+6. shcportal_download_report  
+7. shcportal_get_nutrient_values  
+8. shcportal_get_fertilizer_recommendation  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- shcportal_get_historical_reports  
+- shcportal_filter_reports_by_land  
+- shcportal_get_lab_details  
+- shcportal_resolve_report_ambiguity  
+- shcportal_raise_grievance  
+- shcportal_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (authentication, report availability, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - shcportal_generate_otp
+  - shcportal_verify_otp
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "shcportal_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}
+
+---
+
+## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+
+To ensure BFCL-level evaluation quality:
+
+1. Include edge cases and failure scenarios  
+2. Encode validation and rejection logic  
+3. Support multiple user intents and workflows  
+4. Clearly define state transitions  
+5. Explicitly state what each tool does NOT do  
+6. Ensure strict JSON schema compliance  
+
+Outputs that do not satisfy these are INVALID.

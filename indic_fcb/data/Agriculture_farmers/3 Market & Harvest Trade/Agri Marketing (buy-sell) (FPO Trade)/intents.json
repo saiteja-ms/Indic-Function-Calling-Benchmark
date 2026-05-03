@@ -1,0 +1,883 @@
+[
+  {
+    "intent_id": "agrimarket_simple_001",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for Agri Marketing authentication.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_002",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "agrimarket_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_003",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Creates a new crop listing for sale.",
+    "required_tools": [
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_004",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Searches available crop listings by commodity, location, quality, and price range.",
+    "required_tools": [
+      "agrimarket_search_listings"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_005",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Retrieves full details of a specific listing including seller info, quantity, price, and status.",
+    "required_tools": [
+      "agrimarket_get_listing_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_006",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Updates an existing listing (price, quantity, status).",
+    "required_tools": [
+      "agrimarket_update_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_007",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Places an order on an active listing.",
+    "required_tools": [
+      "agrimarket_place_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_008",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Tracks order status ('created', 'confirmed', 'dispatched', 'delivered', 'completed', 'cancelled').",
+    "required_tools": [
+      "agrimarket_track_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_009",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Tracks payment status ('pending', 'paid', 'failed', 'refunded') for an order.",
+    "required_tools": [
+      "agrimarket_track_payment"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_010",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Places a bid on an auction-type listing.",
+    "required_tools": [
+      "agrimarket_bid_on_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_011",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Cancels an existing order.",
+    "required_tools": [
+      "agrimarket_cancel_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_012",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Tracks delivery status for dispatched orders.",
+    "required_tools": [
+      "agrimarket_track_delivery"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_013",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance.",
+    "required_tools": [
+      "agrimarket_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_simple_014",
+    "usecase": "agrimarket",
+    "category": "simple",
+    "abstract_goal": "Tracks grievance status.",
+    "required_tools": [
+      "agrimarket_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agrimarket_multiple_001",
+    "usecase": "agrimarket",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Agri Marketing authentication.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "agrimarket_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agrimarket_multiple_002",
+    "usecase": "agrimarket",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Agri Marketing authentication.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "agrimarket_create_listing"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agrimarket_multiple_003",
+    "usecase": "agrimarket",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Agri Marketing authentication.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "agrimarket_search_listings"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agrimarket_multiple_004",
+    "usecase": "agrimarket",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Agri Marketing authentication.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "agrimarket_get_listing_details"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agrimarket_multiple_005",
+    "usecase": "agrimarket",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Agri Marketing authentication.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "agrimarket_update_listing"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agrimarket_parallel_001",
+    "usecase": "agrimarket",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: agrimarket_generate_otp.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "agrimarket_parallel_002",
+    "usecase": "agrimarket",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: agrimarket_verify_otp.",
+    "required_tools": [
+      "agrimarket_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "agrimarket_parallel_003",
+    "usecase": "agrimarket",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: agrimarket_create_listing.",
+    "required_tools": [
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_create_listing"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "agrimarket_parallel_multiple_001",
+    "usecase": "agrimarket",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agrimarket_search_listings and agrimarket_cancel_order.",
+    "required_tools": [
+      "agrimarket_search_listings",
+      "agrimarket_cancel_order"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_search_listings",
+      "agrimarket_cancel_order"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agrimarket_parallel_multiple_002",
+    "usecase": "agrimarket",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agrimarket_search_listings and agrimarket_get_listing_details.",
+    "required_tools": [
+      "agrimarket_search_listings",
+      "agrimarket_get_listing_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_search_listings",
+      "agrimarket_get_listing_details"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agrimarket_parallel_multiple_003",
+    "usecase": "agrimarket",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agrimarket_track_payment and agrimarket_raise_grievance.",
+    "required_tools": [
+      "agrimarket_track_payment",
+      "agrimarket_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_track_payment",
+      "agrimarket_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agrimarket_parallel_multiple_004",
+    "usecase": "agrimarket",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agrimarket_update_listing and agrimarket_track_delivery.",
+    "required_tools": [
+      "agrimarket_update_listing",
+      "agrimarket_track_delivery"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_update_listing",
+      "agrimarket_track_delivery"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agrimarket_parallel_multiple_005",
+    "usecase": "agrimarket",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agrimarket_cancel_order and agrimarket_track_grievance_status.",
+    "required_tools": [
+      "agrimarket_cancel_order",
+      "agrimarket_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agrimarket_cancel_order",
+      "agrimarket_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agrimarket_irrelevance_001",
+    "usecase": "agrimarket",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agrimarket_irrelevance_002",
+    "usecase": "agrimarket",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agrimarket_irrelevance_003",
+    "usecase": "agrimarket",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agrimarket_irrelevance_004",
+    "usecase": "agrimarket",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agrimarket_irrelevance_005",
+    "usecase": "agrimarket",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agrimarket_base_001",
+    "usecase": "agrimarket",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agrimarket_generate_otp, agrimarket_verify_otp.",
+    "required_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agrimarket_base_002",
+    "usecase": "agrimarket",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agrimarket_raise_grievance, agrimarket_track_grievance_status.",
+    "required_tools": [
+      "agrimarket_raise_grievance",
+      "agrimarket_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agrimarket_base_003",
+    "usecase": "agrimarket",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agrimarket_generate_otp, agrimarket_create_listing.",
+    "required_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agrimarket_base_004",
+    "usecase": "agrimarket",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agrimarket_generate_otp, agrimarket_verify_otp, agrimarket_create_listing.",
+    "required_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_verify_otp",
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agrimarket_base_005",
+    "usecase": "agrimarket",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agrimarket_verify_otp, agrimarket_create_listing.",
+    "required_tools": [
+      "agrimarket_verify_otp",
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agrimarket_miss_param_001",
+    "usecase": "agrimarket",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform agrimarket_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "agrimarket_miss_param_002",
+    "usecase": "agrimarket",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform agrimarket_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "agrimarket_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "agrimarket_miss_param_003",
+    "usecase": "agrimarket",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform agrimarket_create_listing but do not provide the necessary session_token.",
+    "required_tools": [
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "agrimarket_miss_func_001",
+    "usecase": "agrimarket",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "agrimarket_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "agrimarket_long_context_001",
+    "usecase": "agrimarket",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agrimarket_generate_otp, agrimarket_verify_otp.",
+    "required_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agrimarket_long_context_002",
+    "usecase": "agrimarket",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agrimarket_raise_grievance, agrimarket_track_grievance_status.",
+    "required_tools": [
+      "agrimarket_raise_grievance",
+      "agrimarket_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agrimarket_long_context_003",
+    "usecase": "agrimarket",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agrimarket_generate_otp, agrimarket_create_listing.",
+    "required_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agrimarket_long_context_004",
+    "usecase": "agrimarket",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agrimarket_generate_otp, agrimarket_verify_otp, agrimarket_create_listing.",
+    "required_tools": [
+      "agrimarket_generate_otp",
+      "agrimarket_verify_otp",
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agrimarket_long_context_005",
+    "usecase": "agrimarket",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agrimarket_verify_otp, agrimarket_create_listing.",
+    "required_tools": [
+      "agrimarket_verify_otp",
+      "agrimarket_create_listing"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

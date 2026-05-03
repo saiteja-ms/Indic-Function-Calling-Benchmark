@@ -1,0 +1,883 @@
+[
+  {
+    "intent_id": "pmpranam_simple_001",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for PM-PRANAM authentication.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_002",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "pmpranam_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_003",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Retrieves the farmer's fertilizer usage records for a given season.",
+    "required_tools": [
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_004",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Analyzes fertilizer usage patterns comparing current season vs baseline.",
+    "required_tools": [
+      "pmpranam_analyze_usage_pattern"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_005",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Provides recommendations for alternative fertilizers (organic, biofertilizer, balanced NPK) based on crop, soil, and usage history.",
+    "required_tools": [
+      "pmpranam_get_recommendation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_006",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Checks the farmer's compliance_status ('non_compliant', 'partially_compliant', 'compliant') with PM-PRANAM usage patterns.",
+    "required_tools": [
+      "pmpranam_check_compliance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_007",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Checks whether the farmer/region is eligible for PM-PRANAM incentives.",
+    "required_tools": [
+      "pmpranam_check_incentive_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_008",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Tracks incentive_status ('not_eligible', 'eligible', 'calculated', 'allocated').",
+    "required_tools": [
+      "pmpranam_track_incentive_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_009",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Lists available alternative fertilizers (organic, biofertilizer, balanced NPK) suitable for the farmer's crop and region.",
+    "required_tools": [
+      "pmpranam_get_alternative_fertilizers"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_010",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Retrieves multi-season fertilizer usage history to identify long-term trends.",
+    "required_tools": [
+      "pmpranam_get_usage_history"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_011",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Resolves conflicting usage data when purchase records and declared usage don't match.",
+    "required_tools": [
+      "pmpranam_resolve_usage_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_012",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Self-reports fertilizer usage data when purchase records are unavailable.",
+    "required_tools": [
+      "pmpranam_report_usage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_013",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Raises a PM-PRANAM grievance.",
+    "required_tools": [
+      "pmpranam_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_simple_014",
+    "usecase": "pmpranam",
+    "category": "simple",
+    "abstract_goal": "Tracks PM-PRANAM grievance status.",
+    "required_tools": [
+      "pmpranam_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "pmpranam_multiple_001",
+    "usecase": "pmpranam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PM-PRANAM authentication.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmpranam_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmpranam_multiple_002",
+    "usecase": "pmpranam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PM-PRANAM authentication.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmpranam_multiple_003",
+    "usecase": "pmpranam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PM-PRANAM authentication.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "pmpranam_analyze_usage_pattern"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmpranam_multiple_004",
+    "usecase": "pmpranam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PM-PRANAM authentication.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "pmpranam_get_recommendation"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmpranam_multiple_005",
+    "usecase": "pmpranam",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for PM-PRANAM authentication.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "pmpranam_check_compliance"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "pmpranam_parallel_001",
+    "usecase": "pmpranam",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmpranam_generate_otp.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmpranam_parallel_002",
+    "usecase": "pmpranam",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmpranam_verify_otp.",
+    "required_tools": [
+      "pmpranam_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmpranam_parallel_003",
+    "usecase": "pmpranam",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmpranam_get_fertilizer_usage.",
+    "required_tools": [
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "pmpranam_parallel_multiple_001",
+    "usecase": "pmpranam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmpranam_analyze_usage_pattern and pmpranam_resolve_usage_ambiguity.",
+    "required_tools": [
+      "pmpranam_analyze_usage_pattern",
+      "pmpranam_resolve_usage_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_analyze_usage_pattern",
+      "pmpranam_resolve_usage_ambiguity"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmpranam_parallel_multiple_002",
+    "usecase": "pmpranam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmpranam_analyze_usage_pattern and pmpranam_get_recommendation.",
+    "required_tools": [
+      "pmpranam_analyze_usage_pattern",
+      "pmpranam_get_recommendation"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_analyze_usage_pattern",
+      "pmpranam_get_recommendation"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmpranam_parallel_multiple_003",
+    "usecase": "pmpranam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmpranam_get_alternative_fertilizers and pmpranam_raise_grievance.",
+    "required_tools": [
+      "pmpranam_get_alternative_fertilizers",
+      "pmpranam_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_get_alternative_fertilizers",
+      "pmpranam_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmpranam_parallel_multiple_004",
+    "usecase": "pmpranam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmpranam_check_compliance and pmpranam_report_usage.",
+    "required_tools": [
+      "pmpranam_check_compliance",
+      "pmpranam_report_usage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_check_compliance",
+      "pmpranam_report_usage"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmpranam_parallel_multiple_005",
+    "usecase": "pmpranam",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: pmpranam_resolve_usage_ambiguity and pmpranam_track_grievance_status.",
+    "required_tools": [
+      "pmpranam_resolve_usage_ambiguity",
+      "pmpranam_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmpranam_resolve_usage_ambiguity",
+      "pmpranam_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "pmpranam_irrelevance_001",
+    "usecase": "pmpranam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmpranam_irrelevance_002",
+    "usecase": "pmpranam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmpranam_irrelevance_003",
+    "usecase": "pmpranam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmpranam_irrelevance_004",
+    "usecase": "pmpranam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmpranam_irrelevance_005",
+    "usecase": "pmpranam",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "pmpranam_base_001",
+    "usecase": "pmpranam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmpranam_generate_otp, pmpranam_verify_otp.",
+    "required_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmpranam_base_002",
+    "usecase": "pmpranam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmpranam_raise_grievance, pmpranam_track_grievance_status.",
+    "required_tools": [
+      "pmpranam_raise_grievance",
+      "pmpranam_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmpranam_base_003",
+    "usecase": "pmpranam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmpranam_generate_otp, pmpranam_get_fertilizer_usage.",
+    "required_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmpranam_base_004",
+    "usecase": "pmpranam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmpranam_generate_otp, pmpranam_verify_otp, pmpranam_get_fertilizer_usage.",
+    "required_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_verify_otp",
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmpranam_base_005",
+    "usecase": "pmpranam",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: pmpranam_verify_otp, pmpranam_get_fertilizer_usage.",
+    "required_tools": [
+      "pmpranam_verify_otp",
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "pmpranam_miss_param_001",
+    "usecase": "pmpranam",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmpranam_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmpranam_miss_param_002",
+    "usecase": "pmpranam",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmpranam_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "pmpranam_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmpranam_miss_param_003",
+    "usecase": "pmpranam",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform pmpranam_get_fertilizer_usage but do not provide the necessary session_token.",
+    "required_tools": [
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "pmpranam_miss_func_001",
+    "usecase": "pmpranam",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "pmpranam_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "pmpranam_long_context_001",
+    "usecase": "pmpranam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmpranam_generate_otp, pmpranam_verify_otp.",
+    "required_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmpranam_long_context_002",
+    "usecase": "pmpranam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmpranam_raise_grievance, pmpranam_track_grievance_status.",
+    "required_tools": [
+      "pmpranam_raise_grievance",
+      "pmpranam_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmpranam_long_context_003",
+    "usecase": "pmpranam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmpranam_generate_otp, pmpranam_get_fertilizer_usage.",
+    "required_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmpranam_long_context_004",
+    "usecase": "pmpranam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmpranam_generate_otp, pmpranam_verify_otp, pmpranam_get_fertilizer_usage.",
+    "required_tools": [
+      "pmpranam_generate_otp",
+      "pmpranam_verify_otp",
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "pmpranam_long_context_005",
+    "usecase": "pmpranam",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmpranam_verify_otp, pmpranam_get_fertilizer_usage.",
+    "required_tools": [
+      "pmpranam_verify_otp",
+      "pmpranam_get_fertilizer_usage"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

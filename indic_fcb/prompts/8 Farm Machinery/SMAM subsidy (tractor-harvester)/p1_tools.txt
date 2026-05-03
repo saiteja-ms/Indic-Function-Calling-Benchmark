@@ -1,0 +1,364 @@
+You are building a function-calling benchmark dataset in the style
+of the Berkeley Function Calling Leaderboard (BFCL).
+
+Your task: Generate a JSON array of tool schemas for the
+SMAM (Sub-Mission on Agricultural Mechanization)
+subsidy service for farm machinery (tractor, harvester, implements)
+on the UMANG app.
+
+The number of tools should be sufficient (typically 12–16 tools)
+to cover all realistic farmer interactions and edge cases.
+
+---
+
+## CORE OBJECTIVE
+
+Design tools that enable realistic workflows such as:
+- Farmer authentication
+- Eligibility checking for machinery subsidy
+- Machinery selection (tractor, harvester, etc.)
+- Vendor selection
+- Subsidy calculation
+- Application submission
+- Purchase validation
+- Inspection and verification
+- Subsidy disbursement tracking
+- Grievance handling
+
+---
+
+## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+
+- Authentication is REQUIRED:
+  Aadhaar + OTP verification must be completed.
+  Authentication returns a session_token.
+
+- Eligibility dependency:
+  Farmer must satisfy:
+    - land ownership or operational holding
+    - category eligibility (general, SC/ST, women)
+    - scheme-specific criteria
+
+- Machinery dependency:
+  Subsidy applies ONLY to approved machinery types:
+    - tractor
+    - harvester
+    - power tiller
+    - implements
+
+- Vendor dependency:
+  Machinery must be purchased from:
+    - authorized vendors
+
+- Purchase requirement:
+  Subsidy is linked to:
+    - actual purchase
+    - valid invoice
+
+- Subsidy structure:
+  Subsidy is a percentage of machinery cost,
+  varying by category and region.
+
+- Duplicate prevention:
+  Same farmer cannot claim subsidy multiple times
+  for the same machinery category within a defined period.
+
+- Inspection requirement:
+  Physical verification of machinery is required.
+
+- Disbursement dependency:
+  Subsidy is released ONLY after:
+    - purchase verification
+    - inspection approval
+
+- Partial subsidy:
+  Subsidy may have upper limits (capped amount).
+
+- Grievances should ONLY be raised after checking application or subsidy status.
+
+---
+
+## STATE TRANSITION REQUIREMENT (MANDATORY)
+
+Tool descriptions MUST encode valid state transitions:
+
+- application_status:
+  not_applied → submitted → under_review → approved → rejected
+
+- purchase_status:
+  not_initiated → initiated → completed → verified
+
+- inspection_status:
+  not_scheduled → scheduled → completed → verified → failed
+
+- subsidy_status:
+  not_initiated → pending → approved → disbursed → failed
+
+- vendor_status:
+  not_selected → selected → validated
+
+Tools must define:
+- when actions are valid
+- when actions are invalid
+
+---
+
+## EDGE CASE REQUIREMENT (MANDATORY)
+
+The toolset MUST support scenarios where:
+- farmer not eligible but applies
+- invalid or unsupported machinery selected
+- vendor not authorized
+- purchase not completed after approval
+- mismatch between invoice and application
+- duplicate subsidy attempt
+- incorrect category declaration
+- inspection failure due to missing or incorrect machinery
+- subsidy calculation mismatch
+- delay or failure in subsidy disbursement
+
+Descriptions must explicitly reflect these cases.
+
+---
+
+## ERROR HANDLING REQUIREMENT (MANDATORY)
+
+Each tool description MUST include:
+- validation rules (eligibility, vendor, machinery type)
+- rejection conditions (invalid application, duplicate claim)
+- failure scenarios (inspection failure, subsidy delay)
+
+Tools must NOT assume success-only execution.
+
+---
+
+## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+
+The toolset MUST support:
+- farmer checking eligibility
+- selecting machinery and vendor
+- submitting application
+- completing purchase
+- verifying machinery
+- receiving subsidy
+- rejection or delay scenarios
+- grievance escalation
+
+---
+
+## TOOL DESIGN REQUIREMENTS
+
+- Naming format: smam_verb_noun (lowercase, underscores only)
+- Each tool must represent ONE atomic API
+- Tools should be independent (no chaining logic required)
+
+---
+
+## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the farmer."
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked with Aadhaar."
+}
+
+"session_token": {
+  "type": "string",
+  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+}
+
+"application_id": {
+  "type": "string",
+  "description": "Unique identifier of the SMAM application."
+}
+
+"machinery_id": {
+  "type": "string",
+  "description": "Unique identifier of the machinery."
+}
+
+"vendor_id": {
+  "type": "string",
+  "description": "Unique identifier of the authorized vendor."
+}
+
+---
+
+## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+
+"machinery_type": [
+  "tractor",
+  "harvester",
+  "power_tiller",
+  "rotavator",
+  "seed_drill"
+]
+
+"application_status": [
+  "not_applied",
+  "submitted",
+  "under_review",
+  "approved",
+  "rejected"
+]
+
+"purchase_status": [
+  "not_initiated",
+  "initiated",
+  "completed",
+  "verified"
+]
+
+"inspection_status": [
+  "not_scheduled",
+  "scheduled",
+  "completed",
+  "verified",
+  "failed"
+]
+
+"subsidy_status": [
+  "not_initiated",
+  "pending",
+  "approved",
+  "disbursed",
+  "failed"
+]
+
+"beneficiary_category": [
+  "general",
+  "sc_st",
+  "women",
+  "small_marginal"
+]
+
+"grievance_category": [
+  "application_rejected",
+  "vendor_issue",
+  "inspection_failure",
+  "subsidy_not_received",
+  "delay_in_processing"
+]
+
+---
+
+## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+
+1. smam_generate_otp  
+2. smam_verify_otp  
+3. smam_check_eligibility  
+4. smam_select_machinery  
+5. smam_select_vendor  
+6. smam_calculate_subsidy  
+7. smam_submit_application  
+8. smam_track_application_status  
+9. smam_verify_purchase  
+10. smam_track_subsidy  
+
+---
+
+## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+
+- smam_get_vendor_list  
+- smam_get_machinery_details  
+- smam_schedule_inspection  
+- smam_resolve_application_ambiguity  
+- smam_cancel_application  
+- smam_raise_grievance  
+- smam_track_grievance_status  
+
+---
+
+## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+
+Each tool description MUST clearly state:
+1. What the tool does  
+2. Preconditions (eligibility, purchase, etc.)  
+3. What it does NOT do  
+4. Failure conditions and rejection scenarios  
+
+---
+
+## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+
+Each tool MUST explicitly include:
+- at least one invalid usage scenario
+- at least one limitation
+
+---
+
+## PARAMETER RULES
+
+- "type": "dict" with "properties"
+- Every parameter must include:
+  - "type"
+  - "description"
+- "session_token" MUST be in "required" for all tools except:
+  - smam_generate_otp
+  - smam_verify_otp
+
+---
+
+## TOOL USAGE CONSTRAINTS (MANDATORY)
+
+- Tools MUST only be called when required.
+- Tools MUST NOT be called if prerequisites are not satisfied.
+
+## PARAMETER CONSTRAINTS (MANDATORY)
+
+- Parameters MUST be derived from user input or prior tool outputs.
+- No fabricated values allowed.
+
+## TOOL SELECTION CONSTRAINTS (MANDATORY)
+
+- Tool selection MUST match user intent.
+
+## MINIMALITY CONSTRAINT
+
+- Use minimum number of tools required.
+
+## AMBIGUITY HANDLING
+
+- Do not call tools if intent is unclear.
+
+## OUTPUT STRICTNESS
+
+- Output MUST be valid JSON with no extra fields.
+
+## DETERMINISM REQUIREMENT
+
+- Tool outputs are deterministic given inputs.
+
+---
+
+## STRICT OUTPUT VALIDATION (MANDATORY)
+
+- Output MUST be valid JSON
+- No extra fields allowed
+- All required tools MUST be present
+- Enums MUST be correctly used
+- Violations = INVALID OUTPUT
+
+---
+
+## OUTPUT FORMAT
+
+Return ONLY a JSON array.
+
+Each tool must follow this structure:
+
+{
+  "name": "smam_example_tool",
+  "description": "...",
+  "parameters": {
+    "type": "dict",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}

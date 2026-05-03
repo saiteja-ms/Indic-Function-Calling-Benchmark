@@ -1,0 +1,147 @@
+You are building test personas for a function-calling
+benchmark for the Jal Jeevan Mission (rural water supply)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\9 Water & Electricity\JAL Jeevan Mission (rural water)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\9 Water & Electricity\JAL Jeevan Mission (rural water)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific rural water access / scheme scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — Household not connected to water supply
+  connection_status: NOT_CONNECTED
+
+PATH 2 — Connection applied, awaiting approval
+  connection_status: APPLIED
+  approval_status: PENDING
+
+PATH 3 — Connection approved, installation pending
+  connection_status: APPROVED
+  installation_status: PENDING
+
+PATH 4 — Functional tap water connection available
+  connection_status: ACTIVE
+
+PATH 5 — Irregular water supply issues
+  supply_status: IRREGULAR
+
+PATH 6 — Water quality issues reported
+  quality_status: POOR
+
+PATH 7 — Multiple households connected under same scheme
+  community_connection: TRUE
+
+PATH 8 — Connection failed due to infrastructure limitations
+  connection_status: FAILED
+  failure_reason: INFRASTRUCTURE_ISSUE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CONNECTION FLOW
+   - NOT_CONNECTED → APPLIED → APPROVED → ACTIVE/FAILED
+
+2. INSTALLATION RULE
+   - COMPLETED only if APPROVED
+
+3. SUPPLY RULE
+   - IRREGULAR → inconsistent water availability
+   - REGULAR → consistent supply
+
+4. QUALITY RULE
+   - POOR → contamination or unsafe water
+   - GOOD → safe drinking water
+
+5. FAILURE RULE
+   - FAILED → must include failure_reason
+   - Valid reasons:
+     INFRASTRUCTURE_ISSUE
+     WATER_SOURCE_UNAVAILABLE
+     ADMINISTRATIVE_DELAY
+
+6. COMMUNITY RULE
+   - TRUE → multiple households benefit from shared system
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Household size:
+  2–10 members
+
+- Water supply:
+  liters/day realistic values
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed water scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ramesh Yadav — UP, PATH 2",
+  "code_path": "PATH 2 — connection applied, pending approval",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer applied for tap water connection for household use",
+  "stub_test_assertion": "connection_status should become APPROVED after connection_approval tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

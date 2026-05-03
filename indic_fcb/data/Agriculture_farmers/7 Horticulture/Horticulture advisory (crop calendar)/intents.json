@@ -1,0 +1,883 @@
+[
+  {
+    "intent_id": "hortadvisory_simple_001",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Retrieves the full crop calendar for a horticulture crop in a specific region.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_002",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Provides detailed guidance for a specific crop growth stage including input recommendations, best practices, and expected milestones.",
+    "required_tools": [
+      "horti_get_stage_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_003",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Generates advisory adjusted for current weather conditions.",
+    "required_tools": [
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_004",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Provides pest and disease management advisory for a horticulture crop at a specific stage.",
+    "required_tools": [
+      "horti_get_pest_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_005",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Provides nutrient management recommendations including fertilizer type, dosage, and application timing for a crop at a specific stage.",
+    "required_tools": [
+      "horti_get_nutrient_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_006",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Tracks and returns the current estimated crop stage based on sowing date and crop type.",
+    "required_tools": [
+      "horti_track_crop_stage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_007",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Generates a full seasonal plan with stage-wise schedule, input requirements, and activity milestones for a horticulture crop.",
+    "required_tools": [
+      "horti_get_seasonal_plan"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_008",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous crop names to standardized identifiers.",
+    "required_tools": [
+      "horti_resolve_crop_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_009",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous location names for horticulture advisory.",
+    "required_tools": [
+      "horti_resolve_location_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_010",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Returns guidance for the upcoming crop stage based on current stage progression.",
+    "required_tools": [
+      "horti_get_next_stage_guidance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_011",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Manually updates the crop stage for personalized tracking.",
+    "required_tools": [
+      "horti_update_crop_stage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_012",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Returns a region-optimized crop calendar that accounts for local agro-climatic conditions.",
+    "required_tools": [
+      "horti_get_region_specific_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_013",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Raises a grievance about advisory quality.",
+    "required_tools": [
+      "horti_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_simple_014",
+    "usecase": "hortadvisory",
+    "category": "simple",
+    "abstract_goal": "Tracks horticulture advisory grievance.",
+    "required_tools": [
+      "horti_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "hortadvisory_multiple_001",
+    "usecase": "hortadvisory",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Retrieves the full crop calendar for a horticulture crop in a specific region.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "horti_get_stage_advisory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "hortadvisory_multiple_002",
+    "usecase": "hortadvisory",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Retrieves the full crop calendar for a horticulture crop in a specific region.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "hortadvisory_multiple_003",
+    "usecase": "hortadvisory",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Retrieves the full crop calendar for a horticulture crop in a specific region.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "horti_get_pest_advisory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "hortadvisory_multiple_004",
+    "usecase": "hortadvisory",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Retrieves the full crop calendar for a horticulture crop in a specific region.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "horti_get_nutrient_advisory"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "hortadvisory_multiple_005",
+    "usecase": "hortadvisory",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Retrieves the full crop calendar for a horticulture crop in a specific region.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "horti_track_crop_stage"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_001",
+    "usecase": "hortadvisory",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: horti_get_crop_calendar.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_002",
+    "usecase": "hortadvisory",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: horti_get_stage_advisory.",
+    "required_tools": [
+      "horti_get_stage_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_get_stage_advisory"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_003",
+    "usecase": "hortadvisory",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: horti_get_weather_adjusted_advisory.",
+    "required_tools": [
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_multiple_001",
+    "usecase": "hortadvisory",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: horti_get_pest_advisory and horti_update_crop_stage.",
+    "required_tools": [
+      "horti_get_pest_advisory",
+      "horti_update_crop_stage"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_get_pest_advisory",
+      "horti_update_crop_stage"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_multiple_002",
+    "usecase": "hortadvisory",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: horti_get_pest_advisory and horti_get_nutrient_advisory.",
+    "required_tools": [
+      "horti_get_pest_advisory",
+      "horti_get_nutrient_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_get_pest_advisory",
+      "horti_get_nutrient_advisory"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_multiple_003",
+    "usecase": "hortadvisory",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: horti_resolve_location_ambiguity and horti_raise_grievance.",
+    "required_tools": [
+      "horti_resolve_location_ambiguity",
+      "horti_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_resolve_location_ambiguity",
+      "horti_raise_grievance"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_multiple_004",
+    "usecase": "hortadvisory",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: horti_track_crop_stage and horti_get_region_specific_calendar.",
+    "required_tools": [
+      "horti_track_crop_stage",
+      "horti_get_region_specific_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_track_crop_stage",
+      "horti_get_region_specific_calendar"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "hortadvisory_parallel_multiple_005",
+    "usecase": "hortadvisory",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: horti_update_crop_stage and horti_track_grievance_status.",
+    "required_tools": [
+      "horti_update_crop_stage",
+      "horti_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "horti_update_crop_stage",
+      "horti_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "hortadvisory_irrelevance_001",
+    "usecase": "hortadvisory",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "horti_get_crop_calendar",
+      "horti_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "hortadvisory_irrelevance_002",
+    "usecase": "hortadvisory",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "horti_get_crop_calendar",
+      "horti_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "hortadvisory_irrelevance_003",
+    "usecase": "hortadvisory",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "horti_get_crop_calendar",
+      "horti_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "hortadvisory_irrelevance_004",
+    "usecase": "hortadvisory",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "horti_get_crop_calendar",
+      "horti_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "hortadvisory_irrelevance_005",
+    "usecase": "hortadvisory",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "horti_get_crop_calendar",
+      "horti_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "hortadvisory_base_001",
+    "usecase": "hortadvisory",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: horti_get_crop_calendar, horti_get_stage_advisory.",
+    "required_tools": [
+      "horti_get_crop_calendar",
+      "horti_get_stage_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "hortadvisory_base_002",
+    "usecase": "hortadvisory",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: horti_raise_grievance, horti_track_grievance_status.",
+    "required_tools": [
+      "horti_raise_grievance",
+      "horti_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "hortadvisory_base_003",
+    "usecase": "hortadvisory",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: horti_get_crop_calendar, horti_get_weather_adjusted_advisory.",
+    "required_tools": [
+      "horti_get_crop_calendar",
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "hortadvisory_base_004",
+    "usecase": "hortadvisory",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: horti_get_crop_calendar, horti_get_stage_advisory, horti_get_weather_adjusted_advisory.",
+    "required_tools": [
+      "horti_get_crop_calendar",
+      "horti_get_stage_advisory",
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "hortadvisory_base_005",
+    "usecase": "hortadvisory",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: horti_get_stage_advisory, horti_get_weather_adjusted_advisory.",
+    "required_tools": [
+      "horti_get_stage_advisory",
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "hortadvisory_miss_param_001",
+    "usecase": "hortadvisory",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform horti_get_crop_calendar but do not provide the necessary crop_type.",
+    "required_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "crop_type",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "hortadvisory_miss_param_002",
+    "usecase": "hortadvisory",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform horti_get_stage_advisory but do not provide the necessary crop_type.",
+    "required_tools": [
+      "horti_get_stage_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "crop_type",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "hortadvisory_miss_param_003",
+    "usecase": "hortadvisory",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform horti_get_weather_adjusted_advisory but do not provide the necessary crop_type.",
+    "required_tools": [
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "crop_type",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "hortadvisory_miss_func_001",
+    "usecase": "hortadvisory",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "horti_get_crop_calendar"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "hortadvisory_long_context_001",
+    "usecase": "hortadvisory",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: horti_get_crop_calendar, horti_get_stage_advisory.",
+    "required_tools": [
+      "horti_get_crop_calendar",
+      "horti_get_stage_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "hortadvisory_long_context_002",
+    "usecase": "hortadvisory",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: horti_raise_grievance, horti_track_grievance_status.",
+    "required_tools": [
+      "horti_raise_grievance",
+      "horti_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "hortadvisory_long_context_003",
+    "usecase": "hortadvisory",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: horti_get_crop_calendar, horti_get_weather_adjusted_advisory.",
+    "required_tools": [
+      "horti_get_crop_calendar",
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "hortadvisory_long_context_004",
+    "usecase": "hortadvisory",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: horti_get_crop_calendar, horti_get_stage_advisory, horti_get_weather_adjusted_advisory.",
+    "required_tools": [
+      "horti_get_crop_calendar",
+      "horti_get_stage_advisory",
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "hortadvisory_long_context_005",
+    "usecase": "hortadvisory",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: horti_get_stage_advisory, horti_get_weather_adjusted_advisory.",
+    "required_tools": [
+      "horti_get_stage_advisory",
+      "horti_get_weather_adjusted_advisory"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

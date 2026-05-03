@@ -1,0 +1,142 @@
+You are building test personas for a function-calling
+benchmark for the Horticulture Advisory (crop calendar)
+service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Horticulture advisory (crop calendar)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Horticulture advisory (crop calendar)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific crop calendar / advisory usage scenario.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No advisory accessed
+  advisory_access_status: NOT_ACCESSED
+
+PATH 2 — Crop calendar viewed
+  advisory_access_status: VIEWED
+
+PATH 3 — Advisory followed for planting schedule
+  usage_type: PLANTING
+
+PATH 4 — Advisory followed for harvesting schedule
+  usage_type: HARVESTING
+
+PATH 5 — Advisory followed for irrigation planning
+  usage_type: IRRIGATION
+
+PATH 6 — Advisory ignored by farmer
+  advisory_usage_status: IGNORED
+
+PATH 7 — Multiple crop advisories used
+  multiple_crops: TRUE
+
+PATH 8 — Outdated advisory followed (incorrect timing)
+  advisory_status: OUTDATED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ACCESS RULE
+   - NOT_ACCESSED → no advisory usage
+
+2. ADVISORY STRUCTURE
+   - Must include:
+     - crop
+     - stage (sowing, growing, harvesting)
+     - recommended_action
+     - time_window
+
+3. USAGE RULE
+   - PLANTING/HARVESTING/IRRIGATION must match advisory content
+
+4. MULTI-CROP RULE
+   - Each crop must have separate advisory
+
+5. OUTDATED RULE
+   - Advisory older than season timeline
+
+6. IGNORE RULE
+   - IGNORED → advisory not applied
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Crops:
+  fruits, vegetables, spices
+
+- Time windows:
+  realistic seasonal ranges
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed advisory schedules
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Karthik — Tamil Nadu, PATH 2",
+  "code_path": "PATH 2 — crop calendar viewed",
+  "language_preference": "ta",
+  "interesting_characteristic": "Farmer checking crop calendar before sowing vegetables",
+  "stub_test_assertion": "advisory_access_status should remain VIEWED after advisory_fetch tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

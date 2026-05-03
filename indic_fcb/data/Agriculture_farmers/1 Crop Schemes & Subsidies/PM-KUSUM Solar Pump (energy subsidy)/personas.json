@@ -1,0 +1,114 @@
+[
+  {
+    "persona_id": "PERSONA_A",
+    "display_name": "Dinesh Tiwari — UP, PATH 1",
+    "code_path": "PATH 1 — Not applied for solar pump",
+    "language_preference": "hi",
+    "interesting_characteristic": "Small farmer in UP unaware of PM-KUSUM solar pump subsidy scheme",
+    "stub_test_assertion": "eligibility_status should become 'eligible' after pmkusum_check_eligibility",
+    "state_values": {
+      "otp_sent": false, "otp_verified": false, "session_token": null,
+      "eligibility_status": null, "application_id": null, "application_status": null,
+      "vendor_id": null, "vendor_status": null, "installation_status": null,
+      "subsidy_status": null, "grid_connection_status": null, "grid_type": null, "grievance_id": null
+    }
+  },
+  {
+    "persona_id": "PERSONA_B",
+    "display_name": "Shyam Yadav — Bihar, PATH 2",
+    "code_path": "PATH 2 — Application submitted, under review",
+    "language_preference": "hi",
+    "interesting_characteristic": "Rice farmer who submitted off-grid pump application and awaits district approval",
+    "stub_test_assertion": "application_status should remain 'submitted' when pmkusum_check_application_status is called",
+    "state_values": {
+      "otp_sent": true, "otp_verified": true, "session_token": "PMKUSUM-TKN-AB12CD34",
+      "eligibility_status": "eligible", "application_id": "PMKUSUM-APP-40000001", "application_status": "submitted",
+      "vendor_id": null, "vendor_status": "not_selected", "installation_status": "not_started",
+      "subsidy_status": "not_initiated", "grid_connection_status": null, "grid_type": "off_grid", "grievance_id": null
+    }
+  },
+  {
+    "persona_id": "PERSONA_C",
+    "display_name": "Amarjit Dhillon — Punjab, PATH 3",
+    "code_path": "PATH 3 — Application approved, vendor selection pending",
+    "language_preference": "pa",
+    "interesting_characteristic": "Wheat farmer in Punjab whose application was approved and needs to select empanelled vendor",
+    "stub_test_assertion": "vendor_status should become 'selected' after pmkusum_select_vendor",
+    "state_values": {
+      "otp_sent": true, "otp_verified": true, "session_token": "PMKUSUM-TKN-EF56GH78",
+      "eligibility_status": "eligible", "application_id": "PMKUSUM-APP-40000002", "application_status": "approved",
+      "vendor_id": null, "vendor_status": "not_selected", "installation_status": "not_started",
+      "subsidy_status": "not_initiated", "grid_connection_status": null, "grid_type": "grid_connected", "grievance_id": null
+    }
+  },
+  {
+    "persona_id": "PERSONA_D",
+    "display_name": "Rajveer Gill — Haryana, PATH 4",
+    "code_path": "PATH 4 — Installation completed, verification pending",
+    "language_preference": "hi",
+    "interesting_characteristic": "Farmer with grid-connected pump installed but awaiting physical verification before subsidy release",
+    "stub_test_assertion": "installation_status should become 'verified' after pmkusum_verify_installation with result='passed'",
+    "state_values": {
+      "otp_sent": true, "otp_verified": true, "session_token": "PMKUSUM-TKN-IJ90KL12",
+      "eligibility_status": "eligible", "application_id": "PMKUSUM-APP-40000003", "application_status": "approved",
+      "vendor_id": "VND-001", "vendor_status": "selected", "installation_status": "completed",
+      "subsidy_status": "not_initiated", "grid_connection_status": null, "grid_type": "grid_connected", "grievance_id": null
+    }
+  },
+  {
+    "persona_id": "PERSONA_E",
+    "display_name": "Vishnu Deshmukh — Maharashtra, PATH 5",
+    "code_path": "PATH 5 — Subsidy disbursed successfully",
+    "language_preference": "mr",
+    "interesting_characteristic": "Soybean farmer who received full subsidy after verified off-grid solar pump installation",
+    "stub_test_assertion": "pmkusum_track_subsidy should return subsidy_status 'disbursed'",
+    "state_values": {
+      "otp_sent": true, "otp_verified": true, "session_token": "PMKUSUM-TKN-MN34OP56",
+      "eligibility_status": "eligible", "application_id": "PMKUSUM-APP-40000004", "application_status": "approved",
+      "vendor_id": "VND-002", "vendor_status": "selected", "installation_status": "verified",
+      "subsidy_status": "disbursed", "grid_connection_status": null, "grid_type": "off_grid", "grievance_id": null
+    }
+  },
+  {
+    "persona_id": "PERSONA_F",
+    "display_name": "Lakshman Gehlot — Rajasthan, PATH 6",
+    "code_path": "PATH 6 — Application rejected",
+    "language_preference": "hi",
+    "interesting_characteristic": "Farmer in arid Rajasthan whose application was rejected due to land area below minimum threshold",
+    "stub_test_assertion": "pmkusum_raise_grievance should create grievance for application_rejected category",
+    "state_values": {
+      "otp_sent": true, "otp_verified": true, "session_token": "PMKUSUM-TKN-QR78ST90",
+      "eligibility_status": "eligible", "application_id": "PMKUSUM-APP-40000005", "application_status": "rejected",
+      "vendor_id": null, "vendor_status": null, "installation_status": null,
+      "subsidy_status": null, "grid_connection_status": null, "grid_type": null, "grievance_id": null
+    }
+  },
+  {
+    "persona_id": "PERSONA_G",
+    "display_name": "Anbarasan Pillai — Tamil Nadu, PATH 7",
+    "code_path": "PATH 7 — Installation delayed due to vendor",
+    "language_preference": "ta",
+    "interesting_characteristic": "Paddy farmer whose installation is delayed beyond 60 days due to vendor scheduling issues",
+    "stub_test_assertion": "pmkusum_raise_grievance should create grievance for installation_delay category",
+    "state_values": {
+      "otp_sent": true, "otp_verified": true, "session_token": "PMKUSUM-TKN-UV12WX34",
+      "eligibility_status": "eligible", "application_id": "PMKUSUM-APP-40000006", "application_status": "approved",
+      "vendor_id": "VND-001", "vendor_status": "selected", "installation_status": "scheduled",
+      "subsidy_status": "not_initiated", "grid_connection_status": null, "grid_type": "off_grid", "grievance_id": null
+    }
+  },
+  {
+    "persona_id": "PERSONA_H",
+    "display_name": "Srinivas Rao — Andhra Pradesh, PATH 8",
+    "code_path": "PATH 8 — Grid-connected, subsidy pending",
+    "language_preference": "te",
+    "interesting_characteristic": "Chilli farmer with verified grid-connected solar pump but subsidy payment stuck in processing",
+    "stub_test_assertion": "pmkusum_track_subsidy should return subsidy_status 'pending'",
+    "state_values": {
+      "otp_sent": true, "otp_verified": true, "session_token": "PMKUSUM-TKN-YZ56AB78",
+      "eligibility_status": "eligible", "application_id": "PMKUSUM-APP-40000007", "application_status": "approved",
+      "vendor_id": "VND-002", "vendor_status": "selected", "installation_status": "verified",
+      "subsidy_status": "pending", "grid_connection_status": "connected", "grid_type": "grid_connected", "grievance_id": null
+    }
+  }
+]

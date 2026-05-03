@@ -1,0 +1,148 @@
+You are building test personas for a function-calling
+benchmark for the SDRF/NDRF Relief Claim (flood–drought)
+disaster relief service.
+
+THE TOOLS:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\4 Disaster Relief & Protection\SDRF-NDRF relief claim (flood-drought)\tools.jsonl
+
+THE INITIAL_STATE SCHEMA (from stub_logic.py):
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\4 Disaster Relief & Protection\SDRF-NDRF relief claim (flood-drought)\stub_logic.py
+
+Your task: Generate exactly 8 farmer personas.
+Each persona is one filled-in instance of
+INITIAL_STATE representing a specific farmer
+with a specific disaster relief claim situation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL LOADING INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Read BOTH:
+  1. tools.jsonl
+  2. stub_logic.py
+
+- Extract:
+  → All tool names
+  → EXACT INITIAL_STATE structure
+
+STRICT:
+- Do NOT invent fields
+- Do NOT rename fields
+- Do NOT omit required fields
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE — 8 DISTINCT CODE PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1 — No disaster claim filed
+  claim_status: NOT_FILED
+
+PATH 2 — Claim submitted, under review
+  claim_status: SUBMITTED
+  verification_status: PENDING
+
+PATH 3 — Claim verified successfully
+  verification_status: VERIFIED
+
+PATH 4 — Claim rejected due to insufficient proof
+  claim_status: REJECTED
+  rejection_reason: INSUFFICIENT_PROOF
+
+PATH 5 — Relief approved, payment pending
+  claim_status: APPROVED
+  payment_status: PENDING
+
+PATH 6 — Relief amount credited successfully
+  payment_status: CREDITED
+
+PATH 7 — Multiple disaster claims (e.g., flood + drought)
+  multiple_claims: TRUE
+
+PATH 8 — Incorrect claim (area not declared disaster zone)
+  claim_status: REJECTED
+  rejection_reason: AREA_NOT_ELIGIBLE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT DATA CONSISTENCY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CLAIM FLOW
+   - NOT_FILED → SUBMITTED → VERIFIED → APPROVED/REJECTED
+
+2. DISASTER TYPES (VALID ENUM)
+   - FLOOD
+   - DROUGHT
+   - CYCLONE
+   - HAILSTORM
+
+3. CLAIM STRUCTURE
+   - Must include:
+     - claim_id (format: SDRF-CLM-XXXX)
+     - disaster_type
+     - affected_area (in acres)
+     - estimated_loss
+
+4. VERIFICATION RULE
+   - VERIFIED → govt confirms damage
+   - REJECTED → must include rejection_reason
+
+5. PAYMENT RULE
+   - CREDITED only if APPROVED
+
+6. MULTI-CLAIM RULE
+   - Each claim must have unique claim_id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGIONAL DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATH 1-2 → UP / Bihar  
+PATH 3-4 → Punjab / Haryana  
+PATH 5-6 → Maharashtra / Rajasthan  
+PATH 7-8 → Tamil Nadu / Andhra  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Aadhaar: 12 digits
+- Mobile: valid Indian
+- Affected area: 0.5–10 acres
+- Estimated loss:
+  ₹5000–₹100000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE DETERMINISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- No randomness
+- Fixed disaster scenarios
+- Reproducible output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "persona_id": "PERSONA_A",
+  "display_name": "Ravi Prasad — Bihar, PATH 2",
+  "code_path": "PATH 2 — claim submitted, under review",
+  "language_preference": "hi",
+  "interesting_characteristic": "Farmer filed claim after recent flood damage",
+  "stub_test_assertion": "verification_status should become VERIFIED after claim_verification tool call",
+  "state_values": {
+    ... EXACT INITIAL_STATE fields ...
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output EXACTLY 8 personas
+- Output MUST be JSON array
+- NO explanation
+- NO markdown
+- NO extra fields
+
+Failure to follow ANY rule = INVALID OUTPUT

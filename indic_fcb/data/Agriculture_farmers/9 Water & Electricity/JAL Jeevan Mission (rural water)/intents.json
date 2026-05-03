@@ -1,0 +1,901 @@
+[
+  {
+    "intent_id": "jaljeevan_simple_001",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for Jal Jeevan Mission authentication.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_002",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "jjm_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_003",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Checks household Functional Household Tap Connection (FHTC) status.",
+    "required_tools": [
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_004",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Submits application for a new tap water connection.",
+    "required_tools": [
+      "jjm_apply_connection"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_005",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Tracks the application status for a new connection.",
+    "required_tools": [
+      "jjm_track_application_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_006",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Returns current water supply_status ('unavailable', 'intermittent', 'available') for a household or village.",
+    "required_tools": [
+      "jjm_get_supply_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_007",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Returns water quality_status ('unknown', 'safe', 'unsafe', 'under_testing') with parameters (potability, contamination).",
+    "required_tools": [
+      "jjm_get_water_quality"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_008",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Reports a water supply issue (no water, poor quality, leakage, etc.",
+    "required_tools": [
+      "jjm_report_issue"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_009",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Tracks complaint_status ('raised', 'in_progress', 'resolved', 'rejected').",
+    "required_tools": [
+      "jjm_track_complaint"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_010",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Returns infrastructure_status ('not_available', 'under_construction', 'operational', 'maintenance') for a village.",
+    "required_tools": [
+      "jjm_get_infrastructure_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_011",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Returns comprehensive village-level summary including total households, connections installed, coverage percentage, and supply status.",
+    "required_tools": [
+      "jjm_get_village_summary"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_012",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Resolves ambiguous household IDs or addresses.",
+    "required_tools": [
+      "jjm_resolve_household_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_013",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Cancels a connection application.",
+    "required_tools": [
+      "jjm_cancel_application"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_014",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Raises JJM grievance.",
+    "required_tools": [
+      "jjm_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_simple_015",
+    "usecase": "jaljeevan",
+    "category": "simple",
+    "abstract_goal": "Tracks JJM grievance.",
+    "required_tools": [
+      "jjm_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "jaljeevan_multiple_001",
+    "usecase": "jaljeevan",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Jal Jeevan Mission authentication.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "jjm_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "jaljeevan_multiple_002",
+    "usecase": "jaljeevan",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Jal Jeevan Mission authentication.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "jjm_get_connection_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "jaljeevan_multiple_003",
+    "usecase": "jaljeevan",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Jal Jeevan Mission authentication.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "jjm_apply_connection"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "jaljeevan_multiple_004",
+    "usecase": "jaljeevan",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Jal Jeevan Mission authentication.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "jjm_track_application_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "jaljeevan_multiple_005",
+    "usecase": "jaljeevan",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for Jal Jeevan Mission authentication.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "jjm_get_supply_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_001",
+    "usecase": "jaljeevan",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: jjm_generate_otp.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_002",
+    "usecase": "jaljeevan",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: jjm_verify_otp.",
+    "required_tools": [
+      "jjm_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_003",
+    "usecase": "jaljeevan",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: jjm_get_connection_status.",
+    "required_tools": [
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_get_connection_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_multiple_001",
+    "usecase": "jaljeevan",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: jjm_verify_otp and jjm_get_village_summary.",
+    "required_tools": [
+      "jjm_verify_otp",
+      "jjm_get_village_summary"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_verify_otp",
+      "jjm_get_village_summary"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_multiple_002",
+    "usecase": "jaljeevan",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: jjm_get_supply_status and jjm_get_water_quality.",
+    "required_tools": [
+      "jjm_get_supply_status",
+      "jjm_get_water_quality"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_get_supply_status",
+      "jjm_get_water_quality"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_multiple_003",
+    "usecase": "jaljeevan",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: jjm_get_connection_status and jjm_track_grievance_status.",
+    "required_tools": [
+      "jjm_get_connection_status",
+      "jjm_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_get_connection_status",
+      "jjm_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_multiple_004",
+    "usecase": "jaljeevan",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: jjm_verify_otp and jjm_resolve_household_ambiguity.",
+    "required_tools": [
+      "jjm_verify_otp",
+      "jjm_resolve_household_ambiguity"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_verify_otp",
+      "jjm_resolve_household_ambiguity"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "jaljeevan_parallel_multiple_005",
+    "usecase": "jaljeevan",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: jjm_report_issue and jjm_get_infrastructure_status.",
+    "required_tools": [
+      "jjm_report_issue",
+      "jjm_get_infrastructure_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "jjm_report_issue",
+      "jjm_get_infrastructure_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "jaljeevan_irrelevance_001",
+    "usecase": "jaljeevan",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "jjm_generate_otp",
+      "jjm_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "jaljeevan_irrelevance_002",
+    "usecase": "jaljeevan",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "jjm_generate_otp",
+      "jjm_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "jaljeevan_irrelevance_003",
+    "usecase": "jaljeevan",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "jjm_generate_otp",
+      "jjm_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "jaljeevan_irrelevance_004",
+    "usecase": "jaljeevan",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "jjm_generate_otp",
+      "jjm_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "jaljeevan_irrelevance_005",
+    "usecase": "jaljeevan",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "jjm_generate_otp",
+      "jjm_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "jaljeevan_base_001",
+    "usecase": "jaljeevan",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: jjm_generate_otp, jjm_verify_otp.",
+    "required_tools": [
+      "jjm_generate_otp",
+      "jjm_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "jaljeevan_base_002",
+    "usecase": "jaljeevan",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: jjm_raise_grievance, jjm_track_grievance_status.",
+    "required_tools": [
+      "jjm_raise_grievance",
+      "jjm_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "jaljeevan_base_003",
+    "usecase": "jaljeevan",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: jjm_generate_otp, jjm_get_connection_status.",
+    "required_tools": [
+      "jjm_generate_otp",
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "jaljeevan_base_004",
+    "usecase": "jaljeevan",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: jjm_generate_otp, jjm_verify_otp, jjm_get_connection_status.",
+    "required_tools": [
+      "jjm_generate_otp",
+      "jjm_verify_otp",
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "jaljeevan_base_005",
+    "usecase": "jaljeevan",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: jjm_verify_otp, jjm_get_connection_status.",
+    "required_tools": [
+      "jjm_verify_otp",
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "jaljeevan_miss_param_001",
+    "usecase": "jaljeevan",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform jjm_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "jjm_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "jaljeevan_miss_param_002",
+    "usecase": "jaljeevan",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform jjm_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "jjm_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "jaljeevan_miss_param_003",
+    "usecase": "jaljeevan",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform jjm_get_connection_status but do not provide the necessary household_id.",
+    "required_tools": [
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "household_id",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "jaljeevan_miss_func_001",
+    "usecase": "jaljeevan",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "jjm_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "jaljeevan_long_context_001",
+    "usecase": "jaljeevan",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: jjm_generate_otp, jjm_verify_otp.",
+    "required_tools": [
+      "jjm_generate_otp",
+      "jjm_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "jaljeevan_long_context_002",
+    "usecase": "jaljeevan",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: jjm_raise_grievance, jjm_track_grievance_status.",
+    "required_tools": [
+      "jjm_raise_grievance",
+      "jjm_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "jaljeevan_long_context_003",
+    "usecase": "jaljeevan",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: jjm_generate_otp, jjm_get_connection_status.",
+    "required_tools": [
+      "jjm_generate_otp",
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "jaljeevan_long_context_004",
+    "usecase": "jaljeevan",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: jjm_generate_otp, jjm_verify_otp, jjm_get_connection_status.",
+    "required_tools": [
+      "jjm_generate_otp",
+      "jjm_verify_otp",
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "jaljeevan_long_context_005",
+    "usecase": "jaljeevan",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: jjm_verify_otp, jjm_get_connection_status.",
+    "required_tools": [
+      "jjm_verify_otp",
+      "jjm_get_connection_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]

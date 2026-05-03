@@ -1,0 +1,901 @@
+[
+  {
+    "intent_id": "agristack_simple_001",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Sends OTP for AgriStack authentication.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_002",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Verifies OTP and returns session_token.",
+    "required_tools": [
+      "agristack_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_003",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Registers a new farmer in the AgriStack registry.",
+    "required_tools": [
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_004",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Retrieves the farmer's registry profile including personal details, linked land parcels, and profile_status.",
+    "required_tools": [
+      "agristack_get_farmer_profile"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_005",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Fetches land records from state databases (e.",
+    "required_tools": [
+      "agristack_fetch_land_records"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_006",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Verifies whether the farmer is the owner of a specific land parcel by cross-referencing Aadhaar with state records.",
+    "required_tools": [
+      "agristack_verify_land_ownership"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_007",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Checks verification status of a land parcel.",
+    "required_tools": [
+      "agristack_check_land_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_008",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Declares a crop for a specific verified land parcel.",
+    "required_tools": [
+      "agristack_declare_crop"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_009",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Grants or revokes consent for sharing farmer data with other services.",
+    "required_tools": [
+      "agristack_manage_consent"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_010",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Returns comprehensive registry status including profile_status, number of linked parcels, verification status, and consent status.",
+    "required_tools": [
+      "agristack_get_registry_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_011",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Registers a new land parcel to the farmer's profile.",
+    "required_tools": [
+      "agristack_register_land_parcel"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_012",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Updates farmer profile details (mobile, address).",
+    "required_tools": [
+      "agristack_update_profile"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_013",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Returns all land parcels linked to the farmer.",
+    "required_tools": [
+      "agristack_get_linked_land_parcels"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_014",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Raises AgriStack grievance.",
+    "required_tools": [
+      "agristack_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_simple_015",
+    "usecase": "agristack",
+    "category": "simple",
+    "abstract_goal": "Tracks AgriStack grievance.",
+    "required_tools": [
+      "agristack_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Basic simple coverage."
+  },
+  {
+    "intent_id": "agristack_multiple_001",
+    "usecase": "agristack",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for AgriStack authentication.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [
+      "agristack_verify_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agristack_multiple_002",
+    "usecase": "agristack",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for AgriStack authentication.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [
+      "agristack_register_farmer"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agristack_multiple_003",
+    "usecase": "agristack",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for AgriStack authentication.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "agristack_get_farmer_profile"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agristack_multiple_004",
+    "usecase": "agristack",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for AgriStack authentication.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [
+      "agristack_fetch_land_records"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agristack_multiple_005",
+    "usecase": "agristack",
+    "category": "multiple",
+    "abstract_goal": "Perform action: Sends OTP for AgriStack authentication.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [
+      "agristack_verify_land_ownership"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Distractor trap."
+  },
+  {
+    "intent_id": "agristack_parallel_001",
+    "usecase": "agristack",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: agristack_generate_otp.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_generate_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "agristack_parallel_002",
+    "usecase": "agristack",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: agristack_verify_otp.",
+    "required_tools": [
+      "agristack_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_verify_otp"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "agristack_parallel_003",
+    "usecase": "agristack",
+    "category": "parallel",
+    "abstract_goal": "Perform this action twice simultaneously for two different entities: agristack_register_farmer.",
+    "required_tools": [
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_register_farmer"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel execution."
+  },
+  {
+    "intent_id": "agristack_parallel_multiple_001",
+    "usecase": "agristack",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agristack_verify_otp and agristack_register_land_parcel.",
+    "required_tools": [
+      "agristack_verify_otp",
+      "agristack_register_land_parcel"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_verify_otp",
+      "agristack_register_land_parcel"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agristack_parallel_multiple_002",
+    "usecase": "agristack",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agristack_verify_land_ownership and agristack_check_land_status.",
+    "required_tools": [
+      "agristack_verify_land_ownership",
+      "agristack_check_land_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_verify_land_ownership",
+      "agristack_check_land_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agristack_parallel_multiple_003",
+    "usecase": "agristack",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agristack_register_farmer and agristack_track_grievance_status.",
+    "required_tools": [
+      "agristack_register_farmer",
+      "agristack_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_register_farmer",
+      "agristack_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agristack_parallel_multiple_004",
+    "usecase": "agristack",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agristack_verify_otp and agristack_update_profile.",
+    "required_tools": [
+      "agristack_verify_otp",
+      "agristack_update_profile"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_verify_otp",
+      "agristack_update_profile"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agristack_parallel_multiple_005",
+    "usecase": "agristack",
+    "category": "parallel_multiple",
+    "abstract_goal": "Perform these two different actions simultaneously: agristack_declare_crop and agristack_get_registry_status.",
+    "required_tools": [
+      "agristack_declare_crop",
+      "agristack_get_registry_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [
+      "agristack_declare_crop",
+      "agristack_get_registry_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Parallel multiple execution."
+  },
+  {
+    "intent_id": "agristack_irrelevance_001",
+    "usecase": "agristack",
+    "category": "task_irrelevance",
+    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "agristack_generate_otp",
+      "agristack_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope loan request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agristack_irrelevance_002",
+    "usecase": "agristack",
+    "category": "task_irrelevance",
+    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "agristack_generate_otp",
+      "agristack_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Completely unrelated general knowledge query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agristack_irrelevance_003",
+    "usecase": "agristack",
+    "category": "task_irrelevance",
+    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "agristack_generate_otp",
+      "agristack_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated medical query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agristack_irrelevance_004",
+    "usecase": "agristack",
+    "category": "task_irrelevance",
+    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [
+      "agristack_generate_otp",
+      "agristack_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Unrelated booking request.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agristack_irrelevance_005",
+    "usecase": "agristack",
+    "category": "task_irrelevance",
+    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [
+      "agristack_generate_otp",
+      "agristack_track_grievance_status"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Out of scope international query.",
+    "eval_notes": "Irrelevance coverage."
+  },
+  {
+    "intent_id": "agristack_base_001",
+    "usecase": "agristack",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agristack_generate_otp, agristack_verify_otp.",
+    "required_tools": [
+      "agristack_generate_otp",
+      "agristack_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agristack_base_002",
+    "usecase": "agristack",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agristack_raise_grievance, agristack_track_grievance_status.",
+    "required_tools": [
+      "agristack_raise_grievance",
+      "agristack_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agristack_base_003",
+    "usecase": "agristack",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agristack_generate_otp, agristack_register_farmer.",
+    "required_tools": [
+      "agristack_generate_otp",
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_D",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agristack_base_004",
+    "usecase": "agristack",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agristack_generate_otp, agristack_verify_otp, agristack_register_farmer.",
+    "required_tools": [
+      "agristack_generate_otp",
+      "agristack_verify_otp",
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_H",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agristack_base_005",
+    "usecase": "agristack",
+    "category": "base",
+    "abstract_goal": "Execute the action sequence sequentially: agristack_verify_otp, agristack_register_farmer.",
+    "required_tools": [
+      "agristack_verify_otp",
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Base multi-turn coverage."
+  },
+  {
+    "intent_id": "agristack_miss_param_001",
+    "usecase": "agristack",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform agristack_generate_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "agristack_generate_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "agristack_miss_param_002",
+    "usecase": "agristack",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform agristack_verify_otp but do not provide the necessary aadhaar_number.",
+    "required_tools": [
+      "agristack_verify_otp"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "aadhaar_number",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "agristack_miss_param_003",
+    "usecase": "agristack",
+    "category": "miss_param",
+    "abstract_goal": "Attempt to perform agristack_register_farmer but do not provide the necessary session_token.",
+    "required_tools": [
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "session_token",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Miss param coverage."
+  },
+  {
+    "intent_id": "agristack_miss_func_001",
+    "usecase": "agristack",
+    "category": "miss_func",
+    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [
+      "agristack_generate_otp"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "delete_account",
+    "irrelevance_reason": null,
+    "eval_notes": "Miss func coverage."
+  },
+  {
+    "intent_id": "agristack_long_context_001",
+    "usecase": "agristack",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agristack_generate_otp, agristack_verify_otp.",
+    "required_tools": [
+      "agristack_generate_otp",
+      "agristack_verify_otp"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agristack_long_context_002",
+    "usecase": "agristack",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agristack_raise_grievance, agristack_track_grievance_status.",
+    "required_tools": [
+      "agristack_raise_grievance",
+      "agristack_track_grievance_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_G",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agristack_long_context_003",
+    "usecase": "agristack",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agristack_generate_otp, agristack_register_farmer.",
+    "required_tools": [
+      "agristack_generate_otp",
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_F",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agristack_long_context_004",
+    "usecase": "agristack",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agristack_generate_otp, agristack_verify_otp, agristack_register_farmer.",
+    "required_tools": [
+      "agristack_generate_otp",
+      "agristack_verify_otp",
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  },
+  {
+    "intent_id": "agristack_long_context_005",
+    "usecase": "agristack",
+    "category": "long_context",
+    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: agristack_verify_otp, agristack_register_farmer.",
+    "required_tools": [
+      "agristack_verify_otp",
+      "agristack_register_farmer"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Sequential requirement.",
+    "suggested_persona": "PERSONA_E",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context coverage."
+  }
+]
