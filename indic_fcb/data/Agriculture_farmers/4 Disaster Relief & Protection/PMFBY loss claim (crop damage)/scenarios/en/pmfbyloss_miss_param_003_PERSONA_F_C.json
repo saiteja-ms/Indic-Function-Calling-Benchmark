@@ -1,0 +1,82 @@
+{
+  "scenario_id": "pmfbyloss_miss_param_003_PERSONA_F_C",
+  "intent_id": "pmfbyloss_miss_param_003",
+  "persona_id": "PERSONA_F",
+  "variant": "C",
+  "category": "miss_param",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Please help me with pmfbyclaim_validate_policy. my aadhaar_number is 100020007905, my policy_id is dummy_policy_id_8957"
+    },
+    {
+      "role": "assistant",
+      "content": "Please provide your session_token."
+    },
+    {
+      "role": "user",
+      "content": "My session_token is PMFBYCLM-TKN-QR78ST90."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfbyclaim_validate_policy",
+      "description": "Validates whether farmer has an active PMFBY policy for the specified crop and land. Claim can ONLY be filed if policy is active and crop-land mapping matches. Requires session_token. Does NOT submit claims. Fails if no active policy found or crop-land mismatch.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "policy_id": {
+            "type": "string",
+            "description": "PMFBY policy ID."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "policy_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [],
+      [
+        {
+          "tool": "pmfbyclaim_validate_policy",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "policy_id": "dummy_policy_id"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "policy_id": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_F"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

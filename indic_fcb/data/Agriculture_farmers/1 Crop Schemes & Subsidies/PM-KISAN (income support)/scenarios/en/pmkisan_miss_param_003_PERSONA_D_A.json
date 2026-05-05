@@ -1,0 +1,120 @@
+{
+  "scenario_id": "pmkisan_miss_param_003_PERSONA_D_A",
+  "intent_id": "pmkisan_miss_param_003",
+  "persona_id": "PERSONA_D",
+  "variant": "A",
+  "category": "miss_param",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Please help me with pmkisan_register_farmer. my aadhaar_number is 100020004361, my farmer_name is dummy_farmer_name_4866, my state is dummy_state_1740, my district is dummy_district_8384, my village is dummy_village_3745, my land_area_hectares is dummy_land_area_hectares_4612, my bank_account_number is 55667788990011, my ifsc_code is HDFC0001234"
+    },
+    {
+      "role": "assistant",
+      "content": "Please provide your session_token."
+    },
+    {
+      "role": "user",
+      "content": "My session_token is PMKISAN-TKN-IJ90KL12."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkisan_register_farmer",
+      "description": "Registers a new farmer for PM-KISAN benefits by submitting personal, land ownership, and bank account details. Transitions registration_status from 'not_registered' to 'registered'. Requires a valid session_token from pmkisan_verify_otp. This tool does NOT verify eligibility or complete eKYC \u2014 those are separate steps. Fails if the Aadhaar is already registered (duplicate prevention enforced), land details are invalid, or bank account details are incomplete. Only one beneficiary record is allowed per Aadhaar.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "farmer_name": {
+            "type": "string",
+            "description": "Full name of the farmer as per Aadhaar records."
+          },
+          "state": {
+            "type": "string",
+            "description": "State where the farmer's land is located."
+          },
+          "district": {
+            "type": "string",
+            "description": "District where the farmer's land is located."
+          },
+          "village": {
+            "type": "string",
+            "description": "Village where the farmer's agricultural land is situated."
+          },
+          "land_area_hectares": {
+            "type": "number",
+            "description": "Total cultivable land area in hectares owned by the farmer."
+          },
+          "bank_account_number": {
+            "type": "string",
+            "description": "Bank account number for receiving DBT payments."
+          },
+          "ifsc_code": {
+            "type": "string",
+            "description": "IFSC code of the bank branch."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "farmer_name",
+          "state",
+          "district",
+          "village",
+          "land_area_hectares",
+          "bank_account_number",
+          "ifsc_code"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [],
+      [
+        {
+          "tool": "pmkisan_register_farmer",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "farmer_name": "dummy_farmer_name",
+            "state": "dummy_state",
+            "district": "dummy_district",
+            "village": "dummy_village",
+            "land_area_hectares": "dummy_land_area_hectares",
+            "bank_account_number": "55667788990011",
+            "ifsc_code": "HDFC0001234"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "farmer_name": "substring",
+            "state": "exact",
+            "district": "exact",
+            "village": "exact",
+            "land_area_hectares": "exact",
+            "bank_account_number": "exact",
+            "ifsc_code": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "scenario_id": "epashu_parallel_003_PERSONA_G_B",
+  "intent_id": "epashu_parallel_003",
+  "persona_id": "PERSONA_G",
+  "variant": "B",
+  "category": "parallel",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform this action twice simultaneously for two different entities: epashu_register_livestock. Here are my details: my health_status is dummy_health_status_9094, my breed_type is dummy_breed_type_5394, my animal_type is dummy_animal_type_8417, my age_months is dummy_age_months_3052."
+    }
+  ],
+  "function": [
+    {
+      "name": "epashu_register_livestock",
+      "description": "Registers a livestock animal with breed, age, health, and vaccination details. Each livestock_id is unique. Requires session_token. Does NOT create sale listings. Fails if duplicate animal details exist or mandatory fields are missing.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "animal_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'cow', 'buffalo', 'goat', 'sheep'."
+          },
+          "breed_type": {
+            "type": "string",
+            "description": "Breed. Allowed: 'indigenous', 'crossbred', 'exotic'."
+          },
+          "age_months": {
+            "type": "integer",
+            "description": "Age in months."
+          },
+          "health_status": {
+            "type": "string",
+            "description": "Health condition description."
+          },
+          "vaccination_records": {
+            "type": "string",
+            "description": "Vaccination history summary. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "animal_type",
+          "breed_type",
+          "age_months",
+          "health_status"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "epashu_register_livestock",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "animal_type": "dummy_animal_type",
+          "breed_type": "dummy_breed_type",
+          "age_months": "dummy_age_months",
+          "health_status": "dummy_health_status"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "animal_type": "exact",
+          "breed_type": "exact",
+          "age_months": "exact",
+          "health_status": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

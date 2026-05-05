@@ -1,0 +1,53 @@
+{
+  "scenario_id": "kisansuvidha_simple_007_PERSONA_A_B",
+  "intent_id": "kisansuvidha_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Resolves ambiguous location names that match multiple regions. Here are my details: my location is dummy_location_2600."
+    }
+  ],
+  "function": [
+    {
+      "name": "ksweather_resolve_location_ambiguity",
+      "description": "Resolves ambiguous location names that match multiple regions. Returns a list of possible locations with state/district disambiguation. PUBLIC tool. Does NOT provide weather data \u2014 use other tools after resolving. Fails if the input does not match any known location.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Ambiguous village or district name to resolve."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ksweather_resolve_location_ambiguity",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

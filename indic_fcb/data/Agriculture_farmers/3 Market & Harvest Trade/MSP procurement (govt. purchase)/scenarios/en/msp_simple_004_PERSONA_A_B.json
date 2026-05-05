@@ -1,0 +1,57 @@
+{
+  "scenario_id": "msp_simple_004_PERSONA_A_B",
+  "intent_id": "msp_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Returns government-fixed MSP rates for supported crops. Here are my details: my crop_type is dummy_crop_type_1761."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_check_msp_rates",
+      "description": "Returns government-fixed MSP rates for supported crops. Rates are fixed and non-negotiable. PUBLIC \u2014 can be called without session. Does NOT register or procure. Fails if crop is unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'paddy', 'wheat', 'maize', 'bajra', 'barley', 'pulses', 'oilseeds'."
+          },
+          "season": {
+            "type": "string",
+            "description": "Season: 'kharif', 'rabi'. Optional."
+          }
+        },
+        "required": [
+          "crop_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_check_msp_rates",
+        "args": {
+          "crop_type": "dummy_crop_type"
+        },
+        "eval_mode": {
+          "crop_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

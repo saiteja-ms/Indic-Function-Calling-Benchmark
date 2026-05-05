@@ -1,0 +1,90 @@
+{
+  "scenario_id": "pmkusum_multiple_002_PERSONA_B_B",
+  "intent_id": "pmkusum_multiple_002",
+  "persona_id": "PERSONA_B",
+  "variant": "B",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform action: Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication. Here are my details: my mobile_number is 9876586776, my aadhaar_number is 100020004831."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusum_generate_otp",
+      "description": "Sends OTP to the Aadhaar-linked mobile number for PM-KUSUM authentication. First step in authentication flow. Does NOT verify the OTP or create a session. Fails if Aadhaar is invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "pmkusum_check_eligibility",
+      "description": "Checks farmer's eligibility for PM-KUSUM solar pump subsidy based on land ownership, irrigation land access, and non-duplication criteria. Returns eligibility_status ('eligible' or 'not_eligible') with reasons. Requires session_token. Does NOT submit application. Fails if farmer has no valid land records or has already received a solar pump subsidy.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "state": {
+            "type": "string",
+            "description": "State where the farmer's land is located."
+          },
+          "land_area_hectares": {
+            "type": "number",
+            "description": "Total irrigable land area in hectares."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "state"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusum_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "scenario_id": "hortadvisory_simple_010_PERSONA_A_B",
+  "intent_id": "hortadvisory_simple_010",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Returns guidance for the upcoming crop stage based on current stage progression. Here are my details: my current_stage is dummy_current_stage_6769, my crop_type is dummy_crop_type_1377, my location is dummy_location_6692."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_get_next_stage_guidance",
+      "description": "Returns guidance for the upcoming crop stage based on current stage progression. Includes preparation steps and timing. PUBLIC tool. Does NOT update records. Fails if current stage is 'harvesting' (no next stage) or crop_type invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "current_stage": {
+            "type": "string",
+            "description": "Current crop stage."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "crop_type",
+          "current_stage",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_get_next_stage_guidance",
+        "args": {
+          "crop_type": "dummy_crop_type",
+          "current_stage": "dummy_current_stage",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "crop_type": "exact",
+          "current_stage": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

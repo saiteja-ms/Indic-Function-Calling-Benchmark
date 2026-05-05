@@ -1,0 +1,110 @@
+{
+  "scenario_id": "meghdoot_long_context_001_PERSONA_G_C",
+  "intent_id": "meghdoot_long_context_001",
+  "persona_id": "PERSONA_G",
+  "variant": "C",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I am a farmer from a small village. We have been waiting for rain."
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. How can I help you today?"
+    },
+    {
+      "role": "user",
+      "content": "The crops are not doing well this year."
+    },
+    {
+      "role": "assistant",
+      "content": "I am sorry to hear that. What service do you need?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with damini_get_lightning_alert. my location is dummy_location_5014"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with damini_get_safety_advisory. my location is dummy_location_5014"
+    }
+  ],
+  "function": [
+    {
+      "name": "damini_get_safety_advisory",
+      "description": "Provides safety recommendations during active lightning events including shelter guidance, outdoor activity warnings, and precautions. Safety-critical \u2014 MUST include recommendations. PUBLIC tool. Does NOT fetch lightning data \u2014 use damini_get_lightning_alert first. Fails if no active lightning alert exists for the location.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "damini_get_lightning_alert",
+      "description": "Fetches real-time lightning alerts for a specified location based on satellite/sensor data. Alerts are valid only within a short time window (~minutes) and expire quickly. PUBLIC tool \u2014 no authentication required. Location is mandatory. Does NOT provide safety recommendations \u2014 use damini_get_safety_advisory. Fails if location is invalid or no alerts exist. Returns alert_status ('active' or 'expired'), severity, and proximity.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "time_window": {
+            "type": "string",
+            "description": "Query window. Allowed: 'current', '1_hour', '3_hour'. Default: 'current'."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "damini_get_lightning_alert",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "damini_get_safety_advisory",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

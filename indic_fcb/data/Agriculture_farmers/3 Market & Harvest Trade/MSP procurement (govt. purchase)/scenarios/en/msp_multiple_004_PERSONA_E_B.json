@@ -1,0 +1,95 @@
+{
+  "scenario_id": "msp_multiple_004_PERSONA_E_B",
+  "intent_id": "msp_multiple_004",
+  "persona_id": "PERSONA_E",
+  "variant": "B",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform action: Sends OTP for MSP procurement authentication. Here are my details: my mobile_number is 9876517372, my aadhaar_number is 100020007408."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_generate_otp",
+      "description": "Sends OTP for MSP procurement authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "msp_declare_crop",
+      "description": "Declares crop and expected quantity for the procurement season. Required before procurement. Transitions procurement_status to 'declared'. Requires session_token. Does NOT schedule mandi visit. Fails if farmer not registered, crop unsupported, or duplicate declaration exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "expected_quantity_quintal": {
+            "type": "number",
+            "description": "Expected quantity in quintals."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "crop_type",
+          "expected_quantity_quintal"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

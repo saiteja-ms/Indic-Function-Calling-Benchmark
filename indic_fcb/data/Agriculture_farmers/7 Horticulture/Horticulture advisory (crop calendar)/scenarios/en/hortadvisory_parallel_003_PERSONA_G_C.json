@@ -1,0 +1,64 @@
+{
+  "scenario_id": "hortadvisory_parallel_003_PERSONA_G_C",
+  "intent_id": "hortadvisory_parallel_003",
+  "persona_id": "PERSONA_G",
+  "variant": "C",
+  "category": "parallel",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform this action twice simultaneously for two different entities: horti_get_weather_adjusted_advisory. For your information, my crop_type is dummy_crop_type_7348, my location is dummy_location_2625."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_get_weather_adjusted_advisory",
+      "description": "Generates advisory adjusted for current weather conditions. Considers rainfall, temperature, and humidity impact on farming activities. PUBLIC tool. Does NOT provide raw weather data \u2014 use weather tools. Fails if location invalid or weather data insufficient.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "crop_stage": {
+            "type": "string",
+            "description": "Current growth stage."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "crop_type",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_get_weather_adjusted_advisory",
+        "args": {
+          "crop_type": "dummy_crop_type",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "crop_type": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

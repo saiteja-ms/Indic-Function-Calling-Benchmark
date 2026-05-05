@@ -1,0 +1,60 @@
+{
+  "scenario_id": "chc_simple_010_PERSONA_A_A",
+  "intent_id": "chc_simple_010",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Tracks payment_status ('not_initiated', 'pending', 'completed', 'failed').. my booking_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "chc_track_payment",
+      "description": "Tracks payment_status ('not_initiated', 'pending', 'completed', 'failed'). Some bookings require advance payment. Requires session_token. Does NOT process payments. Fails if booking_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for booking tools."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "chc_track_payment",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

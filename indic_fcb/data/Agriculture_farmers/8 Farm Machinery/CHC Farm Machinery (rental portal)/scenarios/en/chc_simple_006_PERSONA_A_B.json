@@ -1,0 +1,85 @@
+{
+  "scenario_id": "chc_simple_006_PERSONA_A_B",
+  "intent_id": "chc_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Books farm machinery for a specific date and duration. Here are my details: my machinery_id is dummy_machinery_id_1659, my chc_id is dummy_chc_id_7213, my date is dummy_date_9893, my duration_hours is dummy_duration_hours_1802."
+    }
+  ],
+  "function": [
+    {
+      "name": "chc_create_booking",
+      "description": "Books farm machinery for a specific date and duration. Transitions booking_status to 'requested'. Machinery must be available and operational. Requires session_token. Does NOT guarantee confirmation until CHC confirms. Fails if machinery unavailable, overlapping booking exists, booking duration exceeds limits, or date is in the past.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for booking tools."
+          },
+          "machinery_id": {
+            "type": "string",
+            "description": "Machinery ID."
+          },
+          "chc_id": {
+            "type": "string",
+            "description": "CHC centre ID."
+          },
+          "date": {
+            "type": "string",
+            "description": "Booking date YYYY-MM-DD."
+          },
+          "duration_hours": {
+            "type": "number",
+            "description": "Duration in hours."
+          },
+          "land_area_acres": {
+            "type": "number",
+            "description": "Area to be serviced in acres. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "machinery_id",
+          "chc_id",
+          "date",
+          "duration_hours"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "chc_create_booking",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "machinery_id": "dummy_machinery_id",
+          "chc_id": "dummy_chc_id",
+          "date": "dummy_date",
+          "duration_hours": "dummy_duration_hours"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "machinery_id": "exact",
+          "chc_id": "exact",
+          "date": "exact",
+          "duration_hours": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

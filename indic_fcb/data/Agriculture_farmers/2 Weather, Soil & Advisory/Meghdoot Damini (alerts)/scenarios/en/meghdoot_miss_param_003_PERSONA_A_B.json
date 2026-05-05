@@ -1,0 +1,64 @@
+{
+  "scenario_id": "meghdoot_miss_param_003_PERSONA_A_B",
+  "intent_id": "meghdoot_miss_param_003",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "miss_param",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Please help me with damini_check_alert_validity. "
+    },
+    {
+      "role": "assistant",
+      "content": "Please provide your alert_id."
+    },
+    {
+      "role": "user",
+      "content": "My alert_id is dummy_alert_id_9623."
+    }
+  ],
+  "function": [
+    {
+      "name": "damini_check_alert_validity",
+      "description": "Checks whether a specific lightning alert is still active or has expired. Alerts expire within minutes. PUBLIC tool. Does NOT provide new alerts. Fails if alert_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "alert_id": {
+            "type": "string",
+            "description": "Unique identifier of the lightning alert."
+          }
+        },
+        "required": [
+          "alert_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [],
+      [
+        {
+          "tool": "damini_check_alert_validity",
+          "args": {
+            "alert_id": "dummy_alert_id"
+          },
+          "eval_mode": {
+            "alert_id": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

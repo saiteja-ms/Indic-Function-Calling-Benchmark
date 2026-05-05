@@ -1,0 +1,160 @@
+{
+  "scenario_id": "deds_base_004_PERSONA_E_A",
+  "intent_id": "deds_base_004",
+  "persona_id": "PERSONA_E",
+  "variant": "A",
+  "category": "base",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with deds_generate_otp. my aadhaar_number is 100020003313, my mobile_number is 9876533057"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with deds_verify_otp. my aadhaar_number is 100020003313, my otp is dummy_otp_6688"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with deds_check_eligibility. my aadhaar_number is 100020003313, my project_type is dummy_project_type_6138, my beneficiary_category is dummy_beneficiary_category_1454"
+    }
+  ],
+  "function": [
+    {
+      "name": "deds_generate_otp",
+      "description": "Sends OTP for DEDS authentication. Does NOT verify OTP. Fails if Aadhaar invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "deds_check_eligibility",
+      "description": "Checks farmer's eligibility for DEDS/poultry subsidy based on category (general/SC-ST/women), project type, and prior subsidy history. Returns eligibility_status with reasons. Requires session_token. Does NOT submit application. Fails if farmer has already received DEDS subsidy for same project type (duplicate prevention) or if required details are missing.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "project_type": {
+            "type": "string",
+            "description": "Project type. Allowed: 'dairy_unit', 'poultry_farm', 'goat_rearing', 'pig_farming'."
+          },
+          "beneficiary_category": {
+            "type": "string",
+            "description": "Category. Allowed: 'general', 'sc_st', 'women'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "project_type",
+          "beneficiary_category"
+        ]
+      }
+    },
+    {
+      "name": "deds_verify_otp",
+      "description": "Verifies OTP and returns session_token. Does NOT check eligibility or submit applications. Fails if OTP expired or incorrect.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "otp"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "deds_generate_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "mobile_number": "dummy_mobile_number"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "mobile_number": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "deds_verify_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "otp": "dummy_otp"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "otp": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "deds_check_eligibility",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "project_type": "dummy_project_type",
+            "beneficiary_category": "dummy_beneficiary_category"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "project_type": "exact",
+            "beneficiary_category": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

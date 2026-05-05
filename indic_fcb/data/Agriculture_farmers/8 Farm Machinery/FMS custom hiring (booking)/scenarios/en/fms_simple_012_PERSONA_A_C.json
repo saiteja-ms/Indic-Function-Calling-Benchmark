@@ -1,0 +1,67 @@
+{
+  "scenario_id": "fms_simple_012_PERSONA_A_C",
+  "intent_id": "fms_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Reschedules a service booking to a new date. For your information, my booking_id is None, my new_date is dummy_new_date_2640."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_reschedule_service",
+      "description": "Reschedules a service booking to a new date. Only when 'requested' or 'confirmed'. Requires session_token. Fails if booking already assigned/active or scheduling conflict.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for booking tools."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          },
+          "new_date": {
+            "type": "string",
+            "description": "New date YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id",
+          "new_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_reschedule_service",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": null,
+          "new_date": "dummy_new_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact",
+          "new_date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

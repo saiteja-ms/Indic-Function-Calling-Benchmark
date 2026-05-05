@@ -1,0 +1,92 @@
+{
+  "scenario_id": "nabard_parallel_multiple_001_PERSONA_B_B",
+  "intent_id": "nabard_parallel_multiple_001",
+  "persona_id": "PERSONA_B",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: nabard_verify_documents and nabard_handle_default. Here are my details: my application_id is NABARD-APP-60000001, my loan_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "nabard_handle_default",
+      "description": "Records a default event when EMI payments are overdue beyond threshold. Transitions loan_status to 'defaulted'. Requires session_token. Does NOT restructure loan. Penalty may apply. Fails if loan is not in 'active' or 'overdue' status.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "loan_id": {
+            "type": "string",
+            "description": "Loan ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "loan_id"
+        ]
+      }
+    },
+    {
+      "name": "nabard_verify_documents",
+      "description": "Initiates document verification for a submitted loan application. Transitions verification_status to 'in_progress'. Required documents include identity proof, land records, and project proposal. Requires session_token. Does NOT approve loan. Fails if application not submitted or documents are incomplete/invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Unique identifier of the loan application."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "nabard_verify_documents",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": "NABARD-APP-60000001"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      },
+      {
+        "tool": "nabard_handle_default",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "loan_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "loan_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

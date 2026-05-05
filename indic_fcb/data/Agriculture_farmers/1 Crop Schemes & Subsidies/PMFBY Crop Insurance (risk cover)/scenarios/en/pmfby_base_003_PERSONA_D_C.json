@@ -1,0 +1,118 @@
+{
+  "scenario_id": "pmfby_base_003_PERSONA_D_C",
+  "intent_id": "pmfby_base_003",
+  "persona_id": "PERSONA_D",
+  "variant": "C",
+  "category": "base",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with pmfby_generate_otp. my aadhaar_number is 100020003248, my mobile_number is 9876582338"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with pmfby_check_eligibility. my aadhaar_number is 100020003248, my crop_type is dummy_crop_type_2301, my land_parcel_id is dummy_land_parcel_id_5844"
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfby_check_eligibility",
+      "description": "Checks whether the farmer is eligible to enroll in PMFBY for the current season based on land ownership, crop type, and region. Returns eligibility status and reasons. Requires session_token. This tool does NOT enroll the farmer \u2014 use pmfby_enroll_policy. Fails if farmer is not registered or land records are unavailable.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop to be insured. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds'."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier of the land parcel to be insured."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "crop_type",
+          "land_parcel_id"
+        ]
+      }
+    },
+    {
+      "name": "pmfby_generate_otp",
+      "description": "Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication. This is the first step in the authentication flow. It does NOT verify the OTP or create a session. Fails if Aadhaar is not 12 digits or mobile number is not registered with Aadhaar.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "pmfby_generate_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "mobile_number": "dummy_mobile_number"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "mobile_number": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "pmfby_check_eligibility",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "crop_type": "dummy_crop_type",
+            "land_parcel_id": "dummy_land_parcel_id"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "crop_type": "exact",
+            "land_parcel_id": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

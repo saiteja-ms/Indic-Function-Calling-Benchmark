@@ -1,0 +1,100 @@
+{
+  "scenario_id": "fms_multiple_005_PERSONA_G_A",
+  "intent_id": "fms_multiple_005",
+  "persona_id": "PERSONA_G",
+  "variant": "A",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform action: Sends OTP for FMS custom hiring authentication.. my mobile_number is 9876549459, my aadhaar_number is 100020009147."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_generate_otp",
+      "description": "Sends OTP for FMS custom hiring authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "fms_create_booking",
+      "description": "Books a farm service (service + machine + operator). Transitions booking_status to 'requested'. Service must be available. Requires session_token. Does NOT assign provider. Pricing depends on land area and service type. Fails if service unavailable, invalid date, or duplicate booking.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for booking tools."
+          },
+          "service_id": {
+            "type": "string",
+            "description": "Service ID."
+          },
+          "location": {
+            "type": "string",
+            "description": "Farm location."
+          },
+          "date": {
+            "type": "string",
+            "description": "Service date YYYY-MM-DD."
+          },
+          "land_area_acres": {
+            "type": "number",
+            "description": "Area in acres."
+          },
+          "estimated_duration_hours": {
+            "type": "number",
+            "description": "Estimated duration in hours."
+          }
+        },
+        "required": [
+          "session_token",
+          "service_id",
+          "location",
+          "date",
+          "land_area_acres"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

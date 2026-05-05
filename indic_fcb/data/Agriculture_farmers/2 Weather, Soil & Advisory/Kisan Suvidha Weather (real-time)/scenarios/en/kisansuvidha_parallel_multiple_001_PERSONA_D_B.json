@@ -1,0 +1,89 @@
+{
+  "scenario_id": "kisansuvidha_parallel_multiple_001_PERSONA_D_B",
+  "intent_id": "kisansuvidha_parallel_multiple_001",
+  "persona_id": "PERSONA_D",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: ksweather_get_weather_forecast and ksweather_get_weather_alerts. Here are my details: my time_range is dummy_time_range_8440, my location is dummy_location_7620."
+    }
+  ],
+  "function": [
+    {
+      "name": "ksweather_get_weather_forecast",
+      "description": "Retrieves weather forecast for a location for up to 10 days. Returns predicted temperature, rainfall, humidity, and wind. Forecasts are reliable up to 7-10 days only. PUBLIC tool \u2014 no authentication needed. Does NOT provide current conditions \u2014 use ksweather_get_current_weather. Fails if location is invalid or forecast data is unavailable. Forecasts are predictive and may change.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "time_range": {
+            "type": "string",
+            "description": "Forecast period. Allowed: 'today', '3_day', '7_day', '10_day'."
+          },
+          "forecast_type": {
+            "type": "string",
+            "description": "Forecast granularity. Allowed: 'hourly', 'daily'."
+          }
+        },
+        "required": [
+          "location",
+          "time_range"
+        ]
+      }
+    },
+    {
+      "name": "ksweather_get_weather_alerts",
+      "description": "Fetches active extreme weather alerts (storms, heavy rainfall, heatwaves, cold waves, frost) for a location. PUBLIC tool. Returns alert severity, type, and validity period. Does NOT provide agricultural advisory \u2014 use ksweather_get_weather_advisory. Fails if location is invalid. Returns empty if no active alerts exist. Old/expired alerts are NOT returned.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ksweather_get_weather_forecast",
+        "args": {
+          "location": "dummy_location",
+          "time_range": "dummy_time_range"
+        },
+        "eval_mode": {
+          "location": "exact",
+          "time_range": "exact"
+        }
+      },
+      {
+        "tool": "ksweather_get_weather_alerts",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

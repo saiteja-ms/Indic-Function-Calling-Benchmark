@@ -1,0 +1,81 @@
+{
+  "scenario_id": "ifms_simple_006_PERSONA_A_B",
+  "intent_id": "ifms_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Initiates a fertilizer purchase transaction at an authorized retailer. Here are my details: my quantity_kg is dummy_quantity_kg_4915, my aadhaar_number is 100020003739, my fertilizer_type is dummy_fertilizer_type_9605, my retailer_id is dummy_retailer_id_4919."
+    }
+  ],
+  "function": [
+    {
+      "name": "ifms_initiate_purchase",
+      "description": "Initiates a fertilizer purchase transaction at an authorized retailer. Transitions transaction_status to 'initiated'. Farmer must be authenticated via Aadhaar at point of sale. Requires session_token. Does NOT complete purchase or apply subsidy. Fails if retailer not authorized, farmer not eligible, Aadhaar authentication invalid at POS, or quantity exceeds season limits.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "retailer_id": {
+            "type": "string",
+            "description": "Unique identifier of the authorized fertilizer retailer."
+          },
+          "fertilizer_type": {
+            "type": "string",
+            "description": "Type being purchased."
+          },
+          "quantity_kg": {
+            "type": "number",
+            "description": "Quantity in kilograms."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "retailer_id",
+          "fertilizer_type",
+          "quantity_kg"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ifms_initiate_purchase",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "retailer_id": "dummy_retailer_id",
+          "fertilizer_type": "dummy_fertilizer_type",
+          "quantity_kg": "dummy_quantity_kg"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "retailer_id": "exact",
+          "fertilizer_type": "exact",
+          "quantity_kg": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "scenario_id": "coldstorage_parallel_multiple_005_PERSONA_H_A",
+  "intent_id": "coldstorage_parallel_multiple_005",
+  "persona_id": "PERSONA_H",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: coldstorage_book_storage and coldstorage_release_storage.. my facility_id is dummy_facility_id_3425, my commodity_type is dummy_commodity_type_9564, my start_date is dummy_start_date_4349, my duration_days is dummy_duration_days_9612, my booking_id is None, my quantity_mt is dummy_quantity_mt_8168."
+    }
+  ],
+  "function": [
+    {
+      "name": "coldstorage_book_storage",
+      "description": "Books storage space at a cold storage facility. Transitions booking_status to 'requested'. Facility must have available capacity and commodity must be compatible. Requires session_token. Does NOT guarantee space until confirmed. Fails if capacity full, commodity-temperature mismatch, or duplicate booking.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all non-public tools."
+          },
+          "facility_id": {
+            "type": "string",
+            "description": "Facility ID."
+          },
+          "commodity_type": {
+            "type": "string",
+            "description": "Commodity type."
+          },
+          "quantity_mt": {
+            "type": "number",
+            "description": "Quantity in metric tonnes."
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Storage start date YYYY-MM-DD."
+          },
+          "duration_days": {
+            "type": "integer",
+            "description": "Expected storage duration in days."
+          }
+        },
+        "required": [
+          "session_token",
+          "facility_id",
+          "commodity_type",
+          "quantity_mt",
+          "start_date",
+          "duration_days"
+        ]
+      }
+    },
+    {
+      "name": "coldstorage_release_storage",
+      "description": "Releases stored commodities and closes the booking. Transitions booking_status to 'completed'. Booking must be 'active'. Requires session_token. Does NOT refund or modify records. Fails if booking not active or storage duration violated.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all non-public tools."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "coldstorage_book_storage",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "facility_id": "dummy_facility_id",
+          "commodity_type": "dummy_commodity_type",
+          "quantity_mt": "dummy_quantity_mt",
+          "start_date": "dummy_start_date",
+          "duration_days": "dummy_duration_days"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "facility_id": "exact",
+          "commodity_type": "exact",
+          "quantity_mt": "exact",
+          "start_date": "exact",
+          "duration_days": "exact"
+        }
+      },
+      {
+        "tool": "coldstorage_release_storage",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

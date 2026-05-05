@@ -1,0 +1,85 @@
+{
+  "scenario_id": "epashu_simple_004_PERSONA_A_C",
+  "intent_id": "epashu_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Creates a sale listing for a registered livestock. For your information, my livestock_id is None, my price_type is dummy_price_type_5964, my location is dummy_location_5469, my price is dummy_price_3948."
+    }
+  ],
+  "function": [
+    {
+      "name": "epashu_create_listing",
+      "description": "Creates a sale listing for a registered livestock. Transitions listing_status to 'active'. Only the owner can create listings. Supports fixed_price or negotiable pricing. Requires session_token. Livestock must be registered. Does NOT verify animal health. Fails if livestock not registered, duplicate listing exists, or price is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "livestock_id": {
+            "type": "string",
+            "description": "Unique identifier of the registered livestock."
+          },
+          "price": {
+            "type": "number",
+            "description": "Asking price in INR."
+          },
+          "price_type": {
+            "type": "string",
+            "description": "Pricing model. Allowed: 'fixed', 'negotiable'."
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional listing details."
+          },
+          "location": {
+            "type": "string",
+            "description": "Seller location."
+          }
+        },
+        "required": [
+          "session_token",
+          "livestock_id",
+          "price",
+          "price_type",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "epashu_create_listing",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "livestock_id": null,
+          "price": "dummy_price",
+          "price_type": "dummy_price_type",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "livestock_id": "exact",
+          "price": "exact",
+          "price_type": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

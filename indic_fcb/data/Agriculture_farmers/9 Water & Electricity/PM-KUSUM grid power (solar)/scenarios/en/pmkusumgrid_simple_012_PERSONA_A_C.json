@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pmkusumgrid_simple_012_PERSONA_A_C",
+  "intent_id": "pmkusumgrid_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Calculates estimated revenue based on generation data and tariff rates. For your information, my plant_id is None, my time_range is dummy_time_range_7692."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusumgrid_calculate_revenue",
+      "description": "Calculates estimated revenue based on generation data and tariff rates. Requires session_token. Estimate only \u2014 actual payment may differ due to DISCOM adjustments. Fails if no generation data.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "plant_id": {
+            "type": "string",
+            "description": "Plant ID."
+          },
+          "time_range": {
+            "type": "string",
+            "description": "Period. Allowed: '30_day', '90_day', '1_year'."
+          }
+        },
+        "required": [
+          "session_token",
+          "plant_id",
+          "time_range"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusumgrid_calculate_revenue",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "plant_id": null,
+          "time_range": "dummy_time_range"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "plant_id": "exact",
+          "time_range": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

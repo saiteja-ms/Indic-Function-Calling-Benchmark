@@ -1,0 +1,113 @@
+{
+  "scenario_id": "kisansuvidha_parallel_multiple_004_PERSONA_F_C",
+  "intent_id": "kisansuvidha_parallel_multiple_004",
+  "persona_id": "PERSONA_F",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: ksweather_get_historical_weather and ksweather_raise_grievance. For your information, my description is dummy_description_9951, my start_date is dummy_start_date_3403, my end_date is dummy_end_date_2966, my grievance_category is dummy_grievance_category_4328, my aadhaar_number is 100020005440, my location is dummy_location_9425."
+    }
+  ],
+  "function": [
+    {
+      "name": "ksweather_raise_grievance",
+      "description": "Raises a grievance about weather data quality. Valid categories: 'incorrect_forecast', 'missing_weather_data', 'delayed_update', 'wrong_location', 'alert_not_received'. Farmer must verify data first. Requires session_token. Does NOT correct data. Fails if category is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for subscription and grievance tools."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "grievance_category": {
+            "type": "string",
+            "description": "Category: 'incorrect_forecast', 'missing_weather_data', 'delayed_update', 'wrong_location', 'alert_not_received'."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the issue."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "grievance_category",
+          "description"
+        ]
+      }
+    },
+    {
+      "name": "ksweather_get_historical_weather",
+      "description": "Retrieves historical weather data for a location for the recent past (last 7-30 days only). PUBLIC tool. Does NOT provide forecasts or real-time data. Fails if location is invalid or historical data is unavailable for the requested period. Data may be partial for some regions.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Start date in YYYY-MM-DD format. Must be within last 30 days."
+          },
+          "end_date": {
+            "type": "string",
+            "description": "End date in YYYY-MM-DD format."
+          }
+        },
+        "required": [
+          "location",
+          "start_date",
+          "end_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ksweather_get_historical_weather",
+        "args": {
+          "location": "dummy_location",
+          "start_date": "dummy_start_date",
+          "end_date": "dummy_end_date"
+        },
+        "eval_mode": {
+          "location": "exact",
+          "start_date": "exact",
+          "end_date": "exact"
+        }
+      },
+      {
+        "tool": "ksweather_raise_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "grievance_category": "dummy_grievance_category",
+          "description": "dummy_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "grievance_category": "exact",
+          "description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_F"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

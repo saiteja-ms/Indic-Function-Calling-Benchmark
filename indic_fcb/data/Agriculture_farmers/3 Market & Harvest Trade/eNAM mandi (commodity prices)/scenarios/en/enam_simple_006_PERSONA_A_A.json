@@ -1,0 +1,64 @@
+{
+  "scenario_id": "enam_simple_006_PERSONA_A_A",
+  "intent_id": "enam_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Retrieves arrival quantities and demand trends for a commodity at a mandi.. my commodity is dummy_commodity_5853, my location is dummy_location_6314."
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_get_arrival_data",
+      "description": "Retrieves arrival quantities and demand trends for a commodity at a mandi. PUBLIC tool. Does NOT show prices \u2014 use enam_get_mandi_prices. Fails if mandi or commodity is unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "commodity": {
+            "type": "string",
+            "description": "Commodity name."
+          },
+          "location": {
+            "type": "string",
+            "description": "Mandi location."
+          },
+          "time_range": {
+            "type": "string",
+            "description": "Period. Allowed: 'today', '3_day', '7_day'."
+          }
+        },
+        "required": [
+          "commodity",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "enam_get_arrival_data",
+        "args": {
+          "commodity": "dummy_commodity",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "commodity": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

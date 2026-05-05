@@ -1,0 +1,108 @@
+{
+  "scenario_id": "agrimarket_parallel_multiple_001_PERSONA_G_C",
+  "intent_id": "agrimarket_parallel_multiple_001",
+  "persona_id": "PERSONA_G",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: agrimarket_search_listings and agrimarket_cancel_order. For your information, my reason is dummy_reason_6928, my order_id is dummy_order_id_3602."
+    }
+  ],
+  "function": [
+    {
+      "name": "agrimarket_search_listings",
+      "description": "Searches available crop listings by commodity, location, quality, and price range. Requires session_token. Does NOT place orders. Fails if no listings match. Returns only 'active' listings.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+          },
+          "commodity_type": {
+            "type": "string",
+            "description": "Commodity filter."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location filter."
+          },
+          "quality_grade": {
+            "type": "string",
+            "description": "Grade filter. Optional."
+          },
+          "max_price": {
+            "type": "number",
+            "description": "Maximum price filter. Optional."
+          }
+        },
+        "required": [
+          "session_token"
+        ]
+      }
+    },
+    {
+      "name": "agrimarket_cancel_order",
+      "description": "Cancels an existing order. Transitions order_status to 'cancelled'. Orders CANNOT be cancelled after dispatch. Requires session_token. Does NOT process refunds automatically. Fails if order is already dispatched, delivered, or completed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Order ID."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Cancellation reason."
+          }
+        },
+        "required": [
+          "session_token",
+          "order_id",
+          "reason"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agrimarket_search_listings",
+        "args": {
+          "session_token": "<from_auth_step>"
+        },
+        "eval_mode": {
+          "session_token": "type_only"
+        }
+      },
+      {
+        "tool": "agrimarket_cancel_order",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "order_id": "dummy_order_id",
+          "reason": "dummy_reason"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "order_id": "exact",
+          "reason": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

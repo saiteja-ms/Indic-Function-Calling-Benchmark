@@ -1,0 +1,169 @@
+{
+  "scenario_id": "atma_long_context_004_PERSONA_A_C",
+  "intent_id": "atma_long_context_004",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I am a farmer from a small village. We have been waiting for rain."
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. How can I help you today?"
+    },
+    {
+      "role": "user",
+      "content": "The crops are not doing well this year."
+    },
+    {
+      "role": "assistant",
+      "content": "I am sorry to hear that. What service do you need?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with atma_generate_otp. my aadhaar_number is 100020007673, my mobile_number is 9876527897"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with atma_verify_otp. my aadhaar_number is 100020007673, my otp is dummy_otp_4200"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with atma_get_crop_advisory. my crop_type is dummy_crop_type_7434, my location is dummy_location_3261"
+    }
+  ],
+  "function": [
+    {
+      "name": "atma_generate_otp",
+      "description": "Sends OTP for ATMA Crop Advisory authentication. Does NOT verify OTP. Fails if Aadhaar is invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "atma_verify_otp",
+      "description": "Verifies OTP and returns session_token. Does NOT provide advisory. Fails if OTP is expired or incorrect.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "otp"
+        ]
+      }
+    },
+    {
+      "name": "atma_get_crop_advisory",
+      "description": "Fetches crop-specific advisory for the farmer's location including best practices, input recommendations, and seasonal guidance. Advisory depends on crop, location, and current season. Requires session_token. Does NOT provide weather data or pest diagnosis. Fails if crop_type is unsupported or location is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'sugarcane', 'pulses', 'oilseeds', 'horticulture'."
+          },
+          "location": {
+            "type": "string",
+            "description": "Village, district, or agro-climatic region."
+          }
+        },
+        "required": [
+          "session_token",
+          "crop_type",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "atma_generate_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "mobile_number": "dummy_mobile_number"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "mobile_number": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "atma_verify_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "otp": "dummy_otp"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "otp": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "atma_get_crop_advisory",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "crop_type": "dummy_crop_type",
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "crop_type": "exact",
+            "location": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

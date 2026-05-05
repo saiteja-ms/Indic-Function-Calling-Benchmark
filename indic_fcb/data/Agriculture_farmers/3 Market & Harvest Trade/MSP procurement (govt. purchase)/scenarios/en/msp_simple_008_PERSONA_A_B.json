@@ -1,0 +1,67 @@
+{
+  "scenario_id": "msp_simple_008_PERSONA_A_B",
+  "intent_id": "msp_simple_008",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Schedules a specific date/time for mandi visit. Here are my details: my visit_date is dummy_visit_date_8758, my procurement_token is dummy_procurement_token_4890."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_schedule_mandi_visit",
+      "description": "Schedules a specific date/time for mandi visit. Token must be generated. Requires session_token. Does NOT deliver produce. Fails if no token exists or scheduling conflict.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "procurement_token": {
+            "type": "string",
+            "description": "Procurement token ID."
+          },
+          "visit_date": {
+            "type": "string",
+            "description": "Preferred visit date YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "session_token",
+          "procurement_token",
+          "visit_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_schedule_mandi_visit",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "procurement_token": "dummy_procurement_token",
+          "visit_date": "dummy_visit_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "procurement_token": "exact",
+          "visit_date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

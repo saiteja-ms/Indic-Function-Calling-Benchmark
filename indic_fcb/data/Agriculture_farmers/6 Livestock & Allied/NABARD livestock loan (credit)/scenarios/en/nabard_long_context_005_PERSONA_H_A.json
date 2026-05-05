@@ -1,0 +1,118 @@
+{
+  "scenario_id": "nabard_long_context_005_PERSONA_H_A",
+  "intent_id": "nabard_long_context_005",
+  "persona_id": "PERSONA_H",
+  "variant": "A",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with nabard_verify_otp. my aadhaar_number is 100020003899, my otp is dummy_otp_2918"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with nabard_check_eligibility. my aadhaar_number is 100020003899, my project_type is dummy_project_type_3007, my loan_amount_requested is dummy_loan_amount_requested_6401"
+    }
+  ],
+  "function": [
+    {
+      "name": "nabard_verify_otp",
+      "description": "Verifies OTP and returns session_token. Does NOT check eligibility. Fails if OTP expired or incorrect.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "otp"
+        ]
+      }
+    },
+    {
+      "name": "nabard_check_eligibility",
+      "description": "Checks farmer's eligibility for NABARD livestock loan based on credit history, repayment capacity, and project feasibility. Returns eligibility_status with reasons. Requires session_token. Does NOT submit application. Fails if farmer has existing defaults, poor credit score, or project type is unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "project_type": {
+            "type": "string",
+            "description": "Project. Allowed: 'dairy', 'poultry', 'goat_rearing', 'sheep_rearing'."
+          },
+          "loan_amount_requested": {
+            "type": "number",
+            "description": "Requested loan amount in INR."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "project_type",
+          "loan_amount_requested"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "nabard_verify_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "otp": "dummy_otp"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "otp": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "nabard_check_eligibility",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "project_type": "dummy_project_type",
+            "loan_amount_requested": "dummy_loan_amount_requested"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "project_type": "exact",
+            "loan_amount_requested": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "scenario_id": "pmksy_parallel_multiple_005_PERSONA_C_C",
+  "intent_id": "pmksy_parallel_multiple_005",
+  "persona_id": "PERSONA_C",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: pmksy_select_irrigation_type and pmksy_get_scheme_details. For your information, my land_parcel_id is dummy_land_parcel_id_6471, my irrigation_type is dummy_irrigation_type_6173."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmksy_get_scheme_details",
+      "description": "Returns PMKSY scheme details including components, subsidy rates, and eligibility criteria. PUBLIC tool. Does NOT check individual eligibility. Fails if temporarily unavailable.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "irrigation_type": {
+            "type": "string",
+            "description": "Optional filter."
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "pmksy_select_irrigation_type",
+      "description": "Selects an irrigation type for the application. Returns system details, subsidy rates, and requirements. Requires session_token. Does NOT submit application. Fails if type unsupported or incompatible with land/crop.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "irrigation_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'drip', 'sprinkler', 'surface'."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "irrigation_type",
+          "land_parcel_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmksy_select_irrigation_type",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "irrigation_type": "dummy_irrigation_type",
+          "land_parcel_id": "dummy_land_parcel_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "irrigation_type": "exact",
+          "land_parcel_id": "exact"
+        }
+      },
+      {
+        "tool": "pmksy_get_scheme_details",
+        "args": {},
+        "eval_mode": {}
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_C"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

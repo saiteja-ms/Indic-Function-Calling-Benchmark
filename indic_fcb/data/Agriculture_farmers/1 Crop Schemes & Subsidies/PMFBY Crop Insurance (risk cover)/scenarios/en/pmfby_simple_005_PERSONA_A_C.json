@@ -1,0 +1,88 @@
+{
+  "scenario_id": "pmfby_simple_005_PERSONA_A_C",
+  "intent_id": "pmfby_simple_005",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Enrolls the farmer in PMFBY crop insurance for a specific crop and land parcel for the current season. For your information, my area_hectares is dummy_area_hectares_1683, my land_parcel_id is dummy_land_parcel_id_4020, my sowing_date is dummy_sowing_date_3639, my crop_type is dummy_crop_type_4438, my aadhaar_number is 100020003617."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfby_enroll_policy",
+      "description": "Enrolls the farmer in PMFBY crop insurance for a specific crop and land parcel for the current season. Transitions policy_status from 'not_enrolled' to 'enrolled'. Requires session_token. Enrollment must be within the season window. This tool does NOT calculate or collect premium \u2014 use pmfby_calculate_premium and pmfby_pay_premium. Fails if: enrollment window has closed, farmer is ineligible, crop-land mapping is invalid, or a duplicate enrollment exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop to be insured. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds'."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier of the land parcel to be insured."
+          },
+          "sowing_date": {
+            "type": "string",
+            "description": "Expected sowing date in YYYY-MM-DD format."
+          },
+          "area_hectares": {
+            "type": "number",
+            "description": "Area under cultivation in hectares."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "crop_type",
+          "land_parcel_id",
+          "sowing_date",
+          "area_hectares"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmfby_enroll_policy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "crop_type": "dummy_crop_type",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "sowing_date": "dummy_sowing_date",
+          "area_hectares": "dummy_area_hectares"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "crop_type": "exact",
+          "land_parcel_id": "exact",
+          "sowing_date": "exact",
+          "area_hectares": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

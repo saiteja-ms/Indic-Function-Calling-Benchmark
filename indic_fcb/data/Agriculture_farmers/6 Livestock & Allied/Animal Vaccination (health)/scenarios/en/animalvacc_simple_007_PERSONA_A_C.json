@@ -1,0 +1,78 @@
+{
+  "scenario_id": "animalvacc_simple_007_PERSONA_A_C",
+  "intent_id": "animalvacc_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Records that a vaccination has been administered by authorized personnel. For your information, my booking_id is None, my livestock_id is None, my administered_date is dummy_administered_date_6442."
+    }
+  ],
+  "function": [
+    {
+      "name": "livestock_record_vaccination",
+      "description": "Records that a vaccination has been administered by authorized personnel. Transitions vaccination_status to 'administered'. Vaccination must be in 'scheduled' status and service must be 'assigned' or 'completed'. Requires session_token. Farmers CANNOT self-administer via this system. Does NOT generate certificates. Fails if vaccination is not scheduled, unauthorized personnel attempt recording, or duplicate record exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          },
+          "livestock_id": {
+            "type": "string",
+            "description": "Unique identifier for a registered animal."
+          },
+          "vaccine_batch_number": {
+            "type": "string",
+            "description": "Batch number of the vaccine administered."
+          },
+          "administered_date": {
+            "type": "string",
+            "description": "Date of administration YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id",
+          "livestock_id",
+          "administered_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "livestock_record_vaccination",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": null,
+          "livestock_id": null,
+          "administered_date": "dummy_administered_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact",
+          "livestock_id": "exact",
+          "administered_date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

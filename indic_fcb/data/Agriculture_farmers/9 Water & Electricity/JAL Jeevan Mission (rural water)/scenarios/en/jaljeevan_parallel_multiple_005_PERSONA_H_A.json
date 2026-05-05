@@ -1,0 +1,99 @@
+{
+  "scenario_id": "jaljeevan_parallel_multiple_005_PERSONA_H_A",
+  "intent_id": "jaljeevan_parallel_multiple_005",
+  "persona_id": "PERSONA_H",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: jjm_report_issue and jjm_get_infrastructure_status.. my description is dummy_description_3487, my household_id is JJM-HH-1007, my issue_type is dummy_issue_type_6225, my village is Sample Village."
+    }
+  ],
+  "function": [
+    {
+      "name": "jjm_report_issue",
+      "description": "Reports a water supply issue (no water, poor quality, leakage, etc.). Transitions complaint_status to 'raised'. Requires session_token. Connection must be 'installed' or 'active'. Does NOT resolve issue. Fails if no active connection, duplicate complaint, or invalid issue type.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for personalized tools."
+          },
+          "household_id": {
+            "type": "string",
+            "description": "Household ID."
+          },
+          "issue_type": {
+            "type": "string",
+            "description": "Issue. Allowed: 'no_water_supply', 'poor_quality', 'leakage', 'low_pressure', 'irregular_supply'."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description."
+          }
+        },
+        "required": [
+          "session_token",
+          "household_id",
+          "issue_type",
+          "description"
+        ]
+      }
+    },
+    {
+      "name": "jjm_get_infrastructure_status",
+      "description": "Returns infrastructure_status ('not_available', 'under_construction', 'operational', 'maintenance') for a village. Includes pipeline, storage, and treatment plant info. PUBLIC tool. Does NOT apply for infrastructure. Fails if village invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "village": {
+            "type": "string",
+            "description": "Village or habitation name."
+          }
+        },
+        "required": [
+          "village"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "jjm_report_issue",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "household_id": "JJM-HH-1007",
+          "issue_type": "dummy_issue_type",
+          "description": "dummy_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "household_id": "exact",
+          "issue_type": "substring",
+          "description": "substring"
+        }
+      },
+      {
+        "tool": "jjm_get_infrastructure_status",
+        "args": {
+          "village": "Sample Village"
+        },
+        "eval_mode": {
+          "village": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

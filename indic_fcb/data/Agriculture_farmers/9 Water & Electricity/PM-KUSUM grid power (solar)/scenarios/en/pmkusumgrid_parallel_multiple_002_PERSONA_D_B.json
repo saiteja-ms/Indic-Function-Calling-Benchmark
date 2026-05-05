@@ -1,0 +1,92 @@
+{
+  "scenario_id": "pmkusumgrid_parallel_multiple_002_PERSONA_D_B",
+  "intent_id": "pmkusumgrid_parallel_multiple_002",
+  "persona_id": "PERSONA_D",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: pmkusumgrid_track_installation and pmkusumgrid_get_grid_status. Here are my details: my application_id is KUSUMGRID-APP-10000003, my plant_id is KUSUMGRID-PLT-20000001."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusumgrid_get_grid_status",
+      "description": "Returns grid_status ('not_connected', 'connected', 'active', 'disrupted') for the solar plant connection. Requires session_token. Does NOT restore grid. Fails if plant_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "plant_id": {
+            "type": "string",
+            "description": "Plant ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "plant_id"
+        ]
+      }
+    },
+    {
+      "name": "pmkusumgrid_track_installation",
+      "description": "Tracks installation_status ('not_started', 'in_progress', 'installed', 'verified', 'operational'). Application must be approved. Requires session_token. Does NOT perform installation. Fails if application not approved or application_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusumgrid_track_installation",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": "KUSUMGRID-APP-10000003"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      },
+      {
+        "tool": "pmkusumgrid_get_grid_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "plant_id": "KUSUMGRID-PLT-20000001"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "plant_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

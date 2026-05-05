@@ -1,0 +1,67 @@
+{
+  "scenario_id": "hortadvisory_simple_004_PERSONA_A_A",
+  "intent_id": "hortadvisory_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Provides pest and disease management advisory for a horticulture crop at a specific stage.. my crop_type is dummy_crop_type_6220, my location is dummy_location_9118, my crop_stage is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_get_pest_advisory",
+      "description": "Provides pest and disease management advisory for a horticulture crop at a specific stage. Includes prevention, identification, and treatment guidance. PUBLIC tool. Does NOT diagnose specific infestations \u2014 it provides general recommendations. Fails if crop-stage mismatch or no pest data available.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "crop_stage": {
+            "type": "string",
+            "description": "Growth stage."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "crop_type",
+          "crop_stage",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_get_pest_advisory",
+        "args": {
+          "crop_type": "dummy_crop_type",
+          "crop_stage": null,
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "crop_type": "exact",
+          "crop_stage": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

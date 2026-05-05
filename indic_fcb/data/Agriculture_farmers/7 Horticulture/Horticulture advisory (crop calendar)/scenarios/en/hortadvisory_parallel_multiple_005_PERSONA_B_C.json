@@ -1,0 +1,106 @@
+{
+  "scenario_id": "hortadvisory_parallel_multiple_005_PERSONA_B_C",
+  "intent_id": "hortadvisory_parallel_multiple_005",
+  "persona_id": "PERSONA_B",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: horti_update_crop_stage and horti_track_grievance_status. For your information, my new_stage is dummy_new_stage_6759, my grievance_id is None, my crop_type is dummy_crop_type_5611, my location is dummy_location_1997."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_track_grievance_status",
+      "description": "Tracks horticulture advisory grievance. Requires session_token. Fails if grievance_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for personalized advisory tools."
+          },
+          "grievance_id": {
+            "type": "string",
+            "description": "Grievance ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_id"
+        ]
+      }
+    },
+    {
+      "name": "horti_update_crop_stage",
+      "description": "Manually updates the crop stage for personalized tracking. Requires session_token. Does NOT generate advisory \u2014 use horti_get_stage_advisory. Fails if stage transition is invalid (e.g., jumping from sowing to harvesting) or session invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for personalized advisory tools."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "new_stage": {
+            "type": "string",
+            "description": "New stage. Must follow valid progression."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "session_token",
+          "crop_type",
+          "new_stage",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_update_crop_stage",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "crop_type": "dummy_crop_type",
+          "new_stage": "dummy_new_stage",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "crop_type": "exact",
+          "new_stage": "exact",
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "horti_track_grievance_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "grievance_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "grievance_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

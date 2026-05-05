@@ -1,0 +1,117 @@
+{
+  "scenario_id": "pmpranam_parallel_multiple_002_PERSONA_D_C",
+  "intent_id": "pmpranam_parallel_multiple_002",
+  "persona_id": "PERSONA_D",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: pmpranam_analyze_usage_pattern and pmpranam_get_recommendation. For your information, my crop_type is dummy_crop_type_3833, my land_parcel_id is dummy_land_parcel_id_7401, my aadhaar_number is 100020001352."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmpranam_get_recommendation",
+      "description": "Provides recommendations for alternative fertilizers (organic, biofertilizer, balanced NPK) based on crop, soil, and usage history. Advisory types: 'urea_reduction', 'balanced_nutrition', 'organic_alternative'. Requires session_token. Recommendations are advisory only \u2014 does NOT guarantee yield improvement. Fails if crop-land mismatch, no usage data, or advisory already generated and current.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Current crop."
+          },
+          "advisory_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'urea_reduction', 'balanced_nutrition', 'organic_alternative'. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_parcel_id",
+          "crop_type"
+        ]
+      }
+    },
+    {
+      "name": "pmpranam_analyze_usage_pattern",
+      "description": "Analyzes fertilizer usage patterns comparing current season vs baseline. Identifies reduction in urea usage, shift to alternatives, and balanced nutrition progress. Transitions usage_status to 'analyzed'. Requires session_token. Usage data must be 'recorded'. Does NOT generate recommendations. Fails if no baseline data, usage not recorded, or conflicting data between purchase vs declared usage.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier of the land parcel."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_parcel_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmpranam_analyze_usage_pattern",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "land_parcel_id": "dummy_land_parcel_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "land_parcel_id": "exact"
+        }
+      },
+      {
+        "tool": "pmpranam_get_recommendation",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "crop_type": "dummy_crop_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "land_parcel_id": "exact",
+          "crop_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

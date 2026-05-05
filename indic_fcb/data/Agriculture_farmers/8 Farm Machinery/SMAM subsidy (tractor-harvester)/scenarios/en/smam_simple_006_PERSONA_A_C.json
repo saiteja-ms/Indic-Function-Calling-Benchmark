@@ -1,0 +1,74 @@
+{
+  "scenario_id": "smam_simple_006_PERSONA_A_C",
+  "intent_id": "smam_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Calculates subsidy amount based on machinery type, cost, and beneficiary category. For your information, my beneficiary_category is dummy_beneficiary_category_1753, my machinery_cost is dummy_machinery_cost_7756, my machinery_type is dummy_machinery_type_3000."
+    }
+  ],
+  "function": [
+    {
+      "name": "smam_calculate_subsidy",
+      "description": "Calculates subsidy amount based on machinery type, cost, and beneficiary category. Subsidy is a percentage with upper cap. Returns farmer's share and subsidy breakdown. Requires session_token. Does NOT disburse. Fails if machinery cost invalid or category mismatch.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "machinery_type": {
+            "type": "string",
+            "description": "Machinery type."
+          },
+          "machinery_cost": {
+            "type": "number",
+            "description": "Total cost INR."
+          },
+          "beneficiary_category": {
+            "type": "string",
+            "description": "Category."
+          }
+        },
+        "required": [
+          "session_token",
+          "machinery_type",
+          "machinery_cost",
+          "beneficiary_category"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "smam_calculate_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "machinery_type": "dummy_machinery_type",
+          "machinery_cost": "dummy_machinery_cost",
+          "beneficiary_category": "dummy_beneficiary_category"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "machinery_type": "exact",
+          "machinery_cost": "exact",
+          "beneficiary_category": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

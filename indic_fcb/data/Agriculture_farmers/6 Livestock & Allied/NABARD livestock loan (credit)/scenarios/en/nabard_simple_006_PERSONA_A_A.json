@@ -1,0 +1,60 @@
+{
+  "scenario_id": "nabard_simple_006_PERSONA_A_A",
+  "intent_id": "nabard_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Returns application_status ('not_applied', 'submitted', 'under_review', 'approved', 'rejected') with details.. my application_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "nabard_track_application_status",
+      "description": "Returns application_status ('not_applied', 'submitted', 'under_review', 'approved', 'rejected') with details. Requires session_token. Does NOT modify application. Fails if application_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "nabard_track_application_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

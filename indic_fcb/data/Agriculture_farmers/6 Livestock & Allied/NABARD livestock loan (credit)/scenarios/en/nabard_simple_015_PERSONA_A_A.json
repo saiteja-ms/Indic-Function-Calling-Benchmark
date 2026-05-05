@@ -1,0 +1,60 @@
+{
+  "scenario_id": "nabard_simple_015_PERSONA_A_A",
+  "intent_id": "nabard_simple_015",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Closes a fully repaid loan.. my loan_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "nabard_close_loan",
+      "description": "Closes a fully repaid loan. Transitions loan_status to 'closed'. All EMIs must be completed. Requires session_token. Does NOT refund or modify records. Fails if outstanding balance exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "loan_id": {
+            "type": "string",
+            "description": "Loan ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "loan_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "nabard_close_loan",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "loan_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "loan_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

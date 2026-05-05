@@ -1,0 +1,73 @@
+{
+  "scenario_id": "dealerlookup_multiple_003_PERSONA_F_A",
+  "intent_id": "dealerlookup_multiple_003",
+  "persona_id": "PERSONA_F",
+  "variant": "A",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform action: Searches for pesticide and seed dealers in a specified location.. my location is dummy_location_2358."
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_verify_license",
+      "description": "Verifies the government-issued license status of a dealer. Returns license_status ('valid', 'expired', 'suspended') with expiry date. PUBLIC tool. Unlicensed or expired dealers should NOT be used for purchases. Does NOT update license records. Fails if dealer_id invalid or license data unavailable.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "dealer_id": {
+            "type": "string",
+            "description": "Dealer ID."
+          }
+        },
+        "required": [
+          "dealer_id"
+        ]
+      }
+    },
+    {
+      "name": "dealer_search_by_location",
+      "description": "Searches for pesticide and seed dealers in a specified location. Location (village/district/state) is MANDATORY. Returns dealer names, addresses, and basic info. PUBLIC tool \u2014 no authentication required. Does NOT verify dealer license or check inventory. Queries without valid location are INVALID. Fails if location invalid or no dealers found in the area.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or state. REQUIRED."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Filter. Allowed: 'seeds', 'pesticides', 'fertilizers'. Optional."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "dealer_search_by_location",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_F"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

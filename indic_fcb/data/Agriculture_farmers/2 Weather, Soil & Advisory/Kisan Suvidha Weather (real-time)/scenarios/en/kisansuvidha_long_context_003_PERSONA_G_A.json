@@ -1,0 +1,90 @@
+{
+  "scenario_id": "kisansuvidha_long_context_003_PERSONA_G_A",
+  "intent_id": "kisansuvidha_long_context_003",
+  "persona_id": "PERSONA_G",
+  "variant": "A",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with ksweather_get_current_weather. my location is dummy_location_9144"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with ksweather_get_weather_alerts. my location is dummy_location_9144"
+    }
+  ],
+  "function": [
+    {
+      "name": "ksweather_get_weather_alerts",
+      "description": "Fetches active extreme weather alerts (storms, heavy rainfall, heatwaves, cold waves, frost) for a location. PUBLIC tool. Returns alert severity, type, and validity period. Does NOT provide agricultural advisory \u2014 use ksweather_get_weather_advisory. Fails if location is invalid. Returns empty if no active alerts exist. Old/expired alerts are NOT returned.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "ksweather_get_current_weather",
+      "description": "Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure. Location must be valid (village/district/GPS). This is a PUBLIC tool \u2014 no authentication required. Does NOT provide forecasts \u2014 use ksweather_get_weather_forecast. Fails if location is invalid, ambiguous, or no data is available. Data reflects near real-time conditions but may be slightly delayed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "ksweather_get_current_weather",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "ksweather_get_weather_alerts",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

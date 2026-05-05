@@ -1,0 +1,96 @@
+{
+  "scenario_id": "ifms_parallel_multiple_003_PERSONA_E_C",
+  "intent_id": "ifms_parallel_multiple_003",
+  "persona_id": "PERSONA_E",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: ifms_get_fertilizer_availability and ifms_cancel_transaction. For your information, my transaction_id is IFMS-TXN-10000003, my location is dummy_location_3561."
+    }
+  ],
+  "function": [
+    {
+      "name": "ifms_cancel_transaction",
+      "description": "Cancels a fertilizer purchase transaction. Only possible when transaction_status is 'initiated' (before validation). Transitions to 'failed'. Requires session_token. Does NOT reverse completed purchases. Fails if transaction already validated, completed, or subsidy applied.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "transaction_id": {
+            "type": "string",
+            "description": "Transaction ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "transaction_id"
+        ]
+      }
+    },
+    {
+      "name": "ifms_get_fertilizer_availability",
+      "description": "Checks fertilizer stock availability at retailers in a location. Returns inventory_status ('available', 'low_stock', 'out_of_stock') per fertilizer type. PUBLIC-facing but requires session_token for farmer-specific recommendations. Does NOT reserve stock. Availability is dynamic and may change. Fails if location invalid or no retailers found.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "location": {
+            "type": "string",
+            "description": "Village, district, or region."
+          },
+          "fertilizer_type": {
+            "type": "string",
+            "description": "Filter by type. Allowed: 'urea', 'dap', 'mop', 'npk', 'complex_fertilizer'. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ifms_get_fertilizer_availability",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "ifms_cancel_transaction",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "transaction_id": "IFMS-TXN-10000003"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "transaction_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

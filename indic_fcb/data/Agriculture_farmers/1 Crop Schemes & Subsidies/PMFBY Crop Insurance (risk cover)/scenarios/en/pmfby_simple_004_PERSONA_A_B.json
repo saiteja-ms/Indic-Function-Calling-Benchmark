@@ -1,0 +1,64 @@
+{
+  "scenario_id": "pmfby_simple_004_PERSONA_A_B",
+  "intent_id": "pmfby_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Returns the enrollment window dates for the current crop season. Here are my details: my state is dummy_state_9580."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfby_get_season_window",
+      "description": "Returns the enrollment window dates for the current crop season. Enrollment is allowed ONLY within this predefined window. Requires session_token. This tool does NOT enroll the farmer. Fails if no active season window exists or the region is unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "state": {
+            "type": "string",
+            "description": "State for which the season window is queried."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type for which season window is needed."
+          }
+        },
+        "required": [
+          "session_token",
+          "state"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmfby_get_season_window",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "state": "dummy_state"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "state": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

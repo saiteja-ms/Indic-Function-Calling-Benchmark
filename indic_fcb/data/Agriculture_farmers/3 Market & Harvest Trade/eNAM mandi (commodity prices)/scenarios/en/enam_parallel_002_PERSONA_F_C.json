@@ -1,0 +1,57 @@
+{
+  "scenario_id": "enam_parallel_002_PERSONA_F_C",
+  "intent_id": "enam_parallel_002",
+  "persona_id": "PERSONA_F",
+  "variant": "C",
+  "category": "parallel",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform this action twice simultaneously for two different entities: enam_search_mandis. For your information, my location is dummy_location_2517."
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_search_mandis",
+      "description": "Searches for mandis by location (state/district). Returns mandi names, codes, and supported commodities. PUBLIC tool. Does NOT return prices \u2014 use enam_get_mandi_prices. Fails if location is invalid or no mandis found. May return multiple mandis with same name (ambiguity).",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "State, district, or mandi name."
+          },
+          "commodity": {
+            "type": "string",
+            "description": "Optional filter by commodity."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "enam_search_mandis",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_F"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

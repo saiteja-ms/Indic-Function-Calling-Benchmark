@@ -1,0 +1,82 @@
+{
+  "scenario_id": "pmpranam_miss_param_003_PERSONA_F_B",
+  "intent_id": "pmpranam_miss_param_003",
+  "persona_id": "PERSONA_F",
+  "variant": "B",
+  "category": "miss_param",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Please help me with pmpranam_get_fertilizer_usage. my aadhaar_number is 100020003658, my season is dummy_season_6444"
+    },
+    {
+      "role": "assistant",
+      "content": "Please provide your session_token."
+    },
+    {
+      "role": "user",
+      "content": "My session_token is PRANAM-TKN-UV12WX34."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmpranam_get_fertilizer_usage",
+      "description": "Retrieves the farmer's fertilizer usage records for a given season. Returns quantities of each fertilizer type used, linked from iFMS purchase data and declared crop patterns. Requires session_token. Does NOT analyze patterns \u2014 use pmpranam_analyze_usage_pattern. Fails if no usage records exist (no baseline data), or session invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "season": {
+            "type": "string",
+            "description": "Season. Allowed: 'kharif', 'rabi', 'zaid'."
+          },
+          "year": {
+            "type": "string",
+            "description": "Year YYYY. Optional \u2014 defaults to current."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "season"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [],
+      [
+        {
+          "tool": "pmpranam_get_fertilizer_usage",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "season": "dummy_season"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "season": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_F"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

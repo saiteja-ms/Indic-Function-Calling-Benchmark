@@ -1,0 +1,67 @@
+{
+  "scenario_id": "fms_simple_014_PERSONA_A_C",
+  "intent_id": "fms_simple_014",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Estimates service cost based on service type, land area, and duration. For your information, my service_type is dummy_service_type_3654, my land_area_acres is dummy_land_area_acres_6003, my location is dummy_location_8246."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_estimate_cost",
+      "description": "Estimates service cost based on service type, land area, and duration. PUBLIC tool. Does NOT create bookings. Estimate is approximate. Fails if service type unsupported or area unrealistic.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "service_type": {
+            "type": "string",
+            "description": "Service type."
+          },
+          "land_area_acres": {
+            "type": "number",
+            "description": "Area in acres."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "service_type",
+          "land_area_acres",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_estimate_cost",
+        "args": {
+          "service_type": "dummy_service_type",
+          "land_area_acres": "dummy_land_area_acres",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "service_type": "exact",
+          "land_area_acres": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

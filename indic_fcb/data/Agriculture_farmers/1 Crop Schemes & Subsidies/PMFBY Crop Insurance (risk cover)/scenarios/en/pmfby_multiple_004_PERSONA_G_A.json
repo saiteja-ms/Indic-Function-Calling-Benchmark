@@ -1,0 +1,101 @@
+{
+  "scenario_id": "pmfby_multiple_004_PERSONA_G_A",
+  "intent_id": "pmfby_multiple_004",
+  "persona_id": "PERSONA_G",
+  "variant": "A",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.. my mobile_number is 9876539941, my aadhaar_number is 100020001166."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfby_enroll_policy",
+      "description": "Enrolls the farmer in PMFBY crop insurance for a specific crop and land parcel for the current season. Transitions policy_status from 'not_enrolled' to 'enrolled'. Requires session_token. Enrollment must be within the season window. This tool does NOT calculate or collect premium \u2014 use pmfby_calculate_premium and pmfby_pay_premium. Fails if: enrollment window has closed, farmer is ineligible, crop-land mapping is invalid, or a duplicate enrollment exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop to be insured. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds'."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier of the land parcel to be insured."
+          },
+          "sowing_date": {
+            "type": "string",
+            "description": "Expected sowing date in YYYY-MM-DD format."
+          },
+          "area_hectares": {
+            "type": "number",
+            "description": "Area under cultivation in hectares."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "crop_type",
+          "land_parcel_id",
+          "sowing_date",
+          "area_hectares"
+        ]
+      }
+    },
+    {
+      "name": "pmfby_generate_otp",
+      "description": "Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication. This is the first step in the authentication flow. It does NOT verify the OTP or create a session. Fails if Aadhaar is not 12 digits or mobile number is not registered with Aadhaar.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmfby_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "scenario_id": "epashu_parallel_multiple_002_PERSONA_D_B",
+  "intent_id": "epashu_parallel_multiple_002",
+  "persona_id": "PERSONA_D",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: epashu_get_listing_details and epashu_cancel_order. Here are my details: my reason is dummy_reason_7602, my listing_id is EPASHU-LST-40000002, my order_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "epashu_get_listing_details",
+      "description": "Retrieves full details of a specific listing including animal details, health records, seller info, and verification status. Requires session_token. Does NOT modify listing. Fails if listing_id is invalid or listing is deleted.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "listing_id": {
+            "type": "string",
+            "description": "Unique listing identifier."
+          }
+        },
+        "required": [
+          "session_token",
+          "listing_id"
+        ]
+      }
+    },
+    {
+      "name": "epashu_cancel_order",
+      "description": "Cancels an order. Only possible before 'payment_done' status. Requires session_token. Does NOT auto-refund. Fails if payment already made or ownership transferred.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Order ID."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Cancellation reason."
+          }
+        },
+        "required": [
+          "session_token",
+          "order_id",
+          "reason"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "epashu_get_listing_details",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "listing_id": "EPASHU-LST-40000002"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "listing_id": "exact"
+        }
+      },
+      {
+        "tool": "epashu_cancel_order",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "order_id": null,
+          "reason": "dummy_reason"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "order_id": "exact",
+          "reason": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

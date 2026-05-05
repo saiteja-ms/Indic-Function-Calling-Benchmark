@@ -1,0 +1,73 @@
+{
+  "scenario_id": "enam_irrelevance_003_PERSONA_E_C",
+  "intent_id": "enam_irrelevance_003",
+  "persona_id": "PERSONA_E",
+  "variant": "C",
+  "category": "task_irrelevance",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Request medical advice for a persistent fever and headache."
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_track_grievance_status",
+      "description": "Tracks eNAM grievance status. Requires session_token. Fails if grievance_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after optional authentication. Required for preference and grievance tools."
+          },
+          "grievance_id": {
+            "type": "string",
+            "description": "Grievance ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_id"
+        ]
+      }
+    },
+    {
+      "name": "enam_get_mandi_prices",
+      "description": "Fetches current commodity prices for a specific mandi. Returns modal, minimum, and maximum prices with quality grades. PUBLIC tool \u2014 no auth required. Does NOT execute buy/sell transactions. Fails if commodity or mandi is unsupported, or no price data is available. Prices may be delayed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "commodity": {
+            "type": "string",
+            "description": "Standardized commodity name (e.g., paddy, wheat, cotton)."
+          },
+          "location": {
+            "type": "string",
+            "description": "State, district, or mandi name."
+          },
+          "quality_grade": {
+            "type": "string",
+            "description": "Filter by grade. Allowed: 'A', 'B', 'C', 'FAQ', 'premium'. Optional."
+          }
+        },
+        "required": [
+          "commodity",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

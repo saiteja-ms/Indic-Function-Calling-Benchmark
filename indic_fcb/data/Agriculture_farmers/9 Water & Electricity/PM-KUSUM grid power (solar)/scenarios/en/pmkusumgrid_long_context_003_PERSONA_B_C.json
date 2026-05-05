@@ -1,0 +1,134 @@
+{
+  "scenario_id": "pmkusumgrid_long_context_003_PERSONA_B_C",
+  "intent_id": "pmkusumgrid_long_context_003",
+  "persona_id": "PERSONA_B",
+  "variant": "C",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I am a farmer from a small village. We have been waiting for rain."
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. How can I help you today?"
+    },
+    {
+      "role": "user",
+      "content": "The crops are not doing well this year."
+    },
+    {
+      "role": "assistant",
+      "content": "I am sorry to hear that. What service do you need?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with pmkusumgrid_generate_otp. my aadhaar_number is 100020008396, my mobile_number is 9876539220"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with pmkusumgrid_check_eligibility. my aadhaar_number is 100020008396, my land_area_hectares is dummy_land_area_hectares_4740, my location is dummy_location_2580"
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusumgrid_check_eligibility",
+      "description": "Checks farmer's eligibility for grid-connected solar plant based on land ownership, grid connectivity, and capacity limits. Requires session_token. Does NOT submit application. Fails if grid not available, land insufficient, or farmer already has a solar plant under the scheme.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "land_area_hectares": {
+            "type": "number",
+            "description": "Available land for solar installation."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_area_hectares",
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "pmkusumgrid_generate_otp",
+      "description": "Sends OTP for PM-KUSUM grid power authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "pmkusumgrid_generate_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "mobile_number": "dummy_mobile_number"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "mobile_number": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "pmkusumgrid_check_eligibility",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "land_area_hectares": "dummy_land_area_hectares",
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "land_area_hectares": "exact",
+            "location": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

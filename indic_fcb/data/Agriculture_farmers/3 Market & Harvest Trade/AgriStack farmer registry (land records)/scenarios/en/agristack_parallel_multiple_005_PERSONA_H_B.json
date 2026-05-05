@@ -1,0 +1,107 @@
+{
+  "scenario_id": "agristack_parallel_multiple_005_PERSONA_H_B",
+  "intent_id": "agristack_parallel_multiple_005",
+  "persona_id": "PERSONA_H",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: agristack_declare_crop and agristack_get_registry_status. Here are my details: my aadhaar_number is 100020007095, my crop_type is dummy_crop_type_3269, my land_parcel_id is dummy_land_parcel_id_3082."
+    }
+  ],
+  "function": [
+    {
+      "name": "agristack_get_registry_status",
+      "description": "Returns comprehensive registry status including profile_status, number of linked parcels, verification status, and consent status. Requires session_token. Does NOT modify any status. Fails if farmer not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number"
+        ]
+      }
+    },
+    {
+      "name": "agristack_declare_crop",
+      "description": "Declares a crop for a specific verified land parcel. Crop declaration is per-parcel, not global. Land must be in 'verified' status. Requires session_token. Does NOT provide advisory. Fails if land not verified or crop type unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Verified land parcel ID."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds', 'horticulture'."
+          },
+          "sowing_date": {
+            "type": "string",
+            "description": "Sowing date YYYY-MM-DD."
+          },
+          "area_hectares": {
+            "type": "number",
+            "description": "Area under cultivation."
+          }
+        },
+        "required": [
+          "session_token",
+          "land_parcel_id",
+          "crop_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agristack_declare_crop",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "crop_type": "dummy_crop_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "land_parcel_id": "exact",
+          "crop_type": "exact"
+        }
+      },
+      {
+        "tool": "agristack_get_registry_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

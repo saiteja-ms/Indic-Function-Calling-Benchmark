@@ -1,0 +1,101 @@
+{
+  "scenario_id": "dealerlookup_base_005_PERSONA_F_B",
+  "intent_id": "dealerlookup_base_005",
+  "persona_id": "PERSONA_F",
+  "variant": "B",
+  "category": "base",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with dealer_filter_by_product. my location is dummy_location_2807, my product_type is dummy_product_type_1057"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with dealer_get_details. my dealer_id is dummy_dealer_id_1876"
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_get_details",
+      "description": "Retrieves detailed information about a specific dealer including name, address, contact, products carried, and license status. PUBLIC tool. Does NOT verify license \u2014 use dealer_verify_license. Data may be stale or contain inconsistencies. Fails if dealer_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "dealer_id": {
+            "type": "string",
+            "description": "Unique identifier of the dealer."
+          }
+        },
+        "required": [
+          "dealer_id"
+        ]
+      }
+    },
+    {
+      "name": "dealer_filter_by_product",
+      "description": "Filters dealers by product type and crop compatibility. Returns dealers that carry matching products. PUBLIC tool. Location is required. Does NOT verify dealer status or product availability. Fails if location missing, crop_type unsupported, or no matches found.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or state."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'seeds', 'pesticides', 'fertilizers'."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds', 'horticulture'. Optional."
+          }
+        },
+        "required": [
+          "location",
+          "product_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "dealer_filter_by_product",
+          "args": {
+            "location": "dummy_location",
+            "product_type": "dummy_product_type"
+          },
+          "eval_mode": {
+            "location": "exact",
+            "product_type": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "dealer_get_details",
+          "args": {
+            "dealer_id": "dummy_dealer_id"
+          },
+          "eval_mode": {
+            "dealer_id": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_F"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

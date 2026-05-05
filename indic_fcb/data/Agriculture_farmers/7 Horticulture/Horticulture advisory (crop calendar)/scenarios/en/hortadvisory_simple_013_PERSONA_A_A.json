@@ -1,0 +1,67 @@
+{
+  "scenario_id": "hortadvisory_simple_013_PERSONA_A_A",
+  "intent_id": "hortadvisory_simple_013",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Raises a grievance about advisory quality.. my description is dummy_description_7608, my grievance_category is dummy_grievance_category_5565."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_raise_grievance",
+      "description": "Raises a grievance about advisory quality. Categories: 'incorrect_advisory', 'outdated_information', 'crop_mismatch', 'weather_conflict', 'missing_guidance'. Must verify advisory first. Requires session_token. Fails if category invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for personalized advisory tools."
+          },
+          "grievance_category": {
+            "type": "string",
+            "description": "Category."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_category",
+          "description"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_raise_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "grievance_category": "dummy_grievance_category",
+          "description": "dummy_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "grievance_category": "exact",
+          "description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

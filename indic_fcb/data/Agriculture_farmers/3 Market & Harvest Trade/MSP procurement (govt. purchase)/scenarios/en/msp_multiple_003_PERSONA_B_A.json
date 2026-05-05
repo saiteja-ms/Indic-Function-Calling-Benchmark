@@ -1,0 +1,80 @@
+{
+  "scenario_id": "msp_multiple_003_PERSONA_B_A",
+  "intent_id": "msp_multiple_003",
+  "persona_id": "PERSONA_B",
+  "variant": "A",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform action: Sends OTP for MSP procurement authentication.. my mobile_number is 9876595657, my aadhaar_number is 100020007299."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_generate_otp",
+      "description": "Sends OTP for MSP procurement authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "msp_check_msp_rates",
+      "description": "Returns government-fixed MSP rates for supported crops. Rates are fixed and non-negotiable. PUBLIC \u2014 can be called without session. Does NOT register or procure. Fails if crop is unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'paddy', 'wheat', 'maize', 'bajra', 'barley', 'pulses', 'oilseeds'."
+          },
+          "season": {
+            "type": "string",
+            "description": "Season: 'kharif', 'rabi'. Optional."
+          }
+        },
+        "required": [
+          "crop_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

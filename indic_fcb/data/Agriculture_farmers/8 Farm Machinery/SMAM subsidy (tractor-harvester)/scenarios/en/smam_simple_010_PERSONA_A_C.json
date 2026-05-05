@@ -1,0 +1,60 @@
+{
+  "scenario_id": "smam_simple_010_PERSONA_A_C",
+  "intent_id": "smam_simple_010",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Tracks subsidy_status ('not_initiated', 'pending', 'approved', 'disbursed', 'failed'). For your information, my application_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "smam_track_subsidy",
+      "description": "Tracks subsidy_status ('not_initiated', 'pending', 'approved', 'disbursed', 'failed'). Subsidy released only after purchase verification and inspection. Requires session_token. Does NOT initiate. Fails if purchase not verified.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "smam_track_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

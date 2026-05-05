@@ -1,0 +1,67 @@
+{
+  "scenario_id": "kcc_simple_011_PERSONA_A_A",
+  "intent_id": "kcc_simple_011",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Updates the description or details of an existing grievance.. my ticket_id is None, my updated_description is dummy_updated_description_8674."
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_update_grievance_details",
+      "description": "Updates the description or details of an existing grievance. Only possible when status is 'raised' or 'assigned'. Requires session_token. Does NOT change category or priority. Fails if grievance is beyond 'assigned' status.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Grievance ticket ID."
+          },
+          "updated_description": {
+            "type": "string",
+            "description": "Updated description."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id",
+          "updated_description"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "kcc_update_grievance_details",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "ticket_id": null,
+          "updated_description": "dummy_updated_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "ticket_id": "exact",
+          "updated_description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

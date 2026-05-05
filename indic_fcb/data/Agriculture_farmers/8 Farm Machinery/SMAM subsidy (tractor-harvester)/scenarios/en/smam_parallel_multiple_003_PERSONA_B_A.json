@@ -1,0 +1,106 @@
+{
+  "scenario_id": "smam_parallel_multiple_003_PERSONA_B_A",
+  "intent_id": "smam_parallel_multiple_003",
+  "persona_id": "PERSONA_B",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: smam_calculate_subsidy and smam_track_subsidy.. my beneficiary_category is dummy_beneficiary_category_1640, my application_id is SMAM-APP-30000001, my machinery_cost is dummy_machinery_cost_9861, my machinery_type is dummy_machinery_type_9068."
+    }
+  ],
+  "function": [
+    {
+      "name": "smam_track_subsidy",
+      "description": "Tracks subsidy_status ('not_initiated', 'pending', 'approved', 'disbursed', 'failed'). Subsidy released only after purchase verification and inspection. Requires session_token. Does NOT initiate. Fails if purchase not verified.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    },
+    {
+      "name": "smam_calculate_subsidy",
+      "description": "Calculates subsidy amount based on machinery type, cost, and beneficiary category. Subsidy is a percentage with upper cap. Returns farmer's share and subsidy breakdown. Requires session_token. Does NOT disburse. Fails if machinery cost invalid or category mismatch.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "machinery_type": {
+            "type": "string",
+            "description": "Machinery type."
+          },
+          "machinery_cost": {
+            "type": "number",
+            "description": "Total cost INR."
+          },
+          "beneficiary_category": {
+            "type": "string",
+            "description": "Category."
+          }
+        },
+        "required": [
+          "session_token",
+          "machinery_type",
+          "machinery_cost",
+          "beneficiary_category"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "smam_calculate_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "machinery_type": "dummy_machinery_type",
+          "machinery_cost": "dummy_machinery_cost",
+          "beneficiary_category": "dummy_beneficiary_category"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "machinery_type": "exact",
+          "machinery_cost": "exact",
+          "beneficiary_category": "exact"
+        }
+      },
+      {
+        "tool": "smam_track_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": "SMAM-APP-30000001"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

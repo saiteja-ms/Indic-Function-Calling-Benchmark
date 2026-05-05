@@ -1,0 +1,104 @@
+{
+  "scenario_id": "kcc_long_context_002_PERSONA_G_B",
+  "intent_id": "kcc_long_context_002",
+  "persona_id": "PERSONA_G",
+  "variant": "B",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with kcc_track_response_status. my ticket_id is KCC-TKT-10000006"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with kcc_resolve_category_ambiguity. my description is dummy_description_1042"
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_track_response_status",
+      "description": "Tracks whether a response has been provided for a grievance. Returns response_status ('not_provided', 'provided', 'acknowledged'). Requires session_token. Does NOT provide responses. Fails if ticket_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Grievance ticket ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id"
+        ]
+      }
+    },
+    {
+      "name": "kcc_resolve_category_ambiguity",
+      "description": "Resolves ambiguous grievance categorization when the issue spans multiple domains. Returns recommended category based on description analysis. Requires session_token. Does NOT re-categorize automatically. Fails if description is too vague.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "description": {
+            "type": "string",
+            "description": "Grievance description to analyze."
+          }
+        },
+        "required": [
+          "session_token",
+          "description"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "kcc_track_response_status",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "ticket_id": "KCC-TKT-10000006"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "ticket_id": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "kcc_resolve_category_ambiguity",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "description": "dummy_description"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "description": "substring"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

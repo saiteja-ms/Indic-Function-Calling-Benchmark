@@ -1,0 +1,67 @@
+{
+  "scenario_id": "hortadvisory_simple_007_PERSONA_A_B",
+  "intent_id": "hortadvisory_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Generates a full seasonal plan with stage-wise schedule, input requirements, and activity milestones for a horticulture crop. Here are my details: my season_type is dummy_season_type_2089, my crop_type is dummy_crop_type_4735, my location is dummy_location_2362."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_get_seasonal_plan",
+      "description": "Generates a full seasonal plan with stage-wise schedule, input requirements, and activity milestones for a horticulture crop. PUBLIC tool. Does NOT guarantee yield. Plan is advisory only. Fails if crop-location-season combination unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          },
+          "season_type": {
+            "type": "string",
+            "description": "Season. Allowed: 'kharif', 'rabi', 'zaid'."
+          }
+        },
+        "required": [
+          "crop_type",
+          "location",
+          "season_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_get_seasonal_plan",
+        "args": {
+          "crop_type": "dummy_crop_type",
+          "location": "dummy_location",
+          "season_type": "dummy_season_type"
+        },
+        "eval_mode": {
+          "crop_type": "exact",
+          "location": "exact",
+          "season_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

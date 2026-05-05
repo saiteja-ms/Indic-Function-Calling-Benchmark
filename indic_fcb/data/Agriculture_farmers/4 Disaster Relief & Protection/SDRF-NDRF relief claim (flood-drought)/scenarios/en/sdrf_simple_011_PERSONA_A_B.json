@@ -1,0 +1,74 @@
+{
+  "scenario_id": "sdrf_simple_011_PERSONA_A_B",
+  "intent_id": "sdrf_simple_011",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Uploads structured damage evidence for a claim. Here are my details: my evidence_details is dummy_evidence_details_3034, my evidence_type is dummy_evidence_type_5851, my claim_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "sdrfndrf_upload_evidence",
+      "description": "Uploads structured damage evidence for a claim. Requires session_token. Claim must be in 'reported' or 'submitted' status. Does NOT approve claims. Fails if claim status is beyond 'submitted' or evidence is malformed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "claim_id": {
+            "type": "string",
+            "description": "Claim ID."
+          },
+          "evidence_type": {
+            "type": "string",
+            "description": "Type: 'damage_report', 'witness_statement', 'official_document'."
+          },
+          "evidence_details": {
+            "type": "string",
+            "description": "Structured evidence description."
+          }
+        },
+        "required": [
+          "session_token",
+          "claim_id",
+          "evidence_type",
+          "evidence_details"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "sdrfndrf_upload_evidence",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "claim_id": null,
+          "evidence_type": "dummy_evidence_type",
+          "evidence_details": "dummy_evidence_details"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "claim_id": "exact",
+          "evidence_type": "exact",
+          "evidence_details": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

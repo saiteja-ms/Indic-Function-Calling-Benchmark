@@ -1,0 +1,104 @@
+{
+  "scenario_id": "enam_parallel_multiple_002_PERSONA_E_B",
+  "intent_id": "enam_parallel_multiple_002",
+  "persona_id": "PERSONA_E",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: enam_compare_prices and enam_set_preferences. Here are my details: my state is dummy_state_2118, my commodity is dummy_commodity_5806, my commodities is dummy_commodities_4026."
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_compare_prices",
+      "description": "Compares prices of a commodity across multiple mandis to help identify best selling opportunity. PUBLIC tool. Does NOT execute transactions. Fails if commodity is unsupported or fewer than 2 mandis have data. Results may contain partial data if some mandis haven't updated.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "commodity": {
+            "type": "string",
+            "description": "Commodity to compare."
+          },
+          "state": {
+            "type": "string",
+            "description": "State for comparison."
+          },
+          "district": {
+            "type": "string",
+            "description": "Optional district filter."
+          },
+          "quality_grade": {
+            "type": "string",
+            "description": "Quality filter. Optional."
+          }
+        },
+        "required": [
+          "commodity",
+          "state"
+        ]
+      }
+    },
+    {
+      "name": "enam_set_preferences",
+      "description": "Sets user preferences for commodity and mandi notifications. Requires session_token. Does NOT fetch prices. Fails if session is invalid or preferences are malformed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after optional authentication. Required for preference and grievance tools."
+          },
+          "commodities": {
+            "type": "array",
+            "description": "List of preferred commodities."
+          },
+          "mandis": {
+            "type": "array",
+            "description": "List of preferred mandis."
+          }
+        },
+        "required": [
+          "session_token",
+          "commodities"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "enam_compare_prices",
+        "args": {
+          "commodity": "dummy_commodity",
+          "state": "dummy_state"
+        },
+        "eval_mode": {
+          "commodity": "exact",
+          "state": "exact"
+        }
+      },
+      {
+        "tool": "enam_set_preferences",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "commodities": "dummy_commodities"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "commodities": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

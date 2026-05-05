@@ -1,0 +1,71 @@
+{
+  "scenario_id": "fms_simple_009_PERSONA_A_B",
+  "intent_id": "fms_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Verifies that service has been completed satisfactorily. Here are my details: my booking_id is None, my satisfaction_rating is dummy_satisfaction_rating_5604."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_verify_completion",
+      "description": "Verifies that service has been completed satisfactorily. Transitions booking_status to 'verified'. Service must be 'completed'. Farmer must confirm quality. Requires session_token. Does NOT process payment. Fails if service not completed or quality issues reported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for booking tools."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          },
+          "satisfaction_rating": {
+            "type": "integer",
+            "description": "Rating 1-5."
+          },
+          "remarks": {
+            "type": "string",
+            "description": "Completion remarks. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id",
+          "satisfaction_rating"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_verify_completion",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": null,
+          "satisfaction_rating": "dummy_satisfaction_rating"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact",
+          "satisfaction_rating": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

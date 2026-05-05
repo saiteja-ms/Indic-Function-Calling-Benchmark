@@ -1,0 +1,100 @@
+{
+  "scenario_id": "soilportal_parallel_multiple_005_PERSONA_D_A",
+  "intent_id": "soilportal_parallel_multiple_005",
+  "persona_id": "PERSONA_D",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: shcportal_generate_otp and shcportal_search_reports.. my mobile_number is 9876552429, my aadhaar_number is 100020002910."
+    }
+  ],
+  "function": [
+    {
+      "name": "shcportal_search_reports",
+      "description": "Searches for available Soil Health Card reports for a farmer. Returns list of reports with sample IDs, dates, land parcels, and report_status. Requires session_token. Does NOT retrieve full report details \u2014 use shcportal_get_report_details. Fails if no reports exist. May return multiple reports across years and land parcels.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Optional filter by land parcel."
+          },
+          "report_type": {
+            "type": "string",
+            "description": "Filter: 'latest' or 'historical'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number"
+        ]
+      }
+    },
+    {
+      "name": "shcportal_generate_otp",
+      "description": "Sends OTP for Soil Health Card Portal authentication. Does NOT verify OTP or create session. Fails if Aadhaar is invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "shcportal_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      },
+      {
+        "tool": "shcportal_search_reports",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

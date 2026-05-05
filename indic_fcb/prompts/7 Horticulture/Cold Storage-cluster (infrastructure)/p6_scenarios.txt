@@ -1,0 +1,353 @@
+You are generating benchmark scenarios for an
+Indic function-calling benchmark in the style
+of BFCL and tau-bench.
+
+READ:
+  - tools.json from the current usecase directory
+  - personas.json from the current usecase directory
+  - intents.json from the current usecase directory
+
+USECASE: Cold Storage/cluster (infrastructure)
+
+TOOLS FILE:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\tools.jsonl
+
+PERSONAS FILE:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\personas.json
+
+INTENTS FILE:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\intents.json
+
+STUB LOGIC FILE:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\stub_logic.py
+
+OUTPUT FILE:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\scenarios\en\
+
+GENERATE: one scenario file per intent per variant.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SYSTEM PROMPT TO USE FOR ALL SCENARIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use this system prompt in every scenario:
+
+"""
+You are a helpful assistant for Indian farmers
+using the UMANG government services app.
+You have access to tools for the Cold Storage/cluster (infrastructure)
+service. Help farmers complete their government
+service requests accurately.
+
+Rules:
+- When a required parameter is missing, ask
+  for it clearly. Do not guess or hallucinate.
+- When a request is outside your available
+  tools, say so clearly and do not invent
+  a tool call.
+- Always call authentication tools first
+  when a session_token is needed.
+- Never reveal session tokens to the user.
+"""
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VARIANT DEFINITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For each intent, generate 3 variants:
+
+VARIANT A — direct and specific:
+  Farmer states all required parameter values
+  explicitly in the first message. Nothing is
+  missing. Prompt is unambiguous.
+  User sounds like a literate farmer typing
+  carefully on a phone.
+
+VARIANT B — indirect and colloquial:
+  Farmer describes their situation or problem
+  without explicitly stating all parameters.
+  Parameters must be inferrable from context
+  but are not stated as raw values.
+  User sounds like a semi-literate farmer
+  speaking naturally.
+
+VARIANT C — over-specified or multi-turn:
+  For single-turn intents: farmer gives
+  excessive context before the actual request.
+  For multi-turn intents: farmer spreads
+  information across multiple messages
+  naturally, the way a real conversation flows.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FUNCTION ARRAY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For single-turn categories (simple, multiple,
+parallel, parallel_multiple, task_irrelevance):
+  - Include the correct tool(s)
+  - For multiple: include distractor_tools from
+    the intent + correct tool
+  - Total tools in function array: 3-8
+  - Do not include all 14 tools — only relevant ones
+
+For multi-turn categories (base, miss_param,
+miss_func, long_context):
+  - Include all tools needed across the full chain
+  - Include 1-2 distractors to test disambiguation
+  - session_token tools always included when chain
+    starts with authentication
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GROUND TRUTH RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+single-turn:
+  ground_truth.calls is a flat list
+  one entry per expected tool call
+  parallel: multiple entries at same level
+
+multi-turn:
+  ground_truth.calls is a list of lists
+  one inner list per conversation turn
+  empty list [] for miss_param and miss_func
+  turns where model should NOT call a tool
+
+eval_mode per argument:
+  "exact"     → enums, numbers, booleans,
+                Aadhaar numbers, mobile numbers
+  "substring" → names, free-text descriptions,
+                complaint details
+  "type_only" → session_token, any output-derived
+                ID (request_id, grievance_id etc.)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT SCHEMA (ONE FILE PER SCENARIO)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "scenario_id": "coldstorage_simple_001_PERSONA_C_A",
+  "intent_id": "coldstorage_simple_001",
+  "persona_id": "PERSONA_C",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "...",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "..."
+    }
+  ],
+  "function": [
+    { ...tool schema from tools.json... }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "coldstorage_get_info",
+        "args": {
+          "location": "district level"
+        },
+        "eval_mode": {
+          "location": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_C"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIELD RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+scenario_id:
+  {intent_id}_{persona_id}_{variant}
+  example: coldstorage_simple_001_PERSONA_C_A
+
+persona_id:
+  use suggested_persona from the intent
+  as the default
+  if suggested_persona is PERSONA_C, use
+  PERSONA_C's state_values for all parameter
+  values in ground_truth.args
+
+conversation:
+  single-turn: one user message
+  multi-turn: list of user messages
+  parameter values in the conversation MUST
+  match the persona's state_values exactly
+  never invent parameter values
+  every tool argument used later MUST be
+  grounded in user-provided content
+
+function:
+  copy full tool schema objects from tools.json
+  only include tools relevant to this scenario
+  never truncate or summarise a tool schema
+  tool schema must be byte-identical to source
+
+call_order:
+  "any"        → parallel calls, order irrelevant
+  "sequential" → multi-turn chains, order matters
+
+requires_stub_execution:
+  true  → always true for all categories (execution evaluation)
+
+stub_stateful:
+  false → single-turn, miss_param, miss_func
+  true  → multi-turn base and long_context
+          where state changes between turns
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPECIAL RULES PER CATEGORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+simple:
+  conversation has exactly 1 user message
+  ground_truth.calls has exactly 1 entry
+  requires_stub_execution: true
+
+multiple:
+  conversation has exactly 1 user message
+  ground_truth.calls has exactly 1 entry
+  function array must include distractor tools
+  from the intent's distractor_tools field
+  distractor tools MUST NOT appear in ground_truth
+
+parallel:
+  conversation has exactly 1 user message
+  ground_truth.calls has 2+ entries
+  all entries use the same tool name
+  call_order: "any"
+
+parallel_multiple:
+  conversation has exactly 1 user message
+  ground_truth.calls has 2+ entries
+  entries use different tool names
+  call_order: "any"
+
+task_irrelevance:
+  conversation has exactly 1 user message
+  ground_truth.calls is an empty list []
+  requires_stub_execution: true
+  stub_stateful: false
+
+base:
+  conversation has one message per chain step
+  ground_truth.calls is a list of lists
+  requires_stub_execution: true
+  stub_stateful: true
+  call_order: "sequential"
+  tool sequence MUST respect domain constraints
+  defined in intents.json
+
+miss_param:
+  at the missing-param turn:
+    conversation message asks for something
+    without the required parameter
+    ground_truth inner list for that turn is []
+  at the next turn:
+    user provides the missing value
+    ground_truth inner list has the tool call
+  assistant MUST ask clarification before next call
+
+miss_func:
+  at the missing-func turn:
+    user requests an unavailable action
+    ground_truth inner list for that turn is []
+  assistant must refuse clearly
+  conversation then pivots to a valid action
+  ground_truth for pivot turn has the tool call
+
+long_context:
+  same chain as base
+  add 4-6 padding turns at the start
+  key parameter values (aadhaar, mobile) given
+  ONLY in turn 1 — never repeated
+  ground_truth for padding turns is []
+  model must retrieve values from context
+  without asking user to repeat them
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER VALUE SOURCING (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+All parameter values in:
+  - conversation content
+  - ground_truth.args
+
+MUST come from the persona's state_values.
+
+Never invent an Aadhaar number, mobile number,
+bank account, or installment date.
+Always use the exact values from the persona.
+
+Values must remain identical across:
+  - conversation
+  - ground_truth.args
+(no reformatting, no truncation, no masking)
+
+For type_only arguments (session_token):
+  use placeholder string: "<from_auth_step>"
+  evaluator will type-check only
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL SELECTION AND USAGE CONSISTENCY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Every tool in ground_truth MUST appear in function array
+- No tool outside tools.json may appear anywhere
+- required_tools from intent MUST be used
+- distractor_tools MUST NOT be used in ground_truth
+- tool arguments MUST strictly follow tool schema
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STUB EXECUTION COMPATIBILITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Scenarios MUST be executable under stub_logic.py:
+
+- tool order must be valid
+- required state must exist before each call
+- authentication must precede dependent calls
+- no domain constraint violations allowed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before producing each scenario verify:
+  ✓ scenario_id format is correct
+  ✓ all parameter values match persona state
+  ✓ tool names in ground_truth exist in function
+  ✓ tool names in function exist in tools.json
+  ✓ eval_mode assigned to every argument
+  ✓ multi-turn: turn count matches call list count
+  ✓ miss_param turn: inner list is []
+  ✓ miss_func turn: inner list is []
+  ✓ type_only used for session_token everywhere
+  ✓ no extra or missing tools
+  ✓ schema strictly followed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Generate ALL scenarios for ALL intents.
+One JSON object per scenario.
+Output as a JSON array of all scenarios.
+
+No markdown. No explanation. No truncation.
+No missing fields. No extra fields.
+No invented parameter values.
+
+SAVE TO:
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\7 Horticulture\Cold Storage-cluster (infrastructure)\scenarios\en\
+  one file per scenario named {scenario_id}.json

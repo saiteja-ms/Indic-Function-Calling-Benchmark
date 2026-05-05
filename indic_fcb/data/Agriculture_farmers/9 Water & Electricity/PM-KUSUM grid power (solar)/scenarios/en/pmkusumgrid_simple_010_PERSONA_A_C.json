@@ -1,0 +1,74 @@
+{
+  "scenario_id": "pmkusumgrid_simple_010_PERSONA_A_C",
+  "intent_id": "pmkusumgrid_simple_010",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Reports a fault or system issue with the solar plant. For your information, my description is dummy_description_1844, my plant_id is None, my fault_type is dummy_fault_type_9259."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusumgrid_report_fault",
+      "description": "Reports a fault or system issue with the solar plant. Transitions generation_status to 'fault'. Requires session_token. Plant must be 'operational'. Does NOT repair. Fails if plant not installed or duplicate fault report exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "plant_id": {
+            "type": "string",
+            "description": "Plant ID."
+          },
+          "fault_type": {
+            "type": "string",
+            "description": "Type: 'inverter_failure', 'panel_damage', 'grid_disconnect', 'meter_malfunction', 'low_output'."
+          },
+          "description": {
+            "type": "string",
+            "description": "Fault description."
+          }
+        },
+        "required": [
+          "session_token",
+          "plant_id",
+          "fault_type",
+          "description"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusumgrid_report_fault",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "plant_id": null,
+          "fault_type": "dummy_fault_type",
+          "description": "dummy_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "plant_id": "exact",
+          "fault_type": "exact",
+          "description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

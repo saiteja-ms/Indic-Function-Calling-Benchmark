@@ -1,0 +1,71 @@
+{
+  "scenario_id": "animalvacc_miss_param_002_PERSONA_A_B",
+  "intent_id": "animalvacc_miss_param_002",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "miss_param",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Please help me with livestock_verify_otp. my otp is dummy_otp_3342"
+    },
+    {
+      "role": "assistant",
+      "content": "Please provide your aadhaar_number."
+    },
+    {
+      "role": "user",
+      "content": "My aadhaar_number is 100020005404."
+    }
+  ],
+  "function": [
+    {
+      "name": "livestock_verify_otp",
+      "description": "Verifies the OTP and returns a session_token for livestock vaccination operations. Does NOT register animals or book vaccinations. Fails if OTP is expired, incorrect, or not generated.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP received on registered mobile."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "otp"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [],
+      [
+        {
+          "tool": "livestock_verify_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "otp": "dummy_otp"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "otp": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

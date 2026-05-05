@@ -1,0 +1,88 @@
+{
+  "scenario_id": "deds_simple_004_PERSONA_A_C",
+  "intent_id": "deds_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Submits a detailed project proposal for DEDS subsidy. For your information, my project_cost is dummy_project_cost_4752, my beneficiary_category is dummy_beneficiary_category_5637, my project_type is dummy_project_type_2412, my aadhaar_number is 100020004971, my location is dummy_location_2775."
+    }
+  ],
+  "function": [
+    {
+      "name": "deds_submit_project",
+      "description": "Submits a detailed project proposal for DEDS subsidy. Transitions application_status to 'submitted'. Requires session_token. Farmer must be eligible. Does NOT approve the application or sanction loans. Fails if farmer is ineligible, proposal is incomplete, or duplicate application exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "project_type": {
+            "type": "string",
+            "description": "Project type."
+          },
+          "project_cost": {
+            "type": "number",
+            "description": "Estimated total project cost in INR."
+          },
+          "location": {
+            "type": "string",
+            "description": "Project location (village/district)."
+          },
+          "beneficiary_category": {
+            "type": "string",
+            "description": "Category: 'general', 'sc_st', 'women'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "project_type",
+          "project_cost",
+          "location",
+          "beneficiary_category"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "deds_submit_project",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "project_type": "dummy_project_type",
+          "project_cost": "dummy_project_cost",
+          "location": "dummy_location",
+          "beneficiary_category": "dummy_beneficiary_category"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "project_type": "exact",
+          "project_cost": "exact",
+          "location": "exact",
+          "beneficiary_category": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

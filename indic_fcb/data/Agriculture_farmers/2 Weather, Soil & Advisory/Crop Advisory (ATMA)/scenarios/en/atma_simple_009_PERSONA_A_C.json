@@ -1,0 +1,71 @@
+{
+  "scenario_id": "atma_simple_009_PERSONA_A_C",
+  "intent_id": "atma_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Returns recommended irrigation schedule based on crop, stage, soil type, and weather. For your information, my crop_type is dummy_crop_type_9788, my location is dummy_location_3862."
+    }
+  ],
+  "function": [
+    {
+      "name": "atma_get_irrigation_schedule",
+      "description": "Returns recommended irrigation schedule based on crop, stage, soil type, and weather. Requires session_token. Does NOT control irrigation equipment. Fails if crop or location is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "growth_stage": {
+            "type": "string",
+            "description": "Growth stage."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "session_token",
+          "crop_type",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "atma_get_irrigation_schedule",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "crop_type": "dummy_crop_type",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "crop_type": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

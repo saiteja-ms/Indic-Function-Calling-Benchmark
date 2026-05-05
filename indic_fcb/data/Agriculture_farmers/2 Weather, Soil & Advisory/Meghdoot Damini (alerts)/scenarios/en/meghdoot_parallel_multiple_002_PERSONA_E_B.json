@@ -1,0 +1,78 @@
+{
+  "scenario_id": "meghdoot_parallel_multiple_002_PERSONA_E_B",
+  "intent_id": "meghdoot_parallel_multiple_002",
+  "persona_id": "PERSONA_E",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: damini_check_alert_validity and meghdoot_resolve_alert_conflict. Here are my details: my location is dummy_location_4142, my alert_id is dummy_alert_id_9203."
+    }
+  ],
+  "function": [
+    {
+      "name": "damini_check_alert_validity",
+      "description": "Checks whether a specific lightning alert is still active or has expired. Alerts expire within minutes. PUBLIC tool. Does NOT provide new alerts. Fails if alert_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "alert_id": {
+            "type": "string",
+            "description": "Unique identifier of the lightning alert."
+          }
+        },
+        "required": [
+          "alert_id"
+        ]
+      }
+    },
+    {
+      "name": "meghdoot_resolve_alert_conflict",
+      "description": "Resolves conflicting or overlapping alerts for a location (e.g., simultaneous heatwave and rainfall alerts). Returns prioritized alert list. PUBLIC tool. Does NOT modify alerts. Fails if no alerts exist for the location.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "damini_check_alert_validity",
+        "args": {
+          "alert_id": "dummy_alert_id"
+        },
+        "eval_mode": {
+          "alert_id": "exact"
+        }
+      },
+      {
+        "tool": "meghdoot_resolve_alert_conflict",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

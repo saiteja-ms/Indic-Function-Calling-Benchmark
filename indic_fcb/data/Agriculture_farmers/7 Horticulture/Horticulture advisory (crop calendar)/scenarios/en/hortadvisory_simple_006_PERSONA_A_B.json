@@ -1,0 +1,74 @@
+{
+  "scenario_id": "hortadvisory_simple_006_PERSONA_A_B",
+  "intent_id": "hortadvisory_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Tracks and returns the current estimated crop stage based on sowing date and crop type. Here are my details: my crop_type is dummy_crop_type_8711, my location is dummy_location_3384, my sowing_date is dummy_sowing_date_3106."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_track_crop_stage",
+      "description": "Tracks and returns the current estimated crop stage based on sowing date and crop type. Requires session_token (personalized). Does NOT update stage manually. Calculation is approximate and may not reflect actual field conditions. Fails if no sowing record exists or crop_type unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for personalized advisory tools."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "sowing_date": {
+            "type": "string",
+            "description": "Sowing date YYYY-MM-DD."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "session_token",
+          "crop_type",
+          "sowing_date",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_track_crop_stage",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "crop_type": "dummy_crop_type",
+          "sowing_date": "dummy_sowing_date",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "crop_type": "exact",
+          "sowing_date": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "scenario_id": "soilhealth_parallel_multiple_003_PERSONA_H_A",
+  "intent_id": "soilhealth_parallel_multiple_003",
+  "persona_id": "PERSONA_H",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: shc_get_soil_improvement_advisory and shc_raise_grievance.. my description is dummy_description_8826, my advisory_type is dummy_advisory_type_5373, my sample_id is SHC-SMP-50000007, my grievance_category is dummy_grievance_category_5714, my aadhaar_number is 100020004427."
+    }
+  ],
+  "function": [
+    {
+      "name": "shc_raise_grievance",
+      "description": "Raises a grievance related to SHC. Valid categories: 'sample_not_collected', 'report_not_generated', 'incorrect_values', 'lab_delay', 'recommendation_issue'. Farmer must check sample/report status first. Requires session_token. Does NOT resolve grievances. Fails if category is invalid or duplicate exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "grievance_category": {
+            "type": "string",
+            "description": "Category: 'sample_not_collected', 'report_not_generated', 'incorrect_values', 'lab_delay', 'recommendation_issue'."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the issue."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "grievance_category",
+          "description"
+        ]
+      }
+    },
+    {
+      "name": "shc_get_soil_improvement_advisory",
+      "description": "Provides soil improvement advisory based on SHC test results including remediation steps for nutrient deficiencies, pH correction, and organic matter improvement. Requires session_token. Does NOT execute farming actions. Fails if no report exists for the sample.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "sample_id": {
+            "type": "string",
+            "description": "Unique identifier for a soil sample."
+          },
+          "advisory_type": {
+            "type": "string",
+            "description": "Type of advisory. Allowed: 'fertilizer', 'soil_improvement', 'crop_suitability'."
+          }
+        },
+        "required": [
+          "session_token",
+          "sample_id",
+          "advisory_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "shc_get_soil_improvement_advisory",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "sample_id": "SHC-SMP-50000007",
+          "advisory_type": "dummy_advisory_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "sample_id": "exact",
+          "advisory_type": "exact"
+        }
+      },
+      {
+        "tool": "shc_raise_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "grievance_category": "dummy_grievance_category",
+          "description": "dummy_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "grievance_category": "exact",
+          "description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

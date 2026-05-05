@@ -1,0 +1,81 @@
+{
+  "scenario_id": "kcc_multiple_003_PERSONA_A_C",
+  "intent_id": "kcc_multiple_003",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform action: Sends OTP for Kisan Call Centre authentication. For your information, my mobile_number is 9876580682, my aadhaar_number is 100020001332."
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_generate_otp",
+      "description": "Sends OTP for Kisan Call Centre authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "kcc_get_grievance_status",
+      "description": "Returns current grievance_status ('raised', 'assigned', 'in_progress', 'resolved', 'closed', 'escalated') with details. Requires session_token. Does NOT modify status. Fails if ticket_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Unique identifier of the grievance ticket."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "kcc_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

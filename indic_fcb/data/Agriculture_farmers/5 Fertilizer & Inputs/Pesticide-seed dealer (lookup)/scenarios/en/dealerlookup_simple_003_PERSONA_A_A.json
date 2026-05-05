@@ -1,0 +1,53 @@
+{
+  "scenario_id": "dealerlookup_simple_003_PERSONA_A_A",
+  "intent_id": "dealerlookup_simple_003",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Retrieves detailed information about a specific dealer including name, address, contact, products carried, and license status.. my dealer_id is dummy_dealer_id_1618."
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_get_details",
+      "description": "Retrieves detailed information about a specific dealer including name, address, contact, products carried, and license status. PUBLIC tool. Does NOT verify license \u2014 use dealer_verify_license. Data may be stale or contain inconsistencies. Fails if dealer_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "dealer_id": {
+            "type": "string",
+            "description": "Unique identifier of the dealer."
+          }
+        },
+        "required": [
+          "dealer_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "dealer_get_details",
+        "args": {
+          "dealer_id": "dummy_dealer_id"
+        },
+        "eval_mode": {
+          "dealer_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "scenario_id": "sdrf_simple_008_PERSONA_A_A",
+  "intent_id": "sdrf_simple_008",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Tracks government survey/verification status.. my claim_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "sdrfndrf_track_survey_status",
+      "description": "Tracks government survey/verification status. Returns survey_status ('not_started', 'scheduled', 'in_progress', 'completed'). Requires session_token. Does NOT initiate surveys. Fails if claim_id invalid or no survey assigned.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "claim_id": {
+            "type": "string",
+            "description": "Claim ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "claim_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "sdrfndrf_track_survey_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "claim_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "claim_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

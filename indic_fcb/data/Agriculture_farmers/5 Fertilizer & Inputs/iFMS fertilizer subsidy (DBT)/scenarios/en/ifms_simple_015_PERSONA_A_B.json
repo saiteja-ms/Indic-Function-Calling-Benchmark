@@ -1,0 +1,67 @@
+{
+  "scenario_id": "ifms_simple_015_PERSONA_A_B",
+  "intent_id": "ifms_simple_015",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Calculates the subsidy amount for a given fertilizer type and quantity. Here are my details: my fertilizer_type is dummy_fertilizer_type_7438, my quantity_kg is dummy_quantity_kg_4729."
+    }
+  ],
+  "function": [
+    {
+      "name": "ifms_calculate_subsidy",
+      "description": "Calculates the subsidy amount for a given fertilizer type and quantity. Returns subsidized price, full price, and savings. Requires session_token. Calculation is informational only \u2014 actual subsidy is applied at POS. Does NOT apply subsidy. Fails if fertilizer type unsupported or quantity invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "fertilizer_type": {
+            "type": "string",
+            "description": "Fertilizer type."
+          },
+          "quantity_kg": {
+            "type": "number",
+            "description": "Quantity in kilograms."
+          }
+        },
+        "required": [
+          "session_token",
+          "fertilizer_type",
+          "quantity_kg"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ifms_calculate_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "fertilizer_type": "dummy_fertilizer_type",
+          "quantity_kg": "dummy_quantity_kg"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "fertilizer_type": "exact",
+          "quantity_kg": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

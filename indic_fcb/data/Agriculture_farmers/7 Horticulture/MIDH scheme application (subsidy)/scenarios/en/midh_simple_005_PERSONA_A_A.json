@@ -1,0 +1,88 @@
+{
+  "scenario_id": "midh_simple_005_PERSONA_A_A",
+  "intent_id": "midh_simple_005",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Submits a MIDH scheme application.. my land_parcel_id is dummy_land_parcel_id_1474, my project_cost is dummy_project_cost_2902, my beneficiary_category is dummy_beneficiary_category_1158, my component_type is dummy_component_type_1558, my aadhaar_number is 100020003455."
+    }
+  ],
+  "function": [
+    {
+      "name": "midh_submit_application",
+      "description": "Submits a MIDH scheme application. Transitions application_status to 'submitted'. Farmer must be eligible. Requires session_token. Does NOT approve application. Fails if ineligible, duplicate, or incomplete project details.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "component_type": {
+            "type": "string",
+            "description": "Component type."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          },
+          "project_cost": {
+            "type": "number",
+            "description": "Total project cost INR."
+          },
+          "beneficiary_category": {
+            "type": "string",
+            "description": "Category."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "component_type",
+          "land_parcel_id",
+          "project_cost",
+          "beneficiary_category"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "midh_submit_application",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "component_type": "dummy_component_type",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "project_cost": "dummy_project_cost",
+          "beneficiary_category": "dummy_beneficiary_category"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "component_type": "exact",
+          "land_parcel_id": "exact",
+          "project_cost": "exact",
+          "beneficiary_category": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

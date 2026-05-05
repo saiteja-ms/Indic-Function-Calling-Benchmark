@@ -1,0 +1,57 @@
+{
+  "scenario_id": "jaljeevan_simple_006_PERSONA_A_C",
+  "intent_id": "jaljeevan_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Returns current water supply_status ('unavailable', 'intermittent', 'available') for a household or village. For your information, my village is Sample Village."
+    }
+  ],
+  "function": [
+    {
+      "name": "jjm_get_supply_status",
+      "description": "Returns current water supply_status ('unavailable', 'intermittent', 'available') for a household or village. Reflects real-world variability. PUBLIC tool. Does NOT guarantee continuous supply. Fails if household or village not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "household_id": {
+            "type": "string",
+            "description": "Household ID. Optional \u2014 returns village level if omitted."
+          },
+          "village": {
+            "type": "string",
+            "description": "Village or habitation name."
+          }
+        },
+        "required": [
+          "village"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "jjm_get_supply_status",
+        "args": {
+          "village": "Sample Village"
+        },
+        "eval_mode": {
+          "village": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "scenario_id": "midh_parallel_multiple_005_PERSONA_H_C",
+  "intent_id": "midh_parallel_multiple_005",
+  "persona_id": "PERSONA_H",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: midh_track_project_status and midh_track_subsidy. For your information, my application_id is MIDH-APP-30000007."
+    }
+  ],
+  "function": [
+    {
+      "name": "midh_track_subsidy",
+      "description": "Tracks subsidy_status ('not_initiated', 'pending', 'approved', 'partially_disbursed', 'disbursed', 'failed'). Subsidy may be staged based on project completion milestones. Requires session_token. Does NOT initiate disbursement. Fails if project not verified.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    },
+    {
+      "name": "midh_track_project_status",
+      "description": "Tracks project_status ('not_started', 'in_progress', 'partially_completed', 'completed', 'verified'). Subsidy may be released in stages based on progress. Requires session_token. Does NOT modify project. Fails if application_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "midh_track_project_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": "MIDH-APP-30000007"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      },
+      {
+        "tool": "midh_track_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": "MIDH-APP-30000007"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

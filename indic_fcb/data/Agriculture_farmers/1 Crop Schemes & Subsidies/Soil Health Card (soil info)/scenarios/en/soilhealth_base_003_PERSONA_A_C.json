@@ -1,0 +1,119 @@
+{
+  "scenario_id": "soilhealth_base_003_PERSONA_A_C",
+  "intent_id": "soilhealth_base_003",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "base",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with shc_generate_otp. my aadhaar_number is 100020007175, my mobile_number is 9876570849"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with shc_register_soil_sample. my aadhaar_number is 100020007175, my land_parcel_id is dummy_land_parcel_id_8281"
+    }
+  ],
+  "function": [
+    {
+      "name": "shc_register_soil_sample",
+      "description": "Registers a new soil sample for testing linked to a specific land parcel. Transitions sample_status to 'registered'. Requires session_token. Does NOT collect or test the sample. Fails if land_parcel_id is invalid, a duplicate sample is already registered for the same parcel in the current cycle, or the farmer is not authenticated.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier for a land parcel."
+          },
+          "soil_type": {
+            "type": "string",
+            "description": "Type of soil. Allowed: 'alluvial', 'black', 'red', 'laterite', 'desert', 'mountain'."
+          },
+          "gps_coordinates": {
+            "type": "string",
+            "description": "GPS coordinates of the sample collection point."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_parcel_id"
+        ]
+      }
+    },
+    {
+      "name": "shc_generate_otp",
+      "description": "Sends OTP to the Aadhaar-linked mobile number for Soil Health Card authentication. Does NOT verify the OTP or create a session. Fails if Aadhaar is invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "shc_generate_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "mobile_number": "dummy_mobile_number"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "mobile_number": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "shc_register_soil_sample",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "land_parcel_id": "dummy_land_parcel_id"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "land_parcel_id": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

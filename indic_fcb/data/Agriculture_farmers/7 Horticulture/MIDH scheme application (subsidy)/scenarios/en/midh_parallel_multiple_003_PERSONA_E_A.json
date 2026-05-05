@@ -1,0 +1,113 @@
+{
+  "scenario_id": "midh_parallel_multiple_003_PERSONA_E_A",
+  "intent_id": "midh_parallel_multiple_003",
+  "persona_id": "PERSONA_E",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: midh_check_eligibility and midh_track_grievance_status.. my grievance_id is None, my land_parcel_id is dummy_land_parcel_id_8430, my beneficiary_category is dummy_beneficiary_category_1576, my component_type is dummy_component_type_7816, my aadhaar_number is 100020006291."
+    }
+  ],
+  "function": [
+    {
+      "name": "midh_track_grievance_status",
+      "description": "Tracks MIDH grievance. Requires session_token. Fails if grievance_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "grievance_id": {
+            "type": "string",
+            "description": "Grievance ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_id"
+        ]
+      }
+    },
+    {
+      "name": "midh_check_eligibility",
+      "description": "Checks eligibility for MIDH horticulture subsidy based on land ownership, crop suitability, category (general/SC-ST/women/hilly region), and prior subsidy history. Requires session_token. Does NOT submit application. Fails if farmer has existing MIDH subsidy for same land (duplicate), land records unavailable, or crop-region mismatch.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "component_type": {
+            "type": "string",
+            "description": "Component. Allowed: 'orchard_development', 'polyhouse', 'greenhouse', 'drip_irrigation', 'nursery'."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          },
+          "beneficiary_category": {
+            "type": "string",
+            "description": "Category. Allowed: 'general', 'sc_st', 'women', 'hilly_region'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "component_type",
+          "land_parcel_id",
+          "beneficiary_category"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "midh_check_eligibility",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "component_type": "dummy_component_type",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "beneficiary_category": "dummy_beneficiary_category"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "component_type": "exact",
+          "land_parcel_id": "exact",
+          "beneficiary_category": "exact"
+        }
+      },
+      {
+        "tool": "midh_track_grievance_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "grievance_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "grievance_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

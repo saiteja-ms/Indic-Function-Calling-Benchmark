@@ -1,0 +1,68 @@
+{
+  "scenario_id": "epashu_simple_011_PERSONA_A_B",
+  "intent_id": "epashu_simple_011",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Updates an existing listing (price, description, status). Here are my details: my listing_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "epashu_update_listing",
+      "description": "Updates an existing listing (price, description, status). Only the creator can modify. Requires session_token. Does NOT create new listings. Fails if listing_id is invalid, user is not owner, or listing is deleted.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "listing_id": {
+            "type": "string",
+            "description": "Listing ID."
+          },
+          "price": {
+            "type": "number",
+            "description": "Updated price. Optional."
+          },
+          "listing_status": {
+            "type": "string",
+            "description": "Status. Allowed: 'active', 'inactive'. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "listing_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "epashu_update_listing",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "listing_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "listing_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

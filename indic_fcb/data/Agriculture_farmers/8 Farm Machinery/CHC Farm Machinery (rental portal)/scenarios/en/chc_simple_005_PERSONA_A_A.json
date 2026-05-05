@@ -1,0 +1,64 @@
+{
+  "scenario_id": "chc_simple_005_PERSONA_A_A",
+  "intent_id": "chc_simple_005",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Checks if specific machinery is available for a given date and time slot.. my machinery_id is dummy_machinery_id_7030, my date is dummy_date_4940."
+    }
+  ],
+  "function": [
+    {
+      "name": "chc_check_availability",
+      "description": "Checks if specific machinery is available for a given date and time slot. Returns availability_status ('available', 'reserved', 'unavailable') and machinery_status ('operational', 'in_use', 'maintenance', 'unavailable'). PUBLIC tool. Does NOT book. Fails if machinery_id invalid or date is in the past.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "machinery_id": {
+            "type": "string",
+            "description": "Unique identifier of the farm machinery."
+          },
+          "date": {
+            "type": "string",
+            "description": "Desired date YYYY-MM-DD."
+          },
+          "duration_hours": {
+            "type": "number",
+            "description": "Duration in hours. Optional."
+          }
+        },
+        "required": [
+          "machinery_id",
+          "date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "chc_check_availability",
+        "args": {
+          "machinery_id": "dummy_machinery_id",
+          "date": "dummy_date"
+        },
+        "eval_mode": {
+          "machinery_id": "exact",
+          "date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

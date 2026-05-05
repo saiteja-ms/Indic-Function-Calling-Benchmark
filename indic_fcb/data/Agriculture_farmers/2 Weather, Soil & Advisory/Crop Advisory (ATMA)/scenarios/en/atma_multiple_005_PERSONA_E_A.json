@@ -1,0 +1,96 @@
+{
+  "scenario_id": "atma_multiple_005_PERSONA_E_A",
+  "intent_id": "atma_multiple_005",
+  "persona_id": "PERSONA_E",
+  "variant": "A",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform action: Sends OTP for ATMA Crop Advisory authentication.. my mobile_number is 9876576144, my aadhaar_number is 100020006422."
+    }
+  ],
+  "function": [
+    {
+      "name": "atma_generate_otp",
+      "description": "Sends OTP for ATMA Crop Advisory authentication. Does NOT verify OTP. Fails if Aadhaar is invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "atma_report_crop_issue",
+      "description": "Reports a crop issue (pest, disease, nutrient deficiency, weather damage) with structured symptom inputs. Transitions diagnosis_state to 'symptoms_provided'. Requires session_token. Does NOT diagnose \u2014 use atma_diagnose_pest_disease. Fails if crop_type is invalid or symptom description is empty.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "issue_type": {
+            "type": "string",
+            "description": "Issue category. Allowed: 'pest', 'disease', 'nutrient_deficiency', 'weather_damage'."
+          },
+          "symptoms": {
+            "type": "string",
+            "description": "Detailed symptom description."
+          },
+          "location": {
+            "type": "string",
+            "description": "Village, district, or agro-climatic region."
+          }
+        },
+        "required": [
+          "session_token",
+          "crop_type",
+          "issue_type",
+          "symptoms",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "atma_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

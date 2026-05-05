@@ -1,0 +1,92 @@
+{
+  "scenario_id": "agrimarket_multiple_003_PERSONA_C_B",
+  "intent_id": "agrimarket_multiple_003",
+  "persona_id": "PERSONA_C",
+  "variant": "B",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform action: Sends OTP for Agri Marketing authentication. Here are my details: my mobile_number is 9876525426, my aadhaar_number is 100020007357."
+    }
+  ],
+  "function": [
+    {
+      "name": "agrimarket_generate_otp",
+      "description": "Sends OTP for Agri Marketing authentication. Does NOT verify OTP. Fails if Aadhaar invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the user (farmer/FPO/buyer)."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "agrimarket_search_listings",
+      "description": "Searches available crop listings by commodity, location, quality, and price range. Requires session_token. Does NOT place orders. Fails if no listings match. Returns only 'active' listings.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+          },
+          "commodity_type": {
+            "type": "string",
+            "description": "Commodity filter."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location filter."
+          },
+          "quality_grade": {
+            "type": "string",
+            "description": "Grade filter. Optional."
+          },
+          "max_price": {
+            "type": "number",
+            "description": "Maximum price filter. Optional."
+          }
+        },
+        "required": [
+          "session_token"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agrimarket_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_C"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

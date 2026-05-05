@@ -1,0 +1,60 @@
+{
+  "scenario_id": "smam_simple_012_PERSONA_A_B",
+  "intent_id": "smam_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Returns detailed info about a machinery type including specs, price range, and subsidy rates. Here are my details: my machinery_type is dummy_machinery_type_5242."
+    }
+  ],
+  "function": [
+    {
+      "name": "smam_get_machinery_details",
+      "description": "Returns detailed info about a machinery type including specs, price range, and subsidy rates. Requires session_token. Does NOT select or purchase. Fails if type unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "machinery_type": {
+            "type": "string",
+            "description": "Machinery type."
+          }
+        },
+        "required": [
+          "session_token",
+          "machinery_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "smam_get_machinery_details",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "machinery_type": "dummy_machinery_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "machinery_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

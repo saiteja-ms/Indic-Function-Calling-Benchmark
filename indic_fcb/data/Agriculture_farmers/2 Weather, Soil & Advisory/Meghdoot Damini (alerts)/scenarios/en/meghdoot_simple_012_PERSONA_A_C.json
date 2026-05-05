@@ -1,0 +1,60 @@
+{
+  "scenario_id": "meghdoot_simple_012_PERSONA_A_C",
+  "intent_id": "meghdoot_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Tracks grievance status. For your information, my grievance_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "meghdoot_track_grievance_status",
+      "description": "Tracks grievance status. Requires session_token. Does NOT raise new grievances. Fails if grievance_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for subscription and grievance tools."
+          },
+          "grievance_id": {
+            "type": "string",
+            "description": "Unique grievance ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "meghdoot_track_grievance_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "grievance_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "grievance_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

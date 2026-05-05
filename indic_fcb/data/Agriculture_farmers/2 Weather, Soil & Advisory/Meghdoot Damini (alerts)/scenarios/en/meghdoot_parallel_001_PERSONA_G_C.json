@@ -1,0 +1,57 @@
+{
+  "scenario_id": "meghdoot_parallel_001_PERSONA_G_C",
+  "intent_id": "meghdoot_parallel_001",
+  "persona_id": "PERSONA_G",
+  "variant": "C",
+  "category": "parallel",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform this action twice simultaneously for two different entities: damini_get_lightning_alert. For your information, my location is dummy_location_5559."
+    }
+  ],
+  "function": [
+    {
+      "name": "damini_get_lightning_alert",
+      "description": "Fetches real-time lightning alerts for a specified location based on satellite/sensor data. Alerts are valid only within a short time window (~minutes) and expire quickly. PUBLIC tool \u2014 no authentication required. Location is mandatory. Does NOT provide safety recommendations \u2014 use damini_get_safety_advisory. Fails if location is invalid or no alerts exist. Returns alert_status ('active' or 'expired'), severity, and proximity.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "time_window": {
+            "type": "string",
+            "description": "Query window. Allowed: 'current', '1_hour', '3_hour'. Default: 'current'."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "damini_get_lightning_alert",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "scenario_id": "pmkisan_simple_007_PERSONA_A_A",
+  "intent_id": "pmkisan_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Retrieves the complete payment history of the farmer under PM-KISAN, including all past installments (\u20b92000 each, 3 per year totaling \u20b96000/year), their dates, amounts, and transaction statuses.. my aadhaar_number is 100020001249."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkisan_get_payment_history",
+      "description": "Retrieves the complete payment history of the farmer under PM-KISAN, including all past installments (\u20b92000 each, 3 per year totaling \u20b96000/year), their dates, amounts, and transaction statuses. Requires a valid session_token. This tool does NOT show upcoming or pending installments \u2014 use pmkisan_track_installment_status for that. Fails if the farmer is not registered. Returns empty history if no payments have been processed yet.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkisan_get_payment_history",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

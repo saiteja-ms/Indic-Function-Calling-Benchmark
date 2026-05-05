@@ -1,0 +1,101 @@
+{
+  "scenario_id": "chc_long_context_003_PERSONA_D_A",
+  "intent_id": "chc_long_context_003",
+  "persona_id": "PERSONA_D",
+  "variant": "A",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with chc_generate_otp. my aadhaar_number is 100020006566, my mobile_number is 9876566447"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with chc_get_chc_list. my location is dummy_location_5573"
+    }
+  ],
+  "function": [
+    {
+      "name": "chc_generate_otp",
+      "description": "Sends OTP for CHC Farm Machinery rental authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "chc_get_chc_list",
+      "description": "Returns list of Custom Hiring Centres in a region with location, contact, and supported machinery. PUBLIC tool \u2014 no authentication required. Does NOT check machinery availability. Fails if location invalid or no CHCs found.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or region."
+          },
+          "machinery_type": {
+            "type": "string",
+            "description": "Filter by type. Allowed: 'tractor', 'harvester', 'rotavator', 'seed_drill', 'sprayer'. Optional."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "chc_generate_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "mobile_number": "dummy_mobile_number"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "mobile_number": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "chc_get_chc_list",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

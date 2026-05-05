@@ -1,0 +1,109 @@
+{
+  "scenario_id": "enam_base_005_PERSONA_G_A",
+  "intent_id": "enam_base_005",
+  "persona_id": "PERSONA_G",
+  "variant": "A",
+  "category": "base",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with enam_search_mandis. my location is dummy_location_8368"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with enam_compare_prices. my commodity is dummy_commodity_1528, my state is dummy_state_5649"
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_search_mandis",
+      "description": "Searches for mandis by location (state/district). Returns mandi names, codes, and supported commodities. PUBLIC tool. Does NOT return prices \u2014 use enam_get_mandi_prices. Fails if location is invalid or no mandis found. May return multiple mandis with same name (ambiguity).",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "State, district, or mandi name."
+          },
+          "commodity": {
+            "type": "string",
+            "description": "Optional filter by commodity."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "enam_compare_prices",
+      "description": "Compares prices of a commodity across multiple mandis to help identify best selling opportunity. PUBLIC tool. Does NOT execute transactions. Fails if commodity is unsupported or fewer than 2 mandis have data. Results may contain partial data if some mandis haven't updated.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "commodity": {
+            "type": "string",
+            "description": "Commodity to compare."
+          },
+          "state": {
+            "type": "string",
+            "description": "State for comparison."
+          },
+          "district": {
+            "type": "string",
+            "description": "Optional district filter."
+          },
+          "quality_grade": {
+            "type": "string",
+            "description": "Quality filter. Optional."
+          }
+        },
+        "required": [
+          "commodity",
+          "state"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "enam_search_mandis",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "enam_compare_prices",
+          "args": {
+            "commodity": "dummy_commodity",
+            "state": "dummy_state"
+          },
+          "eval_mode": {
+            "commodity": "exact",
+            "state": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

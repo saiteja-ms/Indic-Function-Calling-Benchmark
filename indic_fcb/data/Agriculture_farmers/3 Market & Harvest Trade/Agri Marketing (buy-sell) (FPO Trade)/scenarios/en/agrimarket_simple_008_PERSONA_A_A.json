@@ -1,0 +1,60 @@
+{
+  "scenario_id": "agrimarket_simple_008_PERSONA_A_A",
+  "intent_id": "agrimarket_simple_008",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Tracks order status ('created', 'confirmed', 'dispatched', 'delivered', 'completed', 'cancelled').. my order_id is dummy_order_id_3370."
+    }
+  ],
+  "function": [
+    {
+      "name": "agrimarket_track_order",
+      "description": "Tracks order status ('created', 'confirmed', 'dispatched', 'delivered', 'completed', 'cancelled'). Requires session_token. Does NOT modify order. Fails if order_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Unique identifier of an order."
+          }
+        },
+        "required": [
+          "session_token",
+          "order_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agrimarket_track_order",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "order_id": "dummy_order_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "order_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

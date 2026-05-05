@@ -1,10 +1,178 @@
 [
-  {"persona_id":"PERSONA_A","display_name":"Santosh Yadav — UP, PATH 1","code_path":"PATH 1 — Unauthenticated status check","language_preference":"hi","interesting_characteristic":"Farmer checking village supply and household connection status without logging in","stub_test_assertion":"jjm_get_connection_status should return status publicly","state_values":{"otp_sent":false,"otp_verified":false,"session_token":null,"application_id":null,"connection_status":null,"complaint_id":null,"complaint_status":null,"grievance_id":null}},
-  {"persona_id":"PERSONA_B","display_name":"Vikas Paswan — Bihar, PATH 2","code_path":"PATH 2 — Applying for connection","language_preference":"hi","interesting_characteristic":"Farmer who just logged in to apply for a tap water connection under JJM","stub_test_assertion":"connection_status should become 'applied' after jjm_apply_connection","state_values":{"otp_sent":true,"otp_verified":true,"session_token":"JJM-TKN-AB12CD34","application_id":null,"connection_status":null,"complaint_id":null,"complaint_status":null,"grievance_id":null}},
-  {"persona_id":"PERSONA_C","display_name":"Balwinder Singh — Punjab, PATH 3","code_path":"PATH 3 — Tracking application","language_preference":"pa","interesting_characteristic":"Farmer tracking his JJM application submitted last month to see if pipes will be laid soon","stub_test_assertion":"jjm_track_application_status should return 'applied' or 'in_progress'","state_values":{"otp_sent":true,"otp_verified":true,"session_token":"JJM-TKN-EF56GH78","application_id":"JJM-APP-10000001","connection_status":"applied","complaint_id":null,"complaint_status":null,"grievance_id":null}},
-  {"persona_id":"PERSONA_D","display_name":"Anil Bishnoi — Haryana, PATH 4","code_path":"PATH 4 — Reporting water issue","language_preference":"hi","interesting_characteristic":"Farmer whose new tap connection has low pressure, logging a formal complaint","stub_test_assertion":"complaint_status should become 'raised' after jjm_report_issue","state_values":{"otp_sent":true,"otp_verified":true,"session_token":"JJM-TKN-IJ90KL12","application_id":"JJM-APP-10000002","connection_status":"active","complaint_id":null,"complaint_status":null,"grievance_id":null}},
-  {"persona_id":"PERSONA_E","display_name":"Nitin Patil — Maharashtra, PATH 5","code_path":"PATH 5 — Tracking complaint","language_preference":"mr","interesting_characteristic":"Farmer checking if his complaint regarding irregular supply has been addressed","stub_test_assertion":"jjm_track_complaint should return 'raised' or 'resolved'","state_values":{"otp_sent":true,"otp_verified":true,"session_token":"JJM-TKN-MN34OP56","application_id":"JJM-APP-10000003","connection_status":"active","complaint_id":"JJM-CMP-20000001","complaint_status":"raised","grievance_id":null}},
-  {"persona_id":"PERSONA_F","display_name":"Ramswaroop Meena — Rajasthan, PATH 6","code_path":"PATH 6 — Cancelling application","language_preference":"hi","interesting_characteristic":"Farmer cancelling his application because he moved to a different village","stub_test_assertion":"connection_status should become 'cancelled' after jjm_cancel_application","state_values":{"otp_sent":true,"otp_verified":true,"session_token":"JJM-TKN-QR78ST90","application_id":"JJM-APP-10000004","connection_status":"applied","complaint_id":null,"complaint_status":null,"grievance_id":null}},
-  {"persona_id":"PERSONA_G","display_name":"Murugan — Tamil Nadu, PATH 7","code_path":"PATH 7 — Grievance: Poor water quality","language_preference":"ta","interesting_characteristic":"Farmer escalating a grievance because the tap water supplied is muddy and unsafe","stub_test_assertion":"jjm_raise_grievance should create grievance for poor_quality","state_values":{"otp_sent":true,"otp_verified":true,"session_token":"JJM-TKN-UV12WX34","application_id":"JJM-APP-10000005","connection_status":"active","complaint_id":"JJM-CMP-20000002","complaint_status":"resolved","grievance_id":null}},
-  {"persona_id":"PERSONA_H","display_name":"Prasad — Andhra, PATH 8","code_path":"PATH 8 — Tracking grievance status","language_preference":"te","interesting_characteristic":"Farmer tracking grievance regarding delay in installation despite paying fees","stub_test_assertion":"jjm_track_grievance_status should return pending resolution status","state_values":{"otp_sent":true,"otp_verified":true,"session_token":"JJM-TKN-YZ56AB78","application_id":"JJM-APP-10000006","connection_status":"applied","complaint_id":null,"complaint_status":null,"grievance_id":"JJM-GRV-80000001"}}
+  {
+    "persona_id": "PERSONA_A",
+    "display_name": "Santosh Yadav \u00e2\u20ac\u201d UP, PATH 1",
+    "code_path": "PATH 1 \u00e2\u20ac\u201d Unauthenticated status check",
+    "language_preference": "hi",
+    "interesting_characteristic": "Farmer checking village supply and household connection status without logging in",
+    "stub_test_assertion": "jjm_get_connection_status should return status publicly",
+    "state_values": {
+      "otp_sent": false,
+      "otp_verified": false,
+      "session_token": null,
+      "application_id": null,
+      "connection_status": null,
+      "complaint_id": null,
+      "complaint_status": null,
+      "grievance_id": null,
+      "aadhaar_number": "100020003000",
+      "mobile_number": "9876543210",
+      "household_id": "JJM-HH-1000",
+      "village": "Sample Village"
+    }
+  },
+  {
+    "persona_id": "PERSONA_B",
+    "display_name": "Vikas Paswan \u00e2\u20ac\u201d Bihar, PATH 2",
+    "code_path": "PATH 2 \u00e2\u20ac\u201d Applying for connection",
+    "language_preference": "hi",
+    "interesting_characteristic": "Farmer who just logged in to apply for a tap water connection under JJM",
+    "stub_test_assertion": "connection_status should become 'applied' after jjm_apply_connection",
+    "state_values": {
+      "otp_sent": true,
+      "otp_verified": true,
+      "session_token": "JJM-TKN-AB12CD34",
+      "application_id": null,
+      "connection_status": null,
+      "complaint_id": null,
+      "complaint_status": null,
+      "grievance_id": null,
+      "aadhaar_number": "100020003001",
+      "mobile_number": "9876543211",
+      "household_id": "JJM-HH-1001",
+      "village": "Sample Village"
+    }
+  },
+  {
+    "persona_id": "PERSONA_C",
+    "display_name": "Balwinder Singh \u00e2\u20ac\u201d Punjab, PATH 3",
+    "code_path": "PATH 3 \u00e2\u20ac\u201d Tracking application",
+    "language_preference": "pa",
+    "interesting_characteristic": "Farmer tracking his JJM application submitted last month to see if pipes will be laid soon",
+    "stub_test_assertion": "jjm_track_application_status should return 'applied' or 'in_progress'",
+    "state_values": {
+      "otp_sent": true,
+      "otp_verified": true,
+      "session_token": "JJM-TKN-EF56GH78",
+      "application_id": "JJM-APP-10000001",
+      "connection_status": "applied",
+      "complaint_id": null,
+      "complaint_status": null,
+      "grievance_id": null,
+      "aadhaar_number": "100020003002",
+      "mobile_number": "9876543212",
+      "household_id": "JJM-HH-1002",
+      "village": "Sample Village"
+    }
+  },
+  {
+    "persona_id": "PERSONA_D",
+    "display_name": "Anil Bishnoi \u00e2\u20ac\u201d Haryana, PATH 4",
+    "code_path": "PATH 4 \u00e2\u20ac\u201d Reporting water issue",
+    "language_preference": "hi",
+    "interesting_characteristic": "Farmer whose new tap connection has low pressure, logging a formal complaint",
+    "stub_test_assertion": "complaint_status should become 'raised' after jjm_report_issue",
+    "state_values": {
+      "otp_sent": true,
+      "otp_verified": true,
+      "session_token": "JJM-TKN-IJ90KL12",
+      "application_id": "JJM-APP-10000002",
+      "connection_status": "active",
+      "complaint_id": null,
+      "complaint_status": null,
+      "grievance_id": null,
+      "aadhaar_number": "100020003003",
+      "mobile_number": "9876543213",
+      "household_id": "JJM-HH-1003",
+      "village": "Sample Village"
+    }
+  },
+  {
+    "persona_id": "PERSONA_E",
+    "display_name": "Nitin Patil \u00e2\u20ac\u201d Maharashtra, PATH 5",
+    "code_path": "PATH 5 \u00e2\u20ac\u201d Tracking complaint",
+    "language_preference": "mr",
+    "interesting_characteristic": "Farmer checking if his complaint regarding irregular supply has been addressed",
+    "stub_test_assertion": "jjm_track_complaint should return 'raised' or 'resolved'",
+    "state_values": {
+      "otp_sent": true,
+      "otp_verified": true,
+      "session_token": "JJM-TKN-MN34OP56",
+      "application_id": "JJM-APP-10000003",
+      "connection_status": "active",
+      "complaint_id": "JJM-CMP-20000001",
+      "complaint_status": "raised",
+      "grievance_id": null,
+      "aadhaar_number": "100020003004",
+      "mobile_number": "9876543214",
+      "household_id": "JJM-HH-1004",
+      "village": "Sample Village"
+    }
+  },
+  {
+    "persona_id": "PERSONA_F",
+    "display_name": "Ramswaroop Meena \u00e2\u20ac\u201d Rajasthan, PATH 6",
+    "code_path": "PATH 6 \u00e2\u20ac\u201d Cancelling application",
+    "language_preference": "hi",
+    "interesting_characteristic": "Farmer cancelling his application because he moved to a different village",
+    "stub_test_assertion": "connection_status should become 'cancelled' after jjm_cancel_application",
+    "state_values": {
+      "otp_sent": true,
+      "otp_verified": true,
+      "session_token": "JJM-TKN-QR78ST90",
+      "application_id": "JJM-APP-10000004",
+      "connection_status": "applied",
+      "complaint_id": null,
+      "complaint_status": null,
+      "grievance_id": null,
+      "aadhaar_number": "100020003005",
+      "mobile_number": "9876543215",
+      "household_id": "JJM-HH-1005",
+      "village": "Sample Village"
+    }
+  },
+  {
+    "persona_id": "PERSONA_G",
+    "display_name": "Murugan \u00e2\u20ac\u201d Tamil Nadu, PATH 7",
+    "code_path": "PATH 7 \u00e2\u20ac\u201d Grievance: Poor water quality",
+    "language_preference": "ta",
+    "interesting_characteristic": "Farmer escalating a grievance because the tap water supplied is muddy and unsafe",
+    "stub_test_assertion": "jjm_raise_grievance should create grievance for poor_quality",
+    "state_values": {
+      "otp_sent": true,
+      "otp_verified": true,
+      "session_token": "JJM-TKN-UV12WX34",
+      "application_id": "JJM-APP-10000005",
+      "connection_status": "active",
+      "complaint_id": "JJM-CMP-20000002",
+      "complaint_status": "resolved",
+      "grievance_id": null,
+      "aadhaar_number": "100020003006",
+      "mobile_number": "9876543216",
+      "household_id": "JJM-HH-1006",
+      "village": "Sample Village"
+    }
+  },
+  {
+    "persona_id": "PERSONA_H",
+    "display_name": "Prasad \u00e2\u20ac\u201d Andhra, PATH 8",
+    "code_path": "PATH 8 \u00e2\u20ac\u201d Tracking grievance status",
+    "language_preference": "te",
+    "interesting_characteristic": "Farmer tracking grievance regarding delay in installation despite paying fees",
+    "stub_test_assertion": "jjm_track_grievance_status should return pending resolution status",
+    "state_values": {
+      "otp_sent": true,
+      "otp_verified": true,
+      "session_token": "JJM-TKN-YZ56AB78",
+      "application_id": "JJM-APP-10000006",
+      "connection_status": "applied",
+      "complaint_id": null,
+      "complaint_status": null,
+      "grievance_id": "JJM-GRV-80000001",
+      "aadhaar_number": "100020003007",
+      "mobile_number": "9876543217",
+      "household_id": "JJM-HH-1007",
+      "village": "Sample Village"
+    }
+  }
 ]

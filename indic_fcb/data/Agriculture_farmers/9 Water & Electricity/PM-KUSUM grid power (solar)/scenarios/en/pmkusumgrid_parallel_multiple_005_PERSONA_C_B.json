@@ -1,0 +1,113 @@
+{
+  "scenario_id": "pmkusumgrid_parallel_multiple_005_PERSONA_C_B",
+  "intent_id": "pmkusumgrid_parallel_multiple_005",
+  "persona_id": "PERSONA_C",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: pmkusumgrid_apply_system and pmkusumgrid_get_tariff_details. Here are my details: my land_area_hectares is dummy_land_area_hectares_5413, my capacity_kw is dummy_capacity_kw_9355, my state is dummy_state_9583, my aadhaar_number is 100020004241, my location is dummy_location_1577."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusumgrid_apply_system",
+      "description": "Submits application for a grid-connected solar plant. Transitions application_status to 'submitted'. Requires session_token. Farmer must be eligible. Does NOT approve or install. Fails if ineligible, duplicate, or capacity exceeds limits.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "capacity_kw": {
+            "type": "number",
+            "description": "Requested solar capacity in kW."
+          },
+          "land_area_hectares": {
+            "type": "number",
+            "description": "Land area for installation."
+          },
+          "location": {
+            "type": "string",
+            "description": "Installation location."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "capacity_kw",
+          "land_area_hectares",
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "pmkusumgrid_get_tariff_details",
+      "description": "Returns current tariff rates for energy exported to grid. Rates may vary by state and policy. Requires session_token. Does NOT guarantee future rates. Fails if tariff data unavailable for farmer's region.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "state": {
+            "type": "string",
+            "description": "State."
+          }
+        },
+        "required": [
+          "session_token",
+          "state"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusumgrid_apply_system",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "capacity_kw": "dummy_capacity_kw",
+          "land_area_hectares": "dummy_land_area_hectares",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "capacity_kw": "exact",
+          "land_area_hectares": "exact",
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "pmkusumgrid_get_tariff_details",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "state": "dummy_state"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "state": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_C"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

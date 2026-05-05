@@ -1,0 +1,60 @@
+{
+  "scenario_id": "ifms_simple_007_PERSONA_A_C",
+  "intent_id": "ifms_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Validates a purchase transaction by verifying Aadhaar biometric/OTP at the point of sale. For your information, my transaction_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "ifms_validate_transaction",
+      "description": "Validates a purchase transaction by verifying Aadhaar biometric/OTP at the point of sale. Transitions transaction_status to 'validated'. Transaction must be 'initiated'. Requires session_token. Does NOT complete the purchase. Fails if transaction not initiated, Aadhaar mismatch, duplicate validation attempt, or POS terminal error.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "transaction_id": {
+            "type": "string",
+            "description": "Unique identifier of the fertilizer purchase transaction."
+          }
+        },
+        "required": [
+          "session_token",
+          "transaction_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ifms_validate_transaction",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "transaction_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "transaction_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

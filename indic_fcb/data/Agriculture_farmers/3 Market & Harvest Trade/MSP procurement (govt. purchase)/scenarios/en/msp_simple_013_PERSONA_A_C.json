@@ -1,0 +1,60 @@
+{
+  "scenario_id": "msp_simple_013_PERSONA_A_C",
+  "intent_id": "msp_simple_013",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Cancels a procurement token. For your information, my procurement_token is dummy_procurement_token_7290."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_cancel_token",
+      "description": "Cancels a procurement token. Only possible before delivery. Requires session_token. Does NOT refund or modify declarations. Fails if produce already delivered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "procurement_token": {
+            "type": "string",
+            "description": "Procurement token ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "procurement_token"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_cancel_token",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "procurement_token": "dummy_procurement_token"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "procurement_token": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

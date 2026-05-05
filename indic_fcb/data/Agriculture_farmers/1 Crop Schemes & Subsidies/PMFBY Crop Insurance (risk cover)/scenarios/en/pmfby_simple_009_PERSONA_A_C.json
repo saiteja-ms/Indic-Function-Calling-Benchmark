@@ -1,0 +1,85 @@
+{
+  "scenario_id": "pmfby_simple_009_PERSONA_A_C",
+  "intent_id": "pmfby_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Reports a crop loss event for a specific policy and land parcel. For your information, my land_parcel_id is dummy_land_parcel_id_2651, my loss_type is dummy_loss_type_4994, my loss_date is dummy_loss_date_8444, my policy_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfby_report_crop_loss",
+      "description": "Reports a crop loss event for a specific policy and land parcel. Transitions claim_status to 'reported'. Loss must be reported within 72 hours of the event. Valid loss_type values: 'drought', 'flood', 'pest_attack', 'cyclone', 'unseasonal_rainfall'. Requires session_token. This tool does NOT submit a formal claim \u2014 use pmfby_submit_claim. Fails if: policy is not 'active', reporting window expired, loss_type is unsupported, or a duplicate report exists for the same event.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "policy_id": {
+            "type": "string",
+            "description": "Unique identifier of the insurance policy."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier of the insured land parcel."
+          },
+          "loss_type": {
+            "type": "string",
+            "description": "Type of crop loss. Allowed: 'drought', 'flood', 'pest_attack', 'cyclone', 'unseasonal_rainfall'."
+          },
+          "loss_date": {
+            "type": "string",
+            "description": "Date of the loss event in YYYY-MM-DD format."
+          },
+          "loss_description": {
+            "type": "string",
+            "description": "Brief description of the crop damage observed."
+          }
+        },
+        "required": [
+          "session_token",
+          "policy_id",
+          "land_parcel_id",
+          "loss_type",
+          "loss_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmfby_report_crop_loss",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "policy_id": null,
+          "land_parcel_id": "dummy_land_parcel_id",
+          "loss_type": "dummy_loss_type",
+          "loss_date": "dummy_loss_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "policy_id": "exact",
+          "land_parcel_id": "exact",
+          "loss_type": "exact",
+          "loss_date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

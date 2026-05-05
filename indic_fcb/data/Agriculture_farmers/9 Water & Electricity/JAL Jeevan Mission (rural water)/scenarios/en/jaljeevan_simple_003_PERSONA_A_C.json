@@ -1,0 +1,60 @@
+{
+  "scenario_id": "jaljeevan_simple_003_PERSONA_A_C",
+  "intent_id": "jaljeevan_simple_003",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Checks household Functional Household Tap Connection (FHTC) status. For your information, my household_id is JJM-HH-1000, my village is Sample Village."
+    }
+  ],
+  "function": [
+    {
+      "name": "jjm_get_connection_status",
+      "description": "Checks household Functional Household Tap Connection (FHTC) status. Returns connection_status ('not_applied', 'applied', 'approved', 'installed', 'active', 'inactive'). PUBLIC tool \u2014 no authentication for general status. Does NOT apply for connection. Fails if household_id invalid or village not in JJM coverage.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "household_id": {
+            "type": "string",
+            "description": "Unique identifier of the household."
+          },
+          "village": {
+            "type": "string",
+            "description": "Village or habitation name."
+          }
+        },
+        "required": [
+          "household_id",
+          "village"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "jjm_get_connection_status",
+        "args": {
+          "household_id": "JJM-HH-1000",
+          "village": "Sample Village"
+        },
+        "eval_mode": {
+          "household_id": "exact",
+          "village": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

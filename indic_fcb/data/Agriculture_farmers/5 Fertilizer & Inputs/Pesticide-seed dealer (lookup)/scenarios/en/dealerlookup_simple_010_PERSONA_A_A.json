@@ -1,0 +1,74 @@
+{
+  "scenario_id": "dealerlookup_simple_010_PERSONA_A_A",
+  "intent_id": "dealerlookup_simple_010",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Provides dealer recommendations based on crop type, location, and product needs.. my product_type is dummy_product_type_3291, my crop_type is dummy_crop_type_6427, my location is dummy_location_9123."
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_get_recommendations",
+      "description": "Provides dealer recommendations based on crop type, location, and product needs. Requires session_token (personalized). Recommendations are advisory only. Does NOT guarantee product availability. Fails if crop_type unsupported or no dealers match.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for preference and grievance tools."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Product type."
+          }
+        },
+        "required": [
+          "session_token",
+          "location",
+          "crop_type",
+          "product_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "dealer_get_recommendations",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "location": "dummy_location",
+          "crop_type": "dummy_crop_type",
+          "product_type": "dummy_product_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "location": "exact",
+          "crop_type": "exact",
+          "product_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

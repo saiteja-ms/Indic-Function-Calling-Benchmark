@@ -1,0 +1,67 @@
+{
+  "scenario_id": "animalvacc_simple_009_PERSONA_A_B",
+  "intent_id": "animalvacc_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Reschedules a missed or upcoming vaccination to a new date. Here are my details: my booking_id is None, my new_date is dummy_new_date_2754."
+    }
+  ],
+  "function": [
+    {
+      "name": "livestock_reschedule_vaccination",
+      "description": "Reschedules a missed or upcoming vaccination to a new date. Transitions vaccination_status to 'rescheduled'. Vaccination must be in 'scheduled' or 'missed' status. Requires session_token. Does NOT administer vaccines. Fails if vaccination is already administered, booking_id is invalid, or new date conflicts with schedule.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          },
+          "new_date": {
+            "type": "string",
+            "description": "New preferred date YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id",
+          "new_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "livestock_reschedule_vaccination",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": null,
+          "new_date": "dummy_new_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact",
+          "new_date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

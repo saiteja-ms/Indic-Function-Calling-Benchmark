@@ -1,0 +1,69 @@
+{
+  "scenario_id": "pmfbyloss_irrelevance_002_PERSONA_H_C",
+  "intent_id": "pmfbyloss_irrelevance_002",
+  "persona_id": "PERSONA_H",
+  "variant": "C",
+  "category": "task_irrelevance",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Ask about the latest cricket match scores and player statistics."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfbyclaim_generate_otp",
+      "description": "Sends OTP for PMFBY loss claim authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "pmfbyclaim_track_grievance_status",
+      "description": "Tracks grievance status. Requires session_token. Fails if grievance_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "grievance_id": {
+            "type": "string",
+            "description": "Grievance ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

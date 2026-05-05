@@ -1,0 +1,99 @@
+{
+  "scenario_id": "fms_parallel_multiple_001_PERSONA_B_A",
+  "intent_id": "fms_parallel_multiple_001",
+  "persona_id": "PERSONA_B",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: fms_check_service_availability and fms_cancel_booking.. my booking_id is None, my date is dummy_date_1421, my location is dummy_location_4853, my service_id is dummy_service_id_7202."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_cancel_booking",
+      "description": "Cancels a service booking. Only when 'requested' or 'confirmed'. Requires session_token. Fails if service already assigned or in progress.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for booking tools."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id"
+        ]
+      }
+    },
+    {
+      "name": "fms_check_service_availability",
+      "description": "Checks if a service is available for a specific date and location. Returns provider_status ('available', 'assigned', 'busy', 'unavailable'). PUBLIC tool. Does NOT book. Service may become unavailable due to weather or high demand. Fails if service_id or date invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "description": "Unique service identifier."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          },
+          "date": {
+            "type": "string",
+            "description": "Desired date YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "service_id",
+          "location",
+          "date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_check_service_availability",
+        "args": {
+          "service_id": "dummy_service_id",
+          "location": "dummy_location",
+          "date": "dummy_date"
+        },
+        "eval_mode": {
+          "service_id": "exact",
+          "location": "exact",
+          "date": "exact"
+        }
+      },
+      {
+        "tool": "fms_cancel_booking",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "scenario_id": "meghdoot_base_004_PERSONA_A_B",
+  "intent_id": "meghdoot_base_004",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "base",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with damini_get_lightning_alert. my location is dummy_location_2742"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with damini_get_safety_advisory. my location is dummy_location_2742"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with damini_check_alert_validity. my alert_id is dummy_alert_id_4515"
+    }
+  ],
+  "function": [
+    {
+      "name": "damini_get_safety_advisory",
+      "description": "Provides safety recommendations during active lightning events including shelter guidance, outdoor activity warnings, and precautions. Safety-critical \u2014 MUST include recommendations. PUBLIC tool. Does NOT fetch lightning data \u2014 use damini_get_lightning_alert first. Fails if no active lightning alert exists for the location.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "damini_get_lightning_alert",
+      "description": "Fetches real-time lightning alerts for a specified location based on satellite/sensor data. Alerts are valid only within a short time window (~minutes) and expire quickly. PUBLIC tool \u2014 no authentication required. Location is mandatory. Does NOT provide safety recommendations \u2014 use damini_get_safety_advisory. Fails if location is invalid or no alerts exist. Returns alert_status ('active' or 'expired'), severity, and proximity.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "time_window": {
+            "type": "string",
+            "description": "Query window. Allowed: 'current', '1_hour', '3_hour'. Default: 'current'."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "damini_check_alert_validity",
+      "description": "Checks whether a specific lightning alert is still active or has expired. Alerts expire within minutes. PUBLIC tool. Does NOT provide new alerts. Fails if alert_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "alert_id": {
+            "type": "string",
+            "description": "Unique identifier of the lightning alert."
+          }
+        },
+        "required": [
+          "alert_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "damini_get_lightning_alert",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "damini_get_safety_advisory",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "damini_check_alert_validity",
+          "args": {
+            "alert_id": "dummy_alert_id"
+          },
+          "eval_mode": {
+            "alert_id": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

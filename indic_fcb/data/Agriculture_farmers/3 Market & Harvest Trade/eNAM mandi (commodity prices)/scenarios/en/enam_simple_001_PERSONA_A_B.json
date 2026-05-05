@@ -1,0 +1,64 @@
+{
+  "scenario_id": "enam_simple_001_PERSONA_A_B",
+  "intent_id": "enam_simple_001",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Fetches current commodity prices for a specific mandi. Here are my details: my commodity is dummy_commodity_1152, my location is dummy_location_1084."
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_get_mandi_prices",
+      "description": "Fetches current commodity prices for a specific mandi. Returns modal, minimum, and maximum prices with quality grades. PUBLIC tool \u2014 no auth required. Does NOT execute buy/sell transactions. Fails if commodity or mandi is unsupported, or no price data is available. Prices may be delayed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "commodity": {
+            "type": "string",
+            "description": "Standardized commodity name (e.g., paddy, wheat, cotton)."
+          },
+          "location": {
+            "type": "string",
+            "description": "State, district, or mandi name."
+          },
+          "quality_grade": {
+            "type": "string",
+            "description": "Filter by grade. Allowed: 'A', 'B', 'C', 'FAQ', 'premium'. Optional."
+          }
+        },
+        "required": [
+          "commodity",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "enam_get_mandi_prices",
+        "args": {
+          "commodity": "dummy_commodity",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "commodity": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

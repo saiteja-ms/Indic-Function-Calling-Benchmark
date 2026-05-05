@@ -1,0 +1,103 @@
+{
+  "scenario_id": "ifms_parallel_multiple_005_PERSONA_H_C",
+  "intent_id": "ifms_parallel_multiple_005",
+  "persona_id": "PERSONA_H",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: ifms_get_purchase_history and ifms_calculate_subsidy. For your information, my aadhaar_number is 100020004585, my fertilizer_type is dummy_fertilizer_type_5139, my quantity_kg is dummy_quantity_kg_2008."
+    }
+  ],
+  "function": [
+    {
+      "name": "ifms_get_purchase_history",
+      "description": "Retrieves all past fertilizer purchase records for the farmer including fertilizer types, quantities, dates, retailers, and subsidy amounts. Requires session_token. Does NOT initiate new purchases. Fails if no records exist.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "season": {
+            "type": "string",
+            "description": "Season filter. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number"
+        ]
+      }
+    },
+    {
+      "name": "ifms_calculate_subsidy",
+      "description": "Calculates the subsidy amount for a given fertilizer type and quantity. Returns subsidized price, full price, and savings. Requires session_token. Calculation is informational only \u2014 actual subsidy is applied at POS. Does NOT apply subsidy. Fails if fertilizer type unsupported or quantity invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "fertilizer_type": {
+            "type": "string",
+            "description": "Fertilizer type."
+          },
+          "quantity_kg": {
+            "type": "number",
+            "description": "Quantity in kilograms."
+          }
+        },
+        "required": [
+          "session_token",
+          "fertilizer_type",
+          "quantity_kg"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ifms_get_purchase_history",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact"
+        }
+      },
+      {
+        "tool": "ifms_calculate_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "fertilizer_type": "dummy_fertilizer_type",
+          "quantity_kg": "dummy_quantity_kg"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "fertilizer_type": "exact",
+          "quantity_kg": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

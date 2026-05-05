@@ -1,0 +1,60 @@
+{
+  "scenario_id": "dealerlookup_simple_011_PERSONA_A_B",
+  "intent_id": "dealerlookup_simple_011",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Saves a dealer as a preferred/favorite dealer for the farmer. Here are my details: my dealer_id is dummy_dealer_id_3685."
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_save_preference",
+      "description": "Saves a dealer as a preferred/favorite dealer for the farmer. Requires session_token. Does NOT guarantee future availability. Fails if dealer_id invalid or session expired.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for preference and grievance tools."
+          },
+          "dealer_id": {
+            "type": "string",
+            "description": "Dealer ID to save."
+          }
+        },
+        "required": [
+          "session_token",
+          "dealer_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "dealer_save_preference",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "dealer_id": "dummy_dealer_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "dealer_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

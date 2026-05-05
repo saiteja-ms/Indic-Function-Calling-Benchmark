@@ -1,0 +1,103 @@
+{
+  "scenario_id": "pmkusum_parallel_multiple_001_PERSONA_H_A",
+  "intent_id": "pmkusum_parallel_multiple_001",
+  "persona_id": "PERSONA_H",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: pmkusum_verify_otp and pmkusum_verify_installation.. my inspection_result is dummy_inspection_result_1893, my application_id is PMKUSUM-APP-40000007, my aadhaar_number is 100020004332, my otp is dummy_otp_3810."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusum_verify_installation",
+      "description": "Records the physical verification/inspection result for the installed solar pump. Transitions installation_status from 'completed' to 'verified' upon passing. Verification is REQUIRED before subsidy disbursement. Requires session_token. Does NOT disburse subsidy. Fails if installation is not 'completed', inspection finds defects, or installation is incomplete.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Unique identifier of the subsidy application."
+          },
+          "inspection_result": {
+            "type": "string",
+            "description": "Result of physical inspection: 'passed' or 'failed'."
+          },
+          "remarks": {
+            "type": "string",
+            "description": "Inspector's remarks or observations."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id",
+          "inspection_result"
+        ]
+      }
+    },
+    {
+      "name": "pmkusum_verify_otp",
+      "description": "Verifies the OTP and returns a session_token for PM-KUSUM operations. Does NOT check eligibility or application status. Fails if OTP is expired, incorrect, or not generated via pmkusum_generate_otp.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP received on registered mobile."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "otp"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusum_verify_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "otp": "dummy_otp"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "otp": "exact"
+        }
+      },
+      {
+        "tool": "pmkusum_verify_installation",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": "PMKUSUM-APP-40000007",
+          "inspection_result": "dummy_inspection_result"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only",
+          "inspection_result": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

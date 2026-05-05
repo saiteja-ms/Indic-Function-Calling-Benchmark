@@ -1,0 +1,74 @@
+{
+  "scenario_id": "agrimarket_simple_007_PERSONA_A_C",
+  "intent_id": "agrimarket_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Places an order on an active listing. For your information, my quantity is dummy_quantity_9569, my listing_id is None, my unit is dummy_unit_9670."
+    }
+  ],
+  "function": [
+    {
+      "name": "agrimarket_place_order",
+      "description": "Places an order on an active listing. Transitions order_status to 'created'. Requires session_token. Listing must be active with sufficient quantity. Does NOT process payment. Fails if listing is inactive, insufficient quantity, or buyer places order on own listing. Orders cannot exceed available quantity.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+          },
+          "listing_id": {
+            "type": "string",
+            "description": "Listing ID."
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Order quantity."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit. Allowed: 'kg', 'quintal', 'ton'."
+          }
+        },
+        "required": [
+          "session_token",
+          "listing_id",
+          "quantity",
+          "unit"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agrimarket_place_order",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "listing_id": null,
+          "quantity": "dummy_quantity",
+          "unit": "dummy_unit"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "listing_id": "exact",
+          "quantity": "exact",
+          "unit": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

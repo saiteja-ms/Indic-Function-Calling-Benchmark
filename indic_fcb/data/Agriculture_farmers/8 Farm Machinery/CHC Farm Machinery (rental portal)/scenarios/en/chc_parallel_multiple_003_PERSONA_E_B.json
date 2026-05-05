@@ -1,0 +1,89 @@
+{
+  "scenario_id": "chc_parallel_multiple_003_PERSONA_E_B",
+  "intent_id": "chc_parallel_multiple_003",
+  "persona_id": "PERSONA_E",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: chc_search_machinery and chc_get_machinery_details. Here are my details: my machinery_id is dummy_machinery_id_8621, my machinery_type is dummy_machinery_type_7193, my location is dummy_location_4995."
+    }
+  ],
+  "function": [
+    {
+      "name": "chc_get_machinery_details",
+      "description": "Returns detailed info about specific machinery (type, capacity, hourly rate, condition). PUBLIC tool. Does NOT check availability. Fails if machinery_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "machinery_id": {
+            "type": "string",
+            "description": "Machinery ID."
+          }
+        },
+        "required": [
+          "machinery_id"
+        ]
+      }
+    },
+    {
+      "name": "chc_search_machinery",
+      "description": "Searches available farm machinery at CHC centres by type, location, and date. Returns machinery details and availability. PUBLIC tool. Does NOT book machinery. May return machinery that is reserved for other time slots. Fails if no machinery matches or location invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or region."
+          },
+          "machinery_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'tractor', 'harvester', 'rotavator', 'seed_drill', 'sprayer'."
+          },
+          "date": {
+            "type": "string",
+            "description": "Desired date YYYY-MM-DD. Optional."
+          }
+        },
+        "required": [
+          "location",
+          "machinery_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "chc_search_machinery",
+        "args": {
+          "location": "dummy_location",
+          "machinery_type": "dummy_machinery_type"
+        },
+        "eval_mode": {
+          "location": "exact",
+          "machinery_type": "exact"
+        }
+      },
+      {
+        "tool": "chc_get_machinery_details",
+        "args": {
+          "machinery_id": "dummy_machinery_id"
+        },
+        "eval_mode": {
+          "machinery_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

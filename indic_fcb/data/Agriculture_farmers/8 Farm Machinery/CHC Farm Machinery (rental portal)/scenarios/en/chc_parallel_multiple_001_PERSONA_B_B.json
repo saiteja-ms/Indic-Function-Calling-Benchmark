@@ -1,0 +1,89 @@
+{
+  "scenario_id": "chc_parallel_multiple_001_PERSONA_B_B",
+  "intent_id": "chc_parallel_multiple_001",
+  "persona_id": "PERSONA_B",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: chc_check_availability and chc_get_nearest_chc. Here are my details: my machinery_id is dummy_machinery_id_8315, my date is dummy_date_8089, my location is dummy_location_4210."
+    }
+  ],
+  "function": [
+    {
+      "name": "chc_check_availability",
+      "description": "Checks if specific machinery is available for a given date and time slot. Returns availability_status ('available', 'reserved', 'unavailable') and machinery_status ('operational', 'in_use', 'maintenance', 'unavailable'). PUBLIC tool. Does NOT book. Fails if machinery_id invalid or date is in the past.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "machinery_id": {
+            "type": "string",
+            "description": "Unique identifier of the farm machinery."
+          },
+          "date": {
+            "type": "string",
+            "description": "Desired date YYYY-MM-DD."
+          },
+          "duration_hours": {
+            "type": "number",
+            "description": "Duration in hours. Optional."
+          }
+        },
+        "required": [
+          "machinery_id",
+          "date"
+        ]
+      }
+    },
+    {
+      "name": "chc_get_nearest_chc",
+      "description": "Returns the nearest CHC centres with distance and availability summary. PUBLIC tool. Does NOT book machinery. Fails if location invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS coordinates."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "chc_check_availability",
+        "args": {
+          "machinery_id": "dummy_machinery_id",
+          "date": "dummy_date"
+        },
+        "eval_mode": {
+          "machinery_id": "exact",
+          "date": "exact"
+        }
+      },
+      {
+        "tool": "chc_get_nearest_chc",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

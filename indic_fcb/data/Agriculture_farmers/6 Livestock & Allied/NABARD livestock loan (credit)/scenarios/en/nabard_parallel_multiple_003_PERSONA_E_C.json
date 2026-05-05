@@ -1,0 +1,127 @@
+{
+  "scenario_id": "nabard_parallel_multiple_003_PERSONA_E_C",
+  "intent_id": "nabard_parallel_multiple_003",
+  "persona_id": "PERSONA_E",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: nabard_submit_application and nabard_restructure_loan. For your information, my loan_amount is dummy_loan_amount_4383, my restructure_reason is dummy_restructure_reason_5533, my loan_id is NABARD-LOAN-70000003, my project_type is dummy_project_type_3367, my project_description is dummy_project_description_6034, my aadhaar_number is 100020008827, my location is dummy_location_8122."
+    }
+  ],
+  "function": [
+    {
+      "name": "nabard_submit_application",
+      "description": "Submits a livestock loan application. Transitions application_status to 'submitted'. Requires session_token. Farmer must be eligible. Does NOT approve or disburse loan. Fails if farmer is ineligible, duplicate application exists, or required documents are missing.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "project_type": {
+            "type": "string",
+            "description": "Project type."
+          },
+          "loan_amount": {
+            "type": "number",
+            "description": "Loan amount in INR."
+          },
+          "project_description": {
+            "type": "string",
+            "description": "Brief project description."
+          },
+          "location": {
+            "type": "string",
+            "description": "Project location."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "project_type",
+          "loan_amount",
+          "project_description",
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "nabard_restructure_loan",
+      "description": "Initiates loan restructuring for a defaulted or overdue loan. May modify EMI amount, tenure, or interest terms. Requires session_token. Restructuring is NOT guaranteed and depends on bank assessment. Fails if loan is not defaulted/overdue or restructuring already attempted.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "loan_id": {
+            "type": "string",
+            "description": "Loan ID."
+          },
+          "restructure_reason": {
+            "type": "string",
+            "description": "Reason for restructuring request."
+          }
+        },
+        "required": [
+          "session_token",
+          "loan_id",
+          "restructure_reason"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "nabard_submit_application",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "project_type": "dummy_project_type",
+          "loan_amount": "dummy_loan_amount",
+          "project_description": "dummy_project_description",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "project_type": "exact",
+          "loan_amount": "exact",
+          "project_description": "substring",
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "nabard_restructure_loan",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "loan_id": "NABARD-LOAN-70000003",
+          "restructure_reason": "dummy_restructure_reason"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "loan_id": "exact",
+          "restructure_reason": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

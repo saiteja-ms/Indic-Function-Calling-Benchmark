@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pmkusum_simple_007_PERSONA_A_A",
+  "intent_id": "pmkusum_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Returns a list of empanelled vendors available in the farmer's region for solar pump installation.. my district is dummy_district_2019, my state is dummy_state_8983."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusum_get_vendor_list",
+      "description": "Returns a list of empanelled vendors available in the farmer's region for solar pump installation. Requires session_token. Does NOT select or assign a vendor. Fails if no vendors are available in the specified region.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "state": {
+            "type": "string",
+            "description": "State where installation is needed."
+          },
+          "district": {
+            "type": "string",
+            "description": "District where installation is needed."
+          }
+        },
+        "required": [
+          "session_token",
+          "state",
+          "district"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusum_get_vendor_list",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "state": "dummy_state",
+          "district": "dummy_district"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "state": "exact",
+          "district": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

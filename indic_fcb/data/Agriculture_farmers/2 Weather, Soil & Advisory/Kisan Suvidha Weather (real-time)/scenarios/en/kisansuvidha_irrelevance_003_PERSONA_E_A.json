@@ -1,0 +1,64 @@
+{
+  "scenario_id": "kisansuvidha_irrelevance_003_PERSONA_E_A",
+  "intent_id": "kisansuvidha_irrelevance_003",
+  "persona_id": "PERSONA_E",
+  "variant": "A",
+  "category": "task_irrelevance",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Request medical advice for a persistent fever and headache."
+    }
+  ],
+  "function": [
+    {
+      "name": "ksweather_track_grievance_status",
+      "description": "Tracks a previously raised weather grievance. Returns resolution status and remarks. Requires session_token. Does NOT raise new grievances. Fails if grievance_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for subscription and grievance tools."
+          },
+          "grievance_id": {
+            "type": "string",
+            "description": "Unique identifier of the grievance."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_id"
+        ]
+      }
+    },
+    {
+      "name": "ksweather_get_current_weather",
+      "description": "Fetches the current weather conditions for a specified location including temperature, humidity, rainfall, wind speed, and pressure. Location must be valid (village/district/GPS). This is a PUBLIC tool \u2014 no authentication required. Does NOT provide forecasts \u2014 use ksweather_get_weather_forecast. Fails if location is invalid, ambiguous, or no data is available. Data reflects near real-time conditions but may be slightly delayed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

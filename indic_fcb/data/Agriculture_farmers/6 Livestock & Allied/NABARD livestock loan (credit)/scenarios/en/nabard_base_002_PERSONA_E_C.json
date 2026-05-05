@@ -1,0 +1,118 @@
+{
+  "scenario_id": "nabard_base_002_PERSONA_E_C",
+  "intent_id": "nabard_base_002",
+  "persona_id": "PERSONA_E",
+  "variant": "C",
+  "category": "base",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Now let us proceed with nabard_raise_grievance. my aadhaar_number is 100020007794, my grievance_category is dummy_grievance_category_1899, my description is dummy_description_3231"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with nabard_track_grievance_status. my grievance_id is None"
+    }
+  ],
+  "function": [
+    {
+      "name": "nabard_raise_grievance",
+      "description": "Raises a NABARD loan grievance. Categories: 'loan_rejected', 'disbursement_delay', 'repayment_issue', 'default_issue', 'documentation_issue'. Must check status first. Requires session_token. Fails if category invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "grievance_category": {
+            "type": "string",
+            "description": "Category."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "grievance_category",
+          "description"
+        ]
+      }
+    },
+    {
+      "name": "nabard_track_grievance_status",
+      "description": "Tracks NABARD grievance. Requires session_token. Fails if grievance_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "grievance_id": {
+            "type": "string",
+            "description": "Grievance ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "grievance_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "nabard_raise_grievance",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "grievance_category": "dummy_grievance_category",
+            "description": "dummy_description"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "grievance_category": "exact",
+            "description": "substring"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "nabard_track_grievance_status",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "grievance_id": null
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "grievance_id": "type_only"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

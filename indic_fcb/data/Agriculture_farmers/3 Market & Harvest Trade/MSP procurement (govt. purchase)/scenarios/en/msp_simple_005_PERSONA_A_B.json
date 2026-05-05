@@ -1,0 +1,78 @@
+{
+  "scenario_id": "msp_simple_005_PERSONA_A_B",
+  "intent_id": "msp_simple_005",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Declares crop and expected quantity for the procurement season. Here are my details: my expected_quantity_quintal is dummy_expected_quantity_quintal_3579, my crop_type is dummy_crop_type_7446, my aadhaar_number is 100020002972."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_declare_crop",
+      "description": "Declares crop and expected quantity for the procurement season. Required before procurement. Transitions procurement_status to 'declared'. Requires session_token. Does NOT schedule mandi visit. Fails if farmer not registered, crop unsupported, or duplicate declaration exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "expected_quantity_quintal": {
+            "type": "number",
+            "description": "Expected quantity in quintals."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "crop_type",
+          "expected_quantity_quintal"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_declare_crop",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "crop_type": "dummy_crop_type",
+          "expected_quantity_quintal": "dummy_expected_quantity_quintal"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "crop_type": "exact",
+          "expected_quantity_quintal": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

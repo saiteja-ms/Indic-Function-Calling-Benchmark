@@ -1,0 +1,99 @@
+{
+  "scenario_id": "kcc_parallel_multiple_005_PERSONA_H_B",
+  "intent_id": "kcc_parallel_multiple_005",
+  "persona_id": "PERSONA_H",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: kcc_close_grievance and kcc_get_grievance_history. Here are my details: my ticket_id is KCC-TKT-10000007, my closure_confirmation is dummy_closure_confirmation_3062, my aadhaar_number is 100020007569."
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_close_grievance",
+      "description": "Closes a resolved grievance. Grievance can ONLY be closed after resolution or user confirmation. Transitions grievance_status to 'closed'. Requires session_token. Does NOT reopen grievances. Fails if grievance is not in 'resolved' status or closed prematurely.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Grievance ticket ID."
+          },
+          "closure_confirmation": {
+            "type": "boolean",
+            "description": "Farmer's confirmation to close. Must be true."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id",
+          "closure_confirmation"
+        ]
+      }
+    },
+    {
+      "name": "kcc_get_grievance_history",
+      "description": "Retrieves all past grievances for the farmer. Requires session_token. Does NOT raise new ones. Fails if no history exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "kcc_close_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "ticket_id": "KCC-TKT-10000007",
+          "closure_confirmation": "dummy_closure_confirmation"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "ticket_id": "exact",
+          "closure_confirmation": "exact"
+        }
+      },
+      {
+        "tool": "kcc_get_grievance_history",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

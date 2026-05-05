@@ -1,0 +1,71 @@
+{
+  "scenario_id": "deds_simple_009_PERSONA_A_C",
+  "intent_id": "deds_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Records verification/inspection result for the implemented DEDS project. For your information, my inspection_result is dummy_inspection_result_5690, my application_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "deds_verify_project",
+      "description": "Records verification/inspection result for the implemented DEDS project. Transitions project_status to 'verified' upon passing. Verification is MANDATORY before subsidy disbursement. Requires session_token. Does NOT disburse subsidy. Fails if project is not 'completed', inspection finds defects, or assets are not operational.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          },
+          "inspection_result": {
+            "type": "string",
+            "description": "Result: 'passed' or 'failed'."
+          },
+          "remarks": {
+            "type": "string",
+            "description": "Inspector's remarks."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id",
+          "inspection_result"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "deds_verify_project",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": null,
+          "inspection_result": "dummy_inspection_result"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only",
+          "inspection_result": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "scenario_id": "enam_simple_007_PERSONA_A_C",
+  "intent_id": "enam_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Returns details of a specific mandi including address, timings, supported commodities, and contact info. For your information, my mandi_id is dummy_mandi_id_2579."
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_get_mandi_details",
+      "description": "Returns details of a specific mandi including address, timings, supported commodities, and contact info. PUBLIC tool. Does NOT return prices. Fails if mandi_id or name is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "mandi_id": {
+            "type": "string",
+            "description": "Mandi identifier or name."
+          }
+        },
+        "required": [
+          "mandi_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "enam_get_mandi_details",
+        "args": {
+          "mandi_id": "dummy_mandi_id"
+        },
+        "eval_mode": {
+          "mandi_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

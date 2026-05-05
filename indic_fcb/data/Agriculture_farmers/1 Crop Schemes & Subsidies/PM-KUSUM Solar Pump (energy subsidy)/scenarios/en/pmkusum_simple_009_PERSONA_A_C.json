@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pmkusum_simple_009_PERSONA_A_C",
+  "intent_id": "pmkusum_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Schedules the solar pump installation with the selected vendor. For your information, my application_id is None, my preferred_date is dummy_preferred_date_3413."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusum_schedule_installation",
+      "description": "Schedules the solar pump installation with the selected vendor. Transitions installation_status from 'not_started' to 'scheduled'. Requires session_token. Vendor must be selected first. Does NOT perform installation or verify it. Fails if vendor is not selected or scheduling conflicts exist.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Unique identifier of the subsidy application."
+          },
+          "preferred_date": {
+            "type": "string",
+            "description": "Preferred installation date in YYYY-MM-DD format."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id",
+          "preferred_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusum_schedule_installation",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": null,
+          "preferred_date": "dummy_preferred_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only",
+          "preferred_date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

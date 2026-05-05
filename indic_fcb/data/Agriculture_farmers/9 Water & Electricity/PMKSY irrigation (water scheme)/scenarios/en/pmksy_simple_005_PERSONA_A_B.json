@@ -1,0 +1,88 @@
+{
+  "scenario_id": "pmksy_simple_005_PERSONA_A_B",
+  "intent_id": "pmksy_simple_005",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Submits PMKSY irrigation support application. Here are my details: my area_hectares is dummy_area_hectares_7626, my land_parcel_id is dummy_land_parcel_id_7206, my irrigation_type is dummy_irrigation_type_7385, my project_cost is dummy_project_cost_5829, my aadhaar_number is 100020003097."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmksy_submit_application",
+      "description": "Submits PMKSY irrigation support application. Transitions application_status to 'submitted'. Farmer must be eligible. Requires session_token. Does NOT approve. Fails if ineligible, duplicate, or details incomplete.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          },
+          "irrigation_type": {
+            "type": "string",
+            "description": "Selected irrigation type."
+          },
+          "area_hectares": {
+            "type": "number",
+            "description": "Area to be irrigated in hectares."
+          },
+          "project_cost": {
+            "type": "number",
+            "description": "Estimated cost INR."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_parcel_id",
+          "irrigation_type",
+          "area_hectares",
+          "project_cost"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmksy_submit_application",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "irrigation_type": "dummy_irrigation_type",
+          "area_hectares": "dummy_area_hectares",
+          "project_cost": "dummy_project_cost"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "land_parcel_id": "exact",
+          "irrigation_type": "exact",
+          "area_hectares": "exact",
+          "project_cost": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

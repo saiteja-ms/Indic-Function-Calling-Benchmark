@@ -1,0 +1,113 @@
+{
+  "scenario_id": "pmpranam_parallel_multiple_003_PERSONA_H_B",
+  "intent_id": "pmpranam_parallel_multiple_003",
+  "persona_id": "PERSONA_H",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: pmpranam_get_alternative_fertilizers and pmpranam_raise_grievance. Here are my details: my description is dummy_description_7704, my grievance_category is dummy_grievance_category_8247, my crop_type is dummy_crop_type_5622, my aadhaar_number is 100020008438, my location is dummy_location_4097."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmpranam_raise_grievance",
+      "description": "Raises a PM-PRANAM grievance. Categories: 'incorrect_usage_data', 'no_incentive_received', 'advisory_issue', 'data_mismatch', 'eligibility_issue'. Must check usage or incentive status first. Requires session_token. Does NOT resolve. Fails if category invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "grievance_category": {
+            "type": "string",
+            "description": "Category."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "grievance_category",
+          "description"
+        ]
+      }
+    },
+    {
+      "name": "pmpranam_get_alternative_fertilizers",
+      "description": "Lists available alternative fertilizers (organic, biofertilizer, balanced NPK) suitable for the farmer's crop and region. Requires session_token. Recommendations are informational. Does NOT purchase or reserve products. Fails if crop type unsupported or no alternatives available.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Current crop."
+          },
+          "location": {
+            "type": "string",
+            "description": "Farmer's location."
+          }
+        },
+        "required": [
+          "session_token",
+          "crop_type",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmpranam_get_alternative_fertilizers",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "crop_type": "dummy_crop_type",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "crop_type": "exact",
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "pmpranam_raise_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "grievance_category": "dummy_grievance_category",
+          "description": "dummy_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "grievance_category": "exact",
+          "description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

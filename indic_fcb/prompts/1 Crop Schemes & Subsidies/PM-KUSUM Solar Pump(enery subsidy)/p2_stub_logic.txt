@@ -1,0 +1,206 @@
+You are a Python engineer building evaluation infrastructure
+for a function-calling benchmark for Indian government services.
+
+Your task: Generate a Python module called stub_logic.py
+for a given service.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOLS SOURCE (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Load the tools JSON from the following path:
+
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM Solar Pump (energy subsidy)\tools.json
+
+Instructions:
+- Read the JSON file at the given path
+- This file contains the complete tool schema list
+- Treat it as the SINGLE SOURCE OF TRUTH
+
+STRICT RULES:
+- Do NOT invent tools
+- Do NOT modify tool names
+- Do NOT change parameters
+- Do NOT add extra fields
+- Every stub must correspond EXACTLY to one tool in this JSON
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT STRUCTURE (STRICT ORDER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This module must have exactly 5 parts in this order:
+
+═══════════════════════════════════════
+PART A — ToolValidationError class
+═══════════════════════════════════════
+class ToolValidationError(Exception):
+    def __init__(self, field: str, value, reason: str):
+        self.field  = field
+        self.value  = value
+        self.reason = reason
+        super().__init__(
+            f"Validation failed for '{field}': "
+            f"{reason} (got: {value!r})"
+        )
+
+═══════════════════════════════════════
+PART B — INITIAL_STATE dict
+═══════════════════════════════════════
+
+A dict called INITIAL_STATE with every field that
+any stub reads from or writes to.
+
+Rules:
+- Every field must have None, False, or [] as default
+- Every field must have inline comment listing valid values
+- Include ONLY fields actually used
+- NO real data
+- NO persona data
+- NO hardcoded examples
+
+═══════════════════════════════════════
+PART C — StubContext class
+═══════════════════════════════════════
+
+class StubContext:
+    def __init__(self, state: dict):
+        self.state    = state.copy()
+        self.call_log = []
+
+    def call(self, tool_name: str, **kwargs) -> dict:
+        self.call_log.append({
+            "tool": tool_name,
+            "args": kwargs
+        })
+        if tool_name not in STUBS:
+            raise ValueError(f"Unknown tool: {tool_name}")
+        return STUBS[tool_name](self.state, **kwargs)
+
+    def get_call_log(self) -> list:
+        return self.call_log.copy()
+
+    def reset(self, state: dict):
+        self.state    = state.copy()
+        self.call_log = []
+
+═══════════════════════════════════════
+PART D — STUB FUNCTIONS
+═══════════════════════════════════════
+
+For EACH tool in the tools JSON:
+
+Generate one function:
+
+def tool_name(state: dict, **kwargs) -> dict
+
+Docstring MUST include:
+- One line: what the tool does
+- Reads: state fields
+- Mutates: state fields OR NONE
+- Raises: ToolValidationError conditions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VALIDATION RULES (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Apply whenever applicable:
+
+- aadhaar_number → exactly 12 digits, numeric
+- mobile_number  → exactly 10 digits, numeric
+- otp            → exactly 6 digits, numeric
+
+- session_token:
+  must follow pattern:
+  PMKUSUM-TKN-XXXXXXXX
+
+- ENUM parameters:
+  must match EXACT values defined in tools JSON
+
+If validation fails:
+→ raise ToolValidationError
+→ DO NOT return error dict
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE & LOGIC RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Follow tool descriptions strictly
+- Respect:
+  - prerequisites
+  - state transitions
+  - invalid flows
+
+- Read-only tools:
+  → NO state mutation
+
+- Mutating tools:
+  → update ONLY required fields
+
+- State must remain deterministic
+
+- Do NOT add extra state fields not needed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RESPONSE FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+On success:
+{
+  "status": "success",
+  ... relevant fields ...
+}
+
+On business failure:
+{
+  "status": "error",
+  "code": "...",
+  "message": "..."
+}
+
+On validation failure:
+→ raise ToolValidationError
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART E — STUBS REGISTRY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STUBS = {
+    "tool_name_1": tool_name_1,
+    "tool_name_2": tool_name_2,
+    ...
+}
+
+Rules:
+- MUST include ALL tools
+- Names MUST match EXACTLY
+- No missing entries
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMPORTS (ONLY THESE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+import re, random, string
+from datetime import date
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output ONLY Python code
+- NO markdown
+- NO explanation
+- NO comments outside required inline comments
+- NO hallucinated tools or fields
+- NO missing functions
+- NO schema violations
+- Deterministic behavior only
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FILE LOCATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Store the output in:
+
+C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM Solar Pump (energy subsidy)\stub_logic.py

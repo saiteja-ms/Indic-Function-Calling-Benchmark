@@ -1,0 +1,86 @@
+{
+  "scenario_id": "agristack_multiple_005_PERSONA_E_A",
+  "intent_id": "agristack_multiple_005",
+  "persona_id": "PERSONA_E",
+  "variant": "A",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform action: Sends OTP for AgriStack authentication.. my mobile_number is 9876549881, my aadhaar_number is 100020002474."
+    }
+  ],
+  "function": [
+    {
+      "name": "agristack_generate_otp",
+      "description": "Sends OTP for AgriStack authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer. Used as the unique identifier."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "agristack_verify_land_ownership",
+      "description": "Verifies whether the farmer is the owner of a specific land parcel by cross-referencing Aadhaar with state records. Transitions land_record_status to 'pending_verification' then 'verified' or 'rejected'. Requires session_token. Does NOT fetch records \u2014 use agristack_fetch_land_records first. Fails if Aadhaar does not match land owner or parcel not found.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier for a land parcel as per state records."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_parcel_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agristack_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

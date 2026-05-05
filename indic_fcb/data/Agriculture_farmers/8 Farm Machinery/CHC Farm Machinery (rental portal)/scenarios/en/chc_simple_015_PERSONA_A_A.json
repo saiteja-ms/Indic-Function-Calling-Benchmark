@@ -1,0 +1,67 @@
+{
+  "scenario_id": "chc_simple_015_PERSONA_A_A",
+  "intent_id": "chc_simple_015",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Validates whether a requested time slot is available without creating a booking.. my machinery_id is dummy_machinery_id_1546, my date is dummy_date_7406, my duration_hours is dummy_duration_hours_9298."
+    }
+  ],
+  "function": [
+    {
+      "name": "chc_validate_time_slot",
+      "description": "Validates whether a requested time slot is available without creating a booking. Returns validity and conflicts. PUBLIC tool. Fails if machinery_id or date invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "machinery_id": {
+            "type": "string",
+            "description": "Machinery ID."
+          },
+          "date": {
+            "type": "string",
+            "description": "Date YYYY-MM-DD."
+          },
+          "duration_hours": {
+            "type": "number",
+            "description": "Duration in hours."
+          }
+        },
+        "required": [
+          "machinery_id",
+          "date",
+          "duration_hours"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "chc_validate_time_slot",
+        "args": {
+          "machinery_id": "dummy_machinery_id",
+          "date": "dummy_date",
+          "duration_hours": "dummy_duration_hours"
+        },
+        "eval_mode": {
+          "machinery_id": "exact",
+          "date": "exact",
+          "duration_hours": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

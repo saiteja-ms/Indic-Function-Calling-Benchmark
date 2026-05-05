@@ -1,0 +1,99 @@
+{
+  "scenario_id": "fms_parallel_multiple_003_PERSONA_E_A",
+  "intent_id": "fms_parallel_multiple_003",
+  "persona_id": "PERSONA_E",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: fms_search_providers and fms_estimate_cost.. my service_type is dummy_service_type_5906, my land_area_acres is dummy_land_area_acres_3505, my location is dummy_location_7542."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_search_providers",
+      "description": "Searches for service providers by service type and location. Returns provider details, ratings, and availability. PUBLIC tool. Does NOT book. Fails if no providers match or location invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or region."
+          },
+          "service_type": {
+            "type": "string",
+            "description": "Service type."
+          }
+        },
+        "required": [
+          "location",
+          "service_type"
+        ]
+      }
+    },
+    {
+      "name": "fms_estimate_cost",
+      "description": "Estimates service cost based on service type, land area, and duration. PUBLIC tool. Does NOT create bookings. Estimate is approximate. Fails if service type unsupported or area unrealistic.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "service_type": {
+            "type": "string",
+            "description": "Service type."
+          },
+          "land_area_acres": {
+            "type": "number",
+            "description": "Area in acres."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "service_type",
+          "land_area_acres",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_search_providers",
+        "args": {
+          "location": "dummy_location",
+          "service_type": "dummy_service_type"
+        },
+        "eval_mode": {
+          "location": "exact",
+          "service_type": "exact"
+        }
+      },
+      {
+        "tool": "fms_estimate_cost",
+        "args": {
+          "service_type": "dummy_service_type",
+          "land_area_acres": "dummy_land_area_acres",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "service_type": "exact",
+          "land_area_acres": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

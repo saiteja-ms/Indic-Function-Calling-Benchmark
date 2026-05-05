@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pmkusum_simple_008_PERSONA_A_A",
+  "intent_id": "pmkusum_simple_008",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Selects an empanelled vendor for solar pump installation.. my vendor_id is None, my application_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusum_select_vendor",
+      "description": "Selects an empanelled vendor for solar pump installation. Transitions vendor_status from 'not_selected' to 'selected'. Requires session_token. Application must be in 'approved' state. Does NOT schedule installation. Fails if vendor_id is invalid, vendor is not empanelled, or application is not approved.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Unique identifier of the subsidy application."
+          },
+          "vendor_id": {
+            "type": "string",
+            "description": "Unique identifier of the empanelled vendor."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id",
+          "vendor_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusum_select_vendor",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": null,
+          "vendor_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only",
+          "vendor_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "scenario_id": "meghdoot_multiple_003_PERSONA_B_B",
+  "intent_id": "meghdoot_multiple_003",
+  "persona_id": "PERSONA_B",
+  "variant": "B",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform action: Fetches real-time lightning alerts for a specified location based on satellite/sensor data. Here are my details: my location is dummy_location_2446."
+    }
+  ],
+  "function": [
+    {
+      "name": "meghdoot_get_weather_alert",
+      "description": "Fetches weather-based alerts (rainfall, storm, heatwave, cold_wave, frost) for a location. Returns alert_type, severity ('low', 'moderate', 'high', 'extreme'), and validity. PUBLIC tool. Does NOT provide agro-advisory. Fails if location is invalid. Returns empty if no alerts exist.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "alert_type": {
+            "type": "string",
+            "description": "Filter by type. Allowed: 'lightning', 'rainfall', 'storm', 'heatwave', 'cold_wave', 'frost'. Optional."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "damini_get_lightning_alert",
+      "description": "Fetches real-time lightning alerts for a specified location based on satellite/sensor data. Alerts are valid only within a short time window (~minutes) and expire quickly. PUBLIC tool \u2014 no authentication required. Location is mandatory. Does NOT provide safety recommendations \u2014 use damini_get_safety_advisory. Fails if location is invalid or no alerts exist. Returns alert_status ('active' or 'expired'), severity, and proximity.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "time_window": {
+            "type": "string",
+            "description": "Query window. Allowed: 'current', '1_hour', '3_hour'. Default: 'current'."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "damini_get_lightning_alert",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

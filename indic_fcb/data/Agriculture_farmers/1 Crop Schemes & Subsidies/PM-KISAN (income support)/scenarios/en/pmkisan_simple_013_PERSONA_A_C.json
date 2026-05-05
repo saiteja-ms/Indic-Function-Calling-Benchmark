@@ -1,0 +1,64 @@
+{
+  "scenario_id": "pmkisan_simple_013_PERSONA_A_C",
+  "intent_id": "pmkisan_simple_013",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Retrieves the installment schedule for the current financial year showing expected dates and amounts for all 3 installments (\u20b92000 each). For your information, my aadhaar_number is 100020005664."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkisan_get_installment_schedule",
+      "description": "Retrieves the installment schedule for the current financial year showing expected dates and amounts for all 3 installments (\u20b92000 each). Requires a valid session_token. This tool does NOT track actual payment status \u2014 use pmkisan_track_installment_status for that. Returns the standard schedule; actual credit dates may vary. Fails if the farmer is not registered or not eligible.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "financial_year": {
+            "type": "string",
+            "description": "Financial year for the schedule, e.g., '2024-25'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkisan_get_installment_schedule",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

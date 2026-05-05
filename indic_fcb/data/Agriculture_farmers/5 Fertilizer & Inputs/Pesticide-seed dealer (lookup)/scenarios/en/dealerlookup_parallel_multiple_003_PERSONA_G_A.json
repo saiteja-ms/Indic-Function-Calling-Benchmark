@@ -1,0 +1,96 @@
+{
+  "scenario_id": "dealerlookup_parallel_multiple_003_PERSONA_G_A",
+  "intent_id": "dealerlookup_parallel_multiple_003",
+  "persona_id": "PERSONA_G",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: dealer_search_by_location and dealer_compare_options.. my product_type is dummy_product_type_2735, my location is dummy_location_4132."
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_compare_options",
+      "description": "Compares multiple dealers by product availability, license status, distance, and ratings. Location is required. PUBLIC tool. Comparison is based on available data which may be stale. Does NOT guarantee accuracy of all fields. Fails if fewer than 2 dealers available for comparison or location invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Location."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Product type."
+          },
+          "dealer_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of dealer IDs to compare. Optional \u2014 auto-selects nearby if omitted."
+          }
+        },
+        "required": [
+          "location",
+          "product_type"
+        ]
+      }
+    },
+    {
+      "name": "dealer_search_by_location",
+      "description": "Searches for pesticide and seed dealers in a specified location. Location (village/district/state) is MANDATORY. Returns dealer names, addresses, and basic info. PUBLIC tool \u2014 no authentication required. Does NOT verify dealer license or check inventory. Queries without valid location are INVALID. Fails if location invalid or no dealers found in the area.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or state. REQUIRED."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Filter. Allowed: 'seeds', 'pesticides', 'fertilizers'. Optional."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "dealer_search_by_location",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "dealer_compare_options",
+        "args": {
+          "location": "dummy_location",
+          "product_type": "dummy_product_type"
+        },
+        "eval_mode": {
+          "location": "exact",
+          "product_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

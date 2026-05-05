@@ -1,0 +1,124 @@
+{
+  "scenario_id": "pmfbyloss_parallel_multiple_002_PERSONA_D_C",
+  "intent_id": "pmfbyloss_parallel_multiple_002",
+  "persona_id": "PERSONA_D",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: pmfbyclaim_check_claim_window and pmfbyclaim_report_loss_event. For your information, my land_parcel_id is dummy_land_parcel_id_6597, my loss_type is dummy_loss_type_1626, my loss_date is dummy_loss_date_3859, my policy_id is dummy_policy_id_2260."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmfbyclaim_check_claim_window",
+      "description": "Checks whether the claim reporting window is still open. Loss must be reported within 72 hours. Requires session_token. Does NOT extend window. Fails if no active disaster event.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "policy_id": {
+            "type": "string",
+            "description": "PMFBY policy ID."
+          },
+          "loss_date": {
+            "type": "string",
+            "description": "Date of loss event YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "session_token",
+          "policy_id",
+          "loss_date"
+        ]
+      }
+    },
+    {
+      "name": "pmfbyclaim_report_loss_event",
+      "description": "Reports a crop loss event. Transitions claim_status to 'reported'. Must be within 72-hour window. Policy must be active. Requires session_token. Does NOT submit formal claim. Fails if policy not active, window expired, loss_type unsupported, or duplicate report.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "policy_id": {
+            "type": "string",
+            "description": "PMFBY policy ID."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Insured land parcel ID."
+          },
+          "loss_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'drought', 'flood', 'pest_attack', 'cyclone', 'unseasonal_rainfall'."
+          },
+          "loss_date": {
+            "type": "string",
+            "description": "Date of loss YYYY-MM-DD."
+          },
+          "loss_description": {
+            "type": "string",
+            "description": "Description of damage."
+          }
+        },
+        "required": [
+          "session_token",
+          "policy_id",
+          "land_parcel_id",
+          "loss_type",
+          "loss_date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmfbyclaim_check_claim_window",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "policy_id": "dummy_policy_id",
+          "loss_date": "dummy_loss_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "policy_id": "exact",
+          "loss_date": "exact"
+        }
+      },
+      {
+        "tool": "pmfbyclaim_report_loss_event",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "policy_id": "dummy_policy_id",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "loss_type": "dummy_loss_type",
+          "loss_date": "dummy_loss_date"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "policy_id": "exact",
+          "land_parcel_id": "exact",
+          "loss_type": "exact",
+          "loss_date": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

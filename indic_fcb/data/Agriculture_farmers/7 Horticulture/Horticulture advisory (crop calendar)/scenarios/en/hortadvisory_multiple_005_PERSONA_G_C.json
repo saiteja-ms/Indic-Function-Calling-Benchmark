@@ -1,0 +1,95 @@
+{
+  "scenario_id": "hortadvisory_multiple_005_PERSONA_G_C",
+  "intent_id": "hortadvisory_multiple_005",
+  "persona_id": "PERSONA_G",
+  "variant": "C",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform action: Retrieves the full crop calendar for a horticulture crop in a specific region. For your information, my crop_type is dummy_crop_type_9728, my location is dummy_location_9047."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_get_crop_calendar",
+      "description": "Retrieves the full crop calendar for a horticulture crop in a specific region. Includes stage-wise milestones (land prep, sowing, vegetative, flowering, harvesting) with recommended dates. PUBLIC tool \u2014 no authentication required. Does NOT provide detailed stage advisory. Fails if crop_type is unsupported for the region or location invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'mango', 'banana', 'tomato', 'potato', 'onion', 'chilli', 'grapes', 'flowers'."
+          },
+          "location": {
+            "type": "string",
+            "description": "State, district, or agro-climatic region."
+          },
+          "season_type": {
+            "type": "string",
+            "description": "Season filter. Allowed: 'kharif', 'rabi', 'zaid'. Optional."
+          }
+        },
+        "required": [
+          "crop_type",
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "horti_track_crop_stage",
+      "description": "Tracks and returns the current estimated crop stage based on sowing date and crop type. Requires session_token (personalized). Does NOT update stage manually. Calculation is approximate and may not reflect actual field conditions. Fails if no sowing record exists or crop_type unsupported.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for personalized advisory tools."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop type."
+          },
+          "sowing_date": {
+            "type": "string",
+            "description": "Sowing date YYYY-MM-DD."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          }
+        },
+        "required": [
+          "session_token",
+          "crop_type",
+          "sowing_date",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "horti_get_crop_calendar",
+        "args": {
+          "crop_type": "dummy_crop_type",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "crop_type": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

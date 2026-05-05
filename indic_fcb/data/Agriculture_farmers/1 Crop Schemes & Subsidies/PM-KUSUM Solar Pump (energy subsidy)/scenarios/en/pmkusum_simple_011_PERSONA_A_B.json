@@ -1,0 +1,71 @@
+{
+  "scenario_id": "pmkusum_simple_011_PERSONA_A_B",
+  "intent_id": "pmkusum_simple_011",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Records the physical verification/inspection result for the installed solar pump. Here are my details: my inspection_result is dummy_inspection_result_5347, my application_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusum_verify_installation",
+      "description": "Records the physical verification/inspection result for the installed solar pump. Transitions installation_status from 'completed' to 'verified' upon passing. Verification is REQUIRED before subsidy disbursement. Requires session_token. Does NOT disburse subsidy. Fails if installation is not 'completed', inspection finds defects, or installation is incomplete.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Unique identifier of the subsidy application."
+          },
+          "inspection_result": {
+            "type": "string",
+            "description": "Result of physical inspection: 'passed' or 'failed'."
+          },
+          "remarks": {
+            "type": "string",
+            "description": "Inspector's remarks or observations."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id",
+          "inspection_result"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusum_verify_installation",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": null,
+          "inspection_result": "dummy_inspection_result"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only",
+          "inspection_result": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

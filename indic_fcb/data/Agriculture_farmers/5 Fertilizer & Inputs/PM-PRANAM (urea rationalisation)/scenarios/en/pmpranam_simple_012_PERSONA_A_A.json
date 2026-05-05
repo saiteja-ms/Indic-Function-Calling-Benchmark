@@ -1,0 +1,88 @@
+{
+  "scenario_id": "pmpranam_simple_012_PERSONA_A_A",
+  "intent_id": "pmpranam_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Self-reports fertilizer usage data when purchase records are unavailable.. my land_parcel_id is dummy_land_parcel_id_5030, my season is dummy_season_9011, my aadhaar_number is 100020004832, my fertilizer_type is dummy_fertilizer_type_6679, my quantity_kg is dummy_quantity_kg_2590."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmpranam_report_usage",
+      "description": "Self-reports fertilizer usage data when purchase records are unavailable. Transitions usage_status to 'recorded'. Requires session_token. Self-reported data is verified against iFMS records when available. Does NOT guarantee compliance credit. Fails if conflicting records already exist.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Land parcel ID."
+          },
+          "fertilizer_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'urea', 'dap', 'mop', 'npk', 'organic', 'biofertilizer'."
+          },
+          "quantity_kg": {
+            "type": "number",
+            "description": "Quantity in kg."
+          },
+          "season": {
+            "type": "string",
+            "description": "Season."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_parcel_id",
+          "fertilizer_type",
+          "quantity_kg",
+          "season"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmpranam_report_usage",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "land_parcel_id": "dummy_land_parcel_id",
+          "fertilizer_type": "dummy_fertilizer_type",
+          "quantity_kg": "dummy_quantity_kg",
+          "season": "dummy_season"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "land_parcel_id": "exact",
+          "fertilizer_type": "exact",
+          "quantity_kg": "exact",
+          "season": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

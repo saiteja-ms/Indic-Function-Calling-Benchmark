@@ -1,0 +1,121 @@
+{
+  "scenario_id": "dealerlookup_long_context_001_PERSONA_A_C",
+  "intent_id": "dealerlookup_long_context_001",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I am a farmer from a small village. We have been waiting for rain."
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. How can I help you today?"
+    },
+    {
+      "role": "user",
+      "content": "The crops are not doing well this year."
+    },
+    {
+      "role": "assistant",
+      "content": "I am sorry to hear that. What service do you need?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with dealer_search_by_location. my location is dummy_location_9314"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with dealer_filter_by_product. my location is dummy_location_9314, my product_type is dummy_product_type_4824"
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_filter_by_product",
+      "description": "Filters dealers by product type and crop compatibility. Returns dealers that carry matching products. PUBLIC tool. Location is required. Does NOT verify dealer status or product availability. Fails if location missing, crop_type unsupported, or no matches found.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or state."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'seeds', 'pesticides', 'fertilizers'."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds', 'horticulture'. Optional."
+          }
+        },
+        "required": [
+          "location",
+          "product_type"
+        ]
+      }
+    },
+    {
+      "name": "dealer_search_by_location",
+      "description": "Searches for pesticide and seed dealers in a specified location. Location (village/district/state) is MANDATORY. Returns dealer names, addresses, and basic info. PUBLIC tool \u2014 no authentication required. Does NOT verify dealer license or check inventory. Queries without valid location are INVALID. Fails if location invalid or no dealers found in the area.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or state. REQUIRED."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Filter. Allowed: 'seeds', 'pesticides', 'fertilizers'. Optional."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "dealer_search_by_location",
+          "args": {
+            "location": "dummy_location"
+          },
+          "eval_mode": {
+            "location": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "dealer_filter_by_product",
+          "args": {
+            "location": "dummy_location",
+            "product_type": "dummy_product_type"
+          },
+          "eval_mode": {
+            "location": "exact",
+            "product_type": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

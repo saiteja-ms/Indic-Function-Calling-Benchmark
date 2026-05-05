@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pmkisan_simple_012_PERSONA_A_B",
+  "intent_id": "pmkisan_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Initiates resolution for a failed PM-KISAN payment. Here are my details: my transaction_reference is None, my beneficiary_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkisan_resolve_payment_failure",
+      "description": "Initiates resolution for a failed PM-KISAN payment. Identifies the cause of failure (incorrect bank details, Aadhaar mismatch, eKYC incomplete) and triggers appropriate corrective actions. Requires a valid session_token. This tool does NOT directly credit payments \u2014 it initiates the resolution process. Fails if no failed payment exists for the beneficiary, or if the failure cause requires manual intervention (e.g., state-level data correction).",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "beneficiary_id": {
+            "type": "string",
+            "description": "Unique identifier of the PM-KISAN beneficiary."
+          },
+          "transaction_reference": {
+            "type": "string",
+            "description": "Transaction reference of the failed payment."
+          }
+        },
+        "required": [
+          "session_token",
+          "beneficiary_id",
+          "transaction_reference"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkisan_resolve_payment_failure",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "beneficiary_id": null,
+          "transaction_reference": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "beneficiary_id": "type_only",
+          "transaction_reference": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

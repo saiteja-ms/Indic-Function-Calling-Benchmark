@@ -1,0 +1,67 @@
+{
+  "scenario_id": "msp_simple_006_PERSONA_A_B",
+  "intent_id": "msp_simple_006",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Generates a procurement token for mandi visit. Here are my details: my mandi_id is dummy_mandi_id_3143, my aadhaar_number is 100020008582."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_generate_procurement_token",
+      "description": "Generates a procurement token for mandi visit. Token is required before visiting. Crop must be declared first. Transitions procurement_status to 'scheduled'. Requires session_token. Does NOT schedule time \u2014 use msp_schedule_mandi_visit. Fails if crop not declared or duplicate token exists.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "mandi_id": {
+            "type": "string",
+            "description": "Unique identifier of the procurement mandi."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "mandi_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_generate_procurement_token",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mandi_id": "dummy_mandi_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "mandi_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

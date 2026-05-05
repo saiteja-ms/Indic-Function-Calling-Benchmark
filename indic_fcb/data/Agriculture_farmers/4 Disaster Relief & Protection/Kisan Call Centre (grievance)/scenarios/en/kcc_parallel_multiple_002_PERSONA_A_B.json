@@ -1,0 +1,106 @@
+{
+  "scenario_id": "kcc_parallel_multiple_002_PERSONA_A_B",
+  "intent_id": "kcc_parallel_multiple_002",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: kcc_provide_response and kcc_escalate_grievance. Here are my details: my ticket_id is None, my response_text is dummy_response_text_5273, my escalation_reason is dummy_escalation_reason_3543."
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_provide_response",
+      "description": "Records a response or update for a grievance from the assigned expert. Transitions response_status to 'provided'. Requires session_token. Grievance must be 'assigned' or 'in_progress'. Does NOT close the grievance. Fails if grievance is not assigned or already closed.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Grievance ticket ID."
+          },
+          "response_text": {
+            "type": "string",
+            "description": "Response content from expert."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id",
+          "response_text"
+        ]
+      }
+    },
+    {
+      "name": "kcc_escalate_grievance",
+      "description": "Escalates an unresolved grievance to higher authorities. Transitions grievance_status to 'escalated'. Requires session_token. Grievance must be in 'in_progress' or 'assigned' status with no satisfactory resolution. Does NOT resolve the issue. Fails if grievance is already resolved/closed or not yet assigned.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Grievance ticket ID."
+          },
+          "escalation_reason": {
+            "type": "string",
+            "description": "Reason for escalation."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id",
+          "escalation_reason"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "kcc_provide_response",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "ticket_id": null,
+          "response_text": "dummy_response_text"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "ticket_id": "exact",
+          "response_text": "exact"
+        }
+      },
+      {
+        "tool": "kcc_escalate_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "ticket_id": null,
+          "escalation_reason": "dummy_escalation_reason"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "ticket_id": "exact",
+          "escalation_reason": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

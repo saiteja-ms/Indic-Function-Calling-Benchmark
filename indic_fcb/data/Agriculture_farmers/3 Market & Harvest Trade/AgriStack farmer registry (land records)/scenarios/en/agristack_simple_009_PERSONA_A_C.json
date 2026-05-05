@@ -1,0 +1,74 @@
+{
+  "scenario_id": "agristack_simple_009_PERSONA_A_C",
+  "intent_id": "agristack_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Grants or revokes consent for sharing farmer data with other services. For your information, my action is dummy_action_3362, my aadhaar_number is 100020003704, my service_name is dummy_service_name_8388."
+    }
+  ],
+  "function": [
+    {
+      "name": "agristack_manage_consent",
+      "description": "Grants or revokes consent for sharing farmer data with other services. Consent-based sharing is mandatory. Transitions consent_status. Requires session_token. Does NOT share data \u2014 only manages permissions. Fails if invalid action.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "action": {
+            "type": "string",
+            "description": "Action: 'grant' or 'revoke'."
+          },
+          "service_name": {
+            "type": "string",
+            "description": "Service to grant/revoke consent for (e.g., 'pmkisan', 'pmfby')."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "action",
+          "service_name"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agristack_manage_consent",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "action": "dummy_action",
+          "service_name": "dummy_service_name"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "action": "exact",
+          "service_name": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "scenario_id": "enam_simple_009_PERSONA_A_A",
+  "intent_id": "enam_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Resolves ambiguous mandi names matching multiple locations.. my mandi_name is dummy_mandi_name_3867."
+    }
+  ],
+  "function": [
+    {
+      "name": "enam_resolve_mandi_ambiguity",
+      "description": "Resolves ambiguous mandi names matching multiple locations. Returns disambiguated list with state/district context. PUBLIC tool. Does NOT return prices. Fails if name matches no mandis.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "mandi_name": {
+            "type": "string",
+            "description": "Ambiguous mandi name."
+          }
+        },
+        "required": [
+          "mandi_name"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "enam_resolve_mandi_ambiguity",
+        "args": {
+          "mandi_name": "dummy_mandi_name"
+        },
+        "eval_mode": {
+          "mandi_name": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

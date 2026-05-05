@@ -1,0 +1,60 @@
+{
+  "scenario_id": "pmkusum_simple_012_PERSONA_A_A",
+  "intent_id": "pmkusum_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Tracks the subsidy disbursement status.. my application_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmkusum_track_subsidy",
+      "description": "Tracks the subsidy disbursement status. Returns subsidy_status ('not_initiated', 'pending', 'disbursed', 'failed') with transaction details. Subsidy is released ONLY after verified installation. Requires session_token. Does NOT initiate disbursement. Fails if installation is not verified.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Unique identifier of the subsidy application."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmkusum_track_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

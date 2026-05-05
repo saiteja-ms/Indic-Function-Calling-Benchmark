@@ -1,0 +1,86 @@
+{
+  "scenario_id": "coldstorage_parallel_multiple_002_PERSONA_A_B",
+  "intent_id": "coldstorage_parallel_multiple_002",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: coldstorage_get_facility_list and coldstorage_check_capacity. Here are my details: my facility_id is dummy_facility_id_6579, my location is dummy_location_8489."
+    }
+  ],
+  "function": [
+    {
+      "name": "coldstorage_get_facility_list",
+      "description": "Returns list of existing cold storage facilities in a region. PUBLIC tool \u2014 no authentication required. Includes facility details, types, and operational status. Does NOT check capacity availability. Fails if location invalid or no facilities found.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "State, district, or region."
+          },
+          "facility_type": {
+            "type": "string",
+            "description": "Filter. Allowed: 'cold_storage', 'ripening_chamber', 'pack_house'. Optional."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "coldstorage_check_capacity",
+      "description": "Checks available storage capacity at a specific facility. Returns capacity_status ('available', 'limited', 'full') with available space. PUBLIC tool. Does NOT book storage. Fails if facility_id invalid or facility not operational.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "facility_id": {
+            "type": "string",
+            "description": "Unique facility identifier."
+          },
+          "commodity_type": {
+            "type": "string",
+            "description": "Commodity. Allowed: 'fruits', 'vegetables', 'flowers', 'perishables'. Optional."
+          }
+        },
+        "required": [
+          "facility_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "coldstorage_get_facility_list",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "coldstorage_check_capacity",
+        "args": {
+          "facility_id": "dummy_facility_id"
+        },
+        "eval_mode": {
+          "facility_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

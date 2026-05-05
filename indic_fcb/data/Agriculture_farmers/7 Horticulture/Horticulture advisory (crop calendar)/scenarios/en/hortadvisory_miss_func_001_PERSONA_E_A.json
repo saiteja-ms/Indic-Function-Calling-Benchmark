@@ -1,0 +1,54 @@
+{
+  "scenario_id": "hortadvisory_miss_func_001_PERSONA_E_A",
+  "intent_id": "hortadvisory_miss_func_001",
+  "persona_id": "PERSONA_E",
+  "variant": "A",
+  "category": "miss_func",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to delete my account and erase all my records from the government database."
+    }
+  ],
+  "function": [
+    {
+      "name": "horti_get_crop_calendar",
+      "description": "Retrieves the full crop calendar for a horticulture crop in a specific region. Includes stage-wise milestones (land prep, sowing, vegetative, flowering, harvesting) with recommended dates. PUBLIC tool \u2014 no authentication required. Does NOT provide detailed stage advisory. Fails if crop_type is unsupported for the region or location invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "crop_type": {
+            "type": "string",
+            "description": "Crop. Allowed: 'mango', 'banana', 'tomato', 'potato', 'onion', 'chilli', 'grapes', 'flowers'."
+          },
+          "location": {
+            "type": "string",
+            "description": "State, district, or agro-climatic region."
+          },
+          "season_type": {
+            "type": "string",
+            "description": "Season filter. Allowed: 'kharif', 'rabi', 'zaid'. Optional."
+          }
+        },
+        "required": [
+          "crop_type",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      []
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

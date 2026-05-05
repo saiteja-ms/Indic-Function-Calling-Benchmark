@@ -1,0 +1,57 @@
+{
+  "scenario_id": "coldstorage_simple_007_PERSONA_A_C",
+  "intent_id": "coldstorage_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Checks available storage capacity at a specific facility. For your information, my facility_id is dummy_facility_id_8062."
+    }
+  ],
+  "function": [
+    {
+      "name": "coldstorage_check_capacity",
+      "description": "Checks available storage capacity at a specific facility. Returns capacity_status ('available', 'limited', 'full') with available space. PUBLIC tool. Does NOT book storage. Fails if facility_id invalid or facility not operational.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "facility_id": {
+            "type": "string",
+            "description": "Unique facility identifier."
+          },
+          "commodity_type": {
+            "type": "string",
+            "description": "Commodity. Allowed: 'fruits', 'vegetables', 'flowers', 'perishables'. Optional."
+          }
+        },
+        "required": [
+          "facility_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "coldstorage_check_capacity",
+        "args": {
+          "facility_id": "dummy_facility_id"
+        },
+        "eval_mode": {
+          "facility_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

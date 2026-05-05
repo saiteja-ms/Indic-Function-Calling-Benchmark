@@ -1,0 +1,67 @@
+{
+  "scenario_id": "soilhealth_simple_008_PERSONA_A_C",
+  "intent_id": "soilhealth_simple_008",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Generates fertilizer recommendations based on Soil Health Card test results and the intended crop. For your information, my crop_type is dummy_crop_type_1080, my sample_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "shc_get_fertilizer_recommendation",
+      "description": "Generates fertilizer recommendations based on Soil Health Card test results and the intended crop. Recommendations are derived strictly from lab-measured values. Requires session_token. Report must exist. Does NOT apply fertilizers or modify soil data. Fails if no report exists, or crop type is unsupported for the soil type.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "sample_id": {
+            "type": "string",
+            "description": "Unique identifier for a soil sample."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Intended crop for recommendation. E.g., 'paddy', 'wheat', 'maize', 'cotton', 'pulses'."
+          }
+        },
+        "required": [
+          "session_token",
+          "sample_id",
+          "crop_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "shc_get_fertilizer_recommendation",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "sample_id": null,
+          "crop_type": "dummy_crop_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "sample_id": "exact",
+          "crop_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

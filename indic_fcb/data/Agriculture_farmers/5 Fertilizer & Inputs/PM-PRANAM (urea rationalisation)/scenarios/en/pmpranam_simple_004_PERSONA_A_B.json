@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pmpranam_simple_004_PERSONA_A_B",
+  "intent_id": "pmpranam_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Analyzes fertilizer usage patterns comparing current season vs baseline. Here are my details: my land_parcel_id is dummy_land_parcel_id_8024, my aadhaar_number is 100020008896."
+    }
+  ],
+  "function": [
+    {
+      "name": "pmpranam_analyze_usage_pattern",
+      "description": "Analyzes fertilizer usage patterns comparing current season vs baseline. Identifies reduction in urea usage, shift to alternatives, and balanced nutrition progress. Transitions usage_status to 'analyzed'. Requires session_token. Usage data must be 'recorded'. Does NOT generate recommendations. Fails if no baseline data, usage not recorded, or conflicting data between purchase vs declared usage.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier of the land parcel."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "land_parcel_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "pmpranam_analyze_usage_pattern",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "land_parcel_id": "dummy_land_parcel_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "land_parcel_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

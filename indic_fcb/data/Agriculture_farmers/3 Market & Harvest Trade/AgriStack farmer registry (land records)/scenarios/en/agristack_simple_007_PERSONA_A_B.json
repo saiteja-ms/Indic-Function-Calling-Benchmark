@@ -1,0 +1,60 @@
+{
+  "scenario_id": "agristack_simple_007_PERSONA_A_B",
+  "intent_id": "agristack_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Checks verification status of a land parcel. Here are my details: my land_parcel_id is dummy_land_parcel_id_7279."
+    }
+  ],
+  "function": [
+    {
+      "name": "agristack_check_land_status",
+      "description": "Checks verification status of a land parcel. Returns land_record_status ('unverified', 'pending_verification', 'verified', 'rejected'). Requires session_token. Does NOT initiate verification. Fails if land_parcel_id invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Unique identifier for a land parcel."
+          }
+        },
+        "required": [
+          "session_token",
+          "land_parcel_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agristack_check_land_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "land_parcel_id": "dummy_land_parcel_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "land_parcel_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "scenario_id": "msp_simple_009_PERSONA_A_A",
+  "intent_id": "msp_simple_009",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Records delivery of produce at the mandi.. my actual_quantity_quintal is dummy_actual_quantity_quintal_3238, my procurement_token is dummy_procurement_token_3833."
+    }
+  ],
+  "function": [
+    {
+      "name": "msp_record_produce_delivery",
+      "description": "Records delivery of produce at the mandi. Transitions procurement_status to 'delivered'. Requires session_token. Does NOT perform quality check. Fails if not scheduled, wrong mandi, or exceeding declared quantity.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "procurement_token": {
+            "type": "string",
+            "description": "Procurement token ID."
+          },
+          "actual_quantity_quintal": {
+            "type": "number",
+            "description": "Actual quantity delivered in quintals."
+          }
+        },
+        "required": [
+          "session_token",
+          "procurement_token",
+          "actual_quantity_quintal"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "msp_record_produce_delivery",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "procurement_token": "dummy_procurement_token",
+          "actual_quantity_quintal": "dummy_actual_quantity_quintal"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "procurement_token": "exact",
+          "actual_quantity_quintal": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

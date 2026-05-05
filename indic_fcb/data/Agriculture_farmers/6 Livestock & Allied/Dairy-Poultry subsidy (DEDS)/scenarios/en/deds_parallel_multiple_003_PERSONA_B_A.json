@@ -1,0 +1,92 @@
+{
+  "scenario_id": "deds_parallel_multiple_003_PERSONA_B_A",
+  "intent_id": "deds_parallel_multiple_003",
+  "persona_id": "PERSONA_B",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: deds_track_loan_status and deds_track_subsidy.. my application_id is DEDS-APP-20000001, my loan_id is dummy_loan_id_7814."
+    }
+  ],
+  "function": [
+    {
+      "name": "deds_track_subsidy",
+      "description": "Tracks subsidy_status ('not_initiated', 'pending', 'approved', 'disbursed', 'failed'). Subsidy is released ONLY after project verification and loan sanction. Requires session_token. Does NOT initiate disbursement. Fails if project not verified or loan not sanctioned.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "Application ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "application_id"
+        ]
+      }
+    },
+    {
+      "name": "deds_track_loan_status",
+      "description": "Tracks loan_status ('not_applied', 'applied', 'sanctioned', 'rejected', 'disbursed'). Requires session_token. Does NOT modify loan. Fails if loan_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "loan_id": {
+            "type": "string",
+            "description": "Unique identifier of the loan application."
+          }
+        },
+        "required": [
+          "session_token",
+          "loan_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "deds_track_loan_status",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "loan_id": "dummy_loan_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "loan_id": "exact"
+        }
+      },
+      {
+        "tool": "deds_track_subsidy",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "application_id": "DEDS-APP-20000001"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "application_id": "type_only"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

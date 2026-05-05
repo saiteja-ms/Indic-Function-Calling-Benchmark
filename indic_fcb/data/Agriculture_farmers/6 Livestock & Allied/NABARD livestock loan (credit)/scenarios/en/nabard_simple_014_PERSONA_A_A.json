@@ -1,0 +1,67 @@
+{
+  "scenario_id": "nabard_simple_014_PERSONA_A_A",
+  "intent_id": "nabard_simple_014",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Initiates loan restructuring for a defaulted or overdue loan.. my restructure_reason is dummy_restructure_reason_8560, my loan_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "nabard_restructure_loan",
+      "description": "Initiates loan restructuring for a defaulted or overdue loan. May modify EMI amount, tenure, or interest terms. Requires session_token. Restructuring is NOT guaranteed and depends on bank assessment. Fails if loan is not defaulted/overdue or restructuring already attempted.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "loan_id": {
+            "type": "string",
+            "description": "Loan ID."
+          },
+          "restructure_reason": {
+            "type": "string",
+            "description": "Reason for restructuring request."
+          }
+        },
+        "required": [
+          "session_token",
+          "loan_id",
+          "restructure_reason"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "nabard_restructure_loan",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "loan_id": null,
+          "restructure_reason": "dummy_restructure_reason"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "loan_id": "exact",
+          "restructure_reason": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

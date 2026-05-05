@@ -1,0 +1,57 @@
+{
+  "scenario_id": "kisansuvidha_simple_008_PERSONA_A_A",
+  "intent_id": "kisansuvidha_simple_008",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Generates weather-based advisory for farming activities (irrigation timing, spraying, harvesting) based on current and forecasted weather.. my location is dummy_location_9033."
+    }
+  ],
+  "function": [
+    {
+      "name": "ksweather_get_weather_advisory",
+      "description": "Generates weather-based advisory for farming activities (irrigation timing, spraying, harvesting) based on current and forecasted weather. PUBLIC tool. Does NOT provide crop-specific advisory \u2014 use ATMA tools for that. Fails if location is invalid or weather data is insufficient for advisory generation.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "Village, district, or GPS-based location."
+          },
+          "activity_type": {
+            "type": "string",
+            "description": "Farming activity: 'irrigation', 'spraying', 'harvesting', 'sowing'."
+          }
+        },
+        "required": [
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "ksweather_get_weather_advisory",
+        "args": {
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

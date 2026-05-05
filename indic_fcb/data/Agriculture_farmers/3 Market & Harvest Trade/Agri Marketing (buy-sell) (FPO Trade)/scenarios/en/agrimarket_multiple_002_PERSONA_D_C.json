@@ -1,0 +1,111 @@
+{
+  "scenario_id": "agrimarket_multiple_002_PERSONA_D_C",
+  "intent_id": "agrimarket_multiple_002",
+  "persona_id": "PERSONA_D",
+  "variant": "C",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform action: Sends OTP for Agri Marketing authentication. For your information, my mobile_number is 9876599216, my aadhaar_number is 100020004692."
+    }
+  ],
+  "function": [
+    {
+      "name": "agrimarket_generate_otp",
+      "description": "Sends OTP for Agri Marketing authentication. Does NOT verify OTP. Fails if Aadhaar invalid or mobile not registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the user (farmer/FPO/buyer)."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "agrimarket_create_listing",
+      "description": "Creates a new crop listing for sale. Listing can be fixed_price or auction-based. Requires session_token. Only sellers can create. Does NOT place orders. Fails if commodity is unsupported, duplicate listing exists, or required fields missing.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+          },
+          "commodity_type": {
+            "type": "string",
+            "description": "Commodity. Allowed: 'paddy', 'wheat', 'maize', 'cotton', 'pulses', 'oilseeds', 'fruits', 'vegetables'."
+          },
+          "quality_grade": {
+            "type": "string",
+            "description": "Grade. Allowed: 'A', 'B', 'C', 'premium'."
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Available quantity."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit. Allowed: 'kg', 'quintal', 'ton'."
+          },
+          "price_per_unit": {
+            "type": "number",
+            "description": "Price per unit in INR."
+          },
+          "listing_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'fixed_price', 'auction'."
+          },
+          "location": {
+            "type": "string",
+            "description": "Seller location."
+          }
+        },
+        "required": [
+          "session_token",
+          "commodity_type",
+          "quality_grade",
+          "quantity",
+          "unit",
+          "price_per_unit",
+          "listing_type",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "agrimarket_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

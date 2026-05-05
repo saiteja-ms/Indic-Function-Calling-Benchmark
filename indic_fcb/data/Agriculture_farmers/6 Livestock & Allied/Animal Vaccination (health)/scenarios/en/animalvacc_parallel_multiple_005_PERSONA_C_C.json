@@ -1,0 +1,103 @@
+{
+  "scenario_id": "animalvacc_parallel_multiple_005_PERSONA_C_C",
+  "intent_id": "animalvacc_parallel_multiple_005",
+  "persona_id": "PERSONA_C",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: livestock_get_vaccination_schedule and livestock_get_disease_advisory. For your information, my disease_type is dummy_disease_type_2103, my livestock_id is LVS-10000002, my animal_type is dummy_animal_type_5611."
+    }
+  ],
+  "function": [
+    {
+      "name": "livestock_get_disease_advisory",
+      "description": "Provides disease-specific advisory for livestock including symptoms, prevention, and vaccination importance. Requires session_token. Does NOT book vaccinations or diagnose animals. Advisory is informational only. Fails if disease_type is unsupported or animal_type has no applicable advisory.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "animal_type": {
+            "type": "string",
+            "description": "Animal type. Allowed: 'cattle', 'buffalo', 'sheep', 'goat', 'poultry'."
+          },
+          "disease_type": {
+            "type": "string",
+            "description": "Disease. Allowed: 'fmd', 'brucellosis', 'ppr', 'rabies', 'anthrax'."
+          }
+        },
+        "required": [
+          "session_token",
+          "animal_type",
+          "disease_type"
+        ]
+      }
+    },
+    {
+      "name": "livestock_get_vaccination_schedule",
+      "description": "Retrieves the vaccination schedule for a registered animal based on species, age, and disease type. Schedule includes vaccine name, due date, and type (routine/emergency/booster). Requires session_token. Livestock must be registered. Does NOT book vaccinations. Fails if livestock_id is invalid, animal is not registered, or species has no applicable schedule.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "livestock_id": {
+            "type": "string",
+            "description": "Unique identifier for a registered animal."
+          },
+          "disease_type": {
+            "type": "string",
+            "description": "Disease filter. Allowed: 'fmd', 'brucellosis', 'ppr', 'rabies', 'anthrax'. Optional \u2014 returns all if omitted."
+          }
+        },
+        "required": [
+          "session_token",
+          "livestock_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "livestock_get_vaccination_schedule",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "livestock_id": "LVS-10000002"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "livestock_id": "exact"
+        }
+      },
+      {
+        "tool": "livestock_get_disease_advisory",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "animal_type": "dummy_animal_type",
+          "disease_type": "dummy_disease_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "animal_type": "exact",
+          "disease_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_C"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

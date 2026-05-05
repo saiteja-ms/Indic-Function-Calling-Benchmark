@@ -1,0 +1,92 @@
+{
+  "scenario_id": "fms_parallel_multiple_002_PERSONA_E_B",
+  "intent_id": "fms_parallel_multiple_002",
+  "persona_id": "PERSONA_E",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: fms_generate_otp and fms_cancel_booking. Here are my details: my booking_id is FMS-BK-20000003, my mobile_number is 9876580754, my aadhaar_number is 100020007217."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_cancel_booking",
+      "description": "Cancels a service booking. Only when 'requested' or 'confirmed'. Requires session_token. Fails if service already assigned or in progress.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for booking tools."
+          },
+          "booking_id": {
+            "type": "string",
+            "description": "Booking ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "booking_id"
+        ]
+      }
+    },
+    {
+      "name": "fms_generate_otp",
+      "description": "Sends OTP for FMS custom hiring authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      },
+      {
+        "tool": "fms_cancel_booking",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "booking_id": "FMS-BK-20000003"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "booking_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

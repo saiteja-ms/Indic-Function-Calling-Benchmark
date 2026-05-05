@@ -1,0 +1,92 @@
+{
+  "scenario_id": "epashu_parallel_multiple_003_PERSONA_B_A",
+  "intent_id": "epashu_parallel_multiple_003",
+  "persona_id": "PERSONA_B",
+  "variant": "A",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform these two different actions simultaneously: epashu_get_listing_details and epashu_transfer_ownership.. my listing_id is None, my order_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "epashu_get_listing_details",
+      "description": "Retrieves full details of a specific listing including animal details, health records, seller info, and verification status. Requires session_token. Does NOT modify listing. Fails if listing_id is invalid or listing is deleted.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "listing_id": {
+            "type": "string",
+            "description": "Unique listing identifier."
+          }
+        },
+        "required": [
+          "session_token",
+          "listing_id"
+        ]
+      }
+    },
+    {
+      "name": "epashu_transfer_ownership",
+      "description": "Records the transfer of livestock ownership from seller to buyer after successful payment. Transitions order_status to 'transferred'. Payment must be completed first. Requires session_token. Does NOT handle logistics. Fails if payment not done, order not confirmed, or ownership records conflict.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Order ID."
+          }
+        },
+        "required": [
+          "session_token",
+          "order_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "epashu_get_listing_details",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "listing_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "listing_id": "exact"
+        }
+      },
+      {
+        "tool": "epashu_transfer_ownership",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "order_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "order_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_B"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

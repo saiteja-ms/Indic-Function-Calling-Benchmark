@@ -1,0 +1,106 @@
+{
+  "scenario_id": "sdrf_multiple_004_PERSONA_D_B",
+  "intent_id": "sdrf_multiple_004",
+  "persona_id": "PERSONA_D",
+  "variant": "B",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform action: Sends OTP for SDRF/NDRF authentication. Here are my details: my mobile_number is 9876533850, my aadhaar_number is 100020002655."
+    }
+  ],
+  "function": [
+    {
+      "name": "sdrfndrf_report_damage",
+      "description": "Reports disaster-related crop/property damage. Transitions claim_status to 'reported'. Must be within time window. Location must be in affected zone. Requires session_token. Does NOT submit formal claim. Fails if disaster not declared, location ineligible, or reporting window expired.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "location": {
+            "type": "string",
+            "description": "Affected location."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Affected land parcel ID."
+          },
+          "disaster_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'flood', 'drought', 'cyclone', 'landslide', 'hailstorm'."
+          },
+          "damage_description": {
+            "type": "string",
+            "description": "Description of damage."
+          },
+          "damage_severity": {
+            "type": "string",
+            "description": "Severity. Allowed: 'low', 'moderate', 'high', 'severe'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "location",
+          "land_parcel_id",
+          "disaster_type",
+          "damage_description",
+          "damage_severity"
+        ]
+      }
+    },
+    {
+      "name": "sdrfndrf_generate_otp",
+      "description": "Sends OTP for SDRF/NDRF authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "sdrfndrf_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_D"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

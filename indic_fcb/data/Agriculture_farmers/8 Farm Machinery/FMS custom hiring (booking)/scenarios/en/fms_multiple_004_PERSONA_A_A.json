@@ -1,0 +1,86 @@
+{
+  "scenario_id": "fms_multiple_004_PERSONA_A_A",
+  "intent_id": "fms_multiple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Perform action: Sends OTP for FMS custom hiring authentication.. my mobile_number is 9876527887, my aadhaar_number is 100020001415."
+    }
+  ],
+  "function": [
+    {
+      "name": "fms_generate_otp",
+      "description": "Sends OTP for FMS custom hiring authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    },
+    {
+      "name": "fms_check_service_availability",
+      "description": "Checks if a service is available for a specific date and location. Returns provider_status ('available', 'assigned', 'busy', 'unavailable'). PUBLIC tool. Does NOT book. Service may become unavailable due to weather or high demand. Fails if service_id or date invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "description": "Unique service identifier."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location."
+          },
+          "date": {
+            "type": "string",
+            "description": "Desired date YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "service_id",
+          "location",
+          "date"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "fms_generate_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "mobile_number": "dummy_mobile_number"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "mobile_number": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

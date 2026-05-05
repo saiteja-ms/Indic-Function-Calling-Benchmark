@@ -1,0 +1,194 @@
+{
+  "scenario_id": "agristack_long_context_004_PERSONA_A_C",
+  "intent_id": "agristack_long_context_004",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "long_context",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I am a farmer from a small village. We have been waiting for rain."
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. How can I help you today?"
+    },
+    {
+      "role": "user",
+      "content": "The crops are not doing well this year."
+    },
+    {
+      "role": "assistant",
+      "content": "I am sorry to hear that. What service do you need?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with agristack_generate_otp. my aadhaar_number is 100020007316, my mobile_number is 9876586026"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with agristack_verify_otp. my aadhaar_number is 100020007316, my otp is dummy_otp_4203"
+    },
+    {
+      "role": "assistant",
+      "content": "I have completed that step. What next?"
+    },
+    {
+      "role": "user",
+      "content": "Now let us proceed with agristack_register_farmer. my aadhaar_number is 100020007316, my farmer_name is dummy_farmer_name_5251, my state is dummy_state_3564, my district is dummy_district_5586, my village is dummy_village_2821"
+    }
+  ],
+  "function": [
+    {
+      "name": "agristack_verify_otp",
+      "description": "Verifies OTP and returns session_token. Does NOT register farmer. Fails if OTP expired or incorrect.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "otp"
+        ]
+      }
+    },
+    {
+      "name": "agristack_register_farmer",
+      "description": "Registers a new farmer in the AgriStack registry. Each Aadhaar can have ONLY one profile (duplicates rejected). Transitions profile_status to 'registered'. Requires session_token. Does NOT verify land or complete profile. Fails if Aadhaar already registered.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "farmer_name": {
+            "type": "string",
+            "description": "Full name."
+          },
+          "state": {
+            "type": "string",
+            "description": "State."
+          },
+          "district": {
+            "type": "string",
+            "description": "District."
+          },
+          "village": {
+            "type": "string",
+            "description": "Village."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "Mobile number."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "farmer_name",
+          "state",
+          "district",
+          "village"
+        ]
+      }
+    },
+    {
+      "name": "agristack_generate_otp",
+      "description": "Sends OTP for AgriStack authentication. Does NOT verify OTP. Fails if Aadhaar invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer. Used as the unique identifier."
+          },
+          "mobile_number": {
+            "type": "string",
+            "description": "10-digit mobile number linked with Aadhaar."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "mobile_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [
+        {
+          "tool": "agristack_generate_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "mobile_number": "dummy_mobile_number"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "mobile_number": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "agristack_verify_otp",
+          "args": {
+            "aadhaar_number": "dummy_aadhaar_number",
+            "otp": "dummy_otp"
+          },
+          "eval_mode": {
+            "aadhaar_number": "exact",
+            "otp": "exact"
+          }
+        }
+      ],
+      [
+        {
+          "tool": "agristack_register_farmer",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "farmer_name": "dummy_farmer_name",
+            "state": "dummy_state",
+            "district": "dummy_district",
+            "village": "dummy_village"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "farmer_name": "substring",
+            "state": "exact",
+            "district": "exact",
+            "village": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": true
+  }
+}

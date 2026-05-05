@@ -1,0 +1,67 @@
+{
+  "scenario_id": "kcc_simple_012_PERSONA_A_C",
+  "intent_id": "kcc_simple_012",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Marks a grievance as resolved after investigation. For your information, my ticket_id is None, my resolution_details is dummy_resolution_details_9449."
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_resolve_grievance",
+      "description": "Marks a grievance as resolved after investigation. Transitions grievance_status to 'resolved'. Requires session_token. Grievance must be 'in_progress'. Does NOT close it \u2014 farmer must confirm via kcc_close_grievance. Fails if not in 'in_progress' status.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Grievance ticket ID."
+          },
+          "resolution_details": {
+            "type": "string",
+            "description": "Resolution summary."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id",
+          "resolution_details"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "kcc_resolve_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "ticket_id": null,
+          "resolution_details": "dummy_resolution_details"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "ticket_id": "exact",
+          "resolution_details": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

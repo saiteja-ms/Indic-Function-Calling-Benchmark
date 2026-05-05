@@ -1,0 +1,74 @@
+{
+  "scenario_id": "jaljeevan_simple_014_PERSONA_A_C",
+  "intent_id": "jaljeevan_simple_014",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Raises JJM grievance. For your information, my description is dummy_description_6560, my grievance_category is dummy_grievance_category_3965, my aadhaar_number is 100020003000."
+    }
+  ],
+  "function": [
+    {
+      "name": "jjm_raise_grievance",
+      "description": "Raises JJM grievance. Categories: 'no_water_supply', 'poor_quality', 'connection_issue', 'delay_in_installation', 'infrastructure_problem'. Must check supply/connection status first. Requires session_token. Fails if category invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for personalized tools."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "grievance_category": {
+            "type": "string",
+            "description": "Category."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "grievance_category",
+          "description"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "jjm_raise_grievance",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "100020003000",
+          "grievance_category": "dummy_grievance_category",
+          "description": "dummy_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "grievance_category": "exact",
+          "description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

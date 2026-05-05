@@ -1,0 +1,79 @@
+{
+  "scenario_id": "soilportal_miss_param_003_PERSONA_H_B",
+  "intent_id": "soilportal_miss_param_003",
+  "persona_id": "PERSONA_H",
+  "variant": "B",
+  "category": "miss_param",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Please help me with shcportal_search_reports. my aadhaar_number is 100020002622"
+    },
+    {
+      "role": "assistant",
+      "content": "Please provide your session_token."
+    },
+    {
+      "role": "user",
+      "content": "My session_token is SHCPORTAL-TKN-YZ56AB78."
+    }
+  ],
+  "function": [
+    {
+      "name": "shcportal_search_reports",
+      "description": "Searches for available Soil Health Card reports for a farmer. Returns list of reports with sample IDs, dates, land parcels, and report_status. Requires session_token. Does NOT retrieve full report details \u2014 use shcportal_get_report_details. Fails if no reports exist. May return multiple reports across years and land parcels.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "land_parcel_id": {
+            "type": "string",
+            "description": "Optional filter by land parcel."
+          },
+          "report_type": {
+            "type": "string",
+            "description": "Filter: 'latest' or 'historical'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [],
+      [
+        {
+          "tool": "shcportal_search_reports",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

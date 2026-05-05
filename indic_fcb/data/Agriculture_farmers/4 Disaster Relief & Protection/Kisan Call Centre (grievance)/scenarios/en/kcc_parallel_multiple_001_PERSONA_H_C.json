@@ -1,0 +1,99 @@
+{
+  "scenario_id": "kcc_parallel_multiple_001_PERSONA_H_C",
+  "intent_id": "kcc_parallel_multiple_001",
+  "persona_id": "PERSONA_H",
+  "variant": "C",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform these two different actions simultaneously: kcc_verify_otp and kcc_update_grievance_details. For your information, my ticket_id is KCC-TKT-10000007, my updated_description is dummy_updated_description_3200, my aadhaar_number is 100020002628, my otp is dummy_otp_1212."
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_update_grievance_details",
+      "description": "Updates the description or details of an existing grievance. Only possible when status is 'raised' or 'assigned'. Requires session_token. Does NOT change category or priority. Fails if grievance is beyond 'assigned' status.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "Grievance ticket ID."
+          },
+          "updated_description": {
+            "type": "string",
+            "description": "Updated description."
+          }
+        },
+        "required": [
+          "session_token",
+          "ticket_id",
+          "updated_description"
+        ]
+      }
+    },
+    {
+      "name": "kcc_verify_otp",
+      "description": "Verifies OTP and returns session_token. Does NOT raise grievances. Fails if OTP expired.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP."
+          }
+        },
+        "required": [
+          "aadhaar_number",
+          "otp"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "kcc_verify_otp",
+        "args": {
+          "aadhaar_number": "dummy_aadhaar_number",
+          "otp": "dummy_otp"
+        },
+        "eval_mode": {
+          "aadhaar_number": "exact",
+          "otp": "exact"
+        }
+      },
+      {
+        "tool": "kcc_update_grievance_details",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "ticket_id": "KCC-TKT-10000007",
+          "updated_description": "dummy_updated_description"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "ticket_id": "exact",
+          "updated_description": "substring"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_H"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

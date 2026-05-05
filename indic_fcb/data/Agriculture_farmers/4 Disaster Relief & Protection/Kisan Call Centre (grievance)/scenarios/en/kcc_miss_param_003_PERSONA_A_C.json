@@ -1,0 +1,89 @@
+{
+  "scenario_id": "kcc_miss_param_003_PERSONA_A_C",
+  "intent_id": "kcc_miss_param_003",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "miss_param",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Please help me with kcc_raise_grievance. my aadhaar_number is 100020003883, my grievance_category is dummy_grievance_category_5471, my description is dummy_description_1766"
+    },
+    {
+      "role": "assistant",
+      "content": "Please provide your session_token."
+    },
+    {
+      "role": "user",
+      "content": "My session_token is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "kcc_raise_grievance",
+      "description": "Raises a new grievance ticket. Supports multi-domain grievances (pmkisan, pmfby, pmkusum, weather, market, soil, other). Generates unique ticket_id. Transitions grievance_status to 'raised'. Requires session_token. Does NOT resolve grievances. Fails if description is empty, category invalid, or duplicate grievance exists for same issue.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "grievance_category": {
+            "type": "string",
+            "description": "Category. Allowed: 'pmkisan', 'pmfby', 'pmkusum', 'weather', 'market', 'soil', 'other'."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the issue."
+          },
+          "priority_level": {
+            "type": "string",
+            "description": "Priority. Allowed: 'low', 'medium', 'high', 'critical'. Optional \u2014 defaults to 'medium'."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "grievance_category",
+          "description"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      [],
+      [
+        {
+          "tool": "kcc_raise_grievance",
+          "args": {
+            "session_token": "<from_auth_step>",
+            "aadhaar_number": "dummy_aadhaar_number",
+            "grievance_category": "dummy_grievance_category",
+            "description": "dummy_description"
+          },
+          "eval_mode": {
+            "session_token": "type_only",
+            "aadhaar_number": "exact",
+            "grievance_category": "exact",
+            "description": "substring"
+          }
+        }
+      ]
+    ],
+    "call_order": "sequential",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

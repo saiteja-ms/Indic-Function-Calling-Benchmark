@@ -1,0 +1,64 @@
+{
+  "scenario_id": "dealerlookup_simple_005_PERSONA_A_A",
+  "intent_id": "dealerlookup_simple_005",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Checks product availability at a specific dealer.. my product_type is dummy_product_type_2310, my dealer_id is dummy_dealer_id_6512."
+    }
+  ],
+  "function": [
+    {
+      "name": "dealer_check_inventory",
+      "description": "Checks product availability at a specific dealer. Returns inventory_status ('available', 'limited', 'unavailable') for specified product. PUBLIC tool. Inventory data is dynamic and may not reflect real-time stock. Does NOT reserve products. Fails if dealer_id invalid or dealer not active.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "dealer_id": {
+            "type": "string",
+            "description": "Dealer ID."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'seeds', 'pesticides', 'fertilizers'."
+          },
+          "crop_type": {
+            "type": "string",
+            "description": "Crop filter. Optional."
+          }
+        },
+        "required": [
+          "dealer_id",
+          "product_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "dealer_check_inventory",
+        "args": {
+          "dealer_id": "dummy_dealer_id",
+          "product_type": "dummy_product_type"
+        },
+        "eval_mode": {
+          "dealer_id": "exact",
+          "product_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

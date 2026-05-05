@@ -1,0 +1,78 @@
+{
+  "scenario_id": "animalvacc_simple_005_PERSONA_A_C",
+  "intent_id": "animalvacc_simple_005",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Books a vaccination service for a registered animal. For your information, my disease_type is dummy_disease_type_6851, my livestock_id is None, my schedule_type is dummy_schedule_type_1054."
+    }
+  ],
+  "function": [
+    {
+      "name": "livestock_book_vaccination",
+      "description": "Books a vaccination service for a registered animal. Transitions vaccination_status to 'scheduled'. Animal must be registered and eligible based on age and schedule. Requires session_token. Does NOT administer the vaccine or assign field workers \u2014 use livestock_track_service. Fails if livestock is not registered, vaccination is outside schedule window, duplicate booking exists, or animal_type-disease mismatch.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "livestock_id": {
+            "type": "string",
+            "description": "Unique identifier for a registered animal."
+          },
+          "disease_type": {
+            "type": "string",
+            "description": "Disease to vaccinate against. Allowed: 'fmd', 'brucellosis', 'ppr', 'rabies', 'anthrax'."
+          },
+          "schedule_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'routine', 'emergency', 'booster'."
+          },
+          "preferred_date": {
+            "type": "string",
+            "description": "Preferred vaccination date YYYY-MM-DD."
+          }
+        },
+        "required": [
+          "session_token",
+          "livestock_id",
+          "disease_type",
+          "schedule_type"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "livestock_book_vaccination",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "livestock_id": null,
+          "disease_type": "dummy_disease_type",
+          "schedule_type": "dummy_schedule_type"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "livestock_id": "exact",
+          "disease_type": "exact",
+          "schedule_type": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

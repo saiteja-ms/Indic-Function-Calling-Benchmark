@@ -1,0 +1,85 @@
+{
+  "scenario_id": "animalvacc_parallel_003_PERSONA_E_C",
+  "intent_id": "animalvacc_parallel_003",
+  "persona_id": "PERSONA_E",
+  "variant": "C",
+  "category": "parallel",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Perform this action twice simultaneously for two different entities: livestock_register_animal. For your information, my animal_type is dummy_animal_type_1703, my aadhaar_number is 100020005888, my breed is dummy_breed_4756, my age_months is dummy_age_months_6388."
+    }
+  ],
+  "function": [
+    {
+      "name": "livestock_register_animal",
+      "description": "Registers a new animal in the livestock registry linked to the farmer's profile. Transitions livestock_status to 'registered'. Each animal gets a unique livestock_id. Requires session_token. Does NOT book vaccinations or verify health status. Fails if duplicate animal details exist, animal_type is unsupported, or farmer is not authenticated.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number of the farmer."
+          },
+          "animal_type": {
+            "type": "string",
+            "description": "Type of animal. Allowed: 'cattle', 'buffalo', 'sheep', 'goat', 'poultry'."
+          },
+          "breed": {
+            "type": "string",
+            "description": "Breed of the animal."
+          },
+          "age_months": {
+            "type": "integer",
+            "description": "Age of the animal in months."
+          },
+          "tag_number": {
+            "type": "string",
+            "description": "Ear tag or identification number if available. Optional."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "animal_type",
+          "breed",
+          "age_months"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "livestock_register_animal",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "animal_type": "dummy_animal_type",
+          "breed": "dummy_breed",
+          "age_months": "dummy_age_months"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "animal_type": "exact",
+          "breed": "exact",
+          "age_months": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_E"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

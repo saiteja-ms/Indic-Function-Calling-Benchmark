@@ -1,0 +1,60 @@
+{
+  "scenario_id": "soilportal_simple_004_PERSONA_A_B",
+  "intent_id": "soilportal_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "B",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Retrieves full details of a specific SHC report including nutrient values, recommendations, and lab details. Here are my details: my report_id is dummy_report_id_1104."
+    }
+  ],
+  "function": [
+    {
+      "name": "shcportal_get_report_details",
+      "description": "Retrieves full details of a specific SHC report including nutrient values, recommendations, and lab details. Report must be in 'available' or 'downloaded' status. Requires session_token. Does NOT download the report file \u2014 use shcportal_download_report. Fails if report_id is invalid or report is not yet available (sample still under testing).",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "report_id": {
+            "type": "string",
+            "description": "Unique identifier of the SHC report."
+          }
+        },
+        "required": [
+          "session_token",
+          "report_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "shcportal_get_report_details",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "report_id": "dummy_report_id"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "report_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

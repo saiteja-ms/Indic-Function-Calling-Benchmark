@@ -1,0 +1,60 @@
+{
+  "scenario_id": "epashu_simple_007_PERSONA_A_C",
+  "intent_id": "epashu_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Verifies the breed certification and health records of a listed animal. For your information, my livestock_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "epashu_verify_livestock",
+      "description": "Verifies the breed certification and health records of a listed animal. Transitions verification_status to 'verified' or 'rejected'. Requires session_token. Does NOT guarantee animal quality post-purchase. Fails if livestock_id is invalid, records are incomplete, or certification is fake.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all transactional tools."
+          },
+          "livestock_id": {
+            "type": "string",
+            "description": "Unique livestock identifier."
+          }
+        },
+        "required": [
+          "session_token",
+          "livestock_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "epashu_verify_livestock",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "livestock_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "livestock_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

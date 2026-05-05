@@ -1,0 +1,88 @@
+{
+  "scenario_id": "coldstorage_simple_004_PERSONA_A_C",
+  "intent_id": "coldstorage_simple_004",
+  "persona_id": "PERSONA_A",
+  "variant": "C",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Hello, I have been farming for years and faced many issues. Recently, I heard about this service. Submits an application for cold storage/cluster infrastructure support. For your information, my capacity_mt is dummy_capacity_mt_2997, my project_cost is dummy_project_cost_8541, my facility_type is dummy_facility_type_9648, my aadhaar_number is 100020007023, my location is dummy_location_5529."
+    }
+  ],
+  "function": [
+    {
+      "name": "coldstorage_submit_application",
+      "description": "Submits an application for cold storage/cluster infrastructure support. Transitions application_status to 'submitted'. Requires session_token. Does NOT approve. Fails if ineligible, duplicate application, or incomplete project details.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for all non-public tools."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "facility_type": {
+            "type": "string",
+            "description": "Type. Allowed: 'cold_storage', 'ripening_chamber', 'pack_house'."
+          },
+          "capacity_mt": {
+            "type": "number",
+            "description": "Proposed capacity in metric tonnes."
+          },
+          "project_cost": {
+            "type": "number",
+            "description": "Estimated cost in INR."
+          },
+          "location": {
+            "type": "string",
+            "description": "Project location."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "facility_type",
+          "capacity_mt",
+          "project_cost",
+          "location"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "coldstorage_submit_application",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "facility_type": "dummy_facility_type",
+          "capacity_mt": "dummy_capacity_mt",
+          "project_cost": "dummy_project_cost",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "facility_type": "exact",
+          "capacity_mt": "exact",
+          "project_cost": "exact",
+          "location": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "scenario_id": "soilhealth_simple_007_PERSONA_A_A",
+  "intent_id": "soilhealth_simple_007",
+  "persona_id": "PERSONA_A",
+  "variant": "A",
+  "category": "simple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I want to perform the following action: Retrieves detailed nutrient analysis values (N, P, K, pH, organic carbon, micronutrients) from a generated Soil Health Card.. my sample_id is None."
+    }
+  ],
+  "function": [
+    {
+      "name": "shc_get_nutrient_analysis",
+      "description": "Retrieves detailed nutrient analysis values (N, P, K, pH, organic carbon, micronutrients) from a generated Soil Health Card. Values are lab-measured and CANNOT be modified. Requires session_token. Report must be in 'generated' or 'delivered' status. Does NOT provide recommendations. Fails if report is not generated yet or sample_id is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+          },
+          "sample_id": {
+            "type": "string",
+            "description": "Unique identifier for a soil sample."
+          },
+          "nutrient_type": {
+            "type": "string",
+            "description": "Specific nutrient to query. Allowed: 'nitrogen', 'phosphorus', 'potassium', 'organic_carbon', 'ph', 'micronutrients'. Optional \u2014 if omitted, returns all."
+          }
+        },
+        "required": [
+          "session_token",
+          "sample_id"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "shc_get_nutrient_analysis",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "sample_id": null
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "sample_id": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_A"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}

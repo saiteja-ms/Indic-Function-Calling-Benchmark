@@ -1,0 +1,110 @@
+{
+  "scenario_id": "meghdoot_parallel_multiple_005_PERSONA_G_B",
+  "intent_id": "meghdoot_parallel_multiple_005",
+  "persona_id": "PERSONA_G",
+  "variant": "B",
+  "category": "parallel_multiple",
+  "language": "en",
+  "system_prompt": "You are a helpful assistant for Indian farmers\nusing the UMANG government services app.\nYou have access to tools for the appropriate\nservice. Help farmers complete their government\nservice requests accurately.\n\nRules:\n- When a required parameter is missing, ask\n  for it clearly. Do not guess or hallucinate.\n- When a request is outside your available\n  tools, say so clearly and do not invent\n  a tool call.\n- Always call authentication tools first\n  when a session_token is needed.\n- Never reveal session tokens to the user.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Namaste, can you help me? Perform these two different actions simultaneously: meghdoot_subscribe_alerts and meghdoot_set_location_preferences. Here are my details: my locations is dummy_locations_3581, my aadhaar_number is 100020006484, my location is dummy_location_1330."
+    }
+  ],
+  "function": [
+    {
+      "name": "meghdoot_subscribe_alerts",
+      "description": "Subscribes the farmer to weather and lightning alert notifications for a location. Transitions subscription_status to 'subscribed'. Requires session_token (authenticated). Does NOT provide alerts directly. Fails if already subscribed or session is invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for subscription and grievance tools."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location to subscribe for."
+          },
+          "alert_type": {
+            "type": "string",
+            "description": "Alert type filter. Optional \u2014 subscribes to all if omitted."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "location"
+        ]
+      }
+    },
+    {
+      "name": "meghdoot_set_location_preferences",
+      "description": "Sets preferred locations for alert delivery. Allows multiple locations. Requires session_token. Does NOT subscribe \u2014 must also call meghdoot_subscribe_alerts. Fails if locations are invalid.",
+      "parameters": {
+        "type": "dict",
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "description": "Token returned after authentication. Required for subscription and grievance tools."
+          },
+          "aadhaar_number": {
+            "type": "string",
+            "description": "12-digit Aadhaar number."
+          },
+          "locations": {
+            "type": "array",
+            "description": "List of preferred locations."
+          }
+        },
+        "required": [
+          "session_token",
+          "aadhaar_number",
+          "locations"
+        ]
+      }
+    }
+  ],
+  "ground_truth": {
+    "calls": [
+      {
+        "tool": "meghdoot_subscribe_alerts",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "location": "dummy_location"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "location": "exact"
+        }
+      },
+      {
+        "tool": "meghdoot_set_location_preferences",
+        "args": {
+          "session_token": "<from_auth_step>",
+          "aadhaar_number": "dummy_aadhaar_number",
+          "locations": "dummy_locations"
+        },
+        "eval_mode": {
+          "session_token": "type_only",
+          "aadhaar_number": "exact",
+          "locations": "exact"
+        }
+      }
+    ],
+    "call_order": "any",
+    "stub_persona": "PERSONA_G"
+  },
+  "evaluation": {
+    "type": "execution",
+    "requires_stub_execution": true,
+    "stub_stateful": false
+  }
+}
