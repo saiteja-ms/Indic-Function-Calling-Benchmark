@@ -195,5 +195,5 @@ STRICT OUTPUT RULES
 - NO schema violations
 - Deterministic behavior only
 
-Failure to follow ANY rule = INVALID OUTPUT
+Failure to follow ANY rule = INVALID OUTPUT 
 Store the output in location: C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\stubs_logic.py 

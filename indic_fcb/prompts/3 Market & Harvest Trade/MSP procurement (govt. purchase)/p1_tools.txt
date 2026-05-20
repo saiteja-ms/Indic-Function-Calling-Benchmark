@@ -1,289 +1,549 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-MSP Procurement (Minimum Support Price government procurement)
-service on the UMANG app.
+Your task: Generate tool schemas for the MSP Procurement
+(Minimum Support Price government purchase) service
+on the UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+MSP Procurement enables farmers to register for and
+participate in government-run price support operations
+where designated agencies (FCI, NAFED, state agencies)
+purchase notified crops at the declared Minimum Support
+Price directly from farmers. It covers registration,
+token booking, produce delivery scheduling, weighment,
+payment tracking, and grievance handling.
 
----
+This usecase is DISTINCT from eNAM (open auction-based
+private trade) and from Agri Marketing (FPO direct
+trade). This covers ONLY government procurement at
+MSP through designated procurement centres.
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Farmer registration for MSP procurement
-- Crop declaration for a procurement season
-- Token generation for mandi visit
-- Checking MSP rates for crops
-- Scheduling procurement slot
-- Delivering produce at mandi
-- Quality inspection and grading
-- Procurement acceptance/rejection
-- Payment processing and tracking
-- Grievance handling
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Authentication is REQUIRED for all procurement actions:
-  Aadhaar + OTP verification must be completed first.
-  Authentication returns a session_token.
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Farmer registration is MANDATORY:
-  Only registered farmers can participate in MSP procurement.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Crop declaration is REQUIRED before procurement:
-  Farmer must declare crop and expected quantity for the season.
+To support all three axes, the tool set MUST include:
 
-- MSP rates are FIXED by government:
-  Farmers cannot negotiate MSP prices.
+PUBLIC TOOLS (no session_token required) — at least 5:
+  MSP rates, procurement centre details, and
+  operation status are public information. Enable
+  single-turn, single-step, simple test cases.
 
-- Procurement is mandi-based:
-  Produce must be delivered to a registered procurement center.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_msp_rates + get_procurement_centre_details
+  - get_registration_status + get_token_status
+  - get_payment_status + get_weighment_details
+  - get_procurement_schedule + get_msp_rates
 
-- Token system:
-  Farmers must obtain a procurement token before visiting mandi.
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Quality check is STRICT:
-  Produce must meet Fair Average Quality (FAQ) standards.
-  Substandard produce is rejected.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover eNAM mandi auctions,
+  Agri Marketing private trade, PM-KISAN income
+  support, PMFBY crop insurance, fertilizer subsidy,
+  soil health cards, or weather forecasting — these
+  belong to other UMANG services and enable
+  irrelevance test cases.
 
-- Payment is post-procurement:
-  Payment is processed only after successful acceptance of produce.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- State-specific rules:
-  Procurement policies may vary across states.
+Each tool description must be SELF-CONTAINED.
 
-- Grievances should ONLY be raised after checking procurement/payment status.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
----
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires registration_status: verified and
+     token_status: booked")
+  ✓ Return value schemas
+    ("returns token_id, scheduled delivery date,
+     and assigned procurement centre")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-Tool descriptions MUST encode valid state transitions:
+Example — CORRECT description:
+  "Books a delivery token for a registered farmer
+   to bring produce to a designated MSP procurement
+   centre on a specific date. Requires an authenticated
+   session and a registration_status of verified for
+   the crop and season. Returns token_id, assigned
+   procurement_centre_id, scheduled delivery date,
+   and maximum quantity allowed per token. Fails if
+   procurement operations are closed for the crop in
+   the district, if the farmer's registration is
+   pending verification, if the daily token quota
+   for the centre is exhausted, or if the farmer
+   already has an active undelivered token. Does NOT
+   confirm receipt of produce or initiate payment."
 
-- registration_status:
-  unregistered → registered
+Example — INCORRECT description:
+  "Books a delivery token. Call msp_authenticate_farmer
+   first, then msp_register_for_procurement to get
+   registration, then call this tool."
 
-- procurement_status:
-  not_declared → declared → scheduled → delivered → inspected → accepted/rejected → payment_processed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- payment_status:
-  pending → initiated → completed → failed
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - MSP rate lookup by crop and season
+  - Procurement centre finder by district
+  - Procurement operation schedule and status
+  - Farmer registration for MSP procurement
+  - Registration status tracking
+  - Token booking for delivery date
+  - Token status and validity check
+  - Produce delivery and weighment record
+  - Quality assay status at procurement centre
+  - Payment status and DBT tracking
+  - Procurement receipt download
+  - Grievance filing for payment delay or
+    rejection
+  - Crop-wise procurement target and progress
+  - Agency contact lookup (FCI, NAFED, state)
 
-Tools must clearly define:
-- when they are valid to call
-- when they are invalid
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+These are real MSP procurement rules — encode them
+as preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+- MSP rates are declared by the Cabinet Committee
+  on Economic Affairs (CCEA) seasonally; Kharif
+  MSP is declared in June-July, Rabi in October.
+- Only notified crops are eligible for MSP
+  procurement; the list varies by state.
+- Farmers must register with their Aadhaar, land
+  records, and bank account before procurement.
+- Each farmer may sell up to the prescribed limit
+  (varies by crop; typically 25 quintals per
+  season for paddy, wheat has no cap for
+  registered farmers).
+- Tokens are issued for a specific centre and
+  date; a farmer must physically deliver produce
+  within the token window.
+- Quality assay is mandatory; produce failing
+  Fair Average Quality (FAQ) standards is
+  rejected.
+- Payment is made via DBT to the registered bank
+  account within 72 hours of delivery and
+  quality acceptance.
+- A grievance about payment can only be raised
+  after delivery is confirmed and quality is
+  accepted.
+- Procurement centres operate only during the
+  declared procurement season window.
+- A farmer who has sold through eNAM or private
+  trade is still eligible for MSP procurement
+  for remaining produce.
 
-The toolset MUST support scenarios where:
-- farmer is not registered
-- crop not declared but trying to schedule
-- invalid crop or unsupported commodity
-- exceeding declared quantity
-- duplicate token requests
-- poor quality produce rejection
-- payment delays or failures
-- wrong mandi selection
-- expired procurement window
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Descriptions must explicitly reflect these cases.
+registration_status:
+  not_registered → registered → verified
+                → rejected → suspended
 
----
+token_status:
+  not_booked → booked → used → expired → cancelled
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+delivery_status:
+  not_delivered → delivered → weighment_done
+                → quality_accepted → quality_rejected
 
-Each tool description MUST include:
-- validation rules (e.g., crop must be declared before scheduling)
-- rejection conditions (e.g., quality below FAQ)
-- failure scenarios (e.g., payment processing failure)
+payment_status:
+  not_initiated → pending → credited → failed
+                → disputed → resolved
 
-Tools must NOT assume success-only execution.
+procurement_operation_status:
+  not_started → active → suspended → closed
 
----
+quality_status:
+  not_assessed → under_assessment → accepted
+               → rejected → disputed
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected → escalated
 
-The toolset MUST support:
-- new farmer onboarding
-- returning farmer procurement
-- successful procurement flow
-- rejected procurement flow
-- delayed payment scenario
-- grievance escalation scenario
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## TOOL DESIGN REQUIREMENTS
+  msp_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-- Naming format: msp_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+  msp_get_msp_rates                       [public]
+  msp_find_procurement_centres            [public]
+  msp_get_procurement_schedule            [public]
+  msp_get_crop_procurement_progress       [public]
+  msp_get_agency_contact                  [public]
+  msp_register_for_procurement            [authenticated]
+  msp_get_registration_status             [authenticated]
+  msp_book_delivery_token                 [authenticated]
+  msp_get_token_status                    [authenticated]
+  msp_get_delivery_and_weighment_status   [authenticated]
+  msp_get_quality_assay_status            [authenticated]
+  msp_get_payment_status                  [authenticated]
+  msp_download_procurement_receipt        [authenticated]
+  msp_raise_grievance                     [authenticated]
+  msp_track_grievance_status              [public]
 
----
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+You MAY add additional tools beyond these 16 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - msp_resend_otp
+  - msp_cancel_token
+  - msp_get_farmer_sale_history
+  - msp_get_faq_standards
+  - msp_get_helpline_number
+  - msp_update_bank_details
+  - msp_get_remaining_sale_quota
+
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that access private
+    registration, token, delivery, and payment
+    data [TYPE_ONLY]"
 }
 
-"mandi_id": {
+"registration_id": {
   "type": "string",
-  "description": "Unique identifier of the procurement mandi."
+  "description": "Unique MSP procurement
+    registration identifier [EXACT]"
 }
 
----
+"token_id": {
+  "type": "string",
+  "description": "Unique delivery token
+    identifier [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"centre_id": {
+  "type": "string",
+  "description": "Unique procurement centre
+    identifier [EXACT]"
+}
 
-"crop_type": [
-  "paddy", "wheat", "maize", "bajra", "barley", "pulses", "oilseeds"
-]
+"commodity_code": {
+  "type": "string",
+  "description": "Standardised commodity code
+    for the notified crop [EXACT]"
+}
 
-"quality_grade": ["FAQ", "below_FAQ"]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"procurement_status": [
-  "not_declared",
-  "declared",
-  "scheduled",
-  "delivered",
-  "inspected",
-  "accepted",
-  "rejected",
-  "payment_processed"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"payment_status": [
-  "pending",
-  "initiated",
-  "completed",
-  "failed"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    registration IDs, token IDs, centre IDs, commodity
+    codes, dates, MSP rates in rupees per quintal,
+    weight in quintals, boolean flags, season identifiers,
+    fixed identifiers
 
-"grievance_category": [
-  "payment_delay",
-  "procurement_rejection",
-  "quantity_mismatch",
-  "mandi_issue",
-  "registration_issue"
-]
+  [SUBSTRING]
+    For free-text crop names in search context,
+    grievance details, quality dispute descriptions,
+    centre names in search context
 
----
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (registration_id, token_id, centre_id, receipt_id,
+    grievance_id) that the model cannot know until
+    a prior tool returns it
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. msp_generate_otp  
-2. msp_verify_otp  
-3. msp_register_farmer  
-4. msp_check_msp_rates  
-5. msp_declare_crop  
-6. msp_generate_procurement_token  
-7. msp_schedule_mandi_visit  
-8. msp_record_produce_delivery  
-9. msp_check_procurement_status  
-10. msp_track_payment  
+registration_status:
+  ["not_registered", "registered", "verified",
+   "rejected", "suspended"]
 
----
+token_status:
+  ["not_booked", "booked", "used", "expired",
+   "cancelled"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+delivery_status:
+  ["not_delivered", "delivered", "weighment_done",
+   "quality_accepted", "quality_rejected"]
 
-- msp_get_mandi_list  
-- msp_check_quality_status  
-- msp_cancel_token  
-- msp_update_crop_declaration  
-- msp_raise_grievance  
-- msp_track_grievance_status  
+payment_status:
+  ["not_initiated", "pending", "credited", "failed",
+   "disputed", "resolved"]
 
----
+procurement_operation_status:
+  ["not_started", "active", "suspended", "closed"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+quality_status:
+  ["not_assessed", "under_assessment", "accepted",
+   "rejected", "disputed"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (authentication, declaration, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+grievance_status:
+  ["not_filed", "filed", "under_review", "resolved",
+   "rejected", "escalated"]
 
----
+season:
+  ["kharif", "rabi", "summer"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+procurement_agency:
+  ["fci", "nafed", "sfac", "state_agency", "cci"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+crop_category:
+  ["cereal", "pulse", "oilseed", "fibre",
+   "commercial"]
 
----
+grievance_category:
+  ["payment_not_received", "payment_delay",
+   "wrong_amount_credited", "quality_rejection_dispute",
+   "token_not_issued", "weighment_dispute",
+   "registration_rejected"]
 
-## PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - msp_generate_otp
-  - msp_verify_otp
+Each tool description must contain (in order):
 
----
+1. WHAT IT DOES — one sentence stating the action
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires registration_status: verified
+    and procurement_operation_status: active for
+    the crop and district")
+   NEVER name other tools.
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "commodity_code must be in the notified
+    crop list for the state and season; season
+    must be one of the supported enum values;
+    aadhaar_number must be exactly 12 digits")
 
----
+4. RETURNS — key fields in the success response
+   (e.g. "returns token_id, centre_id, scheduled
+    delivery_date, and maximum_quantity_quintals")
 
-## OUTPUT FORMAT
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not confirm receipt of produce;
+    does not initiate payment; does not handle
+    quality assessment")
 
-Return ONLY a JSON array.
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if procurement operations are closed
+    for the crop in the district, if registration
+    is pending verification, if daily token quota
+    is exhausted, or if the farmer already has an
+    active undelivered token")
 
-Each tool must follow this structure:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Descriptions across the tool set must collectively
+support these real-world scenarios:
+
+  - registration rejected due to land record
+    mismatch
+  - token booked but farmer misses the delivery date
+    (token expires)
+  - daily token quota exhausted at nearest centre
+  - quality rejected at procurement centre
+    (FAQ standards not met)
+  - quality rejection disputed by farmer
+  - payment not received within 72 hours of
+    quality acceptance
+  - grievance raised before delivery is confirmed
+    (invalid)
+  - farmer exceeds per-season sale quota
+  - procurement operations suspended mid-season
+  - crop not in notified list for the state
+  - farmer trying to book a second token when
+    first token is still active
+  - payment credited but partial (deductions made)
+  - centre closed for the requested delivery date
+    (holiday or capacity)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"msp_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"msp_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "msp_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 5 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers eNAM mandi auctions, Agri
+    Marketing private trade, PM-KISAN, PMFBY,
+    fertilizer subsidy, soil health cards,
+    or weather forecasting
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multiple user intents and workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

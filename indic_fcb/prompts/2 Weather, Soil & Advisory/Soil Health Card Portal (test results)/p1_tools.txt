@@ -1,279 +1,506 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-Soil Health Card Portal (soil test results and report retrieval)
-service on the UMANG app.
+Your task: Generate tool schemas for the Soil Health
+Card (SHC) Portal — the farmer-facing access layer for
+retrieving completed test results, nutrient reports,
+fertilizer recommendations, and historical comparisons.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+This is DISTINCT from the SHC scheme enrollment covered
+separately. This usecase covers only the READ and ADVISORY
+layer: farmers who already have an issued card accessing
+its contents, comparing across cycles, and acting on
+recommendations.
 
----
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer workflow
+needs an additional tool not listed below, add it.
 
-## CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Searching Soil Health Card reports
-- Retrieving and downloading soil test reports
-- Viewing nutrient analysis (N, P, K, pH, etc.)
-- Tracking soil sample processing status
-- Accessing historical reports
-- Filtering reports by land parcel
-- Viewing lab/testing center details
-- Grievance handling
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
----
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Authentication is REQUIRED for accessing personal soil data:
-  Aadhaar + OTP verification must be completed first.
-  Authentication returns a session_token.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Land-parcel dependency:
-  Each Soil Health Card report is tied to a specific land parcel.
+To support all three axes, the tool set MUST include:
 
-- Lab dependency:
-  Reports are available ONLY after lab testing is complete.
+PUBLIC TOOLS (no session_token required) — at least 5:
+  The portal is primarily a read-only advisory layer.
+  Most lookups are public. Enable single-turn,
+  single-step, simple test cases.
 
-- Periodicity:
-  Soil Health Cards are typically generated once every 2 years.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint data and never mutate
+  shared state. Enable parallel-multiple cases.
 
-- Data immutability:
-  Nutrient values (N, P, K, pH, etc.) are lab-measured and cannot be modified.
+CHAIN-CAPABLE TOOLS — at least 4:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Recommendation dependency:
-  Fertilizer recommendations depend strictly on soil test reports.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover soil sample collection
+  scheduling, lab assignment, or scheme enrollment
+  (covered in the SHC scheme usecase). Must NOT cover
+  PM-KISAN, PMFBY, PM-KUSUM, weather forecasting,
+  or eNAM mandi trade — these belong to other
+  UMANG services and enable irrelevance test cases.
 
-- Multiple reports:
-  A farmer can have multiple reports across years and land parcels.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Grievances should ONLY be raised after checking report or sample status.
+Each tool description must be SELF-CONTAINED.
 
----
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires card_status: issued and
+     test_status: completed")
+  ✓ Return value schemas
+    ("returns card_id and nutrient_levels object
+     with 12 parameter readings")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-Tool descriptions MUST encode valid state transitions:
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- sample_status:
-  registered → collected → in_transit → under_testing → report_ready
+Example — CORRECT description:
+  "Retrieves the crop-specific fertilizer dosage
+   recommendation from a completed soil health card.
+   Requires a card with card_status: issued and
+   test_status: completed for the specified plot.
+   Returns recommended doses in kg per hectare for
+   NPK and micro-nutrients, split by crop growth
+   stage. Fails if the card is expired, if the
+   requested crop is not in the card's cropping
+   pattern, or if the card_id does not belong to
+   the authenticated farmer. Does NOT apply or
+   order fertilizer."
 
-- report_status:
-  not_available → available → downloaded
+Example — INCORRECT description:
+  "Retrieves fertilizer recommendation. Call
+   shcportal_authenticate first, then
+   shcportal_get_card_summary to get the card_id,
+   then call this tool."
 
-- query_state:
-  invalid_query → valid_query → filtered → result_found / result_empty
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tools must define:
-- when data is accessible
-- when access is invalid
+Design tools that enable realistic workflows:
+  - Farmer authentication (light — most reads are public)
+  - Card summary lookup (card_id, issuance date,
+    validity, plot details)
+  - Full nutrient report retrieval (all 12 parameters
+    with ratings: low, medium, sufficient, high)
+  - Parameter-specific reading lookup (single nutrient)
+  - Crop-specific fertilizer recommendation retrieval
+  - Stage-wise fertilizer application schedule
+  - Historical card comparison (trend across cycles)
+  - Nutrient deficit alert lookup (which parameters
+    are critically low)
+  - Nearby fertilizer dealer lookup
+  - Organic amendment recommendation
+  - Card expiry status and renewal reminder
+  - Download card as PDF
+  - Share card with extension officer
+  - Grievance for incorrect test results
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+These are real SHC portal rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-The toolset MUST support scenarios where:
-- no report exists for given Aadhaar
-- invalid or missing land_parcel_id
-- report requested before testing completion
-- partial reports (some nutrients missing)
-- multiple reports for same land parcel (ambiguity)
-- outdated reports being requested
-- lab delay or stalled testing
-- incorrect mapping of land parcel to farmer
-- download failure
+- A card is valid for 3 years from issuance date;
+  expired cards are viewable but recommendations
+  are marked outdated.
+- Recommendations are crop-specific; a farmer must
+  specify the crop to get relevant dosage advice.
+- Nutrient levels are rated on a 4-point scale:
+  low, medium, sufficient, high.
+- Stage-wise schedules divide crop growth into
+  pre-sowing, basal, top-dressing, and foliar stages.
+- Historical comparisons require at least 2 issued
+  cards for the same plot.
+- A farmer can access only cards linked to their
+  Aadhaar-verified plot ownership.
+- PDF download requires an authenticated session.
+- Sharing a card with an extension officer requires
+  the officer's registered ID in the KVK network.
+- A grievance about incorrect results requires the
+  specific card_id and parameter_name in dispute.
+- Organic amendment recommendations are separate from
+  chemical fertilizer recommendations and cover
+  compost, vermicompost, green manure, and biofertilizer.
 
-Descriptions must explicitly reflect these cases.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+card_status:
+  not_issued → issued → expired → revoked
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+test_status:
+  not_started → in_progress → completed → failed
+              → disputed
 
-Each tool description MUST include:
-- validation rules (Aadhaar format, land parcel linkage)
-- failure conditions (report not ready, invalid query)
-- ambiguity handling (multiple reports)
+recommendation_status:
+  not_generated → current → outdated → updated
 
-Tools must NOT assume successful retrieval.
+comparison_availability:
+  insufficient_data → available
 
----
+nutrient_rating:
+  low → medium → sufficient → high
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected
 
-The toolset MUST support:
-- farmer checking latest report
-- accessing historical reports
-- checking sample status before report availability
-- retrieving nutrient values
-- handling missing or delayed reports
-- grievance escalation
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## TOOL DESIGN REQUIREMENTS
+  shcportal_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-- Naming format: shcportal_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+  shcportal_get_card_summary               [public]
+  shcportal_get_nutrient_report            [public]
+  shcportal_get_parameter_reading          [public]
+  shcportal_get_nutrient_deficit_alerts    [public]
+  shcportal_get_fertilizer_recommendation  [public]
+  shcportal_get_stage_wise_schedule        [public]
+  shcportal_get_organic_amendment_advice   [public]
+  shcportal_compare_historical_cards       [authenticated]
+  shcportal_check_card_expiry              [public]
+  shcportal_find_fertilizer_dealer         [public]
+  shcportal_download_card_pdf              [authenticated]
+  shcportal_share_card_with_officer        [authenticated]
+  shcportal_raise_grievance                [authenticated]
+  shcportal_track_grievance_status         [public]
 
----
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+You MAY add additional tools beyond these 15 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - shcportal_resend_otp
+  - shcportal_get_renewal_reminder
+  - shcportal_get_crop_nutrient_requirement
+  - shcportal_get_all_cards_for_farmer
+  - shcportal_get_helpline_number
+  - shcportal_cancel_grievance
+
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for tools that access private card
+    data or perform write operations [TYPE_ONLY]"
 }
 
-"land_parcel_id": {
+"card_id": {
   "type": "string",
-  "description": "Unique identifier for a land parcel."
+  "description": "Unique soil health card
+    identifier [EXACT]"
 }
 
----
+"plot_id": {
+  "type": "string",
+  "description": "Unique farm plot identifier
+    linked to the card [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"sample_status": [
-  "registered",
-  "collected",
-  "in_transit",
-  "under_testing",
-  "report_ready"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"report_status": [
-  "not_available",
-  "available",
-  "downloaded"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    card IDs, plot IDs, dates, nutrient readings in
+    numeric form, crop codes, stage identifiers,
+    officer IDs, fixed identifiers
 
-"nutrient_type": [
-  "nitrogen",
-  "phosphorus",
-  "potassium",
-  "organic_carbon",
-  "ph",
-  "micronutrients"
-]
+  [SUBSTRING]
+    For free-text crop names when used in advisory
+    context, dispute descriptions, grievance details,
+    village names, officer names
 
-"report_type": ["latest", "historical"]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (card_id, plot_id, grievance_id, schedule_id)
+    that the model cannot know until a prior tool
+    returns it
 
-"grievance_category": [
-  "report_not_found",
-  "incorrect_values",
-  "lab_delay",
-  "wrong_land_mapping",
-  "download_issue"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+card_status:
+  ["not_issued", "issued", "expired", "revoked"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+test_status:
+  ["not_started", "in_progress", "completed",
+   "failed", "disputed"]
 
-1. shcportal_generate_otp  
-2. shcportal_verify_otp  
-3. shcportal_search_reports  
-4. shcportal_get_report_details  
-5. shcportal_check_sample_status  
-6. shcportal_download_report  
-7. shcportal_get_nutrient_values  
-8. shcportal_get_fertilizer_recommendation  
+recommendation_status:
+  ["not_generated", "current", "outdated", "updated"]
 
----
+nutrient_rating:
+  ["low", "medium", "sufficient", "high"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+soil_parameter:
+  ["ph", "ec", "organic_carbon", "nitrogen",
+   "phosphorus", "potassium", "sulphur", "zinc",
+   "iron", "copper", "manganese", "boron"]
 
-- shcportal_get_historical_reports  
-- shcportal_filter_reports_by_land  
-- shcportal_get_lab_details  
-- shcportal_resolve_report_ambiguity  
-- shcportal_raise_grievance  
-- shcportal_track_grievance_status  
+crop_stage:
+  ["pre_sowing", "basal", "top_dressing", "foliar",
+   "post_harvest"]
 
----
+amendment_type:
+  ["compost", "vermicompost", "green_manure",
+   "biofertilizer", "farmyard_manure", "crop_residue"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+comparison_availability:
+  ["insufficient_data", "available"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (authentication, report availability, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+grievance_category:
+  ["incorrect_ph", "incorrect_nutrient_reading",
+   "missing_parameter", "wrong_recommendation",
+   "card_not_accessible", "pdf_download_failure"]
 
----
+fertilizer_type:
+  ["urea", "dap", "mop", "ssp", "npk_complex",
+   "micronutrient_mixture", "organic"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+cropping_season:
+  ["kharif", "rabi", "summer", "year_round"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must contain (in order):
 
-## PARAMETER RULES
+1. WHAT IT DOES — one sentence stating the action
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - shcportal_generate_otp
-  - shcportal_verify_otp
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires card_status: issued and
+    test_status: completed")
+   NEVER name other tools.
 
----
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "card_id must exist in the portal;
+    soil_parameter must be one of the 12 supported
+    enum values; aadhaar_number must be 12 digits")
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+4. RETURNS — key fields in the success response
+   (e.g. "returns parameter_name, measured_value,
+    unit, nutrient_rating, and district_average
+    for comparison")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not schedule a new soil test;
+    does not order fertilizer")
 
----
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the card_status is not_issued,
+    if the card belongs to a different farmer,
+    or if the requested soil_parameter is not
+    among the 12 tested parameters")
 
-## OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Return ONLY a JSON array.
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-Each tool must follow this structure:
+  - card expired but farmer tries to get fresh
+    recommendation
+  - farmer has only one card — historical comparison
+    requested but insufficient data
+  - recommendation requested for a crop not in the
+    card's cropping pattern
+  - nutrient reading requested for a parameter not
+    tested (lab skipped one parameter)
+  - PDF download attempted without authentication
+  - grievance about a specific nutrient reading
+    that the farmer believes is wrong
+  - organic amendment advice requested for a plot
+    where no card has been issued
+  - stage-wise schedule requested for a crop stage
+    that has already passed
+  - fertilizer dealer lookup in a district with
+    no registered dealers
+  - comparison requested across cards from different
+    plots (not same plot — invalid comparison)
+  - card shared with officer who is not in KVK
+    network
+  - card_id provided does not belong to the
+    authenticated farmer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"shcportal_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"shcportal_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "shcportal_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 5 tools are public (no session_token)
+  ✓ at least 4 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers soil sample collection scheduling,
+    lab assignment, scheme enrollment, PM-KISAN,
+    PMFBY, PM-KUSUM, weather forecasting, or
+    eNAM mandi trade
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multiple user intents and workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

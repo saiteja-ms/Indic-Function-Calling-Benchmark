@@ -1,312 +1,445 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-PM-KISAN (Pradhan Mantri Kisan Samman Nidhi - income support)
+Your task: Generate tool schemas for the PM-KISAN
+(Pradhan Mantri Kisan Samman Nidhi - income support)
 service on the UMANG app.
 
-The number of tools should be sufficient (typically 12–16 tools)
-to cover all realistic farmer interactions and edge cases.
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer workflow
+needs an additional tool not listed below, add it.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## CORE OBJECTIVE
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Farmer registration and enrollment
-- Eligibility verification
-- eKYC completion
-- Beneficiary status tracking
-- Installment payment tracking
-- Payment failure resolution
-- Bank account verification/update
-- Land record linkage validation
-- Grievance handling
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
----
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Authentication is REQUIRED:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+To support all three axes, the tool set MUST include:
 
-- Eligibility dependency:
-  Farmer must satisfy:
-    - valid Aadhaar
-    - valid land ownership records
-    - not excluded under scheme rules
+PUBLIC TOOLS (no session_token required) — at least 4:
+  Enable single-turn, single-step, simple test cases.
 
-- Mandatory eKYC:
-  eKYC must be completed before receiving payments.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
 
-- Installment-based payment:
-  ₹6000/year is paid in 3 installments of ₹2000.
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Land record linkage:
-  Land ownership must be verified via state databases.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover crop insurance, mandi
+  prices, fertilizer subsidy, KCC loans, soil health
+  cards, or MGNREGA — these belong to other UMANG
+  services and enable irrelevance test cases.
 
-- Bank account dependency:
-  Payment is transferred directly to linked bank account.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Payment dependency:
-  Installment is credited only if:
-    - eligibility confirmed
-    - eKYC completed
-    - bank details valid
+Each tool description must be SELF-CONTAINED.
 
-- Duplicate prevention:
-  One Aadhaar can have only one beneficiary record.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+    ("call pmkisan_authenticate_farmer first")
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-- Payment failure:
-  Payments may fail due to incorrect bank details or mismatch.
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires beneficiary status: registered")
+  ✓ Return value schemas
+    ("returns session_token valid for 15 minutes")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-- Grievances should ONLY be raised after checking payment or eligibility status.
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
----
+Example — CORRECT description:
+  "Completes mandatory eKYC verification using Aadhaar OTP.
+   Requires an active authentication session and a
+   registered beneficiary with ekyc_status: pending.
+   Returns the updated eKYC status. Fails if eKYC is
+   already completed, if the beneficiary is not
+   registered, or if the OTP is invalid. Does NOT
+   handle Aadhaar enrolment or biometric updates."
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+Example — INCORRECT description:
+  "Completes mandatory eKYC. Call pmkisan_authenticate_farmer
+   first to get session_token. Then call
+   pmkisan_track_installment_status to confirm release."
 
-Tool descriptions MUST encode valid state transitions:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- registration_status:
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Registration and enrollment
+  - Eligibility verification
+  - eKYC completion
+  - Beneficiary status tracking
+  - Installment payment tracking
+  - Payment failure resolution
+  - Bank account verification and update
+  - Land record linkage validation
+  - Grievance handling
+  - Exclusion reason lookup
+
+Add additional tools whenever a workflow is missing
+a step. Examples of legitimate additional tools:
+  - pmkisan_resend_otp
+  - pmkisan_get_installment_schedule
+  - pmkisan_download_payment_receipt
+  - pmkisan_get_nodal_officer_contact
+  - pmkisan_verify_bank_account
+  - pmkisan_get_grievance_categories
+  - pmkisan_get_helpline_number
+  - pmkisan_search_beneficiary_by_village
+
+Do not force-add tools that have no real UMANG analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+These are real PM-KISAN rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
+
+- Authentication is required for write operations.
+  Authentication produces a session_token.
+- Eligibility requires valid Aadhaar, valid land
+  ownership records, and not being excluded under
+  scheme rules.
+- eKYC must be completed before installments release.
+- ₹6000/year is paid as 3 installments of ₹2000.
+- Land ownership must be verified via state databases.
+- Payment is transferred directly to the linked
+  bank account.
+- Installment is credited only if eligibility is
+  confirmed, eKYC is completed, and bank details
+  are valid.
+- One Aadhaar maps to one beneficiary record only
+  (duplicate prevention).
+- Payments may fail due to incorrect bank details
+  or name mismatch.
+- A grievance is meaningful only if status has been
+  verified first.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+registration_status:
   not_registered → registered → verified
 
-- ekyc_status:
+ekyc_status:
   not_started → pending → completed → failed
 
-- eligibility_status:
+eligibility_status:
   unknown → eligible → ineligible → rejected
 
-- payment_status:
+payment_status:
   not_initiated → pending → credited → failed
 
-- installment_status:
+installment_status:
   due → processed → credited → failed
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+  pmkisan_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-The toolset MUST support scenarios where:
-- duplicate registration attempt
-- invalid Aadhaar or mismatch
-- land record not found or mismatched
-- eKYC not completed but payment expected
-- incorrect or inactive bank account
-- payment failure due to mismatch
-- ineligible farmer attempting registration
-- delayed installment
-- partial payment history
-- incorrect beneficiary details
+  pmkisan_check_eligibility            [public]
+  pmkisan_validate_land_records        [public]
+  pmkisan_register_farmer              [authenticated]
+  pmkisan_complete_ekyc                [authenticated]
+  pmkisan_get_beneficiary_status       [public]
+  pmkisan_get_payment_history          [authenticated]
+  pmkisan_track_installment_status     [public]
+  pmkisan_track_payment                [public]
+  pmkisan_update_bank_details          [authenticated]
+  pmkisan_resolve_payment_failure      [authenticated]
+  pmkisan_get_exclusion_reason         [public]
+  pmkisan_raise_grievance              [authenticated]
+  pmkisan_track_grievance_status       [public]
 
-Descriptions must explicitly reflect these cases.
+(public = session_token NOT required;
+ authenticated = session_token required)
 
----
+You MAY add additional tools beyond these 14 if a
+realistic farmer workflow needs them. Mark every
+new tool as [public] or [authenticated] using the
+same access rules.
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
-
-Each tool description MUST include:
-- validation rules (Aadhaar format, bank details, land linkage)
-- rejection conditions (ineligible farmer, duplicate record)
-- failure scenarios (payment failure, eKYC failure)
-
-Tools must NOT assume success-only execution.
-
----
-
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
-
-The toolset MUST support:
-- new farmer registration
-- eligibility verification
-- eKYC completion
-- tracking installments
-- resolving payment failures
-- updating bank details
-- grievance escalation
-
----
-
-## TOOL DESIGN REQUIREMENTS
-
-- Naming format: pmkisan_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
-
----
-
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for tools that perform write
+    operations or access private beneficiary
+    data [TYPE_ONLY]"
 }
 
 "beneficiary_id": {
   "type": "string",
-  "description": "Unique identifier of the PM-KISAN beneficiary."
+  "description": "Unique PM-KISAN beneficiary
+    identifier [EXACT]"
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+Every parameter description must end with exactly one
+of these markers:
 
-"registration_status": [
-  "not_registered",
-  "registered",
-  "verified"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    numeric IDs, IFSC codes, boolean flags, dates,
+    fixed identifiers, integer counts
 
-"ekyc_status": [
-  "not_started",
-  "pending",
-  "completed",
-  "failed"
-]
+  [SUBSTRING]
+    For free-text names, addresses, complaint
+    descriptions, grievance details, custom remarks
 
-"eligibility_status": [
-  "unknown",
-  "eligible",
-  "ineligible",
-  "rejected"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (request_id, grievance_id, ticket_id) that the
+    model cannot know until a prior tool returns it
 
-"payment_status": [
-  "not_initiated",
-  "pending",
-  "credited",
-  "failed"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"installment_status": [
-  "due",
-  "processed",
-  "credited",
-  "failed"
-]
+registration_status:
+  ["not_registered", "registered", "verified"]
 
-"grievance_category": [
-  "payment_not_received",
-  "ekyc_issue",
-  "bank_account_issue",
-  "eligibility_issue",
-  "registration_issue"
-]
+ekyc_status:
+  ["not_started", "pending", "completed", "failed"]
 
----
+eligibility_status:
+  ["unknown", "eligible", "ineligible", "rejected"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+payment_status:
+  ["not_initiated", "pending", "credited", "failed"]
 
-1. pmkisan_generate_otp  
-2. pmkisan_verify_otp  
-3. pmkisan_register_farmer  
-4. pmkisan_check_eligibility  
-5. pmkisan_complete_ekyc  
-6. pmkisan_get_beneficiary_status  
-7. pmkisan_get_payment_history  
-8. pmkisan_track_installment_status  
-9. pmkisan_update_bank_details  
-10. pmkisan_track_payment  
+installment_status:
+  ["due", "processed", "credited", "failed"]
 
----
+installment_number:
+  ["installment_1", "installment_2", "installment_3"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+grievance_category:
+  ["payment_not_received", "ekyc_issue",
+   "bank_account_issue", "eligibility_issue",
+   "registration_issue"]
 
-- pmkisan_validate_land_records  
-- pmkisan_resolve_payment_failure  
-- pmkisan_get_installment_schedule  
-- pmkisan_resolve_eligibility_ambiguity  
-- pmkisan_cancel_registration  
-- pmkisan_raise_grievance  
-- pmkisan_track_grievance_status  
+exclusion_reason:
+  ["income_tax_payer", "government_employee",
+   "institutional_landholder", "professional_doctor",
+   "professional_engineer", "professional_lawyer",
+   "constitutional_post_holder", "land_not_owned",
+   "land_under_dispute", "duplicate_record"]
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+Each tool description must contain (in order):
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (eligibility, eKYC, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+1. WHAT IT DOES — one sentence stating the action
 
----
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires beneficiary to be registered with
+    ekyc_status: completed")
+   NEVER name other tools.
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "Aadhaar must be exactly 12 digits;
+    OTP must be 6 digits")
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+4. RETURNS — key fields in the success response
+   (e.g. "returns ekyc_status and a list of
+    affected installments")
 
----
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not handle Aadhaar enrolment;
+    does not reset OTPs")
 
-## PARAMETER RULES
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if ekyc_status is already completed,
+    if OTP is invalid, or if beneficiary is excluded")
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - pmkisan_generate_otp
-  - pmkisan_verify_otp
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+  - duplicate registration attempt
+  - invalid Aadhaar or Aadhaar-name mismatch
+  - land record not found or mismatched
+  - eKYC not completed but payment expected
+  - inactive or wrong bank account
+  - payment failure due to name mismatch
+  - ineligible farmer attempting registration
+  - delayed installment beyond 90 days
+  - partial payment history
+  - grievance about a non-existent claim
+  - excluded beneficiary querying status
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
 
-## OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Return ONLY a JSON array.
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
 
-Each tool must follow this structure:
+Example structure:
+
+{"name":"pmkisan_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"pmkisan_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"pmkisan_tool_three","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "pmkisan_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 4 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers crop insurance, mandi prices,
+    fertilizer subsidy, KCC, soil health, or MGNREGA
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support full payment lifecycle workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

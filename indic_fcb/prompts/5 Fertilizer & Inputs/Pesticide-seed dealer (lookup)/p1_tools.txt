@@ -1,301 +1,535 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-Pesticide and Seed Dealer Lookup service on the UMANG app.
+Your task: Generate tool schemas for the Pesticide
+and Seed Dealer Lookup service on the UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+This service enables farmers to find licensed pesticide
+and seed dealers, verify dealer licenses, check product
+registrations, report spurious or substandard inputs,
+track complaint status, and access crop-wise input
+recommendations. It is operated through the Central
+Insecticides Board and Registration Committee (CIBRC)
+for pesticides and the Ministry of Agriculture seed
+portal for seeds.
 
----
+This usecase covers ONLY the input quality, dealer
+registry, and complaint layer — not fertilizer
+(covered in iFMS, Cluster 5 Usecase 1) and not
+crop advisory (covered in ATMA, Cluster 2).
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Searching for nearby pesticide/seed dealers
-- Filtering dealers by location, crop, or product type
-- Verifying dealer authenticity and license status
-- Checking product availability (seeds/pesticides)
-- Viewing dealer details (contact, address, license)
-- Comparing dealers
-- Safety and compliance checks
-- Grievance handling
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Public vs authenticated access:
-  - Dealer lookup is PUBLIC
-  - Saving preferences, history, and grievances REQUIRE authentication
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Location dependency:
-  Dealer search MUST include location (village/district/state).
-  Queries without location are INVALID.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Licensing requirement:
-  Dealers must have valid government-issued licenses.
-  Unlicensed dealers must be flagged as invalid.
+To support all three axes, the tool set MUST include:
 
-- Product regulation:
-  Certain pesticides are regulated and require proper authorization.
+PUBLIC TOOLS (no session_token required) — at least 6:
+  Dealer lookup, product registration check, and
+  banned product list are fully public. Enable
+  single-turn, single-step, simple test cases.
 
-- Availability uncertainty:
-  Product availability is dynamic and may not be guaranteed.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - find_pesticide_dealer + find_seed_dealer
+  - verify_pesticide_registration + check_banned_status
+  - get_recommended_inputs + find_pesticide_dealer
+  - get_seed_certification_status + verify_seed_variety
 
-- Crop-product compatibility:
-  Seeds/pesticides must match crop type.
+CHAIN-CAPABLE TOOLS — at least 4:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases.
 
-- Duplicate listings:
-  Same dealer may appear multiple times due to data inconsistencies.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover fertilizer subsidy
+  (iFMS), crop management advisory (ATMA), soil
+  health cards (SHC), PM-KISAN, PMFBY, MSP
+  procurement, or weather forecasting — these
+  belong to other UMANG services and enable
+  irrelevance test cases.
 
-- Safety advisory:
-  Tools must emphasize safe usage and compliance.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Grievances should ONLY be raised after verifying dealer details.
+Each tool description must be SELF-CONTAINED.
 
----
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires dealer_license_status: active in
+     the CIBRC registry")
+  ✓ Return value schemas
+    ("returns complaint_id, assigned inspector,
+     and expected investigation date")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-Tool descriptions MUST encode valid state transitions:
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- query_state:
-  invalid_query → valid_query → results_found / no_results
+Example — CORRECT description:
+  "Files a complaint about a spurious or substandard
+   pesticide product sold by a licensed dealer.
+   Requires an authenticated session and a valid
+   purchase record or product batch details.
+   Returns complaint_id, assigned district
+   agriculture officer, and expected sample
+   collection date. Fails if the dealer_id is
+   not in the CIBRC registry, if no product
+   registration number is provided, or if a
+   complaint for the same batch has already
+   been filed. Does NOT collect the sample or
+   initiate a ban on the product."
 
-- dealer_status:
-  active → inactive → suspended
+Example — INCORRECT description:
+  "Files a complaint. Call psd_authenticate first,
+   then psd_verify_pesticide_registration to check
+   the product, then call this tool."
 
-- license_status:
-  valid → expired → suspended
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- inventory_status:
-  available → limited → unavailable
+Design tools that enable realistic workflows:
+  - Farmer authentication (light — most lookups public)
+  - Licensed pesticide dealer finder by district
+  - Licensed seed dealer finder by district
+  - Pesticide product registration verification
+    (is this product legally registered?)
+  - Banned/restricted pesticide check
+  - Seed variety registration verification
+  - Seed lot certification status check
+  - Crop-wise recommended pesticide lookup
+  - Crop-wise recommended seed variety lookup
+  - Spurious pesticide complaint filing
+  - Substandard seed complaint filing
+  - Unlicensed dealer complaint filing
+  - Complaint status tracking
+  - Complaint escalation
+  - CIBRC registered product list by pest/crop
+  - Seed subsidy scheme status (where applicable)
 
-Tools must define:
-- when results are valid
-- when results are unreliable or unavailable
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+These are real regulatory rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+- Pesticides must be registered under the
+  Insecticides Act 1968 and listed in the CIBRC
+  registry before sale is legal.
+- Some pesticides are banned (Schedule I) or
+  restricted (Schedule II); sale of banned
+  pesticides is a criminal offense.
+- Dealers must hold a valid license under the
+  Insecticides Act; licenses are renewed annually
+  by the state agriculture department.
+- Seeds must be certified by the State Seed
+  Certification Agency (SSCA) for truthful labelling.
+- Seed lots have a certification tag number;
+  farmers can verify the tag on the SSCA portal.
+- Complaints about spurious pesticides require
+  a product registration number or batch details
+  for investigation.
+- Complaints about unlicensed dealers require
+  the dealer's name and location for inspection.
+- Sample collection and testing is done by the
+  state agriculture inspector; results take 30-45
+  days.
+- A complaint about a product already under
+  investigation by another farmer is merged with
+  the existing investigation.
+- Crop-wise pesticide recommendations must specify
+  the target pest and crop growth stage.
 
-The toolset MUST support scenarios where:
-- missing or invalid location
-- no dealers found in region
-- dealer with expired or suspended license
-- product not available at dealer
-- mismatch between crop and product
-- duplicate or conflicting dealer entries
-- ambiguous dealer names
-- incorrect contact details
-- regulated pesticide without authorization
-- stale or outdated inventory data
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Descriptions must explicitly reflect these cases.
+dealer_license_status:
+  active → expired → suspended → revoked
 
----
+pesticide_registration_status:
+  registered → restricted → banned → expired
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+seed_certification_status:
+  certified → expired → cancelled → under_review
 
-Each tool description MUST include:
-- validation rules (location required, valid filters)
-- failure conditions (no results, invalid dealer)
-- ambiguity handling (duplicate or conflicting entries)
+complaint_status:
+  not_filed → filed → sample_collected
+            → under_testing → resolved
+            → rejected → escalated
 
-Tools must NOT assume successful retrieval.
+investigation_status:
+  not_started → assigned → in_progress → completed
+              → no_action → penalised
 
----
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The toolset MUST support:
-- farmer searching for nearby dealers
-- filtering dealers by product or crop
-- verifying dealer license
-- checking product availability
-- comparing multiple dealers
-- handling no-result scenarios
-- grievance escalation
+  psd_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes mobile_number, otp
+       returns session_token
 
----
+  psd_find_pesticide_dealer             [public]
+  psd_find_seed_dealer                  [public]
+  psd_verify_pesticide_registration     [public]
+  psd_check_banned_pesticide_status     [public]
+  psd_verify_seed_variety               [public]
+  psd_check_seed_lot_certification      [public]
+  psd_get_recommended_pesticides        [public]
+  psd_get_recommended_seed_varieties    [public]
+  psd_get_cibrc_product_list            [public]
+  psd_file_spurious_pesticide_complaint [authenticated]
+  psd_file_substandard_seed_complaint   [authenticated]
+  psd_file_unlicensed_dealer_complaint  [authenticated]
+  psd_track_complaint_status            [public]
+  psd_escalate_complaint                [authenticated]
 
-## TOOL DESIGN REQUIREMENTS
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-- Naming format: dealer_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+You MAY add additional tools beyond these 15 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - psd_resend_otp
+  - psd_get_dealer_details
+  - psd_get_restricted_pesticide_conditions
+  - psd_check_seed_subsidy_status
+  - psd_get_helpline_number
+  - psd_get_complaint_history
+  - psd_get_inspection_schedule
 
----
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
-
-"aadhaar_number": {
-  "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
-}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number of the
+    farmer [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after authentication. Required for preference and grievance tools."
+  "description": "Active authentication token
+    obtained after mobile OTP verification.
+    Required for complaint filing and escalation
+    tools [TYPE_ONLY]"
 }
 
-"location": {
+"district": {
   "type": "string",
-  "description": "Village, district, or state."
+  "description": "Indian district name in lowercase
+    underscore form [EXACT]"
+}
+
+"state": {
+  "type": "string",
+  "description": "Indian state name in lowercase
+    underscore form [EXACT]"
 }
 
 "dealer_id": {
   "type": "string",
-  "description": "Unique identifier of the dealer."
+  "description": "Unique CIBRC or state-registered
+    dealer identifier [EXACT]"
 }
 
----
+"product_registration_number": {
+  "type": "string",
+  "description": "CIBRC registration number for
+    a pesticide product [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"complaint_id": {
+  "type": "string",
+  "description": "Unique complaint identifier
+    assigned at filing [EXACT]"
+}
 
-"product_type": [
-  "seeds",
-  "pesticides",
-  "fertilizers"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"crop_type": [
-  "paddy",
-  "wheat",
-  "maize",
-  "cotton",
-  "pulses",
-  "oilseeds",
-  "horticulture"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"license_status": [
-  "valid",
-  "expired",
-  "suspended"
-]
+  [EXACT]
+    For enums, mobile numbers, OTPs, dealer IDs,
+    product registration numbers, seed lot numbers,
+    certification tag numbers, complaint IDs, dates,
+    district/state names, crop codes, pest codes,
+    boolean flags, fixed identifiers
 
-"dealer_status": [
-  "active",
-  "inactive",
-  "suspended"
-]
+  [SUBSTRING]
+    For free-text complaint descriptions, spurious
+    product observations, dealer name in search
+    context, adulteration details, batch label
+    discrepancies
 
-"inventory_status": [
-  "available",
-  "limited",
-  "unavailable"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (complaint_id, inspection_id) that the model
+    cannot know until a prior tool returns it
 
-"grievance_category": [
-  "fake_dealer",
-  "expired_license",
-  "wrong_information",
-  "product_not_available",
-  "safety_violation"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+dealer_license_status:
+  ["active", "expired", "suspended", "revoked"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+pesticide_registration_status:
+  ["registered", "restricted", "banned", "expired"]
 
-1. dealer_search_by_location  
-2. dealer_filter_by_product  
-3. dealer_get_details  
-4. dealer_verify_license  
-5. dealer_check_inventory  
-6. dealer_compare_options  
+seed_certification_status:
+  ["certified", "expired", "cancelled",
+   "under_review"]
 
----
+complaint_status:
+  ["not_filed", "filed", "sample_collected",
+   "under_testing", "resolved", "rejected",
+   "escalated"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+investigation_status:
+  ["not_started", "assigned", "in_progress",
+   "completed", "no_action", "penalised"]
 
-- dealer_resolve_location_ambiguity  
-- dealer_resolve_duplicate_entries  
-- dealer_get_nearest  
-- dealer_get_recommendations  
-- dealer_save_preference  
-- dealer_raise_grievance  
-- dealer_track_grievance_status  
+complaint_type:
+  ["spurious_pesticide", "substandard_seed",
+   "unlicensed_dealer", "banned_product_sale",
+   "overpricing", "mislabelling"]
 
----
+pesticide_schedule:
+  ["schedule_i_banned", "schedule_ii_restricted",
+   "unscheduled_approved"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+seed_class:
+  ["breeder", "foundation", "certified",
+   "truthfully_labelled"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (location, filters, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+crop_stage:
+  ["pre_sowing", "vegetative", "flowering",
+   "fruiting", "harvest"]
 
----
+escalation_reason:
+  ["no_action_taken", "investigation_delayed",
+   "sample_not_collected", "inspector_unresponsive",
+   "resolution_unsatisfactory"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+Each tool description must contain (in order):
 
----
+1. WHAT IT DOES — one sentence stating the action
 
-## PARAMETER RULES
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "no authentication required; product
+    registration number must exist in the CIBRC
+    database")
+   NEVER name other tools.
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be required ONLY for:
-  - preference tools
-  - grievance tools
-- It MUST NOT be required for public lookup tools
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "product_registration_number must follow
+    the CIBRC format; crop_code must be in the
+    supported crop registry; district must be
+    in the service coverage list")
 
----
+4. RETURNS — key fields in the success response
+   (e.g. "returns registration_status, active_uses
+    list, banned_in_states list, and
+    last_review_date")
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not collect samples; does not issue
+    bans; does not provide dosage recommendations")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the product registration number
+    is not found in CIBRC database, if the product
+    is a fertilizer not a pesticide, or if the
+    registration has been purged from the active
+    registry")
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## OUTPUT FORMAT
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-Return ONLY a JSON array.
+  - farmer searches for pesticide dealer but
+    no licensed dealer in the district
+  - product registration number found but product
+    is banned (Schedule I)
+  - product is registered but restricted in the
+    farmer's state (state-specific ban)
+  - seed lot certification tag expired at time
+    of purchase
+  - unlicensed dealer complaint where dealer
+    has no record in state registry
+  - spurious pesticide complaint where product
+    registration number is not found in CIBRC
+  - complaint merged with existing investigation
+    for same batch
+  - complaint escalation before investigation
+    SLA is exceeded (invalid)
+  - recommended pesticide is banned in farmer's
+    state despite being nationally registered
+  - seed variety registered nationally but not
+    recommended for farmer's agro-climatic zone
+  - complaint status checked with wrong complaint_id
+    (does not belong to farmer)
 
-Each tool must follow this structure:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"psd_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"psd_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
-  "name": "dealer_example_tool",
-  "description": "...",
+  "name": "psd_example_tool",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 6 tools are public (no session_token)
+  ✓ at least 4 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers fertilizer subsidy (iFMS),
+    crop management advisory (ATMA), soil health
+    cards, PM-KISAN, PMFBY, MSP procurement, or
+    weather forecasting
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support retrieval and filtering workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

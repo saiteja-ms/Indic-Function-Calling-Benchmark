@@ -1,319 +1,555 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-Agri Marketing (buy-sell platform for farmers/FPOs)
-service on the UMANG app.
+Your task: Generate tool schemas for the Agri Marketing
+(Farmer Producer Organisation buy/sell platform) service
+on the UMANG app.
 
-The number of tools should be sufficient (typically 12–16 tools)
-to cover all realistic farmer, buyer, and FPO interactions and edge cases.
+This service enables individual farmers and FPOs
+(Farmer Producer Organisations) to buy agricultural
+inputs (seeds, fertilizers, pesticides, equipment)
+and sell produce directly to buyers, processors, and
+exporters — bypassing traditional mandi intermediaries.
+It covers buyer-seller matching, order management,
+logistics coordination, and payment settlement.
 
----
+This usecase is DISTINCT from eNAM (which is mandi
+auction-based) and from MSP procurement (which is
+government purchase at floor price). This covers
+private market direct trade between farmers/FPOs
+and buyers.
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Farmer/FPO authentication
-- Creating and managing crop listings
-- Searching and browsing listings
-- Price discovery and comparison
-- Placing and managing orders
-- Bid-based (auction) participation
-- Order fulfillment and delivery tracking
-- Payment processing and tracking
-- Cancellation and refund handling
-- Grievance handling
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Authentication is REQUIRED for all transactional actions:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Role distinction:
-  Users can act as:
-    - seller (farmer/FPO)
-    - buyer (trader/consumer)
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Listing ownership:
-  Only the creator of a listing can modify or delete it.
+To support all three axes, the tool set MUST include:
 
-- Commodity standardization:
-  Listings must include:
-    - commodity
-    - quality grade
-    - quantity
-    - unit
+PUBLIC TOOLS (no session_token required) — at least 4:
+  Buyer/seller discovery and commodity listings are
+  public. Enable single-turn, single-step, simple
+  test cases.
 
-- Pricing model:
-  Listings can be:
-    - fixed price
-    - auction-based
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - search_buyers + search_input_suppliers
+  - get_commodity_listing + get_buyer_profile
+  - get_order_status + get_payment_status
+  - get_logistics_status + get_order_status
 
-- Order lifecycle:
-  Orders must follow strict states:
-    created → confirmed → dispatched → delivered → completed
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Payment dependency:
-  Payment must be successful before order completion.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover eNAM mandi auctions,
+  MSP procurement at government godowns, PM-KISAN
+  income support, PMFBY crop insurance, fertilizer
+  DBT subsidy, weather forecasting, or soil health
+  cards — these belong to other UMANG services and
+  enable irrelevance test cases.
 
-- Logistics constraint:
-  Delivery tracking exists only after dispatch.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Cancellation rules:
-  Orders cannot be cancelled after dispatch.
+Each tool description must be SELF-CONTAINED.
 
-- Partial fulfillment:
-  Large orders may be partially fulfilled.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-- Grievances should ONLY be raised after checking order/payment status.
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires listing_status: active and
+     order_status: not_placed")
+  ✓ Return value schemas
+    ("returns order_id, confirmed_price_per_quintal,
+     and expected_delivery_date")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
----
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+Example — CORRECT description:
+  "Places a sell order for a listed commodity lot
+   with a matched buyer. Requires an authenticated
+   seller session, an active listing with
+   listing_status: active, and a buyer_id from
+   a confirmed buyer match. Returns order_id,
+   agreed_price_per_quintal, total_order_value,
+   and logistics_arrangement_required flag. Fails
+   if the listing has expired, if the buyer is not
+   verified on the platform, if the requested
+   quantity exceeds the listed quantity, or if the
+   agreed price is below the seller's floor price.
+   Does NOT arrange logistics or initiate payment."
 
-Tool descriptions MUST encode valid state transitions:
+Example — INCORRECT description:
+  "Places a sell order. Call agrimarket_authenticate
+   first, then agrimarket_search_buyers to find a
+   buyer, then agrimarket_create_listing, then
+   call this tool."
 
-- listing_status:
-  active → updated → inactive → deleted
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- order_status:
-  created → confirmed → dispatched → delivered → completed → cancelled
+Design tools that enable realistic workflows:
+  - Farmer / FPO authentication
+  - Seller profile registration
+  - Commodity listing creation (produce for sale)
+  - Input purchase listing lookup (seeds, fertilizer)
+  - Buyer search by commodity and location
+  - Input supplier search
+  - Buyer profile verification
+  - Order placement (sell side)
+  - Order placement (buy side — input procurement)
+  - Order status tracking
+  - Logistics coordination (pickup scheduling)
+  - Logistics status tracking
+  - Payment initiation and status
+  - Invoice and receipt download
+  - Dispute filing for order or payment issues
+  - FPO membership and aggregation lookup
+  - Price negotiation request
+  - Order cancellation
 
-- payment_status:
-  pending → paid → failed → refunded
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- auction_status:
-  open → bidding → closed → awarded
+These are real Agri Marketing platform rules — encode
+them as preconditions in tool descriptions without
+naming which other tools must satisfy them.
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+- A seller must have a verified profile with Aadhaar
+  linkage before creating listings.
+- Buyers must be registered and verified on the
+  platform before an order can be placed with them.
+- A listing must be active (not expired or cancelled)
+  for an order to be placed.
+- Logistics must be arranged before physical delivery
+  can occur; the platform coordinates pickup from
+  the farm gate.
+- Payment is escrow-based: buyer deposits funds
+  before pickup; funds released to seller after
+  delivery confirmation.
+- A dispute can only be raised after an order has
+  been confirmed (order_status: confirmed).
+- FPO aggregation allows multiple small farmers
+  to pool produce under one listing.
+- Input procurement orders follow the same order
+  lifecycle as produce sell orders.
+- Price negotiation is allowed only before an order
+  is confirmed.
+- Order cancellation is allowed only before
+  logistics are arranged.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+seller_profile_status:
+  not_registered → registered → verified → suspended
 
-The toolset MUST support scenarios where:
-- duplicate listing creation
-- invalid commodity or unsupported crop
-- insufficient quantity for order
-- placing order on inactive listing
-- bid lower than minimum price
-- multiple buyers bidding simultaneously
-- order cancellation after dispatch attempt
-- payment failure or timeout
-- delivery delay or mismatch
-- partial delivery
-- fraudulent or incorrect listing
+listing_status:
+  not_created → active → matched → order_placed
+              → completed → expired → cancelled
 
-Descriptions must explicitly reflect these cases.
+order_status:
+  not_placed → placed → confirmed → logistics_arranged
+             → in_transit → delivered → completed
+             → cancelled → disputed
 
----
+payment_status:
+  not_initiated → escrow_deposited → released
+                → failed → disputed → refunded
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+logistics_status:
+  not_arranged → scheduled → pickup_done
+               → in_transit → delivered → failed
 
-Each tool description MUST include:
-- validation rules (quantity, price, listing status)
-- rejection conditions (invalid order, unauthorized modification)
-- failure scenarios (payment failure, delivery issues)
+dispute_status:
+  not_filed → filed → under_review → resolved
+            → rejected → escalated
 
-Tools must NOT assume success-only execution.
+negotiation_status:
+  not_initiated → initiated → counter_offered
+                → accepted → rejected → expired
 
----
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The toolset MUST support:
-- farmer creating and managing listings
-- buyer searching and placing orders
-- auction participation and bidding
-- successful order lifecycle
-- failed order/payment scenarios
-- delivery tracking and disputes
-- grievance escalation
+  agrimarket_authenticate_user
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
----
+  agrimarket_search_buyers                 [public]
+  agrimarket_search_input_suppliers        [public]
+  agrimarket_get_commodity_listings        [public]
+  agrimarket_get_buyer_profile             [public]
+  agrimarket_register_seller_profile       [authenticated]
+  agrimarket_create_listing                [authenticated]
+  agrimarket_place_sell_order              [authenticated]
+  agrimarket_place_buy_order               [authenticated]
+  agrimarket_get_order_status              [authenticated]
+  agrimarket_schedule_logistics            [authenticated]
+  agrimarket_get_logistics_status          [authenticated]
+  agrimarket_get_payment_status            [authenticated]
+  agrimarket_initiate_price_negotiation    [authenticated]
+  agrimarket_cancel_order                  [authenticated]
+  agrimarket_raise_dispute                 [authenticated]
+  agrimarket_track_dispute_status          [authenticated]
 
-## TOOL DESIGN REQUIREMENTS
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-- Naming format: agrimarket_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+You MAY add additional tools beyond these 17 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - agrimarket_resend_otp
+  - agrimarket_download_invoice
+  - agrimarket_get_fpo_details
+  - agrimarket_get_price_benchmark
+  - agrimarket_get_helpline_number
+  - agrimarket_update_listing
+  - agrimarket_confirm_delivery
 
----
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+or platform API endpoint.
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the user (farmer/FPO/buyer)."
+  "description": "12-digit Aadhaar number of the
+    farmer or FPO representative [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all transactional tools."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that create, modify,
+    or access private listing, order, and payment
+    data [TYPE_ONLY]"
 }
 
 "listing_id": {
   "type": "string",
-  "description": "Unique identifier of a crop listing."
+  "description": "Unique commodity listing
+    identifier on the Agri Marketing platform
+    [EXACT]"
 }
 
 "order_id": {
   "type": "string",
-  "description": "Unique identifier of an order."
+  "description": "Unique trade order identifier
+    [EXACT]"
 }
 
----
+"buyer_id": {
+  "type": "string",
+  "description": "Unique verified buyer identifier
+    on the platform [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"commodity_code": {
+  "type": "string",
+  "description": "Standardised commodity code
+    [EXACT]"
+}
 
-"commodity_type": [
-  "paddy", "wheat", "maize", "cotton",
-  "pulses", "oilseeds", "fruits", "vegetables"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"quality_grade": ["A", "B", "C", "premium"]
+Every parameter description must end with exactly one
+of these markers:
 
-"unit": ["kg", "quintal", "ton"]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    listing IDs, order IDs, buyer IDs, commodity codes,
+    dates, prices per quintal, weight in quintals,
+    GPS coordinates, boolean flags, fixed identifiers
 
-"listing_type": ["fixed_price", "auction"]
+  [SUBSTRING]
+    For free-text commodity names in search context,
+    dispute descriptions, negotiation remarks,
+    delivery address details, buyer company names
+    in search context
 
-"listing_status": ["active", "inactive", "deleted"]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (listing_id, order_id, buyer_id, dispute_id,
+    logistics_id, negotiation_id, invoice_id) that
+    the model cannot know until a prior tool
+    returns it
 
-"order_status": [
-  "created",
-  "confirmed",
-  "dispatched",
-  "delivered",
-  "completed",
-  "cancelled"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"payment_status": [
-  "pending",
-  "paid",
-  "failed",
-  "refunded"
-]
+seller_profile_status:
+  ["not_registered", "registered", "verified",
+   "suspended"]
 
-"auction_status": ["open", "bidding", "closed", "awarded"]
+listing_status:
+  ["not_created", "active", "matched",
+   "order_placed", "completed", "expired",
+   "cancelled"]
 
-"grievance_category": [
-  "payment_issue",
-  "order_not_delivered",
-  "wrong_quality",
-  "price_mismatch",
-  "listing_issue"
-]
+order_status:
+  ["not_placed", "placed", "confirmed",
+   "logistics_arranged", "in_transit", "delivered",
+   "completed", "cancelled", "disputed"]
 
----
+payment_status:
+  ["not_initiated", "escrow_deposited", "released",
+   "failed", "disputed", "refunded"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+logistics_status:
+  ["not_arranged", "scheduled", "pickup_done",
+   "in_transit", "delivered", "failed"]
 
-1. agrimarket_generate_otp  
-2. agrimarket_verify_otp  
-3. agrimarket_create_listing  
-4. agrimarket_search_listings  
-5. agrimarket_get_listing_details  
-6. agrimarket_place_order  
-7. agrimarket_track_order  
-8. agrimarket_track_payment  
+dispute_status:
+  ["not_filed", "filed", "under_review", "resolved",
+   "rejected", "escalated"]
 
----
+negotiation_status:
+  ["not_initiated", "initiated", "counter_offered",
+   "accepted", "rejected", "expired"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+trade_type:
+  ["sell_produce", "buy_input"]
 
-- agrimarket_update_listing  
-- agrimarket_delete_listing  
-- agrimarket_bid_on_listing  
-- agrimarket_get_auction_status  
-- agrimarket_cancel_order  
-- agrimarket_track_delivery  
-- agrimarket_handle_partial_fulfillment  
-- agrimarket_get_price_trends  
-- agrimarket_raise_grievance  
-- agrimarket_track_grievance_status  
+commodity_category:
+  ["cereal", "pulse", "oilseed", "vegetable",
+   "fruit", "spice", "fibre", "processed",
+   "seed", "fertilizer", "pesticide", "equipment"]
 
----
+logistics_mode:
+  ["farm_gate_pickup", "mandi_delivery",
+   "warehouse_delivery", "buyer_arranged"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+dispute_reason:
+  ["payment_not_received", "wrong_amount",
+   "quality_mismatch", "quantity_mismatch",
+   "logistics_failure", "buyer_no_show",
+   "price_dispute"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (authentication, ownership, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+user_type:
+  ["individual_farmer", "fpo", "buyer",
+   "input_supplier"]
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+Each tool description must contain (in order):
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+1. WHAT IT DOES — one sentence stating the action
 
----
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires seller_profile_status: verified
+    and listing_status: active")
+   NEVER name other tools.
 
-## PARAMETER RULES
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "quantity_quintals must be greater than 0
+    and not exceed the listed quantity;
+    price_per_quintal must be greater than 0;
+    buyer_id must be a verified platform buyer")
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - agrimarket_generate_otp
-  - agrimarket_verify_otp
+4. RETURNS — key fields in the success response
+   (e.g. "returns order_id, confirmed_price_per_quintal,
+    total_order_value, and logistics_arrangement_required")
 
----
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not arrange logistics; does not
+    initiate payment or escrow deposit")
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the listing has expired or been
+    cancelled, if the buyer is not verified, if the
+    requested quantity exceeds the available quantity,
+    or if the price is below the seller's floor price")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-## OUTPUT FORMAT
+  - listing expired before order was placed
+  - buyer places order but does not deposit escrow
+  - seller tries to cancel after logistics arranged
+  - dispute raised before order is confirmed (invalid)
+  - logistics failed — produce not picked up
+  - delivery confirmed by driver but disputed
+    by buyer
+  - payment released but wrong amount
+  - negotiation accepted but order not placed
+    within validity window
+  - FPO aggregation where one member farmer
+    withdraws produce after listing is created
+  - input procurement order where supplier
+    is out of stock after order placement
+  - seller not registered but tries to create
+    a listing
+  - duplicate listing for the same produce lot
+  - price negotiation initiated after order
+    is confirmed (invalid)
 
-Return ONLY a JSON array.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Each tool must follow this structure:
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"agrimarket_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"agrimarket_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "agrimarket_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 4 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers eNAM mandi auctions, MSP
+    procurement, PM-KISAN, PMFBY, fertilizer DBT,
+    weather forecasting, or soil health cards
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multiple user roles and workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

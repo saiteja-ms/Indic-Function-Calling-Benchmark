@@ -1,310 +1,535 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-iFMS (Integrated Fertilizer Management System - fertilizer subsidy DBT)
-service on the UMANG app.
+Your task: Generate tool schemas for the iFMS
+(Integrated Fertilizer Management System) service
+on the UMANG app.
 
-The number of tools should be sufficient (typically 12–16 tools)
-to cover all realistic farmer interactions and edge cases.
+iFMS manages the end-to-end fertilizer subsidy
+disbursement chain in India. Under the Direct Benefit
+Transfer for Fertilizers (DBT-F) scheme, subsidy is
+transferred directly to fertilizer manufacturers and
+retailers. Farmers purchase fertilizers at subsidised
+prices by authenticating with Aadhaar at point-of-sale
+(PoS). On UMANG, farmers can check subsidised fertilizer
+prices, locate nearby authorized retailers, view their
+purchase history, track DBT subsidy credit status,
+raise grievances for wrong charges or unavailability,
+and check nutrient-based subsidy rates.
 
----
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-## CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Checking subsidy eligibility
-- Fertilizer availability lookup
-- Retailer/point-of-sale identification
-- Purchase transaction recording
-- Subsidy calculation and application
-- Transaction validation (Aadhaar-based)
-- Subsidy disbursement tracking
-- Purchase history retrieval
-- Grievance handling
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
----
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Authentication is REQUIRED:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Aadhaar-linked purchase:
-  Fertilizer purchase must be authenticated using Aadhaar at POS.
+To support all three axes, the tool set MUST include:
 
-- Subsidy is purchase-linked:
-  Subsidy is applied ONLY when:
-    - fertilizer is purchased from authorized retailer
-    - transaction is recorded in system
+PUBLIC TOOLS (no session_token required) — at least 5:
+  Fertilizer price lookup, retailer finder, and
+  subsidy rate information are public. Enable
+  single-turn, single-step, simple test cases.
 
-- Retailer dependency:
-  Purchase must occur through registered fertilizer dealers.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_fertilizer_price + find_authorized_retailer
+  - get_subsidy_rate + get_fertilizer_price
+  - get_purchase_history + get_subsidy_credit_status
+  - find_authorized_retailer for two different
+    fertilizer types simultaneously
 
-- Subsidy type:
-  Subsidy is provided directly to fertilizer companies,
-  not as direct cash transfer to farmer (price is reduced upfront).
+CHAIN-CAPABLE TOOLS — at least 5:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Quantity limits:
-  Subsidy may be limited based on:
-    - crop type
-    - land size
-    - season
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover PM-KISAN income support,
+  PMFBY crop insurance, soil health cards, eNAM mandi
+  trade, MSP procurement, KCC query submission, or
+  weather forecasting — these belong to other UMANG
+  services and enable irrelevance test cases.
 
-- Inventory dependency:
-  Fertilizer availability depends on stock at retailer.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Duplicate transaction prevention:
-  Same purchase cannot be recorded multiple times.
+Each tool description must be SELF-CONTAINED.
 
-- Grievances should ONLY be raised after checking transaction or subsidy status.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
----
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires a verified Aadhaar-linked farmer
+     identity and an active purchase transaction
+     record")
+  ✓ Return value schemas
+    ("returns transaction_id, subsidised price
+     paid, and subsidy_credit_status")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-Tool descriptions MUST encode valid state transitions:
+Example — CORRECT description:
+  "Retrieves the complete fertilizer purchase history
+   for an authenticated farmer including transaction
+   dates, fertilizer types, quantities, prices paid,
+   and subsidy credit status for each purchase.
+   Requires an authenticated session. Returns a list
+   of purchase records with transaction_id,
+   fertilizer_type, quantity_bags, price_paid,
+   retailer_id, and subsidy_credit_status for each.
+   Fails if no purchase records exist for the farmer
+   or if the requested date range exceeds 2 years.
+   Does NOT display current fertilizer prices or
+   locate retailers."
 
-- transaction_status:
-  initiated → validated → completed → failed
+Example — INCORRECT description:
+  "Retrieves purchase history. Call ifms_authenticate
+   first to get session_token, then call this tool."
 
-- subsidy_status:
-  not_applied → applied → verified → settled
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- inventory_status:
-  available → low_stock → out_of_stock
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Subsidised fertilizer price lookup by type
+    and state
+  - Nutrient-based subsidy (NBS) rate lookup
+  - Authorized fertilizer retailer finder by
+    district and fertilizer type
+  - Retailer stock availability check
+  - Farmer purchase history retrieval
+  - Subsidy credit status per transaction
+  - DBT subsidy amount verification
+  - Overcharging complaint filing
+  - Fertilizer unavailability complaint filing
+  - Adulterated fertilizer complaint filing
+  - Complaint status tracking
+  - Fertilizer bag quality check (QR code / batch)
+  - State-wise fertilizer allocation status
+  - Fertilizer requirement calculator by crop
+    and area
 
-- purchase_status:
-  not_recorded → recorded → verified
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+These are real iFMS/DBT-F rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
----
+- Subsidy is embedded in the price at PoS; farmers
+  do not receive subsidy cash directly — they pay
+  the subsidised MRP.
+- Purchase requires Aadhaar authentication at the
+  PoS device; the transaction is recorded in iFMS.
+- MRP is fixed by the government for urea (fully
+  controlled); for P&K fertilizers MRP is set by
+  companies subject to NBS rates.
+- Urea is the only fertilizer with a fully
+  government-controlled price (₹242 per 45 kg bag
+  as of last revision).
+- P&K fertilizer subsidies are per-nutrient under
+  NBS scheme; rates are revised quarterly.
+- A farmer may purchase any quantity at subsidised
+  price; there is no per-farmer purchase cap for
+  urea (unlike some state-level restrictions).
+- Retailer must be licensed under the Fertilizer
+  (Control) Order; unlicensed retailers are not
+  in the iFMS database.
+- Adulteration complaints are routed to the state
+  agriculture department for sample collection and
+  testing.
+- A complaint about overcharging requires the
+  specific transaction_id and retailer_id.
+- Subsidy credit to the retailer happens after
+  PoS authentication; the farmer's transaction
+  record shows subsidy_credit_status.
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+subsidy_credit_status:
+  not_initiated → pending → credited → failed
+                → disputed
 
-The toolset MUST support scenarios where:
-- farmer not eligible but attempts purchase subsidy
-- invalid Aadhaar authentication at POS
-- purchase from unauthorized retailer
-- insufficient stock at retailer
-- exceeding subsidy quantity limits
-- duplicate transaction attempt
-- mismatch between land/crop and fertilizer usage
-- transaction failure at POS
-- subsidy calculation mismatch
-- delayed or missing subsidy application
+retailer_license_status:
+  active → suspended → revoked → expired
 
-Descriptions must explicitly reflect these cases.
+stock_availability_status:
+  available → low_stock → out_of_stock → unknown
 
----
+complaint_status:
+  not_filed → filed → assigned → under_investigation
+            → resolved → rejected → escalated
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+batch_quality_status:
+  not_checked → genuine → suspected_adulteration
+               → confirmed_adulteration → cleared
 
-Each tool description MUST include:
-- validation rules (Aadhaar, retailer validity, quantity limits)
-- rejection conditions (invalid purchase, ineligible farmer)
-- failure scenarios (transaction failure, subsidy mismatch)
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-Tools must NOT assume success-only execution.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+  ifms_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+  ifms_get_fertilizer_price               [public]
+  ifms_get_nbs_subsidy_rates              [public]
+  ifms_find_authorized_retailer           [public]
+  ifms_check_retailer_stock               [public]
+  ifms_get_state_allocation_status        [public]
+  ifms_get_purchase_history               [authenticated]
+  ifms_get_subsidy_credit_status          [authenticated]
+  ifms_verify_dbt_amount                  [authenticated]
+  ifms_check_bag_quality                  [public]
+  ifms_calculate_fertilizer_requirement   [public]
+  ifms_file_overcharging_complaint        [authenticated]
+  ifms_file_unavailability_complaint      [authenticated]
+  ifms_file_adulteration_complaint        [authenticated]
+  ifms_track_complaint_status             [public]
 
-The toolset MUST support:
-- farmer checking fertilizer availability
-- purchasing fertilizer with subsidy
-- validating transaction
-- tracking subsidy application
-- retrieving purchase history
-- handling failed or invalid transactions
-- grievance escalation
+(public = session_token NOT required;
+ authenticated = session_token required)
 
----
+You MAY add additional tools beyond these 15 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - ifms_resend_otp
+  - ifms_get_retailer_details
+  - ifms_get_fertilizer_types
+  - ifms_get_district_retailer_count
+  - ifms_get_helpline_number
+  - ifms_download_purchase_receipt
+  - ifms_get_complaint_categories
 
-## TOOL DESIGN REQUIREMENTS
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
 
-- Naming format: ifms_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
-
----
-
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that access private
+    purchase, subsidy, and complaint data
+    [TYPE_ONLY]"
 }
 
 "transaction_id": {
   "type": "string",
-  "description": "Unique identifier of the fertilizer purchase transaction."
+  "description": "Unique iFMS fertilizer purchase
+    transaction identifier [EXACT]"
 }
 
 "retailer_id": {
   "type": "string",
-  "description": "Unique identifier of the authorized fertilizer retailer."
+  "description": "Unique iFMS authorized fertilizer
+    retailer identifier [EXACT]"
 }
 
----
+"district": {
+  "type": "string",
+  "description": "Indian district name in lowercase
+    underscore form [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"state": {
+  "type": "string",
+  "description": "Indian state name in lowercase
+    underscore form [EXACT]"
+}
 
-"fertilizer_type": [
-  "urea",
-  "dap",
-  "mop",
-  "npk",
-  "complex_fertilizer"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"transaction_status": [
-  "initiated",
-  "validated",
-  "completed",
-  "failed"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"subsidy_status": [
-  "not_applied",
-  "applied",
-  "verified",
-  "settled"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    transaction IDs, retailer IDs, complaint IDs,
+    dates, prices in rupees, quantity in bags or kg,
+    district/state names, crop codes, land area,
+    batch numbers, boolean flags, fixed identifiers
 
-"inventory_status": [
-  "available",
-  "low_stock",
-  "out_of_stock"
-]
+  [SUBSTRING]
+    For free-text complaint descriptions, adulteration
+    observations, overcharging incident details,
+    unavailability notes
 
-"eligibility_status": [
-  "eligible",
-  "not_eligible"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (transaction_id, complaint_id, receipt_id) that
+    the model cannot know until a prior tool
+    returns it
 
-"grievance_category": [
-  "transaction_failed",
-  "subsidy_not_applied",
-  "retailer_issue",
-  "stock_unavailable",
-  "quantity_limit_exceeded"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+fertilizer_type:
+  ["urea", "dap", "mop", "ssp", "npk_10_26_26",
+   "npk_12_32_16", "npk_20_20_0", "ammonium_sulphate",
+   "zinc_sulphate", "boron", "ferrous_sulphate"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+subsidy_scheme:
+  ["urea_subsidy", "nbs_phosphatic",
+   "nbs_potassic", "nbs_complex"]
 
-1. ifms_generate_otp  
-2. ifms_verify_otp  
-3. ifms_check_eligibility  
-4. ifms_get_fertilizer_availability  
-5. ifms_get_retailer_list  
-6. ifms_initiate_purchase  
-7. ifms_validate_transaction  
-8. ifms_complete_purchase  
-9. ifms_apply_subsidy  
-10. ifms_track_transaction  
+subsidy_credit_status:
+  ["not_initiated", "pending", "credited", "failed",
+   "disputed"]
 
----
+retailer_license_status:
+  ["active", "suspended", "revoked", "expired"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+stock_availability_status:
+  ["available", "low_stock", "out_of_stock",
+   "unknown"]
 
-- ifms_get_purchase_history  
-- ifms_check_inventory_status  
-- ifms_resolve_transaction_ambiguity  
-- ifms_cancel_transaction  
-- ifms_calculate_subsidy  
-- ifms_raise_grievance  
-- ifms_track_grievance_status  
+complaint_status:
+  ["not_filed", "filed", "assigned",
+   "under_investigation", "resolved", "rejected",
+   "escalated"]
 
----
+complaint_type:
+  ["overcharging", "unavailability",
+   "adulteration", "wrong_bag_weight",
+   "unlicensed_retailer", "pos_malfunction"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+batch_quality_status:
+  ["not_checked", "genuine",
+   "suspected_adulteration",
+   "confirmed_adulteration", "cleared"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (eligibility, retailer validity, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+allocation_status:
+  ["sufficient", "low", "critical", "exhausted"]
 
----
+nutrient_type:
+  ["nitrogen", "phosphorus", "potassium",
+   "sulphur", "zinc", "boron"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+season:
+  ["kharif", "rabi", "summer"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must contain (in order):
 
-## PARAMETER RULES
+1. WHAT IT DOES — one sentence stating the action
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - ifms_generate_otp
-  - ifms_verify_otp
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires retailer_license_status: active
+    in the iFMS database")
+   NEVER name other tools.
 
----
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "fertilizer_type must be in the supported
+    enum; district must be in the iFMS coverage
+    network; aadhaar_number must be exactly 12 digits")
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+4. RETURNS — key fields in the success response
+   (e.g. "returns mrp_per_bag, subsidised_price_per_bag,
+    subsidy_amount_per_bag, and validity_date")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not place a purchase order; does not
+    guarantee stock at the retailer at time of visit")
 
----
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the fertilizer type is not covered
+    under DBT-F in the state, if no authorized retailer
+    is registered in the district, or if the retailer
+    license is suspended")
 
-## OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Return ONLY a JSON array.
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-Each tool must follow this structure:
+  - retailer charges above MRP (overcharging)
+  - retailer out of stock for required fertilizer
+  - no authorized retailer in the farmer's district
+    for a specific fertilizer type
+  - adulterated fertilizer bag reported by farmer
+  - PoS machine malfunction — transaction not
+    recorded in iFMS
+  - subsidy credit pending beyond 7 days
+    (payment delay)
+  - farmer queries subsidy for a fertilizer type
+    not covered under NBS (e.g. straight urea
+    is not under NBS, it has fixed MRP)
+  - wrong bag weight (50 kg bag sold as 45 kg)
+  - retailer license suspended after farmer's
+    purchase is already recorded
+  - duplicate complaint for same transaction
+  - complaint about a transaction that does not
+    exist in iFMS (unrecorded purchase)
+  - state fertilizer allocation exhausted
+    mid-season
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"ifms_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"ifms_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "ifms_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 5 tools are public (no session_token)
+  ✓ at least 4 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers PM-KISAN, PMFBY, soil health
+    cards, eNAM mandi trade, MSP procurement,
+    KCC queries, or weather forecasting
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support transaction + subsidy lifecycle workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

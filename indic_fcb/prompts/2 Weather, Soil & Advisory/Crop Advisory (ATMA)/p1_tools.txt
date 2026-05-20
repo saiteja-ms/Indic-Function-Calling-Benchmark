@@ -1,292 +1,541 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-Crop Advisory (ATMA - Agricultural Technology Management Agency)
+Your task: Generate tool schemas for the Crop Advisory
+and ATMA (Agricultural Technology Management Agency)
 service on the UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+ATMA is the district-level agricultural extension
+delivery system. It connects farmers to Krishi Vigyan
+Kendras (KVKs), subject matter specialists, farm
+schools, demonstrations, and training programmes.
+This usecase covers expert advisory access, training
+registration, demonstration plot visits, and
+personalised crop management guidance.
 
----
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-## CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Design tools that enable realistic workflows such as:
-- Fetching crop-specific advisories
-- Stage-based farming recommendations
-- Weather-based advisory guidance
-- Pest and disease diagnosis
-- Fertilizer and irrigation recommendations
-- Crop planning support
-- Expert consultation requests
-- Advisory history tracking
-- Grievance handling
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
----
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Authentication is REQUIRED for personalized advisory:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Location dependency:
-  Advisory depends on district/state/agro-climatic zone.
+To support all three axes, the tool set MUST include:
 
-- Crop specificity:
-  Advisory must be tied to a specific crop.
+PUBLIC TOOLS (no session_token required) — at least 5:
+  ATMA advisory lookups are mostly public information
+  services. Enable single-turn, single-step, simple
+  test cases.
 
-- Growth stage dependency:
-  Advisory varies by stage:
-    sowing → vegetative → flowering → harvesting
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint data and never mutate
+  shared state. Enable parallel-multiple cases.
 
-- Weather dependency:
-  Advisory must consider current or forecasted weather.
+CHAIN-CAPABLE TOOLS — at least 5:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Diagnosis requirement:
-  Pest/disease advisory requires symptoms or structured inputs.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover weather forecasting
+  (Kisan Suvidha / Meghdoot), soil test scheduling
+  (SHC scheme), market prices (eNAM / Kisan Suvidha),
+  PM-KISAN income support, PMFBY crop insurance, or
+  PM-KUSUM solar pumps — these belong to other UMANG
+  services and enable irrelevance test cases.
 
-- Advisory limitation:
-  Tools provide recommendations ONLY — no direct farm execution.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Expert escalation:
-  Expert consultation should be used when automated advisory is insufficient.
+Each tool description must be SELF-CONTAINED.
 
-- Grievances should ONLY be raised after attempting advisory retrieval.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
----
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires farmer_profile_status: registered
+     and training_registration_status: confirmed")
+  ✓ Return value schemas
+    ("returns training_id and scheduled date")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-Tool descriptions MUST encode valid state transitions:
+Example — CORRECT description:
+  "Registers a farmer for an upcoming ATMA training
+   programme at a KVK or farm school. Requires an
+   authenticated session and a farmer profile with
+   profile_status: registered. Returns training_id,
+   confirmed_date, venue, and maximum_participants
+   remaining. Fails if the training programme is
+   fully booked, if the farmer is already registered
+   for the same training, or if registration is
+   closed for that programme. Does NOT confirm
+   attendance or issue a training certificate."
 
-- advisory_state:
-  requested → generated → updated → obsolete
+Example — INCORRECT description:
+  "Registers for ATMA training. Call
+   atma_authenticate_farmer first, then
+   atma_get_available_trainings to find a programme,
+   then call this tool."
 
-- diagnosis_state:
-  symptoms_provided → analyzed → diagnosed → recommendation_generated
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- consultation_state:
-  not_requested → requested → assigned → resolved
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Farmer profile registration with ATMA
+  - Nearby KVK and extension officer lookup
+  - Subject matter specialist (SMS) contact lookup
+  - Crop-specific advisory bulletin lookup
+  - Integrated pest management (IPM) advisory
+  - Demonstration plot schedule and location lookup
+  - Training programme listing by district and crop
+  - Training registration
+  - Training attendance confirmation
+  - Training certificate download
+  - Farm school visit scheduling
+  - Expert query submission (ask a specialist)
+  - Query response tracking
+  - Technology package recommendation by crop
+    and agro-climatic zone
+  - Grievance filing for missed advisory or
+    unresponsive officer
 
-Tools must define:
-- when advisory is valid
-- when advisory becomes outdated
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+These are real ATMA rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+- ATMA operates at the district level; advisories
+  and programmes are district-and-crop specific.
+- A farmer must be registered in the ATMA farmer
+  database (linked to Aadhaar) to register for
+  training or submit queries.
+- Training programmes have a maximum participant
+  limit; registration closes when capacity is full.
+- Training certificates are issued only after
+  attendance is confirmed by the KVK officer.
+- Farm school visits require prior scheduling and
+  are limited to registered ATMA farmers.
+- Expert queries are routed to the Subject Matter
+  Specialist for the relevant crop; response SLA
+  is 3 working days.
+- Technology packages are agro-climatic zone
+  specific and cover variety selection, spacing,
+  input schedule, and harvesting guidance.
+- IPM advisories are season and pest-pressure
+  specific; they are updated weekly during
+  active crop seasons.
+- A grievance about an unresponsive officer
+  requires the officer_id and the query_id that
+  went unanswered.
+- Advisory bulletins are published by ICAR and
+  state agriculture departments; they are read-only.
 
-The toolset MUST support scenarios where:
-- invalid or unsupported crop
-- missing growth stage
-- conflicting inputs (crop vs location mismatch)
-- insufficient data for diagnosis
-- multiple possible diagnoses (ambiguity)
-- outdated advisory used
-- weather mismatch affecting advisory
-- expert not available
-- incorrect or irrelevant recommendation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Descriptions must explicitly reflect these cases.
+farmer_profile_status:
+  not_registered → registered → verified → suspended
 
----
+training_registration_status:
+  not_registered → registered → waitlisted
+                → cancelled → attended → certified
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+query_status:
+  not_submitted → submitted → assigned → responded
+               → closed → escalated
 
-Each tool description MUST include:
-- validation rules (crop, stage, location required)
-- failure conditions (insufficient input, no advisory available)
-- ambiguity handling (multiple diagnoses or advisories)
+farm_school_visit_status:
+  not_scheduled → scheduled → completed → cancelled
 
-Tools must NOT assume successful advisory generation.
+programme_availability:
+  open → full → closed → cancelled
 
----
+certificate_status:
+  not_issued → issued → downloaded → revoked
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected
 
-The toolset MUST support:
-- farmer requesting advisory for crop
-- stage-specific recommendations
-- pest/disease diagnosis
-- weather-adjusted advisory
-- escalation to expert consultation
-- handling incorrect or missing advisory
-- grievance escalation
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## TOOL DESIGN REQUIREMENTS
+  atma_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-- Naming format: atma_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+  atma_find_nearest_kvk                    [public]
+  atma_get_sms_contact                     [public]
+  atma_get_advisory_bulletin               [public]
+  atma_get_ipm_advisory                    [public]
+  atma_get_demonstration_schedule          [public]
+  atma_get_technology_package              [public]
+  atma_get_available_trainings             [public]
+  atma_register_farmer_profile             [authenticated]
+  atma_register_for_training               [authenticated]
+  atma_confirm_training_attendance         [authenticated]
+  atma_download_training_certificate       [authenticated]
+  atma_schedule_farm_school_visit          [authenticated]
+  atma_submit_expert_query                 [authenticated]
+  atma_track_query_response                [authenticated]
+  atma_raise_grievance                     [authenticated]
+  atma_track_grievance_status              [public]
 
----
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+You MAY add additional tools beyond these 17 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - atma_resend_otp
+  - atma_cancel_training_registration
+  - atma_get_agro_climatic_zone
+  - atma_get_crop_calendar_advisory
+  - atma_get_helpline_number
+  - atma_update_farmer_profile
+  - atma_get_query_history
+
+Do not force-add tools that have no real UMANG analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for tools that create or modify
+    farmer registrations, queries, or training
+    records [TYPE_ONLY]"
 }
 
-"location": {
+"district": {
   "type": "string",
-  "description": "Village, district, or agro-climatic region."
+  "description": "Indian district name in lowercase
+    underscore form [EXACT]"
 }
 
----
+"state": {
+  "type": "string",
+  "description": "Indian state name in lowercase
+    underscore form [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"training_id": {
+  "type": "string",
+  "description": "Unique ATMA training programme
+    identifier [EXACT]"
+}
 
-"crop_type": [
-  "paddy", "wheat", "maize", "cotton",
-  "sugarcane", "pulses", "oilseeds", "horticulture"
-]
+"query_id": {
+  "type": "string",
+  "description": "Unique expert query identifier
+    assigned at submission [EXACT]"
+}
 
-"growth_stage": [
-  "sowing",
-  "germination",
-  "vegetative",
-  "flowering",
-  "fruiting",
-  "harvesting"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"advisory_type": [
-  "irrigation",
-  "fertilizer",
-  "pest_control",
-  "disease_management",
-  "weather_based"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"issue_type": [
-  "pest",
-  "disease",
-  "nutrient_deficiency",
-  "weather_damage"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    training IDs, query IDs, officer IDs, KVK IDs,
+    dates, district/state names, crop codes,
+    fixed identifiers
 
-"diagnosis_confidence": ["low", "medium", "high"]
+  [SUBSTRING]
+    For free-text query text, advisory description,
+    grievance details, farmer name, village name,
+    training topic description
 
-"grievance_category": [
-  "incorrect_advisory",
-  "no_advisory_available",
-  "delayed_response",
-  "expert_not_assigned",
-  "irrelevant_recommendation"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (training_id, query_id, visit_id, grievance_id,
+    certificate_id) that the model cannot know until
+    a prior tool returns it
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+farmer_profile_status:
+  ["not_registered", "registered", "verified",
+   "suspended"]
 
-1. atma_generate_otp  
-2. atma_verify_otp  
-3. atma_get_crop_advisory  
-4. atma_get_stage_based_advisory  
-5. atma_get_weather_based_advisory  
-6. atma_report_crop_issue  
-7. atma_diagnose_pest_disease  
-8. atma_get_fertilizer_recommendation  
+training_registration_status:
+  ["not_registered", "registered", "waitlisted",
+   "cancelled", "attended", "certified"]
 
----
+query_status:
+  ["not_submitted", "submitted", "assigned",
+   "responded", "closed", "escalated"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+farm_school_visit_status:
+  ["not_scheduled", "scheduled", "completed",
+   "cancelled"]
 
-- atma_get_irrigation_schedule  
-- atma_get_crop_plan  
-- atma_request_expert_consultation  
-- atma_get_consultation_status  
-- atma_get_advisory_history  
-- atma_resolve_diagnosis_ambiguity  
-- atma_raise_grievance  
-- atma_track_grievance_status  
+programme_availability:
+  ["open", "full", "closed", "cancelled"]
 
----
+certificate_status:
+  ["not_issued", "issued", "downloaded", "revoked"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+advisory_type:
+  ["crop_management", "ipm", "nutrient_management",
+   "water_management", "post_harvest", "organic_farming",
+   "climate_smart"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (authentication, crop/stage input, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+crop_stage:
+  ["pre_sowing", "sowing", "vegetative", "flowering",
+   "fruiting", "ripening", "harvest", "post_harvest"]
 
----
+agro_climatic_zone:
+  ["western_himalayan", "eastern_himalayan",
+   "lower_gangetic_plains", "middle_gangetic_plains",
+   "upper_gangetic_plains", "trans_gangetic_plains",
+   "eastern_plateau", "central_plateau",
+   "western_plateau", "southern_plateau",
+   "east_coast", "west_coast", "gujarat_plains",
+   "western_dry", "island"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+training_mode:
+  ["in_person", "online", "hybrid"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+pest_category:
+  ["insect", "disease", "weed", "nematode",
+   "rodent", "bird"]
 
----
+grievance_category:
+  ["officer_unresponsive", "training_not_conducted",
+   "certificate_not_issued", "wrong_advisory",
+   "query_not_answered", "visit_not_scheduled"]
 
-## PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - atma_generate_otp
-  - atma_verify_otp
+Each tool description must contain (in order):
 
----
+1. WHAT IT DOES — one sentence stating the action
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires farmer_profile_status: registered
+    and training_registration_status: attended")
+   NEVER name other tools.
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "district must be in the ATMA coverage
+    network; aadhaar_number must be exactly 12 digits;
+    crop must be in the district's notified advisory
+    crop list")
 
----
+4. RETURNS — key fields in the success response
+   (e.g. "returns query_id, assigned_specialist_name,
+    expected_response_date, and query_status")
 
-## OUTPUT FORMAT
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not guarantee expert response within
+    SLA; does not handle purchase of inputs or
+    seeds recommended in the advisory")
 
-Return ONLY a JSON array.
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if farmer_profile_status is
+    not_registered, if the training programme is
+    full or cancelled, or if the farmer is already
+    registered for the same programme")
 
-Each tool must follow this structure:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Descriptions across the tool set must collectively
+support these real-world scenarios:
+
+  - training registration when programme is full
+    (waitlist scenario)
+  - certificate download before attendance is
+    confirmed (invalid)
+  - duplicate training registration for same
+    programme
+  - expert query submitted but no SMS available
+    for the crop in the district
+  - query response SLA exceeded (escalation)
+  - farm school visit scheduled but cancelled
+    by KVK
+  - advisory bulletin not available for the
+    requested crop stage
+  - technology package not available for the
+    farmer's agro-climatic zone
+  - IPM advisory stale (last updated more than
+    7 days ago during active season)
+  - grievance about an officer where no query
+    was submitted
+  - farmer profile suspended due to data mismatch
+  - training conducted online but farmer has no
+    internet access (training_mode: online conflict)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"atma_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"atma_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "atma_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 5 tools are public (no session_token)
+  ✓ at least 5 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers weather forecasting, soil test
+    scheduling, market prices, PM-KISAN, PMFBY,
+    PM-KUSUM, or eNAM mandi trade
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multi-dimensional advisory workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

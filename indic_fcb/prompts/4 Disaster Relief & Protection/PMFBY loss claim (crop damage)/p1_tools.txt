@@ -1,329 +1,585 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-PMFBY Loss Claim (crop damage reporting and compensation claim)
-service on the UMANG app.
+Your task: Generate tool schemas for the PMFBY Loss
+Claim (post-disaster crop damage claim under Pradhan
+Mantri Fasal Bima Yojana) service on the UMANG app.
 
-The number of tools should be sufficient (typically 12–16 tools)
-to cover all realistic farmer interactions and edge cases.
+This usecase covers the POST-ENROLLMENT claim lifecycle
+under PMFBY — after a farmer has already enrolled and
+paid premium. It covers loss notification, claim
+submission, surveyor assignment tracking, yield
+assessment, compensation calculation, and grievance
+handling for disputed claims.
 
----
+This usecase is DISTINCT from PMFBY enrollment
+(covered in Cluster 1 — that covers premium
+calculation and policy issuance). This covers
+ONLY the claim side: what happens after a crop
+loss event occurs.
 
-## CORE OBJECTIVE
+It is also DISTINCT from SDRF/NDRF (Cluster 4,
+Usecase 1) — SDRF is government relief funded by
+taxes; PMFBY is insurance compensation funded by
+premiums. A farmer may be eligible for both for the
+same loss event.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Reporting crop damage events
-- Verifying policy linkage
-- Submitting loss claims
-- Uploading evidence (structured inputs)
-- Survey and field inspection tracking
-- Loss assessment and validation
-- Claim approval/rejection
-- Compensation calculation
-- Payment tracking
-- Grievance handling
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-- Authentication is REQUIRED:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Policy dependency:
-  Claim can ONLY be filed if:
-    - farmer has an active PMFBY policy
-    - crop and land parcel match the insured details
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Time-bound reporting:
-  Crop loss must be reported within a fixed time window
-  after the event (e.g., within 72 hours).
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Loss types:
-  Claims may be triggered by:
-    - drought
-    - flood
-    - pest attack
-    - cyclone
-    - unseasonal rainfall
+To support all three axes, the tool set MUST include:
 
-- Evidence requirement:
-  Claim must include:
-    - structured loss details
-    - optional supporting evidence (simulated)
+PUBLIC TOOLS (no session_token required) — at least 4:
+  Loss event notifications, claim window status,
+  and area yield data are public. Enable single-turn,
+  single-step, simple test cases.
 
-- Survey dependency:
-  Field survey or remote sensing is required
-  before claim approval.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_loss_event_notifications + get_claim_window_status
+  - get_claim_status + get_survey_status
+  - get_compensation_details + get_payment_status
+  - get_area_yield_data + get_loss_event_notifications
 
-- Partial vs full loss:
-  Compensation depends on severity of loss.
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Duplicate claims:
-  Multiple claims for the same event/land are NOT allowed.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover PMFBY enrollment
+  (premium calculation, application submission —
+  covered in Cluster 1), SDRF/NDRF government
+  relief, PM-KISAN income support, MSP procurement,
+  eNAM mandi trade, or weather forecasting — these
+  belong to other UMANG services and enable
+  irrelevance test cases.
 
-- Payment dependency:
-  Compensation is processed ONLY after claim approval.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Grievances should ONLY be raised after checking claim status.
+Each tool description must be SELF-CONTAINED.
 
----
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires policy_status: active and
+     loss_notification_status: submitted within
+     72 hours of loss event")
+  ✓ Return value schemas
+    ("returns claim_id, assigned surveyor details,
+     and expected survey completion date")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-Tool descriptions MUST encode valid state transitions:
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- claim_status:
-  not_reported → reported → submitted → under_review → approved → rejected → compensated
+Example — CORRECT description:
+  "Submits a formal crop loss claim under an active
+   PMFBY policy for a notified loss event. Requires
+   an authenticated session, a policy with
+   policy_status: active for the affected crop and
+   season, and a loss_notification submitted within
+   the 72-hour reporting window. Returns claim_id,
+   claim_status, and estimated survey date. Fails
+   if no active policy exists for the crop and
+   season, if the loss event is not notified for
+   the district, if the 72-hour notification window
+   was missed, or if a claim already exists for
+   the same policy and loss event. Does NOT assess
+   yield loss or calculate compensation."
 
-- survey_status:
-  not_started → scheduled → in_progress → completed
+Example — INCORRECT description:
+  "Submits a crop loss claim. Call
+   pmfby_claim_authenticate first, then
+   pmfby_claim_notify_loss to report within 72
+   hours, then call this tool."
 
-- assessment_status:
-  not_assessed → partially_assessed → fully_assessed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- payment_status:
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Active policy verification
+  - Loss event notification lookup (notified
+    events in the district for the season)
+  - Claim window status check
+  - Loss notification submission (within 72 hours)
+  - Loss notification status tracking
+  - Formal crop loss claim submission
+  - Claim status tracking
+  - Surveyor assignment status
+  - Survey result retrieval
+  - Crop cutting experiment (CCE) data lookup
+  - Area yield data retrieval
+  - Compensation calculation status
+  - Compensation amount details
+  - Payment status tracking
+  - Claim correction request
+  - Grievance filing for disputed claim
+  - Grievance status tracking
+  - Insurance company contact lookup
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+These are real PMFBY claim rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
+
+- Loss notification must be submitted within 72
+  hours of the loss event for localised calamity;
+  for widespread calamity the window extends to
+  the official notification date.
+- A formal claim can only be submitted after a
+  loss notification has been accepted.
+- An active policy (policy_status: active) must
+  exist for the crop, season, and plot.
+- Surveyor assignment is mandatory for localised
+  calamity claims; widespread calamity uses
+  area-yield approach via CCE data.
+- Compensation = (Threshold Yield - Actual Yield)
+  / Threshold Yield × Sum Insured; paid only when
+  actual yield falls below threshold.
+- Compensation is disbursed via DBT to the bank
+  account used for premium payment.
+- A claim can be disputed within 30 days of
+  compensation decision.
+- Duplicate claims for the same policy and loss
+  event are rejected.
+- A grievance about compensation requires the
+  specific claim_id and the disputed
+  compensation amount.
+- For loanee farmers, compensation may be
+  credited to the lending bank account first.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+loss_notification_status:
+  not_submitted → submitted → accepted → rejected
+                → late_submission
+
+claim_status:
+  not_filed → filed → surveyor_assigned
+            → survey_completed → yield_assessed
+            → compensation_calculated → approved
+            → payment_initiated → disbursed
+            → rejected → disputed
+
+survey_status:
+  not_assigned → assigned → in_progress → completed
+               → disputed
+
+compensation_status:
+  not_calculated → calculating → calculated
+                 → approved → rejected → disputed
+
+payment_status:
   not_initiated → pending → credited → failed
+                → disputed → resolved
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+policy_status:
+  active → expired → cancelled → lapsed
 
----
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected → escalated
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-The toolset MUST support scenarios where:
-- claim filed without active policy
-- reporting after allowed time window
-- invalid or unsupported loss type
-- incorrect land or crop mapping
-- duplicate claim submission
-- insufficient evidence
-- survey delay or missing survey
-- conflicting survey results
-- claim rejected due to low damage threshold
-- partial compensation disputes
-- payment failure or delay
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Descriptions must explicitly reflect these cases.
+  pmfby_claim_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
----
+  pmfby_claim_get_loss_event_notifications [public]
+  pmfby_claim_get_claim_window_status      [public]
+  pmfby_claim_get_area_yield_data          [public]
+  pmfby_claim_get_insurer_contact          [public]
+  pmfby_claim_verify_active_policy         [authenticated]
+  pmfby_claim_submit_loss_notification     [authenticated]
+  pmfby_claim_get_notification_status      [authenticated]
+  pmfby_claim_submit_claim                 [authenticated]
+  pmfby_claim_get_claim_status             [authenticated]
+  pmfby_claim_get_surveyor_assignment      [authenticated]
+  pmfby_claim_get_survey_result            [authenticated]
+  pmfby_claim_get_compensation_details     [authenticated]
+  pmfby_claim_get_payment_status           [authenticated]
+  pmfby_claim_request_correction           [authenticated]
+  pmfby_claim_raise_grievance              [authenticated]
+  pmfby_claim_track_grievance_status       [public]
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-Each tool description MUST include:
-- validation rules (policy active, time window, land linkage)
-- rejection conditions (invalid claim, duplicate claim)
-- failure scenarios (survey delay, claim rejection, payment failure)
+You MAY add additional tools beyond these 17 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - pmfby_claim_resend_otp
+  - pmfby_claim_get_cce_schedule
+  - pmfby_claim_download_compensation_letter
+  - pmfby_claim_get_all_claims_for_farmer
+  - pmfby_claim_get_helpline_number
+  - pmfby_claim_cancel_claim
+  - pmfby_claim_get_threshold_yield_data
 
-Tools must NOT assume success-only execution.
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
 
----
-
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
-
-The toolset MUST support:
-- farmer reporting crop loss
-- submitting valid claim
-- tracking claim lifecycle
-- survey and assessment process
-- claim approval and compensation
-- claim rejection scenarios
-- grievance escalation
-
----
-
-## TOOL DESIGN REQUIREMENTS
-
-- Naming format: pmfbyclaim_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
-
----
-
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that submit, modify,
+    or access private policy, claim, and
+    compensation data [TYPE_ONLY]"
 }
 
 "policy_id": {
   "type": "string",
-  "description": "Unique identifier of the PMFBY insurance policy."
+  "description": "Unique PMFBY policy identifier
+    for the enrolled crop and season [EXACT]"
 }
 
 "claim_id": {
   "type": "string",
-  "description": "Unique identifier of the crop loss claim."
+  "description": "Unique PMFBY crop loss claim
+    identifier [EXACT]"
 }
 
-"land_parcel_id": {
+"notification_id": {
   "type": "string",
-  "description": "Unique identifier of the insured land parcel."
+  "description": "Unique loss notification
+    identifier submitted within 72 hours of
+    loss event [EXACT]"
 }
 
----
+"loss_event_id": {
+  "type": "string",
+  "description": "Unique identifier for the
+    notified loss event in the district [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"loss_type": [
-  "drought",
-  "flood",
-  "pest_attack",
-  "cyclone",
-  "unseasonal_rainfall"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"claim_status": [
-  "not_reported",
-  "reported",
-  "submitted",
-  "under_review",
-  "approved",
-  "rejected",
-  "compensated"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    policy IDs, claim IDs, notification IDs, loss
+    event IDs, dates, area in hectares, yield values
+    in quintals per hectare, compensation amounts,
+    boolean flags, fixed identifiers
 
-"survey_status": [
-  "not_started",
-  "scheduled",
-  "in_progress",
-  "completed"
-]
+  [SUBSTRING]
+    For free-text loss descriptions, grievance
+    details, correction reasons, surveyor remarks,
+    damage description narratives
 
-"assessment_status": [
-  "not_assessed",
-  "partially_assessed",
-  "fully_assessed"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (claim_id, notification_id, grievance_id,
+    survey_id, correction_id) that the model cannot
+    know until a prior tool returns it
 
-"payment_status": [
-  "not_initiated",
-  "pending",
-  "credited",
-  "failed"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"grievance_category": [
-  "claim_rejected",
-  "survey_delay",
-  "incorrect_assessment",
-  "payment_delay",
-  "duplicate_claim_issue"
-]
+loss_notification_status:
+  ["not_submitted", "submitted", "accepted",
+   "rejected", "late_submission"]
 
----
+claim_status:
+  ["not_filed", "filed", "surveyor_assigned",
+   "survey_completed", "yield_assessed",
+   "compensation_calculated", "approved",
+   "payment_initiated", "disbursed", "rejected",
+   "disputed"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+survey_status:
+  ["not_assigned", "assigned", "in_progress",
+   "completed", "disputed"]
 
-1. pmfbyclaim_generate_otp  
-2. pmfbyclaim_verify_otp  
-3. pmfbyclaim_report_loss_event  
-4. pmfbyclaim_validate_policy  
-5. pmfbyclaim_submit_claim  
-6. pmfbyclaim_track_claim_status  
-7. pmfbyclaim_track_survey_status  
-8. pmfbyclaim_get_assessment_result  
-9. pmfbyclaim_calculate_compensation  
-10. pmfbyclaim_track_payment  
+compensation_status:
+  ["not_calculated", "calculating", "calculated",
+   "approved", "rejected", "disputed"]
 
----
+payment_status:
+  ["not_initiated", "pending", "credited", "failed",
+   "disputed", "resolved"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+policy_status:
+  ["active", "expired", "cancelled", "lapsed"]
 
-- pmfbyclaim_upload_evidence  
-- pmfbyclaim_check_claim_window  
-- pmfbyclaim_resolve_claim_ambiguity  
-- pmfbyclaim_cancel_claim  
-- pmfbyclaim_raise_grievance  
-- pmfbyclaim_track_grievance_status  
+grievance_status:
+  ["not_filed", "filed", "under_review", "resolved",
+   "rejected", "escalated"]
 
----
+loss_cause:
+  ["drought", "flood", "cyclone", "hailstorm",
+   "pest_attack", "disease", "unseasonal_rain",
+   "frost", "fire", "wild_animal_damage",
+   "cloud_burst", "inundation"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+calamity_scope:
+  ["localised", "widespread"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (policy, time window, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+survey_approach:
+  ["individual_survey", "area_yield_cce"]
 
----
+farmer_category:
+  ["loanee", "non_loanee"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+season:
+  ["kharif", "rabi", "summer", "commercial"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+grievance_category:
+  ["compensation_not_received", "wrong_compensation",
+   "surveyor_no_show", "survey_result_disputed",
+   "notification_rejected", "claim_wrongly_rejected",
+   "payment_to_wrong_account"]
 
----
+correction_type:
+  ["wrong_area", "wrong_loss_cause",
+   "wrong_crop_variety", "survey_date_error",
+   "bank_account_mismatch", "policy_id_error"]
 
-## PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - pmfbyclaim_generate_otp
-  - pmfbyclaim_verify_otp
+Each tool description must contain (in order):
 
----
+1. WHAT IT DOES — one sentence stating the action
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires policy_status: active and
+    loss_notification_status: accepted")
+   NEVER name other tools.
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "policy_id must correspond to an active
+    enrollment; loss_event_id must be a notified
+    event in the farmer's district; aadhaar_number
+    must be exactly 12 digits")
 
----
+4. RETURNS — key fields in the success response
+   (e.g. "returns claim_id, claim_status, assigned
+    survey_approach, and expected survey date")
 
-## OUTPUT FORMAT
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not assess yield loss; does not
+    calculate compensation; does not assign
+    a surveyor")
 
-Return ONLY a JSON array.
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if no active policy exists for
+    the crop and season, if the loss event is not
+    notified for the district, if the 72-hour
+    notification window was missed for localised
+    calamity, or if a claim already exists for
+    the same policy and loss event")
 
-Each tool must follow this structure:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Descriptions across the tool set must collectively
+support these real-world scenarios:
+
+  - loss notification submitted after 72-hour
+    window for localised calamity (late submission)
+  - claim submitted before loss notification
+    is accepted (invalid)
+  - duplicate claim for same policy and loss event
+  - surveyor assigned but does not visit within
+    expected window
+  - survey result shows no loss despite farmer
+    reporting total crop failure
+  - actual yield above threshold — no compensation
+    due despite active policy
+  - compensation calculated but payment failed
+    due to wrong bank account
+  - loanee farmer's compensation credited to
+    bank instead of farmer account
+  - claim dispute window missed (after 30 days)
+  - widespread calamity where individual survey
+    is not conducted (area yield approach)
+  - policy lapsed before loss event (no claim
+    possible)
+  - grievance filed for a claim that was never
+    submitted (invalid)
+  - correction requested after compensation
+    is already disbursed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"pmfby_claim_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"pmfby_claim_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
-  "name": "pmfbyclaim_example_tool",
-  "description": "...",
+  "name": "pmfby_claim_example_tool",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 4 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers PMFBY enrollment (premium
+    calculation, application), SDRF government
+    relief, PM-KISAN, MSP procurement, eNAM,
+    or weather forecasting
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support full claim lifecycle workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

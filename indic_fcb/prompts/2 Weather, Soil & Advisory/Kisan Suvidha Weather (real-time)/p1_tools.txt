@@ -1,274 +1,505 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-Kisan Suvidha Weather (real-time weather information)
-service on the UMANG app.
+Your task: Generate tool schemas for the Kisan Suvidha
+(real-time weather, market price, and crop advisory
+mobile service) on the UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer workflow
+needs an additional tool not listed below, add it.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## CORE OBJECTIVE
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-Design tools that enable realistic workflows such as:
-- Fetching current weather conditions
-- Retrieving hourly and daily forecasts
-- Querying weather by location (village/district)
-- Accessing extreme weather alerts
-- Viewing historical weather summaries
-- Generating weather-based advisories
-- Managing alert subscriptions
-- Grievance handling
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
----
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Public vs authenticated access:
-  - Weather data (current + forecast) is PUBLIC
-  - Subscriptions, preferences, and grievances REQUIRE authentication
+To support all three axes, the tool set MUST include:
 
-- Location specificity:
-  Weather queries must include a valid location (village/district/GPS).
-  Generic queries without location are INVALID.
+PUBLIC TOOLS (no session_token required) — at least 6:
+  Kisan Suvidha is predominantly an information service,
+  so MOST tools should be public lookups. Enable
+  single-turn, single-step, simple test cases.
 
-- Forecast limits:
-  Forecasts are reliable only up to ~7–10 days.
+PARALLEL-SAFE TOOL PAIRS — at least 5 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
 
-- Real-time vs forecast distinction:
-  - Current weather reflects near real-time data
-  - Forecast is predictive and may change
+CHAIN-CAPABLE TOOLS — at least 4:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Historical data limitation:
-  Only recent past data (e.g., last 7–30 days) is available.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover PM-KISAN income support,
+  PMFBY crop insurance enrollment, PM-KUSUM solar pumps,
+  soil sample collection (separate scheme), eNAM mandi
+  trade execution, or fertilizer subsidy DBT — these
+  belong to other UMANG services and enable irrelevance
+  test cases.
 
-- Data variability:
-  Weather data may differ across sources and updates.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Advisory nature:
-  Weather tools provide information ONLY — no direct farm actions.
+Each tool description must be SELF-CONTAINED.
 
-- Grievances should ONLY be raised after verifying weather data.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
----
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires subscription_status: active")
+  ✓ Return value schemas
+    ("returns subscription_id and active alert
+     channels list")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-Tool descriptions MUST encode valid state transitions:
+Example — CORRECT description:
+  "Subscribes a farmer to crop-stage-aware advisory
+   alerts for a specified crop and location. Requires
+   an authenticated session and a profile_status of
+   created. Returns subscription_id, delivery_channels
+   (SMS, push, voice), and the daily advisory window.
+   Fails if no advisory programme covers the crop
+   for the district, if the farmer already has an
+   active subscription for the same crop, or if the
+   profile location is incomplete. Does NOT send the
+   advisory message or alter delivery preferences."
 
-- query_state:
-  invalid_location → valid_query → data_available / data_not_available
+Example — INCORRECT description:
+  "Subscribes to advisory alerts. Call kisansuvidha_
+   authenticate first, then kisansuvidha_create_profile,
+   then call this tool."
 
-- data_freshness:
-  real_time → recent → stale
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- forecast_state:
-  generated → updated → expired
+Design tools that enable realistic workflows:
+  - Farmer authentication (light — most lookups are public)
+  - Location-based weather forecast (5-day, hourly)
+  - Current rainfall and temperature lookup
+  - Market price lookup for a commodity at nearest mandi
+  - Historical price trend lookup
+  - Plant protection advisory (pest and disease info)
+  - Fertilizer dosage advisory by crop and stage
+  - Crop calendar lookup (sowing, irrigation, harvest)
+  - Cold wave / heat wave / cyclone alerts by region
+  - Subscription management for daily SMS/voice advisories
+  - Nearest agriculture extension officer (KVK) contact lookup
+  - Crop variety recommendation by district and season
+  - Grievance handling for incorrect advisories
+  - Profile management (preferred crops, location, language)
 
-- subscription_status:
-  not_subscribed → subscribed → unsubscribed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tools must define:
-- when data is valid
-- when data is stale or unavailable
+These are real Kisan Suvidha rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
----
+- Weather data is sourced from IMD and updated every
+  3 hours; forecasts extend 5 days ahead.
+- Market prices are sourced from Agmarknet and updated
+  daily; weekends and mandi holidays return last-known
+  values.
+- Advisory content is published by ICAR / state KVK
+  network and is district-and-crop specific.
+- Subscriptions are delivered via SMS (default), voice
+  call (regional language), or push notification.
+- A farmer profile must include at least one crop
+  and a verified location (district + village) to
+  receive personalised advisories.
+- Plant protection advisories are stage-specific
+  (sowing, vegetative, flowering, ripening) and
+  depend on the farmer's reported sowing date.
+- Cold-wave and heat-wave alerts use IMD trigger
+  thresholds; alerts are pre-emptive (48-72 hours).
+- Mandi prices are reported per quintal in INR for
+  declared varieties only.
+- The system does NOT confirm sales, place orders, or
+  transact — it is read-only advisory.
+- A grievance about a wrong advisory requires the
+  specific advisory_id and date the advisory was
+  received.
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The toolset MUST support scenarios where:
-- missing or invalid location
-- no weather data available for region
-- stale or outdated data
-- conflicting forecast results
-- incorrect or partial data
-- extreme weather not reflected in forecast
-- ambiguous location names
-- duplicate or delayed updates
-- user expecting alerts without subscription
+profile_status:
+  not_created → created → verified → suspended
 
-Descriptions must explicitly reflect these cases.
+subscription_status:
+  not_subscribed → active → paused → cancelled
 
----
+alert_delivery_status:
+  pending → sent → delivered → failed
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+advisory_freshness:
+  current → stale → outdated
 
-Each tool description MUST include:
-- validation rules (location required, valid query inputs)
-- failure conditions (no data, invalid query)
-- ambiguity handling (multiple matching locations)
+forecast_validity:
+  active → expired
 
-Tools must NOT assume successful data retrieval.
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected
 
----
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The toolset MUST support:
-- farmer checking current weather
-- planning using forecasts
-- checking rainfall before irrigation
-- handling missing or delayed data
-- subscribing to weather alerts
-- grievance escalation
+  kisansuvidha_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes mobile_number, otp
+       returns session_token
 
----
+  kisansuvidha_get_weather_forecast        [public]
+  kisansuvidha_get_current_weather         [public]
+  kisansuvidha_get_market_price            [public]
+  kisansuvidha_get_price_history           [public]
+  kisansuvidha_get_plant_protection_advice [public]
+  kisansuvidha_get_fertilizer_advice       [public]
+  kisansuvidha_get_crop_calendar           [public]
+  kisansuvidha_get_active_weather_alerts   [public]
+  kisansuvidha_find_nearest_kvk            [public]
+  kisansuvidha_get_crop_variety_recommendation [public]
+  kisansuvidha_create_profile              [authenticated]
+  kisansuvidha_subscribe_advisory          [authenticated]
+  kisansuvidha_manage_subscription         [authenticated]
+  kisansuvidha_raise_grievance             [authenticated]
+  kisansuvidha_track_grievance_status      [public]
 
-## TOOL DESIGN REQUIREMENTS
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-- Naming format: ksweather_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+You MAY add additional tools beyond these 16 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - kisansuvidha_resend_otp
+  - kisansuvidha_get_rainfall_history
+  - kisansuvidha_get_seasonal_outlook
+  - kisansuvidha_get_pest_outbreak_alerts
+  - kisansuvidha_change_delivery_language
+  - kisansuvidha_get_helpline_number
+  - kisansuvidha_unsubscribe_all
 
----
+Do not force-add tools that have no real UMANG analog.
+Every tool must correspond to a plausible government
+API endpoint.
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
-
-"aadhaar_number": {
-  "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
-}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number of the
+    farmer [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after authentication. Required for subscription and grievance tools."
+  "description": "Active authentication token
+    obtained after mobile OTP verification.
+    Required for tools that create or modify
+    a farmer profile or subscription [TYPE_ONLY]"
 }
 
-"location": {
+"state": {
   "type": "string",
-  "description": "Village, district, or GPS-based location."
+  "description": "Indian state name in lowercase
+    underscore form (e.g. uttar_pradesh,
+    tamil_nadu) [EXACT]"
 }
 
----
+"district": {
+  "type": "string",
+  "description": "Indian district name in lowercase
+    underscore form [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"profile_id": {
+  "type": "string",
+  "description": "Unique Kisan Suvidha farmer
+    profile identifier [EXACT]"
+}
 
-"forecast_type": ["current", "hourly", "daily"]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"time_range": ["today", "3_day", "7_day", "10_day"]
+Every parameter description must end with exactly one
+of these markers:
 
-"weather_parameter": [
-  "temperature",
-  "rainfall",
-  "humidity",
-  "wind_speed",
-  "pressure"
-]
+  [EXACT]
+    For enums, mobile numbers, OTPs, dates, prices in
+    rupees, quantity in quintals/kg, district/state
+    names, crop codes, KVK IDs, fixed identifiers
 
-"data_status": ["available", "partial", "not_available"]
+  [SUBSTRING]
+    For free-text village names, custom remarks,
+    grievance descriptions, advisory dispute reasons
 
-"subscription_status": ["not_subscribed", "subscribed", "unsubscribed"]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (profile_id, subscription_id, advisory_id,
+    alert_id, grievance_id) that the model cannot
+    know until a prior tool returns it
 
-"grievance_category": [
-  "incorrect_forecast",
-  "missing_weather_data",
-  "delayed_update",
-  "wrong_location",
-  "alert_not_received"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+profile_status:
+  ["not_created", "created", "verified", "suspended"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+subscription_status:
+  ["not_subscribed", "active", "paused", "cancelled"]
 
-1. ksweather_get_current_weather  
-2. ksweather_get_weather_forecast  
-3. ksweather_get_weather_alerts  
-4. ksweather_get_location_weather  
-5. ksweather_get_weather_parameters  
+alert_delivery_status:
+  ["pending", "sent", "delivered", "failed"]
 
----
+advisory_freshness:
+  ["current", "stale", "outdated"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+forecast_validity:
+  ["active", "expired"]
 
-- ksweather_get_historical_weather  
-- ksweather_resolve_location_ambiguity  
-- ksweather_get_weather_advisory  
-- ksweather_subscribe_alerts  
-- ksweather_unsubscribe_alerts  
-- ksweather_set_location_preferences  
-- ksweather_raise_grievance  
-- ksweather_track_grievance_status  
+grievance_status:
+  ["not_filed", "filed", "under_review", "resolved",
+   "rejected"]
 
----
+delivery_channel:
+  ["sms", "voice", "push"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+advisory_category:
+  ["plant_protection", "fertilizer", "irrigation",
+   "harvest_timing", "post_harvest", "weather_alert"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (location, authentication if needed)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+crop_stage:
+  ["pre_sowing", "sowing", "vegetative", "flowering",
+   "fruiting", "ripening", "harvest", "post_harvest"]
 
----
+weather_parameter:
+  ["temperature", "rainfall", "humidity", "wind_speed",
+   "wind_direction", "uv_index", "cloud_cover"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+alert_type:
+  ["heat_wave", "cold_wave", "cyclone", "heavy_rainfall",
+   "thunderstorm", "hailstorm", "frost", "drought"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+forecast_horizon:
+  ["current", "next_24_hours", "next_3_days",
+   "next_5_days"]
 
----
+language:
+  ["hi", "en", "ta", "te", "kn", "ml", "mr", "pa",
+   "bn", "gu", "or", "as"]
 
-## PARAMETER RULES
+grievance_category:
+  ["wrong_weather_forecast", "wrong_market_price",
+   "irrelevant_advisory", "missed_alert",
+   "language_mismatch", "subscription_not_active"]
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be required ONLY for:
-  - subscription tools
-  - grievance tools
-- It MUST NOT be required for public tools
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must contain (in order):
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+1. WHAT IT DOES — one sentence stating the action
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires profile_status: verified and
+    subscription_status: not_subscribed for the
+    same crop")
+   NEVER name other tools.
 
----
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "district must exist in the Kisan Suvidha
+    coverage list; forecast_horizon must be one of
+    the supported enums; mobile_number must be
+    exactly 10 digits")
 
-## OUTPUT FORMAT
+4. RETURNS — key fields in the success response
+   (e.g. "returns forecast_data array (per-day
+    temperature, rainfall, humidity), source
+    (IMD station id), and validity period")
 
-Return ONLY a JSON array.
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not transact or sell;
+    does not provide hyperlocal village-level
+    forecasts beyond district resolution")
 
-Each tool must follow this structure:
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the IMD station for the district
+    is offline, if the requested forecast horizon
+    exceeds 5 days, or if the district is not
+    covered by the Kisan Suvidha network")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Descriptions across the tool set must collectively
+support these real-world scenarios:
+
+  - IMD station offline for the district
+  - market price stale due to mandi holiday
+  - advisory not available for the requested crop
+    in the district
+  - duplicate subscription for the same crop and
+    delivery channel
+  - subscription paused vs cancelled distinction
+  - alert missed because subscription_status was
+    paused at trigger time
+  - language requested is not supported for the
+    district
+  - profile location incomplete (only state, no
+    district)
+  - forecast request for horizon beyond 5 days
+  - market price request for a non-notified commodity
+  - grievance filed for an advisory_id that does
+    not exist
+  - KVK not within reasonable distance for the
+    farmer's location
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"kisansuvidha_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"kisansuvidha_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
-  "name": "ksweather_example_tool",
-  "description": "...",
+  "name": "kisansuvidha_example_tool",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 6 tools are public (no session_token)
+  ✓ at least 4 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers PM-KISAN income support,
+    PMFBY crop insurance enrollment, PM-KUSUM
+    solar pumps, soil sample collection, eNAM
+    mandi trade execution, or fertilizer subsidy DBT
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multiple user intents and workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

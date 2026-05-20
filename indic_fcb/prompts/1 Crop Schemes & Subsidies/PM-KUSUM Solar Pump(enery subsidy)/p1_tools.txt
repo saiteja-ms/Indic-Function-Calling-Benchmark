@@ -1,317 +1,502 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-PM-KUSUM (Pradhan Mantri Kisan Urja Suraksha evam Utthaan Mahabhiyan)
-solar pump subsidy service on the UMANG app.
+Your task: Generate tool schemas for the PM-KUSUM
+(Pradhan Mantri Kisan Urja Suraksha evam Utthaan
+Mahabhiyan - solar pump subsidy and grid-connected
+solar) service on the UMANG app.
 
-The number of tools should be sufficient (typically 12–16 tools)
-to cover all realistic farmer interactions and edge cases.
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer workflow
+needs an additional tool not listed below, add it.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## CORE OBJECTIVE
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Eligibility checking for solar pump subsidy
-- Application submission for solar pump installation
-- Subsidy calculation and beneficiary contribution
-- Vendor selection and approval
-- Installation scheduling and tracking
-- Physical inspection and verification
-- Subsidy disbursement tracking
-- Grid connection (if applicable)
-- Grievance handling
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
----
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Authentication is REQUIRED:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+To support all three axes, the tool set MUST include:
 
-- Eligibility dependency:
-  Farmer must satisfy:
-    - land ownership or valid lease
-    - access to irrigation land
-    - non-duplication (cannot receive multiple subsidies for same asset)
+PUBLIC TOOLS (no session_token required) — at least 4:
+  Enable single-turn, single-step, simple test cases.
 
-- Application requirement:
-  Subsidy can only be applied after eligibility check.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
 
-- Subsidy structure:
-  Subsidy is shared between:
-    - central government
-    - state government
-    - farmer contribution
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Vendor dependency:
-  Installation must be carried out by empanelled vendors.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover PM-KISAN income support,
+  PMFBY crop insurance, soil health cards, fertilizer
+  subsidy, eNAM mandi trade, or general electricity
+  bill payment — these belong to other UMANG services
+  and enable irrelevance test cases.
 
-- Installation requirement:
-  Subsidy is released ONLY after successful installation.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Inspection dependency:
-  Physical verification must confirm installation before payment.
+Each tool description must be SELF-CONTAINED.
 
-- Grid/off-grid distinction:
-  Some pumps may be grid-connected, others standalone.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-- State-specific variation:
-  Subsidy percentage and rules may vary across states.
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires application_status: approved and
+     vendor_selection_status: confirmed")
+  ✓ Return value schemas
+    ("returns application_id and assigned
+     vendor list for the district")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-- Grievances should ONLY be raised after checking application or subsidy status.
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
----
+Example — CORRECT description:
+  "Confirms vendor selection for a sanctioned solar
+   pump installation under PM-KUSUM Component B.
+   Requires an authenticated session, an approved
+   application, and a vendor_selection_status of
+   pending. Returns the confirmed vendor_id,
+   estimated installation_date, and farmer share
+   amount due. Fails if the application is not
+   approved, if the vendor is not empanelled for
+   the district, or if the selection window has
+   expired. Does NOT initiate payment or schedule
+   the installation."
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+Example — INCORRECT description:
+  "Confirms vendor selection. Call pmkusum_authenticate
+   first to get session_token, then pmkusum_get_empanelled
+   vendors to find a vendor, then call this tool."
 
-Tool descriptions MUST encode valid state transitions:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- application_status:
-  not_applied → submitted → under_review → approved → rejected
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Component A (grid-connected solar plant on barren land)
+    interest registration
+  - Component B (standalone solar pump for off-grid farms)
+    application
+  - Component C (grid-connected solar pump) application
+  - Eligibility check (land ownership, electricity
+    connection status, pump capacity needs)
+  - Subsidy calculation (central + state + farmer share)
+  - Empanelled vendor lookup by district
+  - Vendor selection and confirmation
+  - Application status tracking
+  - Installation scheduling status
+  - Subsidy disbursement tracking
+  - Performance monitoring of installed pump
+  - Grievance handling
+  - State-specific scheme variant lookup
 
-- installation_status:
-  not_started → scheduled → in_progress → completed → verified
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- subsidy_status:
-  not_initiated → pending → disbursed → failed
+These are real PM-KUSUM rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-- vendor_status:
-  not_selected → selected → assigned
+- Component A is only for individual farmers, FPOs,
+  cooperatives, or panchayats with at least 0.5 acres
+  of barren or cultivable wasteland.
+- Component B is only for off-grid farmers with no
+  existing grid electricity connection for irrigation.
+- Component C is only for farmers with an existing
+  grid-connected electric pump.
+- Pump capacity is capped at 7.5 HP for standard
+  Component B applications.
+- Central subsidy is 30% of benchmark cost.
+- State subsidy is 30% (varies by state).
+- Farmer share is 40% (varies based on category;
+  reduced for SC/ST, North-East, and hilly states).
+- Vendor must be empanelled by MNRE for the
+  applicable district and pump capacity range.
+- Subsidy is disbursed only after successful
+  installation and verification.
+- Land ownership must be verified via state revenue
+  records before application can proceed.
+- One farmer may apply for only ONE Component B
+  pump per landholding.
+- A grievance is meaningful only after application
+  status has been retrieved.
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+application_status:
+  not_submitted → submitted → under_review → approved
+                → rejected
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+eligibility_status:
+  unknown → eligible → ineligible
 
-The toolset MUST support scenarios where:
-- farmer not eligible but attempts application
-- duplicate subsidy request
-- invalid or missing land details
-- vendor not available in region
-- installation delay or failure
-- inspection failure (installation incomplete or incorrect)
-- subsidy calculation mismatch
-- partial installation
-- grid connection failure
-- subsidy payment delay or failure
+vendor_selection_status:
+  not_required → pending → confirmed → expired
 
-Descriptions must explicitly reflect these cases.
+installation_status:
+  not_scheduled → scheduled → in_progress → completed
+                → failed
 
----
+subsidy_disbursement_status:
+  not_initiated → calculated → approved → disbursed
+                → failed
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+farmer_share_payment_status:
+  not_due → pending → paid → refunded
 
-Each tool description MUST include:
-- validation rules (eligibility, land ownership, duplication)
-- rejection conditions (ineligible farmer, invalid application)
-- failure scenarios (installation failure, subsidy delay)
+pump_operational_status:
+  not_installed → operational → faulty → under_repair
 
-Tools must NOT assume success-only execution.
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+  pmkusum_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-The toolset MUST support:
-- farmer checking eligibility
-- applying for subsidy
-- vendor selection and installation tracking
-- successful installation and subsidy release
-- rejection or failure scenarios
-- grievance escalation
+  pmkusum_check_eligibility               [public]
+  pmkusum_validate_land_records           [public]
+  pmkusum_get_pump_capacity_options       [public]
+  pmkusum_calculate_subsidy               [public]
+  pmkusum_get_empanelled_vendors          [public]
+  pmkusum_submit_application              [authenticated]
+  pmkusum_get_application_status          [public]
+  pmkusum_select_vendor                   [authenticated]
+  pmkusum_pay_farmer_share                [authenticated]
+  pmkusum_get_installation_schedule       [authenticated]
+  pmkusum_get_subsidy_disbursement_status [public]
+  pmkusum_report_pump_issue               [authenticated]
+  pmkusum_raise_grievance                 [authenticated]
+  pmkusum_track_grievance_status          [public]
 
----
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-## TOOL DESIGN REQUIREMENTS
+You MAY add additional tools beyond these 15 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - pmkusum_resend_otp
+  - pmkusum_get_state_specific_variants
+  - pmkusum_get_pump_specifications
+  - pmkusum_cancel_application
+  - pmkusum_download_sanction_letter
+  - pmkusum_get_warranty_status
+  - pmkusum_get_helpline_number
 
-- Naming format: pmkusum_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+Do not force-add tools that have no real UMANG analog.
+Every tool must correspond to a plausible government
+API endpoint.
 
----
-
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for tools that perform write
+    operations or access private application
+    and subsidy data [TYPE_ONLY]"
 }
 
 "application_id": {
   "type": "string",
-  "description": "Unique identifier of the subsidy application."
+  "description": "Unique PM-KUSUM application
+    identifier [EXACT]"
 }
 
 "vendor_id": {
   "type": "string",
-  "description": "Unique identifier of the empanelled vendor."
+  "description": "MNRE-empanelled vendor
+    identifier [EXACT]"
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+Every parameter description must end with exactly one
+of these markers:
 
-"pump_type": [
-  "surface_pump",
-  "submersible_pump"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    numeric IDs, IFSC codes, boolean flags, dates,
+    pump capacity in HP, land area in acres, subsidy
+    amounts, vendor IDs, fixed identifiers
 
-"installation_status": [
-  "not_started",
-  "scheduled",
-  "in_progress",
-  "completed",
-  "verified"
-]
+  [SUBSTRING]
+    For free-text names, addresses, issue descriptions,
+    complaint details, grievance remarks
 
-"application_status": [
-  "not_applied",
-  "submitted",
-  "under_review",
-  "approved",
-  "rejected"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (application_id, vendor_id, schedule_id,
+    grievance_id) that the model cannot know until
+    a prior tool returns it
 
-"subsidy_status": [
-  "not_initiated",
-  "pending",
-  "disbursed",
-  "failed"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"grid_type": [
-  "off_grid",
-  "grid_connected"
-]
+scheme_component:
+  ["component_a", "component_b", "component_c"]
 
-"eligibility_status": [
-  "eligible",
-  "not_eligible"
-]
+application_status:
+  ["not_submitted", "submitted", "under_review",
+   "approved", "rejected"]
 
-"grievance_category": [
-  "application_rejected",
-  "installation_delay",
-  "vendor_issue",
-  "subsidy_not_received",
-  "inspection_failure"
-]
+eligibility_status:
+  ["unknown", "eligible", "ineligible"]
 
----
+vendor_selection_status:
+  ["not_required", "pending", "confirmed", "expired"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+installation_status:
+  ["not_scheduled", "scheduled", "in_progress",
+   "completed", "failed"]
 
-1. pmkusum_generate_otp  
-2. pmkusum_verify_otp  
-3. pmkusum_check_eligibility  
-4. pmkusum_apply_subsidy  
-5. pmkusum_calculate_subsidy  
-6. pmkusum_select_vendor  
-7. pmkusum_schedule_installation  
-8. pmkusum_track_installation  
-9. pmkusum_verify_installation  
-10. pmkusum_track_subsidy  
+subsidy_disbursement_status:
+  ["not_initiated", "calculated", "approved",
+   "disbursed", "failed"]
 
----
+farmer_share_payment_status:
+  ["not_due", "pending", "paid", "refunded"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+pump_operational_status:
+  ["not_installed", "operational", "faulty",
+   "under_repair"]
 
-- pmkusum_get_vendor_list  
-- pmkusum_check_application_status  
-- pmkusum_get_grid_connection_status  
-- pmkusum_resolve_application_ambiguity  
-- pmkusum_cancel_application  
-- pmkusum_raise_grievance  
-- pmkusum_track_grievance_status  
+land_type:
+  ["cultivable", "barren", "wasteland", "fallow"]
 
----
+electricity_connection_status:
+  ["no_connection", "active_connection",
+   "disconnected"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+farmer_category:
+  ["general", "sc", "st", "obc"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (eligibility, application status, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+state_region_category:
+  ["general", "north_east", "hilly", "ut"]
 
----
+pump_capacity_hp:
+  ["1", "2", "3", "5", "7_5", "10"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+grievance_category:
+  ["application_delay", "vendor_unresponsive",
+   "installation_failure", "subsidy_not_disbursed",
+   "pump_malfunction", "warranty_dispute"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must contain (in order):
 
-## PARAMETER RULES
+1. WHAT IT DOES — one sentence stating the action
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - pmkusum_generate_otp
-  - pmkusum_verify_otp
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires application_status: approved and
+    vendor_selection_status: confirmed")
+   NEVER name other tools.
 
----
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "pump_capacity_hp must be in the supported
+    enum; land_area_acres must be greater than 0;
+    aadhaar_number must be exactly 12 digits")
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+4. RETURNS — key fields in the success response
+   (e.g. "returns application_id, sanctioned
+    subsidy amount, and farmer share due")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not schedule installation;
+    does not handle vendor payment")
 
----
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the land is not classified as
+    cultivable or barren, if the farmer already has
+    an active grid pump connection for Component B,
+    or if the selected vendor is not empanelled for
+    the district")
 
-## OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Return ONLY a JSON array.
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-Each tool must follow this structure:
+  - applicant ineligible due to existing grid pump
+    connection (Component B exclusion)
+  - applicant ineligible due to land type mismatch
+  - duplicate application for same landholding
+  - vendor not empanelled for the district
+  - vendor selection window expired
+  - farmer share payment failure
+  - installation scheduled but vendor no-show
+  - installation completed but verification pending
+  - subsidy calculated but disbursement failed
+  - pump installed but reported faulty within warranty
+  - grievance about a non-existent application
+  - state-specific subsidy share variations
+  - SC/ST farmer with reduced share requirement
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"pmkusum_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"pmkusum_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "pmkusum_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 4 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers PM-KISAN income support,
+    PMFBY crop insurance, soil health cards,
+    fertilizer subsidy, eNAM mandi trade, or
+    general electricity bill payment
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support infrastructure lifecycle workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

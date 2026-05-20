@@ -1,332 +1,573 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-SDRF/NDRF (State Disaster Response Fund / National Disaster Response Fund)
-relief claim service on the UMANG app.
+Your task: Generate tool schemas for the SDRF/NDRF
+(State Disaster Relief Fund / National Disaster Relief
+Fund) relief claim service on the UMANG app.
 
-The number of tools should be sufficient (typically 12–16 tools)
-to cover all realistic farmer interactions and edge cases.
+SDRF/NDRF provides compensation to farmers and rural
+households for losses caused by natural calamities
+— floods, droughts, cyclones, landslides, hailstorms,
+earthquakes, and cold waves. Farmers submit claims
+through the state revenue department portal integrated
+with UMANG. Relief covers crop loss, house damage,
+livestock loss, and human casualty compensation.
 
----
+This usecase is DISTINCT from PMFBY crop insurance
+(which is pre-paid premium-based insurance) and from
+MSP procurement. SDRF/NDRF is post-disaster relief
+funded by government, not by an insurance premium.
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Reporting disaster-related crop damage
-- Checking disaster declaration status
-- Submitting relief claim applications
-- Uploading damage evidence (structured inputs)
-- Verifying location eligibility
-- Survey and damage assessment tracking
-- Relief approval/rejection
-- Compensation calculation and tracking
-- Grievance handling
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Authentication is REQUIRED:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Disaster declaration dependency:
-  Relief claims are valid ONLY if:
-    - disaster (flood/drought/etc.) is officially declared
-    - location falls within affected area
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Location specificity:
-  Claims must be tied to:
-    - village/district
-    - land parcel
+To support all three axes, the tool set MUST include:
 
-- Relief vs insurance:
-  SDRF/NDRF relief is separate from insurance (PMFBY).
-  Duplicate compensation for same loss may be restricted.
+PUBLIC TOOLS (no session_token required) — at least 5:
+  Disaster declaration lookup, relief rates, and
+  calamity notifications are public. Enable
+  single-turn, single-step, simple test cases.
 
-- Time-bound reporting:
-  Damage must be reported within a specified window after the disaster.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_declared_calamities + get_relief_rates
+  - get_claim_status + get_survey_status
+  - get_payment_status + get_claim_status
+  - check_eligibility + get_declared_calamities
 
-- Evidence requirement:
-  Claim must include structured damage details (simulated inputs).
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Survey dependency:
-  Government or local authority verification is required.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover PMFBY crop insurance
+  (premium-based private insurance), PM-KISAN income
+  support, MSP procurement, eNAM mandi trade, soil
+  health cards, or weather forecasting — these belong
+  to other UMANG services and enable irrelevance
+  test cases.
 
-- Severity-based compensation:
-  Relief depends on:
-    - extent of damage
-    - type of disaster
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Payment dependency:
-  Relief is disbursed only after approval.
+Each tool description must be SELF-CONTAINED.
 
-- Grievances should ONLY be raised after checking claim status.
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
----
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires calamity_declaration_status: declared
+     for the district and a verified Aadhaar-linked
+     identity")
+  ✓ Return value schemas
+    ("returns claim_id, assigned surveyor details,
+     and expected survey date")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-Tool descriptions MUST encode valid state transitions:
+Example — CORRECT description:
+  "Submits a crop loss relief claim under SDRF for
+   a declared calamity in the farmer's district.
+   Requires an authenticated session, a calamity
+   declaration for the district with
+   calamity_declaration_status: declared, and a
+   verified land record linkage. Returns claim_id,
+   claim_category, estimated_relief_amount, and
+   survey_scheduled_date. Fails if no calamity has
+   been declared for the district, if the claim
+   window has closed, if the farmer has already
+   submitted a claim for the same calamity event,
+   or if land records are not verified. Does NOT
+   assess actual loss or disburse payment."
 
-- claim_status:
-  not_reported → reported → submitted → under_review → approved → rejected → compensated
+Example — INCORRECT description:
+  "Submits a crop loss claim. Call sdrf_authenticate
+   first, then sdrf_check_calamity_declaration to
+   confirm the calamity is declared, then call
+   this tool."
 
-- disaster_status:
-  not_declared → declared → active → closed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- survey_status:
-  not_started → scheduled → in_progress → completed
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Declared calamity lookup by district and season
+  - Relief rate lookup (per hectare for crop loss,
+    per unit for livestock, per category for house)
+  - Eligibility check (is the farmer's district
+    and loss type covered under current declaration?)
+  - Crop loss claim submission
+  - House damage claim submission
+  - Livestock loss claim submission
+  - Human casualty relief claim submission
+  - Claim status tracking
+  - Survey status and surveyor assignment tracking
+  - Survey result retrieval
+  - Payment status tracking
+  - Relief payment receipt download
+  - Claim correction request
+  - Grievance filing for delayed or rejected claim
+  - Grievance status tracking
+  - State relief portal contact lookup
 
-- payment_status:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+These are real SDRF/NDRF rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
+
+- A claim can only be submitted after the state
+  government formally declares a calamity for
+  the affected district.
+- SDRF norms define fixed per-unit relief rates:
+  crop loss (per hectare, varying by irrigated
+  vs rain-fed and crop type), livestock loss
+  (per animal category), house damage (per
+  damage category: fully damaged, severely
+  damaged, partially damaged).
+- Claims must be submitted within the declared
+  claim window (typically 30-60 days after
+  calamity declaration).
+- A field survey is mandatory before relief
+  is approved; survey is conducted by a
+  revenue/agriculture official.
+- A farmer may submit separate claims for crop
+  loss, house damage, and livestock loss for
+  the same calamity event.
+- Payment is via DBT to the Aadhaar-linked
+  bank account.
+- A grievance about relief can only be raised
+  after a claim has been submitted.
+- NDRF norms apply when the calamity exceeds
+  state capacity; SDRF applies for smaller
+  events; the same claim workflow covers both.
+- Duplicate claims for the same calamity event
+  and loss category are rejected.
+- A claim rejected due to survey findings can
+  be disputed within 15 days of rejection.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+calamity_declaration_status:
+  not_declared → declared → relief_operations_open
+               → relief_operations_closed
+
+claim_status:
+  not_submitted → submitted → survey_pending
+                → survey_done → approved → rejected
+                → payment_initiated → payment_credited
+                → disputed
+
+survey_status:
+  not_assigned → assigned → in_progress → completed
+               → disputed
+
+payment_status:
   not_initiated → pending → credited → failed
+                → disputed → resolved
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected → escalated
 
----
+correction_status:
+  not_requested → submitted → under_review
+                → approved → rejected
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-The toolset MUST support scenarios where:
-- disaster not declared but claim attempted
-- location not in affected zone
-- reporting outside allowed time window
-- incorrect or missing land/location details
-- duplicate relief claim
-- insufficient or conflicting damage information
-- survey delay or missing verification
-- claim rejected due to low damage severity
-- overlapping insurance claim (PMFBY conflict)
-- payment delay or failure
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Descriptions must explicitly reflect these cases.
+  sdrf_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
----
+  sdrf_get_declared_calamities             [public]
+  sdrf_get_relief_rates                    [public]
+  sdrf_check_claim_eligibility             [public]
+  sdrf_get_claim_window_status             [public]
+  sdrf_get_state_relief_contact            [public]
+  sdrf_submit_crop_loss_claim              [authenticated]
+  sdrf_submit_house_damage_claim           [authenticated]
+  sdrf_submit_livestock_loss_claim         [authenticated]
+  sdrf_get_claim_status                    [authenticated]
+  sdrf_get_survey_status                   [authenticated]
+  sdrf_get_survey_result                   [authenticated]
+  sdrf_get_payment_status                  [authenticated]
+  sdrf_download_relief_receipt             [authenticated]
+  sdrf_request_claim_correction            [authenticated]
+  sdrf_raise_grievance                     [authenticated]
+  sdrf_track_grievance_status              [public]
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-Each tool description MUST include:
-- validation rules (disaster declaration, location eligibility)
-- rejection conditions (invalid claim, ineligible region)
-- failure scenarios (survey delay, payment failure)
+You MAY add additional tools beyond these 17 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - sdrf_resend_otp
+  - sdrf_get_calamity_event_details
+  - sdrf_submit_human_casualty_claim
+  - sdrf_get_all_claims_for_farmer
+  - sdrf_get_helpline_number
+  - sdrf_cancel_claim
+  - sdrf_get_surveyor_contact
 
-Tools must NOT assume success-only execution.
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
 
----
-
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
-
-The toolset MUST support:
-- farmer reporting disaster damage
-- checking disaster eligibility
-- submitting relief claim
-- tracking claim and survey status
-- receiving compensation
-- rejection scenarios
-- grievance escalation
-
----
-
-## TOOL DESIGN REQUIREMENTS
-
-- Naming format: sdrfndrf_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
-
----
-
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer or affected household member [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that submit, modify,
+    or access private claim and payment data
+    [TYPE_ONLY]"
 }
 
 "claim_id": {
   "type": "string",
-  "description": "Unique identifier of the relief claim."
+  "description": "Unique SDRF/NDRF relief claim
+    identifier [EXACT]"
 }
 
-"land_parcel_id": {
+"calamity_event_id": {
   "type": "string",
-  "description": "Unique identifier of the affected land parcel."
+  "description": "Unique identifier for the
+    declared calamity event in the district
+    [EXACT]"
 }
 
-"location": {
+"district": {
   "type": "string",
-  "description": "Village, district, or affected region."
+  "description": "Indian district name in
+    lowercase underscore form [EXACT]"
 }
 
----
+"state": {
+  "type": "string",
+  "description": "Indian state name in
+    lowercase underscore form [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"disaster_type": [
-  "flood",
-  "drought",
-  "cyclone",
-  "landslide",
-  "hailstorm"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"disaster_status": [
-  "not_declared",
-  "declared",
-  "active",
-  "closed"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    claim IDs, calamity event IDs, dates, land area
+    in hectares, livestock counts, relief amounts,
+    district/state names, boolean flags,
+    fixed identifiers
 
-"claim_status": [
-  "not_reported",
-  "reported",
-  "submitted",
-  "under_review",
-  "approved",
-  "rejected",
-  "compensated"
-]
+  [SUBSTRING]
+    For free-text loss descriptions, grievance
+    details, correction reasons, house damage
+    descriptions, surveyor remarks
 
-"survey_status": [
-  "not_started",
-  "scheduled",
-  "in_progress",
-  "completed"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (claim_id, survey_id, grievance_id, receipt_id,
+    correction_id) that the model cannot know until
+    a prior tool returns it
 
-"payment_status": [
-  "not_initiated",
-  "pending",
-  "credited",
-  "failed"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"damage_severity": [
-  "low",
-  "moderate",
-  "high",
-  "severe"
-]
+calamity_declaration_status:
+  ["not_declared", "declared", "relief_operations_open",
+   "relief_operations_closed"]
 
-"grievance_category": [
-  "claim_rejected",
-  "survey_delay",
-  "incorrect_assessment",
-  "payment_delay",
-  "eligibility_issue"
-]
+calamity_type:
+  ["flood", "drought", "cyclone", "hailstorm",
+   "landslide", "earthquake", "cold_wave",
+   "heat_wave", "pest_attack", "fire",
+   "cloud_burst", "unseasonal_rain"]
 
----
+claim_category:
+  ["crop_loss", "house_damage", "livestock_loss",
+   "human_casualty", "fishing_vessel_damage",
+   "input_loss"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+claim_status:
+  ["not_submitted", "submitted", "survey_pending",
+   "survey_done", "approved", "rejected",
+   "payment_initiated", "payment_credited",
+   "disputed"]
 
-1. sdrfndrf_generate_otp  
-2. sdrfndrf_verify_otp  
-3. sdrfndrf_check_disaster_status  
-4. sdrfndrf_check_location_eligibility  
-5. sdrfndrf_report_damage  
-6. sdrfndrf_submit_claim  
-7. sdrfndrf_track_claim_status  
-8. sdrfndrf_track_survey_status  
-9. sdrfndrf_get_assessment_result  
-10. sdrfndrf_track_payment  
+survey_status:
+  ["not_assigned", "assigned", "in_progress",
+   "completed", "disputed"]
 
----
+payment_status:
+  ["not_initiated", "pending", "credited", "failed",
+   "disputed", "resolved"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+house_damage_category:
+  ["fully_damaged", "severely_damaged",
+   "partially_damaged"]
 
-- sdrfndrf_upload_evidence  
-- sdrfndrf_calculate_relief_amount  
-- sdrfndrf_resolve_location_ambiguity  
-- sdrfndrf_cancel_claim  
-- sdrfndrf_check_claim_window  
-- sdrfndrf_raise_grievance  
-- sdrfndrf_track_grievance_status  
+crop_type:
+  ["irrigated", "rain_fed", "perennial",
+   "horticulture"]
 
----
+livestock_category:
+  ["milch_animal_large", "milch_animal_small",
+   "draught_animal", "poultry", "pig",
+   "rabbit", "sheep_goat"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+grievance_category:
+  ["survey_not_conducted", "survey_result_incorrect",
+   "payment_not_received", "payment_wrong_amount",
+   "claim_wrongly_rejected", "claim_window_missed",
+   "duplicate_claim_error"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (disaster declared, location eligible, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+fund_type:
+  ["sdrf", "ndrf"]
 
----
+correction_type:
+  ["wrong_area", "wrong_crop_type",
+   "wrong_damage_category", "wrong_livestock_count",
+   "bank_account_mismatch", "survey_date_error"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+Each tool description must contain (in order):
 
----
+1. WHAT IT DOES — one sentence stating the action
 
-## PARAMETER RULES
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires calamity_declaration_status:
+    declared for the district and claim window
+    status: open")
+   NEVER name other tools.
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - sdrfndrf_generate_otp
-  - sdrfndrf_verify_otp
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "aadhaar_number must be exactly 12 digits;
+    area_hectares must be greater than 0;
+    calamity_event_id must correspond to a declared
+    event in the farmer's district")
 
----
+4. RETURNS — key fields in the success response
+   (e.g. "returns claim_id, claim_category,
+    estimated_relief_amount, and
+    survey_scheduled_date")
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not assess actual loss; does not
+    disburse payment; does not override survey
+    findings")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if no calamity has been declared
+    for the district, if the claim window has closed,
+    if the farmer has already submitted a claim for
+    the same calamity event and loss category, or
+    if land records are not verified")
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## OUTPUT FORMAT
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-Return ONLY a JSON array.
+  - claim submitted before calamity is declared
+    (invalid)
+  - claim submitted after claim window closes
+  - duplicate claim for same calamity and category
+  - survey not conducted within expected window
+  - survey result shows lower damage than claimed
+  - claim rejected based on survey findings
+  - rejection disputed within 15-day window
+  - rejection disputed after 15-day window expires
+  - payment credited but less than expected
+    (partial relief due to land area cap)
+  - house damage claim where house is in
+    disputed ownership
+  - livestock loss claim without supporting
+    mortality certificate
+  - grievance raised before any claim submitted
+    (invalid)
+  - farmer covered under both SDRF (state event)
+    and NDRF (national event escalation) —
+    understanding which fund applies
+  - correction requested after payment is
+    already credited
 
-Each tool must follow this structure:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"sdrf_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"sdrf_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
-  "name": "sdrfndrf_example_tool",
-  "description": "...",
+  "name": "sdrf_example_tool",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 5 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers PMFBY premium-based insurance,
+    PM-KISAN income support, MSP procurement,
+    eNAM mandi trade, soil health cards, or
+    weather forecasting
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support full disaster relief lifecycle workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

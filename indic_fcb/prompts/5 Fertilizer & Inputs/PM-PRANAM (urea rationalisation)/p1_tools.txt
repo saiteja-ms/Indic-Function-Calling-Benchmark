@@ -1,321 +1,558 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-PM-PRANAM (Promotion of Alternate Nutrients for Agriculture Management)
-service on the UMANG app.
+Your task: Generate tool schemas for the PM-PRANAM
+(PM Programme for Restoration, Awareness, Nourishment
+and Amelioration of Mother Earth) service on the
+UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+PM-PRANAM incentivises states and farmers to reduce
+chemical fertilizer use (especially urea) and shift
+to alternate nutrients — nano urea, organic fertilizers,
+bio-stimulants, and soil amendments. It tracks subsidy
+savings from reduced fertilizer use and channels a
+portion back to states as grants. On UMANG, farmers
+can check their nano urea adoption status, access
+organic farming incentive applications, track
+alternative nutrient subsidy benefits, check village-
+level soil health improvement progress, and access
+state-specific PM-PRANAM incentive programmes.
 
----
+This usecase is DISTINCT from iFMS (fertilizer subsidy
+DBT for chemical fertilizers) and SHC (soil testing).
+PM-PRANAM focuses on the INCENTIVE and TRANSITION
+layer — rewarding reduced chemical use and adoption
+of alternatives.
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Tracking fertilizer usage (especially urea)
-- Checking eligibility for incentive programs
-- Recommending alternative fertilizers
-- Monitoring reduction in chemical fertilizer usage
-- Incentive calculation (indirect / state-driven)
-- Awareness and advisory dissemination
-- Reporting compliance
-- Grievance handling
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Authentication is REQUIRED for personalized tracking:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Aggregate incentive model:
-  PM-PRANAM incentives are primarily calculated at
-  state/district level, not purely individual farmer level.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Behavioral dependency:
-  Benefits depend on reduction in urea usage compared to baseline.
+To support all three axes, the tool set MUST include:
 
-- Baseline requirement:
-  Historical fertilizer usage must exist to measure reduction.
+PUBLIC TOOLS (no session_token required) — at least 5:
+  Scheme information, nano urea product registry,
+  organic input dealer lookup, and state incentive
+  programme details are public. Enable single-turn,
+  single-step, simple test cases.
 
-- Advisory-driven system:
-  Scheme promotes:
-    - organic fertilizers
-    - biofertilizers
-    - balanced nutrient usage
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_nano_urea_product_info + find_organic_input_dealer
+  - get_state_incentive_programme + get_subsidy_saving_status
+  - get_adoption_status + get_incentive_payment_status
+  - get_village_soil_health_progress + get_state_incentive_programme
 
-- No direct cash transfer:
-  Incentives are not directly transferred to farmers in most cases;
-  benefits may be indirect (subsidy support, infrastructure, etc.).
+CHAIN-CAPABLE TOOLS — at least 5:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Data dependency:
-  Usage tracking may rely on:
-    - fertilizer purchase records (iFMS)
-    - declared crop patterns
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover chemical fertilizer
+  subsidy DBT (iFMS), soil sample collection (SHC),
+  crop advisory (ATMA), PM-KISAN, PMFBY, MSP
+  procurement, or weather forecasting — these belong
+  to other UMANG services and enable irrelevance
+  test cases.
 
-- Compliance requirement:
-  Farmers must adhere to recommended usage patterns.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Grievances should ONLY be raised after checking usage or incentive status.
+Each tool description must be SELF-CONTAINED.
 
----
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires enrolment_status: approved and
+     adoption_verification_status: verified")
+  ✓ Return value schemas
+    ("returns incentive_amount, payment_status,
+     and next_review_date")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-Tool descriptions MUST encode valid state transitions:
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- usage_status:
-  not_recorded → recorded → analyzed
+Example — CORRECT description:
+  "Applies for a state PM-PRANAM incentive grant for
+   a farmer who has demonstrably reduced chemical
+   fertilizer use in the current season. Requires an
+   authenticated session, an enrolment_status of
+   not_enrolled, a verified soil health card showing
+   reduced nutrient deficit, and an active state
+   PM-PRANAM programme for the district. Returns
+   application_id, incentive_category, and expected
+   review date. Fails if the farmer is already
+   enrolled in the incentive programme for the
+   current season, if the state has no active
+   PM-PRANAM programme, or if no soil health
+   card is linked to the farmer. Does NOT disburse
+   incentive payments or verify fertilizer purchase
+   records."
 
-- compliance_status:
-  non_compliant → partially_compliant → compliant
+Example — INCORRECT description:
+  "Applies for PM-PRANAM incentive. Call
+   pranam_authenticate first, then
+   pranam_get_state_incentive_programme to confirm
+   programme is active, then call this tool."
 
-- incentive_status:
-  not_eligible → eligible → calculated → allocated
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- advisory_status:
-  not_requested → generated → updated → obsolete
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Nano urea product information and approved
+    brand lookup
+  - Nano urea adoption status check for farmer
+  - Organic input and bio-stimulant dealer finder
+  - Organic farming incentive programme lookup
+    by state
+  - PM-PRANAM incentive application
+  - Application and enrolment status tracking
+  - Fertilizer usage reduction verification
+    (compares current vs previous season purchase
+    records)
+  - Incentive payment status tracking
+  - Village-level soil health improvement progress
+    (aggregate data)
+  - State subsidy saving status and grant
+    disbursement tracking
+  - Alternative nutrient product subsidy
+    eligibility check
+  - Training programme for organic/natural farming
+    lookup
+  - Grievance filing for incentive denial
+  - Grievance status tracking
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+These are real PM-PRANAM rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+- PM-PRANAM incentives are state-specific; not
+  all states have active programmes; eligibility
+  depends on the state's participation.
+- Nano urea (liquid) is approved by the Fertilizer
+  Control Order as a supplement but NOT a full
+  replacement for urea; approved brands are listed
+  by the Ministry of Chemicals and Fertilizers.
+- Fertilizer use reduction is measured against the
+  farmer's own purchase history in iFMS from the
+  previous season; a minimum 10% reduction qualifies
+  for incentive.
+- Incentive amounts vary by state and the degree
+  of reduction achieved; typically Rs 500-2000
+  per acre per season.
+- Incentive disbursement is via DBT to Aadhaar-linked
+  bank account after verification.
+- A farmer must have an issued Soil Health Card
+  to apply for the PM-PRANAM incentive.
+- Village-level data is aggregated and anonymised;
+  individual farmer data is not visible to others.
+- State subsidy savings are calculated centrally
+  by the Ministry and disbursed as grants to states.
+- A grievance about incentive denial requires the
+  specific application_id.
+- Training programmes are conducted through KVKs
+  and are distinct from the incentive application.
 
-The toolset MUST support scenarios where:
-- no baseline data available
-- farmer not reducing urea usage
-- excessive or imbalanced fertilizer usage
-- mismatch between crop and fertilizer recommendation
-- incorrect or missing usage data
-- attempting to claim direct benefit (not supported)
-- conflicting data from purchase vs declared usage
-- partial compliance scenarios
-- outdated advisory applied
-- state-level incentive not applicable to individual farmer
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Descriptions must explicitly reflect these cases.
+enrolment_status:
+  not_enrolled → applied → under_review → approved
+               → rejected → enrolled
 
----
+adoption_verification_status:
+  not_verified → pending → verified → disputed
+               → failed
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+incentive_payment_status:
+  not_initiated → calculated → approved → disbursed
+                → failed → disputed
 
-Each tool description MUST include:
-- validation rules (usage data availability, crop linkage)
-- rejection conditions (no reduction, non-compliance)
-- failure scenarios (data mismatch, invalid advisory)
+programme_status:
+  not_active → active → suspended → closed
 
-Tools must NOT assume success-only execution.
+reduction_verification_status:
+  not_checked → sufficient_reduction
+              → insufficient_reduction → disputed
 
----
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected → escalated
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-The toolset MUST support:
-- farmer checking fertilizer usage
-- receiving alternative recommendations
-- tracking reduction in urea usage
-- assessing compliance status
-- viewing incentive eligibility (if applicable)
-- handling mismatch or incorrect data
-- grievance escalation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+  pranam_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-## TOOL DESIGN REQUIREMENTS
+  pranam_get_nano_urea_product_info        [public]
+  pranam_find_organic_input_dealer         [public]
+  pranam_get_state_incentive_programme     [public]
+  pranam_get_village_soil_health_progress  [public]
+  pranam_get_alternative_nutrient_subsidy  [public]
+  pranam_get_training_programmes           [public]
+  pranam_check_nano_urea_adoption_status   [authenticated]
+  pranam_check_reduction_eligibility       [authenticated]
+  pranam_apply_for_incentive               [authenticated]
+  pranam_get_application_status            [authenticated]
+  pranam_get_incentive_payment_status      [authenticated]
+  pranam_get_subsidy_saving_status         [public]
+  pranam_raise_grievance                   [authenticated]
+  pranam_track_grievance_status            [public]
 
-- Naming format: pmpranam_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+(public = session_token NOT required;
+ authenticated = session_token required)
 
----
+You MAY add additional tools beyond these 15 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - pranam_resend_otp
+  - pranam_get_approved_nano_urea_brands
+  - pranam_get_incentive_calculation_details
+  - pranam_download_incentive_certificate
+  - pranam_get_helpline_number
+  - pranam_get_organic_farming_guidelines
+  - pranam_cancel_application
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that access private
+    adoption, application, and payment data
+    [TYPE_ONLY]"
 }
 
-"land_parcel_id": {
+"application_id": {
   "type": "string",
-  "description": "Unique identifier of the land parcel."
+  "description": "Unique PM-PRANAM incentive
+    application identifier [EXACT]"
 }
 
----
+"state": {
+  "type": "string",
+  "description": "Indian state name in lowercase
+    underscore form [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"district": {
+  "type": "string",
+  "description": "Indian district name in lowercase
+    underscore form [EXACT]"
+}
 
-"fertilizer_type": [
-  "urea",
-  "dap",
-  "mop",
-  "npk",
-  "organic",
-  "biofertilizer"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"usage_status": [
-  "not_recorded",
-  "recorded",
-  "analyzed"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"compliance_status": [
-  "non_compliant",
-  "partially_compliant",
-  "compliant"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    application IDs, dates, incentive amounts in
+    rupees, reduction percentage, state/district
+    names, season identifiers, product brand codes,
+    boolean flags, fixed identifiers
 
-"incentive_status": [
-  "not_eligible",
-  "eligible",
-  "calculated",
-  "allocated"
-]
+  [SUBSTRING]
+    For free-text grievance descriptions, incentive
+    denial reasons, organic input dealer names in
+    search context, training programme descriptions
 
-"advisory_type": [
-  "urea_reduction",
-  "balanced_nutrition",
-  "organic_alternative"
-]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (application_id, grievance_id, certificate_id)
+    that the model cannot know until a prior tool
+    returns it
 
-"grievance_category": [
-  "incorrect_usage_data",
-  "no_incentive_received",
-  "advisory_issue",
-  "data_mismatch",
-  "eligibility_issue"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+enrolment_status:
+  ["not_enrolled", "applied", "under_review",
+   "approved", "rejected", "enrolled"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+adoption_verification_status:
+  ["not_verified", "pending", "verified",
+   "disputed", "failed"]
 
-1. pmpranam_generate_otp  
-2. pmpranam_verify_otp  
-3. pmpranam_get_fertilizer_usage  
-4. pmpranam_analyze_usage_pattern  
-5. pmpranam_get_recommendation  
-6. pmpranam_check_compliance  
-7. pmpranam_check_incentive_eligibility  
-8. pmpranam_track_incentive_status  
+incentive_payment_status:
+  ["not_initiated", "calculated", "approved",
+   "disbursed", "failed", "disputed"]
 
----
+programme_status:
+  ["not_active", "active", "suspended", "closed"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+reduction_verification_status:
+  ["not_checked", "sufficient_reduction",
+   "insufficient_reduction", "disputed"]
 
-- pmpranam_get_alternative_fertilizers  
-- pmpranam_get_usage_history  
-- pmpranam_resolve_usage_ambiguity  
-- pmpranam_get_state_incentive_details  
-- pmpranam_report_usage  
-- pmpranam_raise_grievance  
-- pmpranam_track_grievance_status  
+grievance_status:
+  ["not_filed", "filed", "under_review", "resolved",
+   "rejected", "escalated"]
 
----
+alternative_input_type:
+  ["nano_urea_liquid", "nano_dap_liquid",
+   "biofertilizer", "compost", "vermicompost",
+   "green_manure", "bio_stimulant",
+   "humic_acid", "seaweed_extract"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+incentive_category:
+  ["urea_reduction", "pk_reduction",
+   "full_organic_transition", "nano_urea_adoption"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (usage data, authentication, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+season:
+  ["kharif", "rabi", "summer"]
 
----
+training_mode:
+  ["in_person", "online", "hybrid"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+grievance_category:
+  ["incentive_denied", "payment_not_received",
+   "wrong_amount", "verification_rejected",
+   "programme_not_available", "application_rejected"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must contain (in order):
 
-## PARAMETER RULES
+1. WHAT IT DOES — one sentence stating the action
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - pmpranam_generate_otp
-  - pmpranam_verify_otp
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires programme_status: active for
+    the farmer's state and enrolment_status:
+    not_enrolled for the current season")
+   NEVER name other tools.
 
----
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "state must have an active PM-PRANAM
+    programme; season must be one of the supported
+    enum values; aadhaar_number must be exactly
+    12 digits")
 
-## TOOL USAGE CONSTRAINTS (MANDATORY)
+4. RETURNS — key fields in the success response
+   (e.g. "returns application_id, incentive_category,
+    expected_incentive_amount, and review_date")
 
-- Tools MUST only be called when required.
-- Tools MUST NOT be called if prerequisites are not satisfied.
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not disburse incentive payments;
+    does not verify fertilizer purchase records;
+    does not replace the soil health card requirement")
 
-## PARAMETER CONSTRAINTS (MANDATORY)
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the state has no active PM-PRANAM
+    programme, if the farmer is already enrolled for
+    the current season, if no soil health card is
+    linked to the farmer, or if the reduction in
+    fertilizer use is below the 10% minimum threshold")
 
-- Parameters MUST be derived from user input or prior tool outputs.
-- No fabricated values allowed.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## TOOL SELECTION CONSTRAINTS (MANDATORY)
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-- Tool selection MUST match user intent.
+  - farmer applies for incentive but state has no
+    active PM-PRANAM programme
+  - farmer's reduction is below 10% threshold
+    (insufficient_reduction)
+  - duplicate application for same season
+  - soil health card not linked to farmer
+    (application rejected)
+  - nano urea brand purchased is not on the
+    approved brand list
+  - incentive calculated but payment failed due
+    to wrong bank account
+  - farmer queries subsidy for nano urea but
+    it is a supplement not a subsidised product
+    (outside iFMS scope — irrelevance boundary
+    between PM-PRANAM and iFMS)
+  - village progress data requested for a village
+    not yet in the PM-PRANAM monitoring network
+  - incentive grievance filed before application
+    is reviewed (invalid)
+  - state programme suspended mid-season after
+    farmer has already applied
+  - reduction verified but less than previous
+    year's reduction (tier downgrade)
 
-## MINIMALITY CONSTRAINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Use minimum number of tools required.
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
 
-## AMBIGUITY HANDLING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Do not call tools if intent is unclear.
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
 
-## OUTPUT STRICTNESS
+Example structure:
 
-- Output MUST be valid JSON with no extra fields.
+{"name":"pranam_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"pranam_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
 
-## DETERMINISM REQUIREMENT
-
-- Tool outputs are deterministic given inputs.
-
----
-
-## STRICT OUTPUT VALIDATION (MANDATORY)
-
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
-
----
-
-## OUTPUT FORMAT
-
-Return ONLY a JSON array.
-
-Each tool must follow this structure:
+Each line follows this structure:
 
 {
-  "name": "pmpranam_example_tool",
-  "description": "...",
+  "name": "pranam_example_tool",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before producing output, verify ALL of these:
+
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 5 tools are public (no session_token)
+  ✓ at least 4 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers chemical fertilizer DBT (iFMS),
+    soil sample collection (SHC), crop advisory
+    (ATMA), PM-KISAN, PMFBY, MSP procurement,
+    or weather forecasting
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

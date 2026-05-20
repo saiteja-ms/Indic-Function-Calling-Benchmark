@@ -1,257 +1,519 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-eNAM (National Agriculture Market) mandi price discovery service
+Your task: Generate tool schemas for the eNAM
+(Electronic National Agriculture Market) service
 on the UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer and trader interactions and edge cases.
+eNAM is the unified national online trading platform
+for agricultural commodities connecting farmers,
+traders, FPOs, and mandis across India. It enables
+farmers to list produce lots, receive bids from
+traders across mandis, track payments, and raise
+disputes — all through the UMANG interface.
 
----
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-## CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Design tools that enable realistic workflows such as:
-- Fetching commodity prices across mandis
-- Searching mandis by location
-- Comparing prices across regions
-- Viewing historical price trends
-- Filtering by commodity, quality, and date
-- Discovering best price (decision support)
-- Viewing arrival quantities and demand trends
-- Accessing mandi details and timings
-- Grievance handling
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
----
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Authentication is OPTIONAL:
-  Price discovery is public.
-  Authentication is required only for preferences and grievances.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Location specificity:
-  Prices are mandi-specific.
-  Queries must include state/district/mandi.
+To support all three axes, the tool set MUST include:
 
-- Commodity standardization:
-  Only supported commodities can be queried.
+PUBLIC TOOLS (no session_token required) — at least 5:
+  Price lookups and mandi information are public.
+  Enable single-turn, single-step, simple test cases.
 
-- Price variation:
-  Prices depend on:
-    - mandi
-    - quality grade
-    - arrival quantity
-    - date/time
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_commodity_price for two different commodities
+  - get_mandi_details + get_commodity_arrivals
+  - get_price_history + get_price_trend
+  - get_lot_status + get_payment_status
 
-- Real-time limitation:
-  Prices may be delayed depending on mandi updates.
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Historical data limitation:
-  Historical trends are limited to available records.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover PM-KISAN income support,
+  PMFBY crop insurance, MSP procurement at FCI godowns,
+  fertilizer subsidy, soil health cards, weather
+  forecasting, or KCC loans — these belong to other
+  UMANG services and enable irrelevance test cases.
 
-- Informational system ONLY:
-  These tools do NOT execute buying/selling transactions.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Grievances should ONLY be raised after verifying price or mandi data.
+Each tool description must be SELF-CONTAINED.
 
----
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires lot_status: graded and
+     listing_status: not_listed")
+  ✓ Return value schemas
+    ("returns lot_id, assigned_mandi_id, and
+     auction_start_time")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-Tool descriptions MUST encode valid data query states:
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- query_state:
-  invalid_query → valid_query → filtered → aggregated
+Example — CORRECT description:
+  "Lists a graded produce lot on the eNAM platform
+   for open online auction. Requires an authenticated
+   seller session and a lot with grading_status:
+   completed and listing_status: not_listed. Returns
+   listing_id, scheduled auction_start_time, and
+   reserve_price. Fails if the lot is already listed,
+   if grading is pending, if the commodity is not
+   traded at the assigned mandi, or if the listing
+   window for the auction date is closed. Does NOT
+   accept bids or confirm sale."
 
-- data_availability:
-  not_found → partial_data → complete_data
+Example — INCORRECT description:
+  "Lists a lot for auction. Call enam_authenticate
+   first, then enam_get_lot_grading_status to confirm
+   grading is complete, then call this tool."
 
-Tools must define:
-- when queries are valid
-- when results may be empty or partial
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Design tools that enable realistic workflows:
+  - Farmer / seller authentication
+  - Farmer registration and profile on eNAM
+  - Commodity price lookup at a specific mandi
+  - Price history and trend analysis
+  - Mandi details and holiday calendar
+  - Commodity arrivals at a mandi
+  - Produce lot creation and weighment entry
+  - Lot grading and quality assay
+  - Lot listing for auction
+  - Auction status and bid tracking
+  - Sale confirmation and invoice generation
+  - Payment status tracking
+  - Payment dispute filing
+  - Lot transfer between mandis
+  - FPO / trader lookup by commodity and mandi
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The toolset MUST support scenarios where:
-- invalid commodity name
-- unsupported mandi/location
-- no price data available
-- partial data (some mandis missing)
-- conflicting filters (e.g., wrong date range)
-- empty results
-- stale/outdated prices
-- ambiguous queries (multiple mandis with same name)
+These are real eNAM rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-Descriptions must explicitly reflect these cases.
+- A farmer must be registered on eNAM with a valid
+  Aadhaar-linked account before creating lots.
+- Produce lots must be weighed at the mandi
+  before grading.
+- Grading must be completed by an accredited assayer
+  before a lot can be listed for auction.
+- Auction is open for a fixed window (typically
+  30-60 minutes); bids are sealed during the window.
+- A lot can only be listed at the mandi where it
+  was physically deposited.
+- Payment must be made within T+1 working day
+  after sale confirmation.
+- Disputes about payment can only be raised after
+  sale_status: confirmed.
+- A lot cannot be relisted once auction_status
+  is completed.
+- Price data is sourced from Agmarknet and updated
+  daily at mandi close.
+- MSP is the floor price; lots cannot be sold below
+  MSP for notified commodities.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+farmer_registration_status:
+  not_registered → registered → verified → suspended
 
-Each tool description MUST include:
-- validation rules (commodity, location, time range)
-- failure conditions (no data, invalid filters)
-- ambiguity handling (multiple matches)
+lot_status:
+  not_created → created → weighed → graded
+             → listed → under_auction → sold
+             → payment_pending → payment_received
+             → disputed
 
-Tools must NOT assume successful data retrieval.
+listing_status:
+  not_listed → listed → auction_in_progress
+             → auction_closed → relisted → expired
 
----
+auction_status:
+  not_started → in_progress → completed → no_bid
+              → cancelled
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+sale_status:
+  not_confirmed → confirmed → invoice_generated
+                → cancelled
 
-The toolset MUST support:
-- farmer checking current mandi prices
-- comparing prices across mandis
-- identifying best mandi to sell
-- analyzing historical price trends
-- handling missing or invalid data scenarios
-- grievance escalation
+payment_status:
+  not_initiated → pending → credited → failed
+                → disputed → resolved
 
----
+dispute_status:
+  not_filed → filed → under_review → resolved
+            → rejected → escalated
 
-## TOOL DESIGN REQUIREMENTS
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-- Naming format: enam_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+  enam_authenticate_seller
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+  enam_get_commodity_price             [public]
+  enam_get_price_history               [public]
+  enam_get_mandi_details               [public]
+  enam_get_commodity_arrivals          [public]
+  enam_get_mandi_holiday_calendar      [public]
+  enam_register_farmer                 [authenticated]
+  enam_create_lot                      [authenticated]
+  enam_get_lot_grading_status          [authenticated]
+  enam_list_lot_for_auction            [authenticated]
+  enam_get_auction_status              [authenticated]
+  enam_get_lot_status                  [authenticated]
+  enam_confirm_sale                    [authenticated]
+  enam_get_payment_status              [authenticated]
+  enam_raise_payment_dispute           [authenticated]
+  enam_track_dispute_status            [authenticated]
+
+(public = session_token NOT required;
+ authenticated = session_token required)
+
+You MAY add additional tools beyond these 16 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - enam_resend_otp
+  - enam_get_price_trend
+  - enam_download_invoice
+  - enam_transfer_lot_to_mandi
+  - enam_find_registered_traders
+  - enam_get_assayer_contact
+  - enam_get_helpline_number
+  - enam_cancel_listing
+
+Do not force-add tools that have no real eNAM analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"aadhaar_number": {
+  "type": "string",
+  "description": "12-digit Aadhaar number of the
+    farmer or seller [EXACT]"
+}
+
+"mobile_number": {
+  "type": "string",
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
+}
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after optional authentication. Required for preference and grievance tools."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that create, modify,
+    or access private lot, auction, and payment
+    data [TYPE_ONLY]"
 }
 
-"location": {
+"mandi_id": {
   "type": "string",
-  "description": "State, district, or mandi name."
+  "description": "Unique eNAM mandi identifier
+    [EXACT]"
 }
 
-"commodity": {
+"lot_id": {
   "type": "string",
-  "description": "Standardized commodity name (e.g., paddy, wheat, cotton)."
+  "description": "Unique eNAM produce lot
+    identifier [EXACT]"
 }
 
----
+"commodity_code": {
+  "type": "string",
+  "description": "Standardised commodity code
+    as used in eNAM / Agmarknet [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"price_type": ["modal", "minimum", "maximum"]
+Every parameter description must end with exactly one
+of these markers:
 
-"quality_grade": ["A", "B", "C", "FAQ", "premium"]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    mandi IDs, lot IDs, commodity codes, dates, prices
+    in rupees per quintal, weight in quintals,
+    boolean flags, fixed identifiers
 
-"time_range": ["today", "3_day", "7_day", "30_day"]
+  [SUBSTRING]
+    For free-text commodity names when used in search
+    context, dispute description, grievance details,
+    village or mandi names in free-text search
 
-"data_status": ["available", "partial", "not_available"]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (lot_id, listing_id, auction_id, invoice_id,
+    dispute_id) that the model cannot know until
+    a prior tool returns it
 
-"grievance_category": [
-  "incorrect_price",
-  "missing_mandi_data",
-  "delayed_update",
-  "wrong_location",
-  "commodity_not_found"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+farmer_registration_status:
+  ["not_registered", "registered", "verified",
+   "suspended"]
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+lot_status:
+  ["not_created", "created", "weighed", "graded",
+   "listed", "under_auction", "sold",
+   "payment_pending", "payment_received", "disputed"]
 
-1. enam_get_mandi_prices  
-2. enam_search_mandis  
-3. enam_compare_prices  
-4. enam_get_price_trends  
-5. enam_get_best_price  
+listing_status:
+  ["not_listed", "listed", "auction_in_progress",
+   "auction_closed", "relisted", "expired"]
 
----
+auction_status:
+  ["not_started", "in_progress", "completed",
+   "no_bid", "cancelled"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+sale_status:
+  ["not_confirmed", "confirmed", "invoice_generated",
+   "cancelled"]
 
-- enam_get_arrival_data  
-- enam_get_mandi_details  
-- enam_filter_prices  
-- enam_resolve_mandi_ambiguity  
-- enam_set_preferences  
-- enam_raise_grievance  
-- enam_track_grievance_status  
+payment_status:
+  ["not_initiated", "pending", "credited", "failed",
+   "disputed", "resolved"]
 
----
+dispute_status:
+  ["not_filed", "filed", "under_review", "resolved",
+   "rejected", "escalated"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+grading_status:
+  ["not_started", "in_progress", "completed", "failed"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (valid commodity/location inputs)  
-3. What it does NOT do  
-4. Failure conditions (no data, invalid query, ambiguity)
+price_trend:
+  ["rising", "falling", "stable", "volatile"]
 
----
+commodity_category:
+  ["cereal", "pulse", "oilseed", "vegetable",
+   "fruit", "spice", "fibre", "flower", "other"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+dispute_reason:
+  ["payment_not_received", "wrong_amount_credited",
+   "payment_delay", "lot_weight_dispute",
+   "grading_dispute", "auction_irregularity"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must contain (in order):
 
-## PARAMETER RULES
+1. WHAT IT DOES — one sentence stating the action
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be required ONLY for:
-  - preference tools
-  - grievance tools
-- It MUST NOT be required for public tools
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires lot_status: graded and
+    listing_status: not_listed")
+   NEVER name other tools.
 
----
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "mandi_id must be a registered eNAM mandi;
+    commodity_code must be in the Agmarknet registry;
+    weight_quintals must be greater than 0")
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+4. RETURNS — key fields in the success response
+   (e.g. "returns lot_id, assigned_mandi_id,
+    auction_start_time, and reserve_price")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not accept bids; does not transfer
+    physical custody of the produce")
 
----
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the lot is already listed, if
+    grading is pending, if the commodity is not
+    traded at the assigned mandi, or if the listing
+    window for the auction date is closed")
 
-## OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Return ONLY a JSON array.
+Descriptions across the tool set must collectively
+support these real-world scenarios:
 
-Each tool must follow this structure:
+  - lot listed but auction received no bids
+  - lot relisted after no_bid auction
+  - sale confirmed but payment not received
+    within T+1 SLA
+  - payment dispute filed before sale confirmation
+    (invalid — sale must be confirmed first)
+  - lot grading failed due to quality rejection
+  - commodity price below MSP (cannot sell)
+  - mandi closed on a holiday during auction window
+  - farmer not registered but trying to list a lot
+  - duplicate lot creation for the same produce
+  - lot weight disputed by buyer after sale
+  - auction cancelled due to mandi technical outage
+  - payment credited but wrong amount
+  - dispute resolved but farmer wants to escalate
+  - price history requested for a commodity not
+    traded at the specified mandi
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"enam_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"enam_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "enam_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 5 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers PM-KISAN, PMFBY, MSP procurement
+    at FCI godowns, fertilizer subsidy, soil health
+    cards, weather forecasting, or KCC loans
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multiple user intents and workflows  
-4. Clearly define query/data state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

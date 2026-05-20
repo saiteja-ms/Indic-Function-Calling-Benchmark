@@ -1,276 +1,563 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-Meghdoot (agro-advisory alerts) and Damini (lightning alerts)
-service on the UMANG app.
+Your task: Generate tool schemas for the Meghdoot
+(agro-meteorological advisory) and Damini (real-time
+lightning alert) services on the UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+Meghdoot delivers block-level 5-day agro-met advisories
+to farmers via SMS, voice, and app. Damini provides
+real-time lightning detection and strike alerts with
+location-based warnings. Together they form the
+weather-alert and field-safety layer of the Kisan
+advisory ecosystem.
 
----
+This usecase is DISTINCT from Kisan Suvidha weather
+forecasts (which are district-level, general-purpose)
+and from ATMA crop advisories (which are crop-management
+focused). Meghdoot/Damini operates at block level with
+agro-met integration and real-time lightning safety.
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Retrieving real-time lightning alerts (Damini)
-- Fetching weather-based agro advisories (Meghdoot)
-- Location-based alert queries
-- Severe weather warnings (rain, storm, heatwave)
-- Safety advisory recommendations
-- Alert subscription and notification preferences
-- Alert history retrieval
-- Grievance handling
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Public vs authenticated access:
-  - Basic alerts (lightning proximity, weather alerts) are PUBLIC
-  - Subscription, preferences, and history REQUIRE authentication
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Location specificity:
-  Alerts are generated based on precise location (village/district/GPS).
-  Alerts without location are INVALID.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Real-time lightning alerts (Damini):
-  - Based on satellite/sensor data
-  - Valid only within a short time window (~minutes)
-  - Alerts expire quickly
+To support all three axes, the tool set MUST include:
 
-- Agro-advisory alerts (Meghdoot):
-  - Based on crop + weather + location
-  - Generated periodically (not real-time like lightning)
+PUBLIC TOOLS (no session_token required) — at least 6:
+  Meghdoot and Damini are safety and advisory services.
+  The majority of lookups must be public so farmers
+  can access warnings without authentication barriers.
+  Enable single-turn, single-step, simple test cases.
 
-- Alert validity:
-  Old alerts MUST NOT be treated as active alerts.
+PARALLEL-SAFE TOOL PAIRS — at least 5 pairs:
+  Tools that read disjoint data and never mutate
+  shared state. Enable parallel-multiple cases.
+  Examples of natural pairs:
+  - current lightning status + 5-day agro-met forecast
+  - block-level rainfall advisory + crop-stage alert
+  - active warning lookup + nearest safe shelter finder
+  - subscription status + alert history
 
-- Subscription requirement:
-  Farmers must subscribe to receive notifications.
+CHAIN-CAPABLE TOOLS — at least 4:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Safety-critical nature:
-  Lightning alerts MUST include safety recommendations.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover general weather
+  forecasting beyond agro-met context (IMD general
+  public forecasts belong to Kisan Suvidha), crop
+  management advisories (ATMA), soil testing (SHC),
+  market prices (eNAM), PM-KISAN income support,
+  PMFBY crop insurance, or PM-KUSUM solar pumps
+  — these belong to other UMANG services and enable
+  irrelevance test cases.
 
-- Grievances should ONLY be raised after verifying alert availability/status.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must be SELF-CONTAINED.
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-Tool descriptions MUST encode valid state transitions:
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires subscription_status: active and
+     location_status: verified")
+  ✓ Return value schemas
+    ("returns subscription_id, active delivery
+     channels, and next advisory window")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-- alert_status:
-  generated → active → expired
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- subscription_status:
-  not_subscribed → subscribed → unsubscribed
+Example — CORRECT description:
+  "Retrieves the current real-time lightning strike
+   density map and active strike alerts for a given
+   block within the last 60 minutes. No authentication
+   required. Returns strike_count, last_strike_time,
+   distance_km_from_location, and safety_level (safe,
+   caution, danger). Fails if the Damini sensor network
+   does not cover the specified block, if coordinates
+   are outside India, or if the sensor feed is
+   temporarily offline. Does NOT issue evacuation
+   orders or contact emergency services."
 
-- alert_query_state:
-  invalid_location → valid_query → alert_available / alert_not_available
+Example — INCORRECT description:
+  "Retrieves lightning strike data. Call
+   meghdoot_authenticate first, then
+   meghdoot_get_location_coverage to confirm
+   the block is covered, then call this tool."
 
-Tools must define:
-- when alerts are valid
-- when alerts are expired or unavailable
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Design tools that enable realistic workflows:
+  - Farmer authentication (light — most lookups public)
+  - Block-level 5-day agro-met advisory retrieval
+  - Current agro-met conditions (rainfall, temperature,
+    humidity, wind at block level)
+  - Crop-stage specific weather advisory lookup
+  - Real-time lightning strike status for a location
+  - Active lightning danger alert for a block
+  - Nearest safe shelter during lightning event
+  - Historical rainfall data for a block
+  - Seasonal outlook (monsoon onset and withdrawal)
+  - Subscription management for SMS/voice/push alerts
+  - Advisory delivery history lookup
+  - Alert acknowledgement (farmer confirms receipt)
+  - Location coverage check (is my block covered?)
+  - Sensor / IMD station status for a district
+  - Grievance for missed or wrong advisory
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The toolset MUST support scenarios where:
-- invalid or missing location
-- no alerts available for region
-- expired alerts being queried
-- conflicting alert types (multiple alerts simultaneously)
-- delayed or missing alert updates
-- subscription not active but user expecting alerts
-- incorrect location mapping
-- duplicate alert notifications
-- stale advisory data
+These are real Meghdoot/Damini rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-Descriptions must explicitly reflect these cases.
+- Meghdoot advisories are at block level (sub-district)
+  and updated every 12 hours using IMD AWS data.
+- Advisories are crop-stage aware and change content
+  based on the farmer's registered sowing date and
+  crop type.
+- Damini detects lightning using IITM Pune sensor
+  network; coverage is India-wide but density varies
+  by region.
+- Lightning alerts are issued when strike density
+  exceeds a threshold within a 20 km radius of the
+  farmer's registered location.
+- Safety levels: safe (no strikes within 20 km in
+  60 min), caution (1-5 strikes), danger (6+ strikes).
+- Alert subscriptions are tied to a registered
+  location (block + village); a farmer may have
+  up to 3 registered locations.
+- Advisory SMS is delivered in the farmer's preferred
+  regional language.
+- Historical rainfall is available for up to 10 years
+  at block level from the India-WRIS network.
+- Seasonal monsoon outlook is published by IMD in
+  April (southwest monsoon) and September (northeast
+  monsoon); it is probabilistic, not deterministic.
+- A grievance about a missed alert requires the
+  subscription_id and the expected alert date.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+subscription_status:
+  not_subscribed → active → paused → cancelled
 
-Each tool description MUST include:
-- validation rules (location required, valid alert type)
-- failure conditions (no alerts, expired alerts)
-- ambiguity handling (multiple alerts)
+location_status:
+  not_registered → registered → verified
 
-Tools must NOT assume alerts always exist.
+lightning_safety_level:
+  safe → caution → danger → all_clear
 
----
+advisory_freshness:
+  current → stale → outdated
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+alert_acknowledgement_status:
+  not_sent → sent → delivered → acknowledged → failed
 
-The toolset MUST support:
-- farmer checking real-time lightning alert
-- receiving agro-advisory for crops
-- reacting to severe weather alerts
-- subscribing/unsubscribing to alerts
-- handling no-alert scenarios
-- grievance escalation for missed alerts
+sensor_status:
+  online → offline → degraded
 
----
+monsoon_outlook_status:
+  not_published → published → updated → archived
 
-## TOOL DESIGN REQUIREMENTS
+grievance_status:
+  not_filed → filed → under_review → resolved
+            → rejected
 
-- Naming format:
-  - damini_verb_noun for lightning tools
-  - meghdoot_verb_noun for advisory tools
-- Lowercase, underscores only
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+  meghdoot_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes mobile_number, otp
+       returns session_token
 
-"aadhaar_number": {
-  "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
-}
+  meghdoot_get_agro_met_advisory           [public]
+  meghdoot_get_current_conditions          [public]
+  meghdoot_get_crop_stage_advisory         [public]
+  meghdoot_get_rainfall_history            [public]
+  meghdoot_get_seasonal_outlook            [public]
+  meghdoot_check_location_coverage         [public]
+  damini_get_lightning_status              [public]
+  damini_get_active_alerts                 [public]
+  damini_find_nearest_safe_shelter         [public]
+  damini_get_sensor_status                 [public]
+  meghdoot_subscribe_alerts                [authenticated]
+  meghdoot_manage_subscription             [authenticated]
+  meghdoot_get_advisory_history            [authenticated]
+  meghdoot_acknowledge_alert               [authenticated]
+  meghdoot_raise_grievance                 [authenticated]
+  meghdoot_track_grievance_status          [public]
+
+(public = session_token NOT required;
+ authenticated = session_token required)
+
+You MAY add additional tools beyond these 17 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - meghdoot_resend_otp
+  - meghdoot_register_location
+  - meghdoot_update_crop_profile
+  - meghdoot_get_block_level_forecast
+  - meghdoot_get_helpline_number
+  - damini_get_strike_history
+  - meghdoot_change_delivery_language
+
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number of the
+    farmer [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after authentication. Required for subscription and grievance tools."
+  "description": "Active authentication token
+    obtained after mobile OTP verification.
+    Required for tools that create or modify
+    subscriptions, locations, or alert records
+    [TYPE_ONLY]"
 }
 
-"location": {
+"state": {
   "type": "string",
-  "description": "Village, district, or GPS-based location."
+  "description": "Indian state name in lowercase
+    underscore form (e.g. uttar_pradesh,
+    tamil_nadu) [EXACT]"
 }
 
----
+"district": {
+  "type": "string",
+  "description": "Indian district name in lowercase
+    underscore form [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"block": {
+  "type": "string",
+  "description": "Sub-district administrative block
+    name in lowercase underscore form [EXACT]"
+}
 
-"alert_type": [
-  "lightning",
-  "rainfall",
-  "storm",
-  "heatwave",
-  "cold_wave",
-  "frost"
-]
+"subscription_id": {
+  "type": "string",
+  "description": "Unique Meghdoot alert subscription
+    identifier [EXACT]"
+}
 
-"alert_severity": ["low", "moderate", "high", "extreme"]
+"latitude": {
+  "type": "number",
+  "description": "GPS latitude coordinate of the
+    farmer's field or current location [EXACT]"
+}
 
-"time_window": ["current", "1_hour", "3_hour", "24_hour"]
+"longitude": {
+  "type": "number",
+  "description": "GPS longitude coordinate of the
+    farmer's field or current location [EXACT]"
+}
 
-"alert_status": ["active", "expired"]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"subscription_status": ["not_subscribed", "subscribed", "unsubscribed"]
+Every parameter description must end with exactly one
+of these markers:
 
-"grievance_category": [
-  "alert_not_received",
-  "incorrect_alert",
-  "delayed_alert",
-  "location_mismatch",
-  "notification_failure"
-]
+  [EXACT]
+    For enums, mobile numbers, OTPs, block/district/
+    state names, dates, GPS coordinates, subscription
+    IDs, alert IDs, rainfall amounts in mm,
+    temperature values, fixed identifiers
 
----
+  [SUBSTRING]
+    For free-text village names, grievance details,
+    alert content descriptions, shelter names,
+    advisory text descriptions
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (subscription_id, alert_id, grievance_id,
+    location_id) that the model cannot know until
+    a prior tool returns it
 
-1. damini_get_lightning_alert  
-2. damini_get_safety_advisory  
-3. meghdoot_get_weather_alert  
-4. meghdoot_get_agro_advisory  
-5. meghdoot_get_alert_history  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+subscription_status:
+  ["not_subscribed", "active", "paused", "cancelled"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+location_status:
+  ["not_registered", "registered", "verified"]
 
-- meghdoot_subscribe_alerts  
-- meghdoot_unsubscribe_alerts  
-- meghdoot_set_location_preferences  
-- damini_check_alert_validity  
-- meghdoot_resolve_alert_conflict  
-- meghdoot_raise_grievance  
-- meghdoot_track_grievance_status  
+lightning_safety_level:
+  ["safe", "caution", "danger", "all_clear"]
 
----
+advisory_freshness:
+  ["current", "stale", "outdated"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+alert_acknowledgement_status:
+  ["not_sent", "sent", "delivered", "acknowledged",
+   "failed"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (location, authentication if needed)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+sensor_status:
+  ["online", "offline", "degraded"]
 
----
+monsoon_outlook_status:
+  ["not_published", "published", "updated", "archived"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+monsoon_type:
+  ["southwest", "northeast"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+delivery_channel:
+  ["sms", "voice", "push"]
 
----
+language:
+  ["hi", "en", "ta", "te", "kn", "ml", "mr", "pa",
+   "bn", "gu", "or", "as"]
 
-## PARAMETER RULES
+crop_stage:
+  ["pre_sowing", "sowing", "vegetative", "flowering",
+   "fruiting", "ripening", "harvest", "post_harvest"]
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be required ONLY for:
-  - subscription tools
-  - grievance tools
-- It MUST NOT be required for public alert tools
+weather_parameter:
+  ["rainfall", "temperature_max", "temperature_min",
+   "humidity", "wind_speed", "wind_direction",
+   "cloud_cover", "solar_radiation"]
 
----
+forecast_horizon:
+  ["current", "next_24_hours", "next_3_days",
+   "next_5_days"]
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+grievance_category:
+  ["missed_advisory", "wrong_advisory_content",
+   "alert_not_delivered", "wrong_lightning_alert",
+   "subscription_not_active", "language_mismatch"]
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Each tool description must contain (in order):
 
-## OUTPUT FORMAT
+1. WHAT IT DOES — one sentence stating the action
 
-Return ONLY a JSON array.
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "no authentication required; block must
+    be within Meghdoot coverage network")
+   NEVER name other tools.
 
-Each tool must follow this structure:
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "block must exist in the Meghdoot coverage
+    list; forecast_horizon must be one of the
+    supported enum values; latitude must be within
+    Indian geographic bounds (6.5 to 35.7 degrees
+    north)")
+
+4. RETURNS — key fields in the success response
+   (e.g. "returns advisory_text, crop_specific_
+    recommendation, validity_window, and
+    advisory_freshness")
+
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not issue evacuation orders;
+    does not contact emergency services;
+    does not provide hyperlocal village-level
+    forecasts beyond block resolution")
+
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the Damini sensor network does
+    not cover the specified block, if GPS coordinates
+    are outside India, or if the sensor feed is
+    temporarily offline")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Descriptions across the tool set must collectively
+support these real-world scenarios:
+
+  - block not covered by Meghdoot network
+  - advisory stale because IMD AWS offline for
+    the district
+  - lightning sensor offline for the district
+    (Damini feed unavailable)
+  - farmer at danger safety level requesting
+    nearest shelter
+  - subscription paused when alert triggered
+    (alert not delivered)
+  - seasonal outlook not yet published for
+    current season
+  - rainfall history requested for more than
+    10 years back (exceeds available archive)
+  - crop stage advisory requested for a crop
+    not registered in farmer profile
+  - alert acknowledgement for an alert that
+    was never delivered
+  - duplicate subscription for same location
+    and delivery channel
+  - language requested not supported for
+    the block
+  - grievance for missed advisory when no
+    subscription was active
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"meghdoot_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"damini_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
-  "name": "meghdoot_or_damini_tool_name",
-  "description": "...",
+  "name": "meghdoot_example_tool",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 6 tools are public (no session_token)
+  ✓ at least 4 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers general IMD public forecasts,
+    crop management advisories (ATMA), soil testing,
+    market prices, PM-KISAN, PMFBY, or PM-KUSUM
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multiple user intents and workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

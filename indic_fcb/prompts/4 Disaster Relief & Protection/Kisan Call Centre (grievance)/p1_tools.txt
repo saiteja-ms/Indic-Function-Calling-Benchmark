@@ -1,289 +1,539 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-Kisan Call Centre (farmer grievance and support system)
-service on the UMANG app.
+Your task: Generate tool schemas for the Kisan Call
+Centre (KCC) service on the UMANG app.
 
-The number of tools should be sufficient (typically 12–16 tools)
-to cover all realistic farmer interactions and edge cases.
+KCC is the national farmer helpline (toll-free
+1800-180-1551) operated by the Ministry of Agriculture
+and Farmers Welfare. It provides farmers with real-time
+advisory responses from agricultural experts, grievance
+registration against government schemes and officials,
+query tracking, escalation management, and feedback
+collection. On UMANG, farmers can submit queries,
+track responses, raise grievances, and access the
+query history without calling the phone line.
 
----
+This usecase covers ONLY the KCC digital interface —
+query submission, tracking, escalation, and feedback.
+It does NOT cover the actual advisory content (that
+is covered in ATMA/Kisan Suvidha), scheme transactions
+(covered in PM-KISAN, PMFBY etc.), or market prices
+(covered in eNAM/Kisan Suvidha).
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Raising grievances across multiple services
-- Categorizing and routing issues
-- Assigning support agents or experts
-- Tracking grievance status
-- Providing responses and resolutions
-- Escalating unresolved issues
-- Closing grievances
-- Feedback submission
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Authentication is REQUIRED:
-  Aadhaar + OTP verification must be completed.
-  Authentication returns a session_token.
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Multi-domain support:
-  Grievances can relate to:
-    - PM-KISAN
-    - PMFBY
-    - PM-KUSUM
-    - Weather/Advisory
-    - Market/Trade
-    - Soil Health
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Categorization dependency:
-  Grievance must be categorized correctly before routing.
+To support all three axes, the tool set MUST include:
 
-- Ticket-based system:
-  Each grievance generates a unique ticket_id.
+PUBLIC TOOLS (no session_token required) — at least 4:
+  KCC category lookup, expert availability, and
+  service scope information are public. Enable
+  single-turn, single-step, simple test cases.
 
-- Assignment dependency:
-  Grievance must be assigned to an appropriate expert/department.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint state and never mutate
+  shared fields. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_query_status + get_grievance_status
+  - get_query_response + get_expert_availability
+  - get_kcc_categories + get_escalation_status
+  - get_query_history + get_grievance_history
 
-- Response dependency:
-  Resolution depends on investigation or system validation.
+CHAIN-CAPABLE TOOLS — at least 5:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Escalation logic:
-  Unresolved grievances can be escalated to higher authorities.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover actual agricultural
+  advisory content (ATMA), scheme enrollment or
+  payments (PM-KISAN, PMFBY), market prices (eNAM,
+  Kisan Suvidha), soil testing (SHC), weather
+  forecasting (Meghdoot), or disaster relief (SDRF)
+  — these belong to other UMANG services and enable
+  irrelevance test cases. KCC handles the INTERFACE
+  and ROUTING layer, not the content.
 
-- Closure requirement:
-  Grievance can only be closed after resolution or user confirmation.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Feedback loop:
-  Farmers can provide feedback after resolution.
+Each tool description must be SELF-CONTAINED.
 
----
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires query_status: responded and
+     response_satisfaction: unsatisfied")
+  ✓ Return value schemas
+    ("returns query_id, assigned expert category,
+     and expected response SLA")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-Tool descriptions MUST encode valid state transitions:
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- grievance_status:
-  raised → assigned → in_progress → resolved → closed → escalated
+Example — CORRECT description:
+  "Escalates an unanswered or unsatisfactorily
+   answered KCC query to a senior agricultural
+   officer. Requires an authenticated session and
+   a query with query_status: responded and
+   response_feedback: unsatisfied, OR a query with
+   query_status: submitted that has exceeded the
+   72-hour response SLA. Returns escalation_id,
+   escalated_to officer level, and new expected
+   response date. Fails if the query has not yet
+   been submitted, if the SLA has not been exceeded,
+   or if the query is already escalated. Does NOT
+   guarantee a different advisory response or
+   override the original expert's answer."
 
-- assignment_status:
-  not_assigned → assigned → reassigned
+Example — INCORRECT description:
+  "Escalates a query. Call kcc_authenticate first,
+   then kcc_get_query_status to confirm SLA exceeded,
+   then call this tool."
 
-- response_status:
-  not_provided → provided → acknowledged
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tools must define:
-- when actions are valid
-- when actions are invalid
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - KCC query category listing (crop production,
+    plant protection, soil health, market, scheme,
+    weather, livestock, horticulture)
+  - Expert availability check by category
+  - Agricultural query submission
+  - Query status tracking
+  - Query response retrieval
+  - Response feedback submission (satisfied /
+    unsatisfied)
+  - Query escalation (when SLA exceeded or
+    unsatisfied with response)
+  - Escalation status tracking
+  - Scheme-related grievance submission
+    (against government officials or schemes)
+  - Grievance status tracking
+  - Grievance escalation
+  - Query and grievance history retrieval
+  - Anonymous query submission (for sensitive issues)
+  - KCC service scope and coverage information
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+These are real KCC operational rules — encode them
+as preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-The toolset MUST support scenarios where:
-- invalid or unclear grievance description
-- incorrect categorization
-- duplicate grievance submission
-- grievance raised without checking prior status
-- unassigned or delayed assignment
-- no response from expert
-- incorrect resolution
-- repeated escalation
-- grievance closed prematurely
-- conflicting information across systems
+- KCC operates in 22 scheduled languages; query
+  submission requires specifying preferred language.
+- Query response SLA is 72 hours for standard
+  queries; 24 hours for urgent crop protection
+  queries during active pest outbreaks.
+- Escalation is allowed when SLA is exceeded or
+  when the farmer rates the response as unsatisfied.
+- A farmer may submit at most 3 open queries
+  simultaneously; new queries are rejected until
+  an existing one is closed.
+- Scheme grievances are routed to the relevant
+  scheme's nodal officer; the routing is automatic
+  based on grievance category.
+- Anonymous queries are accepted for sensitive
+  topics but cannot be escalated or tracked
+  without a query_id.
+- A grievance about an official requires the
+  official's designation and district.
+- Response feedback must be submitted within 7
+  days of the response; after that the query
+  is auto-closed.
+- Query history is retained for 2 years.
+- A closed query cannot be reopened; a new query
+  must be submitted.
 
-Descriptions must explicitly reflect these cases.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+query_status:
+  not_submitted → submitted → assigned → responded
+                → escalated → closed → auto_closed
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+response_feedback_status:
+  not_submitted → satisfied → unsatisfied → expired
 
-Each tool description MUST include:
-- validation rules (category, description required)
-- rejection conditions (duplicate or invalid grievance)
-- failure scenarios (no assignment, delayed response)
+escalation_status:
+  not_escalated → escalated → responded → closed
 
-Tools must NOT assume successful resolution.
+grievance_status:
+  not_filed → filed → routed → under_review
+            → resolved → rejected → escalated
 
----
+farmer_profile_status:
+  not_registered → registered → verified
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+open_query_count:
+  tracks 0 to 3 simultaneous open queries
 
-The toolset MUST support:
-- farmer raising grievance
-- tracking grievance status
-- receiving responses
-- escalation of unresolved issues
-- closing grievance
-- feedback submission
-- handling incorrect or unresolved cases
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## TOOL DESIGN REQUIREMENTS
+  kcc_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes mobile_number, otp
+       returns session_token
 
-- Naming format: kcc_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+  kcc_get_query_categories             [public]
+  kcc_get_expert_availability          [public]
+  kcc_get_service_scope                [public]
+  kcc_get_kcc_helpline_info            [public]
+  kcc_register_farmer_profile          [authenticated]
+  kcc_submit_query                     [authenticated]
+  kcc_get_query_status                 [authenticated]
+  kcc_get_query_response               [authenticated]
+  kcc_submit_response_feedback         [authenticated]
+  kcc_escalate_query                   [authenticated]
+  kcc_get_escalation_status            [authenticated]
+  kcc_submit_grievance                 [authenticated]
+  kcc_get_grievance_status             [authenticated]
+  kcc_escalate_grievance               [authenticated]
+  kcc_get_query_history                [authenticated]
+  kcc_get_grievance_history            [authenticated]
 
----
+(public = session_token NOT required;
+ authenticated = session_token required)
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+You MAY add additional tools beyond these 17 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - kcc_resend_otp
+  - kcc_submit_anonymous_query
+  - kcc_close_query
+  - kcc_get_open_query_count
+  - kcc_get_nodal_officer_contact
+  - kcc_update_preferred_language
 
-"aadhaar_number": {
-  "type": "string",
-  "description": "12-digit Aadhaar number of the farmer."
-}
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number of the
+    farmer [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after mobile OTP verification.
+    Required for all tools that submit, modify,
+    or access private query, grievance, and
+    profile data [TYPE_ONLY]"
 }
 
-"ticket_id": {
+"query_id": {
   "type": "string",
-  "description": "Unique identifier of the grievance ticket."
+  "description": "Unique KCC query identifier
+    assigned at submission [EXACT]"
 }
 
----
+"grievance_id": {
+  "type": "string",
+  "description": "Unique KCC grievance identifier
+    assigned at filing [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"escalation_id": {
+  "type": "string",
+  "description": "Unique escalation identifier
+    assigned when a query is escalated [EXACT]"
+}
 
-"grievance_category": [
-  "pmkisan",
-  "pmfby",
-  "pmkusum",
-  "weather",
-  "market",
-  "soil",
-  "other"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"grievance_status": [
-  "raised",
-  "assigned",
-  "in_progress",
-  "resolved",
-  "closed",
-  "escalated"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"assignment_status": [
-  "not_assigned",
-  "assigned",
-  "reassigned"
-]
+  [EXACT]
+    For enums, mobile numbers, OTPs, query IDs,
+    grievance IDs, escalation IDs, dates, boolean
+    flags, language codes, district names,
+    fixed identifiers
 
-"priority_level": ["low", "medium", "high", "critical"]
+  [SUBSTRING]
+    For free-text query text, grievance description,
+    feedback comments, crop problem description,
+    official name or designation in grievance
 
-"feedback_status": ["not_given", "given"]
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (query_id, grievance_id, escalation_id) that
+    the model cannot know until a prior tool
+    returns it
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+query_status:
+  ["not_submitted", "submitted", "assigned",
+   "responded", "escalated", "closed", "auto_closed"]
 
-1. kcc_generate_otp  
-2. kcc_verify_otp  
-3. kcc_raise_grievance  
-4. kcc_get_grievance_status  
-5. kcc_assign_grievance  
-6. kcc_provide_response  
-7. kcc_escalate_grievance  
-8. kcc_close_grievance  
-9. kcc_submit_feedback  
+response_feedback_status:
+  ["not_submitted", "satisfied", "unsatisfied",
+   "expired"]
 
----
+escalation_status:
+  ["not_escalated", "escalated", "responded",
+   "closed"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+grievance_status:
+  ["not_filed", "filed", "routed", "under_review",
+   "resolved", "rejected", "escalated"]
 
-- kcc_get_grievance_history  
-- kcc_update_grievance_details  
-- kcc_resolve_grievance  
-- kcc_reassign_grievance  
-- kcc_set_priority  
-- kcc_track_response_status  
-- kcc_resolve_category_ambiguity  
+farmer_profile_status:
+  ["not_registered", "registered", "verified"]
 
----
+query_category:
+  ["crop_production", "plant_protection",
+   "soil_health", "market_information",
+   "scheme_related", "weather_advisory",
+   "livestock", "horticulture", "fisheries",
+   "post_harvest", "credit_insurance"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+query_priority:
+  ["normal", "urgent"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (authentication, ticket status, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+grievance_category:
+  ["scheme_benefit_denied", "official_misconduct",
+   "payment_not_received", "scheme_implementation",
+   "extension_service_failure", "input_quality",
+   "natural_calamity_relief"]
 
----
+feedback_rating:
+  ["satisfied", "unsatisfied"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+language:
+  ["hi", "en", "ta", "te", "kn", "ml", "mr", "pa",
+   "bn", "gu", "or", "as", "ur", "mai", "bho",
+   "raj", "kok", "sat", "ks", "sd", "doi", "mni"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+escalation_reason:
+  ["sla_exceeded", "unsatisfied_with_response",
+   "incorrect_information", "query_not_answered",
+   "grievance_not_resolved"]
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## PARAMETER RULES
+Each tool description must contain (in order):
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - kcc_generate_otp
-  - kcc_verify_otp
+1. WHAT IT DOES — one sentence stating the action
 
----
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires query_status: responded and
+    response_feedback_status: not_submitted")
+   NEVER name other tools.
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "mobile_number must be exactly 10 digits;
+    query_category must be one of the supported
+    enum values; query_text cannot be empty")
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+4. RETURNS — key fields in the success response
+   (e.g. "returns query_id, assigned_expert_category,
+    expected_response_date, and query_status")
 
----
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not provide the advisory content
+    directly; does not route to scheme-specific
+    portals; does not guarantee a specific expert
+    response")
 
-## OUTPUT FORMAT
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the farmer already has 3 open
+    queries, if the query_category is not supported,
+    or if the query_text is empty")
 
-Return ONLY a JSON array.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Each tool must follow this structure:
+Descriptions across the tool set must collectively
+support these real-world scenarios:
+
+  - query submission rejected because farmer
+    already has 3 open queries
+  - escalation attempted before SLA is exceeded
+    (invalid)
+  - escalation attempted after query is already
+    closed (invalid)
+  - feedback submitted after 7-day window (expired)
+  - query auto-closed because feedback window expired
+  - response feedback submitted as unsatisfied
+    then escalation follows
+  - grievance routed to wrong scheme nodal officer
+    (farmer disputes routing)
+  - grievance escalated after remaining under
+    review beyond SLA
+  - anonymous query attempted to be tracked
+    without query_id (impossible)
+  - same query submitted twice (duplicate detection)
+  - query submitted in regional language but
+    response received in English (language mismatch
+    grievance)
+  - closed query attempted to be reopened (invalid)
+  - grievance filed about a scheme that KCC
+    does not cover
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"kcc_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"kcc_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "kcc_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 4 tools are public (no session_token)
+  ✓ at least 5 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers actual advisory content,
+    scheme enrollment, market prices, soil testing,
+    weather forecasting, or disaster relief
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support full grievance lifecycle workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl

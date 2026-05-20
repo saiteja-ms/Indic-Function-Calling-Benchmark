@@ -1,287 +1,562 @@
-You are building a function-calling benchmark dataset in the style
-of the Berkeley Function Calling Leaderboard (BFCL).
+You are building a function-calling benchmark dataset
+in the style of the Berkeley Function Calling Leaderboard
+(BFCL) and tau-bench.
 
-Your task: Generate a JSON array of tool schemas for the
-AgriStack Farmer Registry (digital farmer identity and land records)
+Your task: Generate tool schemas for the AgriStack
+(Digital Public Infrastructure for Agriculture)
 service on the UMANG app.
 
-The number of tools should be sufficient (typically 10–14 tools)
-to cover all realistic farmer interactions and edge cases.
+AgriStack is India's unified digital agriculture
+infrastructure comprising three core registries:
+the Farmers Registry (unique digital farmer ID
+linked to Aadhaar and land records), the Crop Sown
+Registry (real-time crop declaration by farmers
+each season), and the Plots Registry (geo-referenced
+land parcel data linked to revenue records). Together
+these enable consent-based data sharing for credit,
+insurance, advisory, and scheme delivery.
 
----
+This usecase covers farmer digital ID management,
+land record linkage, crop declaration, consent
+management for data sharing, and registry data
+access and correction.
 
-## CORE OBJECTIVE
+Generate AS MANY tools as needed for complete coverage.
+Minimum 14, no upper limit. If a realistic farmer
+workflow needs an additional tool not listed below,
+add it.
 
-Design tools that enable realistic workflows such as:
-- Farmer authentication
-- Farmer profile registration and retrieval
-- Land parcel linking and registration
-- Fetching land records from state databases
-- Ownership verification
-- Crop declaration per land parcel
-- Updating farmer profile details
-- Consent-based data sharing
-- Registry status tracking
-- Grievance handling
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION DESIGN (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+This benchmark evaluates LLMs on three independent
+dimensions. The tool set MUST support test cases at
+every meaningful cell of this 3-axis grid.
 
-## CRITICAL DOMAIN CONSTRAINTS (MUST BE ENCODED IN DESCRIPTIONS)
+AXIS 1 — Conversation length:
+  single-turn  : one user message
+  multi-turn   : multiple user messages with state
+                 evolving between them
 
-- Authentication is REQUIRED for all personal data access:
-  Aadhaar + OTP verification must be completed first.
-  Authentication returns a session_token.
+AXIS 2 — Tool calls per turn:
+  single-step  : exactly one tool call per turn
+  multi-step   : multiple tool calls in the same turn
+                 (parallel or parallel-multiple)
 
-- Aadhaar uniqueness:
-  Each Aadhaar can have ONLY one farmer registry profile.
-  Duplicate registrations must be rejected.
+AXIS 3 — Task type:
+  simple             : one clear tool, unambiguous
+  parallel-multiple  : multiple tools called together,
+                       no inter-call dependency
+  irrelevance        : no tool can answer; model must
+                       not call anything
 
-- Land ownership verification:
-  Land parcels must be verified against state land records.
-  Unverified or self-declared land is not valid for scheme usage.
+To support all three axes, the tool set MUST include:
 
-- One-to-many mapping:
-  A farmer can own multiple land parcels.
+PUBLIC TOOLS (no session_token required) — at least 4:
+  Basic registry lookups and ID verification are
+  public. Enable single-turn, single-step, simple
+  test cases.
 
-- State integration dependency:
-  Land records are fetched from state systems (e.g., Bhulekh).
-  Data availability may vary across states.
+PARALLEL-SAFE TOOL PAIRS — at least 4 pairs:
+  Tools that read disjoint registry data and never
+  mutate shared state. Enable parallel-multiple cases.
+  Natural pairs:
+  - get_farmer_profile + get_plot_details
+  - get_crop_declaration_status + get_plot_details
+  - get_consent_log + get_farmer_profile
+  - get_linked_schemes + get_crop_declaration_status
 
-- Immutable government records:
-  Verified land ownership data cannot be edited directly.
+CHAIN-CAPABLE TOOLS — at least 6:
+  Tools whose parameter signatures or preconditions
+  imply a required prior call. Enable multi-turn
+  chain cases. The required prior call is inferred
+  from the parameter signature, NOT from text in
+  the description.
 
-- Crop declaration dependency:
-  Crops must be declared per land parcel, not globally.
+DOMAIN-BOUNDARY CLARITY:
+  The tool set must NOT cover PM-KISAN payment
+  processing, PMFBY insurance enrollment, MSP
+  procurement token booking, eNAM mandi auctions,
+  fertilizer DBT, soil test scheduling, or weather
+  forecasting — these belong to other UMANG services
+  and enable irrelevance test cases. AgriStack
+  provides the IDENTITY and LAND RECORDS layer;
+  it does not execute scheme transactions.
 
-- Consent-based sharing:
-  Farmer must explicitly grant permission before sharing data with other services.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL INDEPENDENCE PRINCIPLE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Grievances should ONLY be raised after checking registry or land status.
+Each tool description must be SELF-CONTAINED.
 
----
+FORBIDDEN — these will invalidate the benchmark:
+  ✗ Naming other tools in the description
+  ✗ Saying "must be preceded by X" where X is a
+    tool name
+  ✗ Saying "followed by Y" where Y is a tool name
+  ✗ Any cross-reference between tools by name
 
-## STATE TRANSITION REQUIREMENT (MANDATORY)
+ALLOWED — these are the ONLY ways to encode chain order:
+  ✓ Parameter signatures
+    (a tool requiring session_token implicitly
+     requires a prior authentication call)
+  ✓ Abstract state preconditions
+    ("requires farmer_id_status: active and
+     plot_linkage_status: verified")
+  ✓ Return value schemas
+    ("returns farmer_id, linked plot count,
+     and consent_profile_status")
+  ✓ Description of what state the tool reads or
+    mutates, expressed abstractly
 
-Tool descriptions MUST encode valid state transitions:
+The model being evaluated must INFER chain order from
+parameter and return schemas — never read it from prose.
 
-- profile_status:
-  not_registered → registered → verified
+Example — CORRECT description:
+  "Declares the crop sown on a specific plot for
+   the current season in the Crop Sown Registry.
+   Requires an authenticated session, a plot with
+   plot_linkage_status: verified, and a current
+   open declaration window for the season. Returns
+   declaration_id, declared crop, sowing date, and
+   declaration_status. Fails if the declaration
+   window for the season is closed, if the plot
+   is not linked to the farmer's Aadhaar, if a
+   declaration already exists for the plot in this
+   season, or if the crop is not in the district
+   notified crop list. Does NOT enroll the farmer
+   in any insurance or subsidy scheme."
 
-- land_record_status:
-  unverified → pending_verification → verified → rejected
+Example — INCORRECT description:
+  "Declares crop sown. Call agristack_authenticate
+   first, then agristack_verify_plot_linkage to
+   confirm the plot is linked, then call this tool."
 
-- consent_status:
-  not_given → granted → revoked
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tools must clearly define:
-- when they are valid to call
-- when they are invalid
+Design tools that enable realistic workflows:
+  - Farmer authentication
+  - Farmer digital ID creation and retrieval
+  - Farmer profile lookup (name, Aadhaar linkage,
+    state, district, farmer category)
+  - Plot registration and land record linkage
+  - Plot details retrieval (survey number, area,
+    ownership type, geo-coordinates)
+  - Plot linkage status verification
+  - Crop sown declaration for a season
+  - Crop declaration status tracking
+  - Crop declaration correction or update
+  - Consent management (grant/revoke data access
+    to third parties — banks, insurers, agri firms)
+  - Consent log retrieval (who accessed what data)
+  - Linked scheme lookup (which schemes the farmer
+    is enrolled in via AgriStack)
+  - Data correction request (name mismatch,
+    land area discrepancy)
+  - Farmer ID sharing with service providers
+  - Registry data download (farmer certificate)
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN CONSTRAINTS (encode abstractly in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## EDGE CASE REQUIREMENT (MANDATORY)
+These are real AgriStack rules — encode them as
+preconditions in tool descriptions without naming
+which other tools must satisfy them.
 
-The toolset MUST support scenarios where:
-- duplicate Aadhaar registration attempt
-- land parcel not found in state records
-- mismatched ownership (Aadhaar does not match land owner)
-- multiple land parcels with partial verification
-- attempting crop declaration on unverified land
-- state system unavailable or delayed response
-- invalid land parcel ID
-- missing consent for data sharing
+- A farmer digital ID (FID) is a unique 11-digit
+  identifier linked to Aadhaar; one Aadhaar maps
+  to one FID.
+- Plot linkage requires matching Aadhaar-verified
+  name against state revenue records (RoR).
+- Crop declaration is seasonal: one declaration
+  per plot per season (Kharif/Rabi/Summer).
+- Declaration windows open after sowing completion
+  and close before harvest; windows are state-specific.
+- Consent is granular: a farmer can grant access
+  to specific data fields (land records, crop data,
+  financial history) to specific requestors for
+  a defined period.
+- Consent can be revoked at any time; revocation
+  takes effect immediately.
+- Data corrections require supporting documents
+  (land ownership certificate, Aadhaar, etc.) and
+  are reviewed by state revenue officials.
+- A farmer's FID is portable across states if
+  they migrate; migration requires re-linking
+  land records in the new state.
+- Linked scheme data is read-only; AgriStack
+  does not enroll farmers in schemes directly.
+- Registry data download generates a digitally
+  signed certificate valid for 6 months.
 
-Descriptions must explicitly reflect these cases.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE TRANSITIONS (encode in descriptions)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+farmer_id_status:
+  not_created → created → active → suspended
+              → deactivated
 
-## ERROR HANDLING REQUIREMENT (MANDATORY)
+plot_linkage_status:
+  not_linked → pending_verification → verified
+             → disputed → rejected
 
-Each tool description MUST include:
-- validation rules (Aadhaar format, land ID validity)
-- rejection conditions (duplicate profile, invalid ownership)
-- failure scenarios (state API unavailable, verification delay)
+crop_declaration_status:
+  not_declared → declared → verified → corrected
+               → disputed
 
-Tools must NOT assume success-only execution.
+consent_status:
+  not_granted → active → expired → revoked
 
----
+data_correction_status:
+  not_requested → submitted → under_review
+                → approved → rejected
 
-## SCENARIO COVERAGE REQUIREMENT (MANDATORY)
+certificate_status:
+  not_generated → generated → downloaded → expired
 
-The toolset MUST support:
-- new farmer registration
-- existing farmer retrieving profile
-- linking multiple land parcels
-- land verification success/failure
-- crop declaration scenarios
-- consent granting and revocation
-- grievance escalation
+declaration_window_status:
+  not_open → open → closed
 
----
+Use lowercase_with_underscores consistently for all
+enum values. Never use UPPERCASE.
 
-## TOOL DESIGN REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY MINIMUM TOOLS (generate ALL of these,
+                         add more as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Naming format: agristack_verb_noun (lowercase, underscores only)
-- Each tool must represent ONE atomic API
-- Tools should be independent (no chaining logic required)
+  agristack_authenticate_farmer
+       single authentication tool handling OTP internally
+       takes aadhaar_number, mobile_number, otp
+       returns session_token
 
----
+  agristack_get_farmer_profile             [public]
+  agristack_check_declaration_window       [public]
+  agristack_get_linked_schemes             [public]
+  agristack_verify_farmer_id               [public]
+  agristack_create_farmer_id               [authenticated]
+  agristack_register_plot                  [authenticated]
+  agristack_get_plot_details               [authenticated]
+  agristack_get_plot_linkage_status        [authenticated]
+  agristack_declare_crop_sown              [authenticated]
+  agristack_get_crop_declaration_status    [authenticated]
+  agristack_correct_crop_declaration       [authenticated]
+  agristack_grant_consent                  [authenticated]
+  agristack_revoke_consent                 [authenticated]
+  agristack_get_consent_log                [authenticated]
+  agristack_request_data_correction        [authenticated]
+  agristack_track_correction_status        [authenticated]
+  agristack_download_farmer_certificate    [authenticated]
 
-## SHARED PARAMETERS (COPY EXACTLY WHERE APPLICABLE)
+(public = session_token NOT required;
+ authenticated = session_token required)
+
+You MAY add additional tools beyond these 18 if a
+realistic farmer workflow needs them. Examples of
+legitimate additional tools:
+  - agristack_resend_otp
+  - agristack_share_farmer_id
+  - agristack_get_plot_map
+  - agristack_get_all_plots_for_farmer
+  - agristack_get_helpline_number
+  - agristack_cancel_correction_request
+  - agristack_get_consent_requestor_details
+
+Do not force-add tools that have no real analog.
+Every tool must correspond to a plausible government
+API endpoint.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHARED PARAMETERS (copy exactly where applicable)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "aadhaar_number": {
   "type": "string",
-  "description": "12-digit Aadhaar number of the farmer. Used as the unique identifier."
+  "description": "12-digit Aadhaar number of the
+    farmer [EXACT]"
 }
 
 "mobile_number": {
   "type": "string",
-  "description": "10-digit mobile number linked with Aadhaar."
+  "description": "10-digit mobile number linked
+    with Aadhaar [EXACT]"
 }
 
 "session_token": {
   "type": "string",
-  "description": "Token returned after Aadhaar OTP authentication. Required for all tools except authentication."
+  "description": "Active authentication token
+    obtained after Aadhaar OTP verification.
+    Required for all tools that create, modify,
+    or access private registry, consent, and
+    declaration data [TYPE_ONLY]"
 }
 
-"land_parcel_id": {
+"farmer_id": {
   "type": "string",
-  "description": "Unique identifier for a land parcel as per state records."
+  "description": "11-digit unique AgriStack
+    Farmer Digital ID [EXACT]"
 }
 
----
+"plot_id": {
+  "type": "string",
+  "description": "Unique AgriStack plot identifier
+    linked to state revenue records [EXACT]"
+}
 
-## KEY ENUMS (INCLUDE WHERE APPLICABLE)
+"declaration_id": {
+  "type": "string",
+  "description": "Unique crop sown declaration
+    identifier for a plot and season [EXACT]"
+}
 
-"land_record_status": [
-  "unverified",
-  "pending_verification",
-  "verified",
-  "rejected"
-]
+"consent_id": {
+  "type": "string",
+  "description": "Unique consent grant identifier
+    [EXACT]"
+}
 
-"ownership_type": [
-  "individual",
-  "joint",
-  "leased"
-]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER EVAL_MODE ANNOTATIONS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"crop_type": [
-  "paddy", "wheat", "maize", "cotton",
-  "pulses", "oilseeds", "horticulture"
-]
+Every parameter description must end with exactly one
+of these markers:
 
-"consent_status": [
-  "not_given",
-  "granted",
-  "revoked"
-]
+  [EXACT]
+    For enums, Aadhaar numbers, mobile numbers, OTPs,
+    farmer IDs, plot IDs, declaration IDs, consent IDs,
+    survey numbers, dates, land area in hectares,
+    season identifiers, requestor IDs, fixed identifiers
 
-"grievance_category": [
-  "land_record_mismatch",
-  "ownership_issue",
-  "profile_not_found",
-  "verification_delay",
-  "consent_issue"
-]
+  [SUBSTRING]
+    For free-text farmer name in search context,
+    correction reason descriptions, data dispute
+    details, village names, supporting document
+    descriptions
 
----
+  [TYPE_ONLY]
+    For session_token and any output-derived value
+    (farmer_id, plot_id, declaration_id, consent_id,
+    correction_id, certificate_id) that the model
+    cannot know until a prior tool returns it
 
-## REQUIRED CORE TOOLS (MUST INCLUDE THESE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ENUMS (use these exact lowercase values)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. agristack_generate_otp  
-2. agristack_verify_otp  
-3. agristack_register_farmer  
-4. agristack_get_farmer_profile  
-5. agristack_fetch_land_records  
-6. agristack_verify_land_ownership  
-7. agristack_check_land_status  
-8. agristack_declare_crop  
-9. agristack_manage_consent  
-10. agristack_get_registry_status  
+farmer_id_status:
+  ["not_created", "created", "active", "suspended",
+   "deactivated"]
 
----
+plot_linkage_status:
+  ["not_linked", "pending_verification", "verified",
+   "disputed", "rejected"]
 
-## ADDITIONAL TOOLS (INCLUDE AS NEEDED)
+crop_declaration_status:
+  ["not_declared", "declared", "verified",
+   "corrected", "disputed"]
 
-- agristack_register_land_parcel  
-- agristack_update_profile  
-- agristack_get_linked_land_parcels  
-- agristack_revoke_consent  
-- agristack_raise_grievance  
-- agristack_track_grievance_status  
+consent_status:
+  ["not_granted", "active", "expired", "revoked"]
 
----
+data_correction_status:
+  ["not_requested", "submitted", "under_review",
+   "approved", "rejected"]
 
-## DESCRIPTION REQUIREMENTS (VERY IMPORTANT)
+certificate_status:
+  ["not_generated", "generated", "downloaded",
+   "expired"]
 
-Each tool description MUST clearly state:
-1. What the tool does  
-2. Preconditions (authentication, verification, etc.)  
-3. What it does NOT do  
-4. Failure conditions and rejection scenarios  
+declaration_window_status:
+  ["not_open", "open", "closed"]
 
----
+season:
+  ["kharif", "rabi", "summer"]
 
-## STRICT NEGATIVE CONSTRAINT (MANDATORY)
+farmer_category:
+  ["small", "marginal", "medium", "large"]
 
-Each tool MUST explicitly include:
-- at least one invalid usage scenario
-- at least one limitation
+land_ownership_type:
+  ["owned", "leased", "sharecropped", "inherited",
+   "institutional"]
 
----
+consent_data_type:
+  ["land_records", "crop_data", "financial_history",
+   "scheme_enrollment", "identity_data", "all"]
 
-## PARAMETER RULES
+requestor_type:
+  ["bank", "insurer", "agri_firm", "government_agency",
+   "research_institution"]
 
-- "type": "dict" with "properties"
-- Every parameter must include:
-  - "type"
-  - "description"
-- "session_token" MUST be in "required" for all tools except:
-  - agristack_generate_otp
-  - agristack_verify_otp
+correction_type:
+  ["name_mismatch", "land_area_discrepancy",
+   "survey_number_error", "ownership_type_error",
+   "crop_declaration_error", "geo_coordinates_error"]
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOL DESCRIPTION REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## STRICT OUTPUT VALIDATION (MANDATORY)
+Each tool description must contain (in order):
 
-- Output MUST be valid JSON
-- No extra fields allowed
-- All required tools MUST be present
-- Enums MUST be correctly used
-- Violations = INVALID OUTPUT
+1. WHAT IT DOES — one sentence stating the action
 
----
+2. STATE PRECONDITIONS — abstract conditions that
+   must hold before this tool can succeed
+   (e.g. "requires farmer_id_status: active and
+    plot_linkage_status: verified")
+   NEVER name other tools.
 
-## OUTPUT FORMAT
+3. INPUT VALIDATION — what makes inputs invalid
+   (e.g. "farmer_id must be exactly 11 digits;
+    aadhaar_number must be exactly 12 digits;
+    season must be one of the supported enum values")
 
-Return ONLY a JSON array.
+4. RETURNS — key fields in the success response
+   (e.g. "returns declaration_id, declared_crop,
+    sowing_date, plot_area_hectares, and
+    declaration_status")
 
-Each tool must follow this structure:
+5. WHAT IT DOES NOT DO — at least one limitation
+   (e.g. "does not enroll the farmer in any insurance
+    or subsidy scheme; does not modify revenue
+    records directly")
+
+6. FAILURE CONDITIONS — at least one rejection scenario
+   (e.g. "fails if the declaration window is closed,
+    if the plot is not linked to the farmer's Aadhaar,
+    if a declaration already exists for this plot in
+    the current season, or if the crop is not in
+    the district notified crop list")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDGE CASES TO COVER ACROSS THE TOOL SET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Descriptions across the tool set must collectively
+support these real-world scenarios:
+
+  - duplicate farmer ID creation attempt
+    (one Aadhaar can have only one FID)
+  - plot linkage rejected due to name mismatch
+    with revenue records
+  - crop declaration attempted outside open window
+  - duplicate declaration for same plot and season
+  - consent granted but requestor type not
+    authorised for the requested data type
+  - consent revoked while requestor is actively
+    accessing data
+  - data correction request rejected due to
+    insufficient supporting documents
+  - farmer certificate expired but farmer tries
+    to share it
+  - migrated farmer trying to re-link land records
+    in new state while old records still active
+  - plot with disputed ownership — linkage stuck
+    in pending_verification
+  - crop declaration correction requested after
+    declaration is already verified
+  - linked scheme lookup for a farmer with
+    no active FID
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARAMETER RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- "type": "dict" with "properties" key
+- Every parameter must include "type" and "description"
+- Every description must end with [EXACT], [SUBSTRING],
+  or [TYPE_ONLY]
+- "required" array must be present on every tool
+- session_token in "required" ONLY for authenticated
+  tools
+- session_token must NOT appear in public tool schemas
+  at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT — JSONL (ONE TOOL PER LINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output as JSON Lines (.jsonl) format:
+  - ONE complete tool object per line
+  - Each line is a valid JSON object
+  - NO outer array brackets [ ]
+  - NO commas between lines
+  - NO line breaks WITHIN a tool object
+    (each tool fits on exactly one line)
+  - NO blank lines between tools
+
+Example structure:
+
+{"name":"agristack_tool_one","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+{"name":"agristack_tool_two","description":"...","parameters":{"type":"dict","properties":{...},"required":[...]}}
+
+Each line follows this structure:
 
 {
   "name": "agristack_example_tool",
-  "description": "...",
+  "description": "[1] what it does. [2] state
+    preconditions. [3] input validation. [4] returns.
+    [5] what it does not do. [6] failure conditions.",
   "parameters": {
     "type": "dict",
     "properties": {
-      ...
+      "param_name": {
+        "type": "...",
+        "description": "... [EXACT|SUBSTRING|TYPE_ONLY]"
+      }
     },
     "required": [...]
   }
 }
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## BENCHMARK HARDENING REQUIREMENTS (MANDATORY)
+Before producing output, verify ALL of these:
 
-To ensure BFCL-level evaluation quality:
+  ✓ at least 14 tools generated
+  ✓ all mandatory minimum tools are present
+  ✓ no description names any other tool
+  ✓ at least 4 tools are public (no session_token)
+  ✓ at least 6 tools require session_token
+  ✓ every parameter description ends with [EXACT],
+    [SUBSTRING], or [TYPE_ONLY]
+  ✓ session_token is marked [TYPE_ONLY] everywhere
+  ✓ all enum values use lowercase_with_underscores
+  ✓ every description has all 6 required sections
+  ✓ every description states at least one
+    "does not do" limitation
+  ✓ every description states at least one
+    failure condition
+  ✓ every description lists return fields
+  ✓ no tool covers PM-KISAN payment processing,
+    PMFBY insurance enrollment, MSP procurement
+    token booking, eNAM auctions, fertilizer DBT,
+    soil test scheduling, or weather forecasting
+  ✓ each line of output is exactly one valid
+    JSON object (JSONL format)
+  ✓ no outer array brackets
+  ✓ no commas between lines
 
-1. Include edge cases and failure scenarios  
-2. Encode validation and rejection logic  
-3. Support multiple user intents and workflows  
-4. Clearly define state transitions  
-5. Explicitly state what each tool does NOT do  
-6. Ensure strict JSON schema compliance  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Outputs that do not satisfy these are INVALID.
+- Output ONLY the JSONL content
+- No markdown fences (no ```json or ```jsonl)
+- No explanation before or after
+- No comments inside JSON
+- No trailing commas
+- No outer array brackets
+- One tool per line, nothing more
+
+Failure to follow ANY rule = INVALID OUTPUT
+
+SAVE TO: tools.jsonl
