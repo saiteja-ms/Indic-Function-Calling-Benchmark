@@ -1,0 +1,150 @@
+{
+  "scenario_id": "pmkusum_pmkusum_base_004_ARC_03",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_base_004",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "application_status": "approved",
+    "subsidy_disbursement_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application for the solar pump was approved, but I don't know if the subsidy money has been sent yet. Can you check?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number",
+        "mobile_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My Aadhaar is 456789012345 and my mobile is 7654321098."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012345",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7654321098",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "The OTP is 456789."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012345",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7654321098",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "My application ID is APP98765. Can you check the status now?"
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Okay, and what about the subsidy disbursement?"
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_subsidy_disbursement_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true
+  }
+}

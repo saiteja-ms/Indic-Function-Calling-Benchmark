@@ -1,0 +1,50 @@
+{
+  "scenario_id": "atma_atma_task_irrelevance_002_ARC_14",
+  "usecase": "atma",
+  "intent_ref": "atma_task_irrelevance_002",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN|001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane yield is dropping. I need someone to come and collect a soil sample for testing from my farm."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil testing is handled by the Soil Health Card (SHC) scheme, not ATMA."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Let me try again... Can you just send a soil testing kit to my home in Meerut?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil testing is handled by the Soil Health Card (SHC) scheme, not ATMA."
+    }
+  ],
+  "expected_final_state": {}
+}

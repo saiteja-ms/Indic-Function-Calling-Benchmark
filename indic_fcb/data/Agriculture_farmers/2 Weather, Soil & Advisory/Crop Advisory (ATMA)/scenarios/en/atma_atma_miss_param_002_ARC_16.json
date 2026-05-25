@@ -1,0 +1,68 @@
+{
+  "scenario_id": "atma_atma_miss_param_002_ARC_16",
+  "usecase": "atma",
+  "intent_ref": "atma_miss_param_002",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "verified",
+    "training_registration_status": "not_registered",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to register for the upcoming ATMA training programme. I have my session token ready."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "training_id",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The training ID is TRG-98765."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_for_training",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "training_id": {
+              "value": "TRG-98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "training_registration_status": "registered"
+  }
+}

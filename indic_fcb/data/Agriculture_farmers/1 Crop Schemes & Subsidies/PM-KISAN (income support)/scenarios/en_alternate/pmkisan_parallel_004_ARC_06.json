@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pmkisan_parallel_004_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_parallel_004",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "registration_status": "registered",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": true,
+    "grievance_status": "under_review"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am facing a lot of problems. I complained about my PM-KISAN money not coming, but nothing has happened yet. Can you tell me why?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "grievance_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Are you sure it is safe to share details? I am very worried about fraud. Anyway, I have two complaints. The numbers are GRV1234567 and GRV9876543. Please check both of them, I am telling you again my problem is not solved."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV1234567",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV9876543",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

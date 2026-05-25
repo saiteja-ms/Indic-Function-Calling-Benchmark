@@ -1,0 +1,147 @@
+{
+  "scenario_id": "pmkusum_long_context_002_ARC_07",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_long_context_002",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "application_status": "approved",
+    "installation_status": "scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ramesh Kumar from Sitapur. I grow sugarcane and wheat."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I have a small landholding of 1.2 hectares and I need a solar pump."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I have applied for the PM-KUSUM scheme before, but I want to know about my current application."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "My application ID is APP-98765. Can you check its status?"
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP-98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Okay, since it is approved, I want to know when the installation will happen. My Aadhaar is 890123456789 and the OTP is 456789."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456789",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Now please tell me the installation schedule."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_installation_schedule",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_TOKEN_PLACEHOLDER",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "APP-98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "scenario_id": "atma_atma_multiple_009_ARC_15",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_009",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "query_status": "closed",
+    "has_active_grievance": false,
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Lakshmi. I am escalating this issue because my query QRY-789 was completely ignored by the agriculture officer. I want to raise a grievance immediately under the category 'query_not_answered'. The officer ID is OFF-456. My session token is tok_123. The details are: 'The officer has been unresponsive and never answered my query regarding cotton irrigation.' Do it now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "tok_123",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "query_not_answered",
+              "eval_mode": "EXACT"
+            },
+            "officer_id": {
+              "value": "OFF-456",
+              "eval_mode": "EXACT"
+            },
+            "query_id": {
+              "value": "QRY-789",
+              "eval_mode": "EXACT"
+            },
+            "grievance_details": {
+              "value": "The officer has been unresponsive and never answered my query regarding cotton irrigation.",
+              "eval_mode": "SUBSTRING"
+            }
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "grievance_category": "EXACT",
+            "officer_id": "EXACT",
+            "query_id": "EXACT",
+            "grievance_details": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

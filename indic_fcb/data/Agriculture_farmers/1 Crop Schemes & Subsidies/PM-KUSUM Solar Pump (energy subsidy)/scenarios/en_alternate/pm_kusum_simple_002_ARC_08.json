@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pm_kusum_simple_002_ARC_08",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_simple_002",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check and tell me how much subsidy I would get if I install a 5HP standalone solar pump? I haven't applied yet but I want to know the details before I start the process."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "pump_capacity": {
+              "value": "5HP",
+              "eval_mode": "EXACT"
+            },
+            "component_type": {
+              "value": "standalone",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

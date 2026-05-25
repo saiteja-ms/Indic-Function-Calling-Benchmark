@@ -1,0 +1,51 @@
+{
+  "scenario_id": "pmkusum_task_irrelevance_007_ARC_14",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_007",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "application_status": "approved",
+    "farmer_share_payment_status": "pending"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My regular electricity bill for the farm is pending and I need to pay it quickly before they cut the power."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Regular electricity bills cannot be paid through PM-KUSUM tools."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I have my consumer number ready, it's 123456789. Just process the payment from my side."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Regular electricity bills cannot be paid through PM-KUSUM tools."
+    }
+  ],
+  "expected_final_state": {}
+}

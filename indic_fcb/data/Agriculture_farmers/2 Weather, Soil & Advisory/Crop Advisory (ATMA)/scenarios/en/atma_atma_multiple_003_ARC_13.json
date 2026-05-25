@@ -1,0 +1,64 @@
+{
+  "scenario_id": "atma_atma_multiple_003_ARC_13",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_003",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to find out what in-person training programmes are available next month for groundnut farming in Rajkot, Gujarat."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_available_trainings",
+          "parameters": {
+            "state": {
+              "value": "gujarat",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "rajkot",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "groundnut",
+              "eval_mode": "EXACT"
+            },
+            "training_mode": {
+              "value": "in_person",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "training_mode": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

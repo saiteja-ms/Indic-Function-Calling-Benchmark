@@ -1,0 +1,83 @@
+{
+  "scenario_id": "atma_simple_007_ARC_03",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_007",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My paddy crop needs better care, and I heard there are some training programmes next month. Can you check if anything is available? I am at the CSC center asking for help."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I live in Tamil Nadu. Are you sure you can find the details for me?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "My district is Madurai."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_get_available_trainings",
+          "arguments": {
+            "state": "tamil_nadu",
+            "district": "madurai",
+            "crop_name": "paddy"
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

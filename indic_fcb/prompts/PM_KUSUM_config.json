@@ -1,0 +1,6 @@
+{
+  "USECASE_DISPLAY_NAME": "PM-KUSUM (solar pump subsidy)",
+  "USECASE_ID": "pm_kusum",
+  "USECASE_PREFIX": "pmkusum",
+  "USECASE_STATE_FIELDS_BLOCK": "  eligibility_status: unknown | eligible | ineligible\n  application_status: not_submitted | submitted | under_review | approved | rejected\n  land_record_status: not_validated | validated | mismatch\n  has_existing_grid_pump: true | false\n  vendor_selection_status: not_required | pending | confirmed | expired\n  installation_status: not_scheduled | scheduled | in_progress | completed | failed\n  subsidy_disbursement_status: not_initiated | calculated | approved | disbursed | failed\n  farmer_share_payment_status: not_due | pending | paid | refunded\n  pump_operational_status: not_installed | operational | faulty | under_repair\n  scheme_component_selected: component_a | component_b | component_c | null\n  has_active_grievance: true | false\n  grievance_status: not_filed | filed | under_review | resolved | rejected"
+}

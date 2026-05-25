@@ -1,0 +1,68 @@
+{
+  "scenario_id": "atma_atma_simple_012_ARC_10",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_012",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to authenticate into the ATMA system right now. My mobile number is 8543210976."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "otp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The OTP is 456789. Hurry up and log me in, I don't have all day to wait for this."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_authenticate",
+          "parameters": {
+            "mobile_number": {
+              "value": "8543210976",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true
+  }
+}

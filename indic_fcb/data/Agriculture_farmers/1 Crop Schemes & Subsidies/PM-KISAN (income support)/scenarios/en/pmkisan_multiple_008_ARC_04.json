@@ -1,0 +1,84 @@
+{
+  "scenario_id": "pmkisan_multiple_008_ARC_04",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_008",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "registration_status": "registered",
+    "payment_failure_reason": "bank_account_invalid",
+    "installments": [
+      {
+        "installment_id": "INST_04_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_04_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_04_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "failed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come because of an invalid bank account! I am very angry and want to file a grievance right now! I have already updated my bank details to fix the issue. My beneficiary ID is PMK987654321 and the failed transaction ID is TXN1234567890123. Resolve this payment failure immediately or I will complain to a senior officer!"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK987654321",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated my bank details",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

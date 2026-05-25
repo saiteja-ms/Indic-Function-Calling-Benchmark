@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_task_irrelevance_011_ARC_10",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_011",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to register my cattle for insurance right now. I have 5 cows and I don't want to waste time. Do it quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PMFBY covers only crops; livestock insurance is a separate scheme."
+    }
+  ],
+  "expected_final_state": {}
+}

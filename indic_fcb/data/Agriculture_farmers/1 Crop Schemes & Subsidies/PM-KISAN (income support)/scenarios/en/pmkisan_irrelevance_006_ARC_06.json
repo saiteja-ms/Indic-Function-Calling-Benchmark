@@ -1,0 +1,35 @@
+{
+  "scenario_id": "pmkisan_irrelevance_006_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_006",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My loan money has not come. Can you check my Kisan Credit Card loan status? I am worried."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "KCC handles agricultural loans, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

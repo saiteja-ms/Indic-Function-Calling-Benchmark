@@ -1,0 +1,64 @@
+{
+  "scenario_id": "atma_atma_miss_param_001_ARC_15",
+  "usecase": "atma",
+  "intent_ref": "atma_miss_param_001",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to find the nearest KVK in Tamil Nadu."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "district",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My district is Coimbatore."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_find_nearest_kvk",
+          "parameters": {
+            "state": {
+              "value": "tamil_nadu",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "coimbatore",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,81 @@
+{
+  "scenario_id": "atma_atma_simple_013_ARC_11",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_013",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "not_registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My farmer profile is not registered in the ATMA system and I need to fix this so I can access the features. My name is Ravi Krishna and I am from Guntur district in Andhra Pradesh."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "village_name",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My village is Tenali. Also, my session token is 778899."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_farmer_profile",
+          "parameters": {
+            "session_token": {
+              "value": "778899",
+              "eval_mode": "EXACT"
+            },
+            "farmer_name": {
+              "value": "Ravi Krishna",
+              "eval_mode": "SUBSTRING"
+            },
+            "state": {
+              "value": "andhra_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "guntur",
+              "eval_mode": "EXACT"
+            },
+            "village_name": {
+              "value": "Tenali",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farmer_profile_status": "registered"
+  }
+}

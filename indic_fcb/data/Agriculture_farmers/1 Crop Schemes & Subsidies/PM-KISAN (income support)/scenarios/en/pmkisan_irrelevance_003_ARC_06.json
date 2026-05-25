@@ -1,0 +1,35 @@
+{
+  "scenario_id": "pmkisan_irrelevance_003_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_003",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My wheat crop is not growing well and I need to test my soil. I applied for a Soil Health Card some time ago. Can you please check the status of my Soil Health Card? I am not sure if I am asking in the right place."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil Health Card scheme handles soil testing, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

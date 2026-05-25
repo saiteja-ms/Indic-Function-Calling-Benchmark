@@ -1,0 +1,74 @@
+{
+  "scenario_id": "atma_atma_simple_011_ARC_14",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_011",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "attendance_confirmed": true,
+    "certificate_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane training is completed but the certificate is not showing up. I need to download it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "training_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The training ID is TRG-7788 and my session token is sess_abc123. Please generate the download link quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_download_training_certificate",
+          "parameters": {
+            "session_token": {
+              "value": "sess_abc123",
+              "eval_mode": "EXACT"
+            },
+            "training_id": {
+              "value": "TRG-7788",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "certificate_status": "downloaded"
+  }
+}

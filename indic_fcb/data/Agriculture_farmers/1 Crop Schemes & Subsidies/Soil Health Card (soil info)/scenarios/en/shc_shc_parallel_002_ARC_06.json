@@ -1,0 +1,91 @@
+{
+  "scenario_id": "shc_shc_parallel_002_ARC_06",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_002",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN001122334455",
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crops are not yielding well this season. I want to check the fertilizer recommendations for my fields to fix this problem."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "crop_name",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I need the recommendations for wheat and soybean. Can you check for both?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "card_id",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I am a bit worried about sharing my details, but I really need this. My soil health card number is SHC-123456. Please tell me what to do."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_fertilizer_recommendation",
+          "parameters": {
+            "card_id": {
+              "value": "SHC-123456",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        },
+        {
+          "tool_name": "shc_get_fertilizer_recommendation",
+          "parameters": {
+            "card_id": {
+              "value": "SHC-123456",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "soybean",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

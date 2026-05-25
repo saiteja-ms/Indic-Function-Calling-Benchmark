@@ -1,0 +1,65 @@
+{
+  "scenario_id": "pmkisan_multiple_009_ARC_16",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_009",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "ekyc_status": "completed",
+    "authenticated": true,
+    "session_token": "sess_abc123",
+    "beneficiary_id": "BEN_16",
+    "bank_account": "PUNB0001234|001122334455",
+    "installments": [],
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I have an inquiry regarding updating my bank details for PM-KISAN. Can you process this update for me? My land records for plot 45B in Haryana (state code 06, district code 021) are already verified and perfectly fine, so please do not validate them again. My beneficiary ID is BEN_16. I would like to change my bank account to a new one with IFSC code PUNB0009876 and account number 998877665544."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "sess_abc123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "BEN_16",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "PUNB0009876",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "998877665544",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "scenario_id": "pmkisan_multiple_012_ARC_04",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_012",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "bank_account": "BKID0001234|1234567890",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check my PM-KISAN status. I am not registered yet, but I need to know my status for the scheme. These processes are always so confusing."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do you need that? Fine, my Aadhaar is 567890123456. Just check it quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "567890123456",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

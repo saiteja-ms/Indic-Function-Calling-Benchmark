@@ -1,0 +1,50 @@
+{
+  "scenario_id": "shc_shc_multiple_007_ARC_15",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_007",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "sampling_window_status": "closed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to check the next soil sampling window for the kharif season in district TN-CBE. Give me the dates immediately so I can plan."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_sampling_window",
+          "parameters": {
+            "district_code": {
+              "value": "TN-CBE",
+              "eval_mode": "EXACT"
+            },
+            "cropping_season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

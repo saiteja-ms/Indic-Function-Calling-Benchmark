@@ -1,0 +1,36 @@
+{
+  "scenario_id": "atma_task_irrelevance_002_ARC_05",
+  "usecase": "atma",
+  "intent_ref": "atma_task_irrelevance_002",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if someone can come to my farm in Cuttack to collect a soil sample for testing? My son is helping me use this app."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil testing is handled by the Soil Health Card (SHC) scheme, not ATMA."
+    }
+  ],
+  "expected_final_state": {}
+}

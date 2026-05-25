@@ -1,0 +1,53 @@
+{
+  "scenario_id": "pm_kusum_simple_003_ARC_12",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_simple_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "active",
+    "land_records_verified": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to apply for the solar pump subsidy, but first I need to see the list of empanelled vendors. I am from Ludhiana, Punjab. Please provide the list immediately without any unnecessary steps."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_vendor_list",
+          "parameters": {
+            "state": {
+              "value": "Punjab",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Ludhiana",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

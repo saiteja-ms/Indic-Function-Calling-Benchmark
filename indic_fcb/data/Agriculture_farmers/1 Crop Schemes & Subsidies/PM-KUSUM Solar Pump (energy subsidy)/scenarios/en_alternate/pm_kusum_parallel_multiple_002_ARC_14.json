@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pm_kusum_parallel_multiple_002_ARC_14",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_parallel_multiple_002",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "approved",
+    "installation_status": "in_progress"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump application was approved but the installation is taking too long. I need you to check my application status and also track the installation progress right now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "application_id",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My application ID is APP-123456. Please check it quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP-123456",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pm_kusum_track_installation",
+          "parameters": {
+            "application_id": {
+              "value": "APP-123456",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

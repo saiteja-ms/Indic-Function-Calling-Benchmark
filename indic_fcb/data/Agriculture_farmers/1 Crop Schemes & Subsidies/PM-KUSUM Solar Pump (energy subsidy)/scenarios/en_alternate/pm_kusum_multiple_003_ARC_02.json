@@ -1,0 +1,52 @@
+{
+  "scenario_id": "pm_kusum_multiple_003_ARC_02",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_multiple_003",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "not_applied"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son is helping me with this. Can you submit my PM-KUSUM application for Component B? My Aadhaar number is 345678901234 and my mobile number is 8765432109."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_submit_application",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "345678901234",
+              "eval_mode": "EXACT"
+            },
+            "component": {
+              "value": "B",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "application_status": "submitted"
+  }
+}

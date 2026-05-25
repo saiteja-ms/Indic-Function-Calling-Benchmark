@@ -1,0 +1,87 @@
+{
+  "scenario_id": "shc_shc_parallel_001_ARC_01",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_001",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "sample_collection_status": "in_transit"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soil samples were taken days ago but I haven't heard anything. I need to check the status for both of my plots."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "sample_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The first sample ID is SMPL-1001. I am looking for the second slip, hold on."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "sample_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Found it. The second sample ID is SMPL-1002. Can you check where both of these are right now?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_get_sample_status",
+          "arguments": {
+            "sample_id": "SMPL-1001"
+          },
+          "eval_mode": {
+            "sample_id": "EXACT"
+          }
+        },
+        {
+          "name": "shc_get_sample_status",
+          "arguments": {
+            "sample_id": "SMPL-1002"
+          },
+          "eval_mode": {
+            "sample_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

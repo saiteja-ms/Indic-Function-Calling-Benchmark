@@ -1,0 +1,150 @@
+{
+  "scenario_id": "pmkisan_long_ctx_003_ARC_02",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_long_ctx_003",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_02_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_02_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_02_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "failed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, I am Sunita Devi. My grandson is helping me check my PM-KISAN account. I went to the bank yesterday because my money didn't come."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The bank manager told me there is some Aadhaar mismatch. I waited there for three hours."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "They finally updated my Aadhaar in their system. Can you tell me how to check if my old payment is still failed?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "My grandson says we need to track the payment first. The transaction ID he wrote down is TXN1234567890123."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_payment",
+          "parameters": {
+            "transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Okay, we want to resolve the failure now. My grandson says our beneficiary ID is PMK987654321 and he got a session token: TOKEN9999. The action we took is 'updated Aadhaar at bank'."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "TOKEN9999",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK987654321",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated Aadhaar at bank",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

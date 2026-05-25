@@ -1,0 +1,149 @@
+{
+  "scenario_id": "pmfby_pmfby_long_context_004_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_long_context_004",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "enrollment_status": "enrolled",
+    "cutoff_date_passed": false,
+    "crop_declared": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Harpreet Kaur from Ludhiana. I have a large farm here."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I usually grow wheat and paddy on my 5.5 hectares of land."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "This season, I was planning to sow paddy as usual, but the weather forecast made me reconsider."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "So I decided to change my crop plan. I need to update my crop declaration for my insurance. My Aadhaar is 456789012346 and mobile is 6321098754."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6321098754",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "The OTP is 456789. Please check my enrollment status and update the crop to maize."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_enrollment_status",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_TOKEN_PLACEHOLDER",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Now update the crop declaration."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_update_crop_declaration",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_TOKEN_PLACEHOLDER",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "new_crop_name": {
+              "value": "maize",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "crop_declared": true
+  }
+}

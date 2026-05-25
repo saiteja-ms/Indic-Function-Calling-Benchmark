@@ -1,0 +1,66 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_012_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_012",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "installation_status": "scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the installation schedule for my solar pump immediately. My application ID is APP-123456. Don't make me repeat myself."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "This is ridiculous, why do you need that? Fine, my session token is TOKEN-9876. Give me the schedule now or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_installation_schedule",
+          "parameters": {
+            "session_token": {
+              "value": "TOKEN-9876",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "APP-123456",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

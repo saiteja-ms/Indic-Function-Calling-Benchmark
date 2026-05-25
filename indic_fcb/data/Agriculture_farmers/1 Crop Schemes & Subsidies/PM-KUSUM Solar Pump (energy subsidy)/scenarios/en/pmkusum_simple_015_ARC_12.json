@@ -1,0 +1,78 @@
+{
+  "scenario_id": "pmkusum_simple_015_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_015",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to file a grievance right now. My application ID is PK-998877 and my session token is ST-12345. The vendor is completely ignoring my calls and the installation is pending. I will complain to a senior officer if this isn't fixed."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_category"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Just put the category as 'vendor_unresponsive' and submit it. I don't have time for this."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "ST-12345",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "PK-998877",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "vendor_unresponsive",
+              "eval_mode": "EXACT"
+            },
+            "grievance_remarks": {
+              "value": "The vendor is completely ignoring my calls and the installation is pending.",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

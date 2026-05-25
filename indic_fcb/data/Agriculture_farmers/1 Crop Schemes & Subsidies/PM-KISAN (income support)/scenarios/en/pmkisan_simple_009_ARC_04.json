@@ -1,0 +1,98 @@
+{
+  "scenario_id": "pmkisan_simple_009_ARC_04",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_009",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_04_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_ARC_04_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_ARC_04_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for months because my bank account is not seeded! I am tired of this process. I want to update my bank details immediately. My beneficiary ID is MH123456 and my session token is SESS123."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_ifsc_code",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I don't understand why you need to ask again, I have filed grievances before! Fine, my new IFSC code is BKID0001234 and the account number is 001122334455. Do it now or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "SESS123",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "MH123456",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "BKID0001234",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "001122334455",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

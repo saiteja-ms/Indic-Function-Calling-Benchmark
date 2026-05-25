@@ -1,0 +1,66 @@
+{
+  "scenario_id": "pm_kusum_parallel_002_ARC_16",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_parallel_002",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "active",
+    "land_records_verified": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am researching the PM-KUSUM scheme to install a solar pump on my farm. Could you please provide the approved vendor lists for both Karnal and Panipat districts in Haryana?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_vendor_list",
+          "parameters": {
+            "state": {
+              "value": "Haryana",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Karnal",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pm_kusum_get_vendor_list",
+          "parameters": {
+            "state": {
+              "value": "Haryana",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Panipat",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

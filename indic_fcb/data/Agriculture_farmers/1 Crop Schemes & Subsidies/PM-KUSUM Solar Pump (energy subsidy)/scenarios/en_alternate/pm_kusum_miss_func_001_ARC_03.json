@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pm_kusum_miss_func_001_ARC_03",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_miss_func_001",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB|001122334455",
+    "land_ownership": "tenant",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am at the CSC center right now. I am farming on leased land, so I am a tenant. The landowner is out of town and cannot give his signature. Can you please submit my PM-KUSUM application for a standalone solar pump without his consent? I really need the water for my crops."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "I cannot submit the application because PM-KUSUM requires either land ownership or explicit landowner consent for installation.",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, without his signature it is not possible at all? I get confused by all these strict rules. Okay, I will just give up and go home. Thank you for checking."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

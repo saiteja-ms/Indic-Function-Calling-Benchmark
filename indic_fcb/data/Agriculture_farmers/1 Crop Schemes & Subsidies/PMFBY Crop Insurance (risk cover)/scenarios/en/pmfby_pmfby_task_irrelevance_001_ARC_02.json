@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_001_ARC_02",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_001",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if my PM-KISAN installment has come? My grandson is helping me check."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KISAN income support is a separate scheme and not handled by PMFBY enrollment tools."
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,66 @@
+{
+  "scenario_id": "shc_shc_multiple_006_ARC_10",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_006",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "plot_registration_status": "verified"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to find where I can get my soil tested. I live in Rajasthan, state code RJ. Show me the labs."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district_code"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My district is Kota, code KOT. Just give me the list quickly, I need to get this done."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_nearby_labs",
+          "parameters": {
+            "state_code": {
+              "value": "RJ",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "KOT",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

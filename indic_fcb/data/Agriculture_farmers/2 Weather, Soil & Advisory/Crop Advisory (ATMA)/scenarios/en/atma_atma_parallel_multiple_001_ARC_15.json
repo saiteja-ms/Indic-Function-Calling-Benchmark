@@ -1,0 +1,67 @@
+{
+  "scenario_id": "atma_atma_parallel_multiple_001_ARC_15",
+  "usecase": "atma",
+  "intent_ref": "atma_parallel_multiple_001",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "farmer_profile_status": "verified"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to find the nearest KVK in Coimbatore, Tamil Nadu. I also need the SMS contact for cotton in my district. Please provide both immediately."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_find_nearest_kvk",
+          "parameters": {
+            "state": {
+              "value": "tamil_nadu",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "coimbatore",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "atma_get_sms_contact",
+          "parameters": {
+            "state": {
+              "value": "tamil_nadu",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "coimbatore",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "cotton",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,102 @@
+{
+  "scenario_id": "pmfby_pmfby_base_001_ARC_07",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_base_001",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to enroll for crop insurance for my sugarcane crop in Uttar Pradesh, Sitapur district, village Rampur. My survey number is 123/4."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_validate_land_records",
+          "parameters": {
+            "state_name": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Sitapur",
+              "eval_mode": "SUBSTRING"
+            },
+            "village_name": {
+              "value": "Rampur",
+              "eval_mode": "SUBSTRING"
+            },
+            "survey_number": {
+              "value": "123/4",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The land area is 1.2 hectares and the season is kharif."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Sitapur",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "sugarcane",
+              "eval_mode": "SUBSTRING"
+            },
+            "area_hectares": {
+              "value": 1.2,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "enrollment_status": "applied",
+    "premium_payment_status": "paid"
+  }
+}

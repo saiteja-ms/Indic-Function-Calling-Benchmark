@@ -1,0 +1,70 @@
+{
+  "scenario_id": "atma_atma_simple_001_ARC_04",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_001",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cotton crop is failing and I need to speak to an expert in person. I am from Maharashtra. Where is the nearest KVK?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am in Nashik district. Just tell me the location quickly before I complain to the senior officer about this delay."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_find_nearest_kvk",
+          "parameters": {
+            "state": {
+              "value": "maharashtra",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "nashik",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

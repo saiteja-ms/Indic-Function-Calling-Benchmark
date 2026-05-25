@@ -1,0 +1,72 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_multiple_003_ARC_08",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_003",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "policy_status": "active",
+    "premium_payment_status": "paid"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check my crop insurance policy details and also give me the premium receipt? I am a first-time user and not sure what you need."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "policy_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I have my policy number here. It is POL-987654."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_get_policy_details",
+          "arguments": {
+            "policy_id": "POL-987654"
+          },
+          "eval_mode": {
+            "policy_id": "EXACT"
+          }
+        },
+        {
+          "name": "pmfby_get_premium_receipt",
+          "arguments": {
+            "policy_id": "POL-987654"
+          },
+          "eval_mode": {
+            "policy_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

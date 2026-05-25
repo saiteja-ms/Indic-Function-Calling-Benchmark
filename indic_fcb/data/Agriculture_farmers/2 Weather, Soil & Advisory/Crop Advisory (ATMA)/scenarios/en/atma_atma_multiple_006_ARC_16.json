@@ -1,0 +1,54 @@
+{
+  "scenario_id": "atma_atma_multiple_006_ARC_16",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_006",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "verified",
+    "programme_availability": "open",
+    "training_registration_status": "not_registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello. I am Ranjit Singh from Karnal. I am checking the ATMA portal and I want to sign up for the pest management workshop. I have my details ready: my training ID is TRG-PEST-001 and my active session token is tok_9988. Can you please register me for this training programme?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_for_training",
+          "parameters": {
+            "session_token": {
+              "value": "tok_9988",
+              "eval_mode": "EXACT"
+            },
+            "training_id": {
+              "value": "TRG-PEST-001",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "training_registration_status": "registered"
+  }
+}

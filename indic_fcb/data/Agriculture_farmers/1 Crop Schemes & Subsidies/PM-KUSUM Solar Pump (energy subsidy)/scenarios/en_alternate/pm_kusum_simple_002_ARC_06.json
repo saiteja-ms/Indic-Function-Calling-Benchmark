@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pm_kusum_simple_002_ARC_06",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_simple_002",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My fields are completely dry and I am facing a lot of problems with irrigation. I want to know how much subsidy I can get for a 5HP standalone solar pump. Can you please calculate and tell me? I just want to check the amount first."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "pump_capacity_hp": {
+              "value": 5,
+              "eval_mode": "EXACT"
+            },
+            "component_type": {
+              "value": "standalone",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

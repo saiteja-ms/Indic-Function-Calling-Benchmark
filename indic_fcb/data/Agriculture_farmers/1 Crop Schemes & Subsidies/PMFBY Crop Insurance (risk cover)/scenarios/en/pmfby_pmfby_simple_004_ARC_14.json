@@ -1,0 +1,76 @@
+{
+  "scenario_id": "pmfby_pmfby_simple_004_ARC_14",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_simple_004",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop needs insurance but I am worried I might miss the deadline. What is the last date to apply for crop insurance in Uttar Pradesh?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is for Kharif 2024. Please check and tell me quickly, I don't want to waste time."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "season": "EXACT",
+            "year": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

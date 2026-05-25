@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pmkisan_par_multi_002_ARC_16",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_par_multi_002",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "registration_status": "registered",
+    "has_active_grievance": true,
+    "grievance_status": "under_review",
+    "beneficiary_id": "PMK123456789",
+    "grievance_id": "GRV9876543",
+    "session_token": "tok_789",
+    "bank_account": "PUNB0001234|1234567890",
+    "installments": [
+      {
+        "installment_id": "INST_01",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit from Karnal. I would like to inquire about my PM-KISAN payment history and also track the status of my active grievance. To save time, here are my details: my beneficiary ID is PMK123456789, my grievance ID is GRV9876543, and my current session token is tok_789. Could you please fetch the information for both?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": "tok_789",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK123456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV9876543",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

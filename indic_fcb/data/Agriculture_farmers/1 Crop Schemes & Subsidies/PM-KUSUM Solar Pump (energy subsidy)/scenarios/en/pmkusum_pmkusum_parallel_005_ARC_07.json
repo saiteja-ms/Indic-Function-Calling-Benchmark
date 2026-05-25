@@ -1,0 +1,71 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_005_ARC_07",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_005",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "application_status": "submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump applications have not moved forward. I submitted two of them and want to check their status. One of the application IDs is KUSUM-UP-101."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The second application ID is KUSUM-UP-102."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "KUSUM-UP-101",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "KUSUM-UP-102",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

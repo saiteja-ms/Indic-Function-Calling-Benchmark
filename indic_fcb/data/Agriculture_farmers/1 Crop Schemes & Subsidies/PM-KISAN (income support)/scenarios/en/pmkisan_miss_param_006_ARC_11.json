@@ -1,0 +1,94 @@
+{
+  "scenario_id": "pmkisan_miss_param_006_ARC_11",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_006",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "land_record_status": "not_validated",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_11_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_11_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_11_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "credited"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN money is stuck because my land records are not validated. Please validate my land ownership. My district code is 543 and my plot number is AP-GNT-998."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "state_code",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I forgot. My state code is 28 for Andhra Pradesh."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "28",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "543",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "AP-GNT-998",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "land_record_status": "validated"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_009_ARC_05",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_009",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the subsidy amount for the MNRE rooftop solar scheme? My son is helping me look into it for our house in Cuttack."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "MNRE rooftop solar is an urban scheme, distinct from PM-KUSUM agricultural pumps."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Let me try asking again. We just want to know the central subsidy for a 3 KW rooftop solar setup. Can you calculate that for me?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "MNRE rooftop solar is an urban scheme, distinct from PM-KUSUM agricultural pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmkisan_simple_010_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_010",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "registration_status": "registered",
+    "land_record_status": "not_validated",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "installments": [],
+    "bank_account": "UCBA0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaskar, my grandson is helping me on the phone. I want to ask if my land records are validated for the PM-KISAN scheme?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "state_code",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "He says our state code is 21 for Odisha and district code is 375 for Cuttack. The plot number is P-1234."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "21",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "375",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "P-1234",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "land_record_status": "validated"
+  }
+}

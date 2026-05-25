@@ -1,0 +1,109 @@
+{
+  "scenario_id": "pmkisan_simple_003_ARC_03",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_003",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "registration_status": "registered",
+    "ekyc_status": "pending",
+    "has_pending_over_90_days": true,
+    "authenticated": true,
+    "session_token": "SESS_98765",
+    "beneficiary_id": "TN123456789",
+    "installments": [
+      {
+        "installment_id": "INST_03_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_03_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_03_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ],
+    "bank_account": "CNRB0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN money has stopped coming. The CSC operator told me my eKYC is pending. I don't know what to do, can you help me?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Beneficiary ID? Let me check the paper... it is TN123456789. The CSC boy said eKYC is pending, will this fix my problem?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_otp",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "OTP? Yes, I received a message on my phone. The number is 456789. Are you sure this will complete my eKYC? I am very confused."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_complete_ekyc",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "TN123456789",
+              "eval_mode": "EXACT"
+            },
+            "aadhaar_otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "ekyc_status": "completed",
+    "has_pending_over_90_days": false
+  }
+}

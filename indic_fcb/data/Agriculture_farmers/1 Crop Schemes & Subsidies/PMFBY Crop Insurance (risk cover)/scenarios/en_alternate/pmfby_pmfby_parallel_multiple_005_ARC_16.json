@@ -1,0 +1,68 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_multiple_005_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_005",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "cutoff_date_passed": false,
+    "policy_status": "not_issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Ranjit Singh from Karnal, Haryana. I want to check the enrollment cutoff dates for the Rabi 2023 season. Also, can you provide the contact details of the insurance company assigned to my district?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Haryana",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2023",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_insurer_contact",
+          "parameters": {
+            "state": {
+              "value": "Haryana",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Karnal",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

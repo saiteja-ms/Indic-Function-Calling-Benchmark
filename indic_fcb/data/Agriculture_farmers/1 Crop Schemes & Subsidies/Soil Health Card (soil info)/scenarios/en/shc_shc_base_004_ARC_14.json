@@ -1,0 +1,140 @@
+{
+  "scenario_id": "shc_shc_base_004_ARC_14",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_base_004",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "sample_collection_status": "in_transit",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soil sample has been stuck in transit for weeks. I want to check its status and file a complaint about the delay. My Aadhaar is 678901234568 and my mobile is 8432109765."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234568",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "8432109765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The OTP is 456789. The sample ID is SMPL98765. Please check it and file a complaint saying 'The sample has been in transit for over a month and the test is delayed'."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_authenticate",
+          "parameters": {
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Okay, now check the sample status."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_sample_status",
+          "parameters": {
+            "sample_id": {
+              "value": "SMPL98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Now file the complaint."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "mock_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "grievance_category": {
+              "value": "test_delay",
+              "eval_mode": "EXACT"
+            },
+            "complaint_description": {
+              "value": "The sample has been in transit for over a month and the test is delayed",
+              "eval_mode": "SUBSTRING"
+            },
+            "related_id": {
+              "value": "SMPL98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

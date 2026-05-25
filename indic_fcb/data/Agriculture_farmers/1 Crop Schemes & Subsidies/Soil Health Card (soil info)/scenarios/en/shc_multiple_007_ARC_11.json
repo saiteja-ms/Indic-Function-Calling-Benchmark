@@ -1,0 +1,62 @@
+{
+  "scenario_id": "shc_multiple_007_ARC_11",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_007",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "sampling_window_status": "closed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am trying to request a sample collection because my plot needs a soil test, but I don't know when the next sampling window opens. My district code is GNT01."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "cropping_season",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I need it for the rabi season."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_sampling_window",
+          "arguments": {
+            "district_code": "GNT01",
+            "cropping_season": "rabi"
+          },
+          "eval_mode": {
+            "district_code": "EXACT",
+            "cropping_season": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

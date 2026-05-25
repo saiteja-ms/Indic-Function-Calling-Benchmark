@@ -1,0 +1,79 @@
+{
+  "scenario_id": "atma_atma_simple_003_ARC_12",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the latest advisory bulletin for my wheat crop in Ludhiana, Punjab. Let's skip the pleasantries and get to it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "crop_stage",
+        "advisory_type"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is in the vegetative stage and I need the nutrient management advisory. Just fetch it now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_advisory_bulletin",
+          "parameters": {
+            "state": {
+              "value": "punjab",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "ludhiana",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            },
+            "crop_stage": {
+              "value": "vegetative",
+              "eval_mode": "EXACT"
+            },
+            "advisory_type": {
+              "value": "nutrient_management",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

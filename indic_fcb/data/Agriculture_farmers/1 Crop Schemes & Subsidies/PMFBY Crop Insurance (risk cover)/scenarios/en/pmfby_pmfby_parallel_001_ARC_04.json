@@ -1,0 +1,77 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_001_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_001",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "enrollment_status": "applied"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crop insurance applications for cotton and soybean are stuck on 'applied' for a long time. I am getting impatient with this process. Can you check the status for both of my crops?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Fine. The application ID for cotton is MH-COT-2023-001 and for soybean it is MH-SOY-2023-002. Check them right now. If this isn't resolved quickly, I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_enrollment_status",
+          "parameters": {
+            "application_id": {
+              "value": "MH-COT-2023-001",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "application_id": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmfby_get_enrollment_status",
+          "parameters": {
+            "application_id": {
+              "value": "MH-SOY-2023-002",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "application_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

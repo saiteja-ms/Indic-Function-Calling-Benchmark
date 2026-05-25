@@ -1,0 +1,98 @@
+{
+  "scenario_id": "pmkisan_miss_param_004_ARC_09",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_004",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "installments": [
+      {
+        "installment_id": "INST_09_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "not_seeded"
+      },
+      {
+        "installment_id": "INST_09_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "not_seeded"
+      },
+      {
+        "installment_id": "INST_09_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "not_seeded"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for the last few months because my bank account is not seeded. My son is helping me and he generated the session token ABC123XYZ for my beneficiary ID PMK998877. Please update my bank details. The new account number is 112233445566."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_ifsc_code",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I forgot to give that. The new IFSC code is SBIN0009876. Please try updating it now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "ABC123XYZ",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK998877",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "SBIN0009876",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "112233445566",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

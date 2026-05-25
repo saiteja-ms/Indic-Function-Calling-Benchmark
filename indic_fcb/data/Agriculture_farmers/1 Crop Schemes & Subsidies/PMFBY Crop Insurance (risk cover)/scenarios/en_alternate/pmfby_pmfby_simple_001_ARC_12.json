@@ -1,0 +1,62 @@
+{
+  "scenario_id": "pmfby_pmfby_simple_001_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_simple_001",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "enrollment_status": "applied"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the enrollment status for my Kharif paddy crop. I am very careful about my data, so I only want to provide what is absolutely necessary to get this done."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Fine, my application ID is APP987654321. Now please check it quickly, I have a lot of work to do on the farm."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_get_enrollment_status",
+          "arguments": {
+            "application_id": "APP987654321"
+          },
+          "eval_mode": {
+            "application_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

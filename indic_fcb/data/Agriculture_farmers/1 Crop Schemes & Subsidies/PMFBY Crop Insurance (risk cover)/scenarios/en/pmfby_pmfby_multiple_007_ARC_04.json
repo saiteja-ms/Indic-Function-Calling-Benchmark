@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_007_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_007",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cotton crop needs insurance. Can I get it in Nashik district? I don't want to waste time checking eligibility if it's not even notified."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state_name",
+        "season",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am in Maharashtra. It is for the kharif season of 2024. Just tell me if it's notified or I will complain to the agriculture officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_get_notified_crops",
+          "arguments": {
+            "state_name": "Maharashtra",
+            "district_name": "Nashik",
+            "season": "kharif",
+            "year": 2024
+          },
+          "eval_mode": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "year": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,99 @@
+{
+  "scenario_id": "pmkisan_simple_009_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_009",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "authenticated": true,
+    "session_token": "sess_abc123",
+    "beneficiary_id": "PMK_UP_890123",
+    "bank_account": "SBIN0001234|001122334455",
+    "ekyc_status": "completed",
+    "installments": [
+      {
+        "installment_id": "INST_07_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_07_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_07_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ],
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, my PM-KISAN money is not coming because my old bank account is closed. I need to add my new bank account. My beneficiary ID is PMK_UP_890123."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_account_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My new account number is 998877665544 and the IFSC code is SBIN0009876."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "sess_abc123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK_UP_890123",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "SBIN0009876",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "998877665544",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

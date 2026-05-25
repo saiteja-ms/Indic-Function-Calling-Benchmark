@@ -1,0 +1,68 @@
+{
+  "scenario_id": "pm_kusum_miss_func_002_ARC_05",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_miss_func_002",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, my son is helping me use this app. I want to know if I can get a subsidy for a 15HP solar pump for my farm in Cuttack."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "Subsidy is generally restricted to pumps up to 7.5HP (or 10HP in some states), 15HP is not eligible for subsidy.",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I understand. Can you check if I am eligible for a 7.5HP pump instead? My Aadhaar number is 678901234567."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234567",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": 7.5,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

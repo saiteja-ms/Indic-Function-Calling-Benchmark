@@ -1,0 +1,80 @@
+{
+  "scenario_id": "shc_shc_parallel_multiple_002_ARC_04",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_multiple_002",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "sampling_window_status": "closed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soil needs testing but I don't know where to go. Just find me nearby labs for state code MH and also tell me when the sampling window opens. Don't make me wait."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district_code",
+        "cropping_season"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I told you I'm in a hurry. District code is MH-15 and the season is rabi."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_nearby_labs",
+          "parameters": {
+            "state_code": {
+              "value": "MH",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "MH-15",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "shc_get_sampling_window",
+          "parameters": {
+            "district_code": {
+              "value": "MH-15",
+              "eval_mode": "EXACT"
+            },
+            "cropping_season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

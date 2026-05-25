@@ -1,0 +1,51 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_func_003_ARC_10",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_003",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "policy_status": "active",
+    "premium_payment_status": "paid"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to cancel my active crop insurance policy and get a premium refund immediately."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "request premium refund for an active policy",
+      "irrelevance_reason": "unsupported_action"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "This is unacceptable. I will complain to a senior officer if you don't process my refund right now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "request premium refund for an active policy",
+      "irrelevance_reason": "unsupported_action"
+    }
+  ],
+  "expected_final_state": {}
+}

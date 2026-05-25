@@ -1,0 +1,79 @@
+{
+  "scenario_id": "shc_shc_parallel_002_ARC_14",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_002",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soil health card was issued recently, but I am facing issues figuring out what to apply to my fields. I need the fertilizer recommendations for both sugarcane and wheat right now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "card_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do you need more details? Fine, my card ID is SHC-UP-12345. Just give me the details quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_fertilizer_recommendation",
+          "parameters": {
+            "card_id": {
+              "value": "SHC-UP-12345",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "sugarcane",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        },
+        {
+          "tool_name": "shc_get_fertilizer_recommendation",
+          "parameters": {
+            "card_id": {
+              "value": "SHC-UP-12345",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

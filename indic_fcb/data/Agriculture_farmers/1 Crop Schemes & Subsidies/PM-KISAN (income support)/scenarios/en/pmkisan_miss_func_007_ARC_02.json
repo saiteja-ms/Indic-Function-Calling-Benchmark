@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmkisan_miss_func_007_ARC_02",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_func_007",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_02_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_02_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_02_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if my neighbor's PM-KISAN money has come? I don't have their Aadhaar number with me right now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "I cannot check another farmer's status without their Aadhaar number or registered mobile number.",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Okay, I will ask my son to get their Aadhaar number later. Thank you."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

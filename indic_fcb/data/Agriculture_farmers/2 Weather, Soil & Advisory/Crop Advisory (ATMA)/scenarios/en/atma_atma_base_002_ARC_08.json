@@ -1,0 +1,177 @@
+{
+  "scenario_id": "atma_atma_base_002_ARC_08",
+  "usecase": "atma",
+  "intent_ref": "atma_base_002",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "farmer_profile_status": "not_registered",
+    "query_count_open": 0,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check how I can register my profile and ask an expert about my ragi crop? My name is Geetha R. from Mandya, Karnataka, and my village is Maddur."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number",
+        "otp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My Aadhaar is 901234567890 and the OTP is 456789."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "901234567890",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Please register my profile now."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_farmer_profile",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "farmer_name": {
+              "value": "Geetha R.",
+              "eval_mode": "SUBSTRING"
+            },
+            "state": {
+              "value": "karnataka",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "mandya",
+              "eval_mode": "EXACT"
+            },
+            "village_name": {
+              "value": "Maddur",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I want to submit a query because my ragi crop has pests."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_submit_expert_query",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "district": {
+              "value": "mandya",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "ragi",
+              "eval_mode": "EXACT"
+            },
+            "query_text": {
+              "value": "my ragi crop has pests",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Can you track the response for my query Q-9988?"
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_track_query_response",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "query_id": {
+              "value": "Q-9988",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "farmer_profile_status": "registered",
+    "query_status": "submitted",
+    "query_count_open": 1
+  }
+}

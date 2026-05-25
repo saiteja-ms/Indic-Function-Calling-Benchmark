@@ -1,0 +1,75 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_007_ARC_10",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_007",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to see which vendor I should pick for my solar pump. My application is approved. I am from Kota (district code 12), Rajasthan (state code 8). Show me the options quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "pump_capacity_hp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is for a 5 HP pump. Give me the list now, I will complain to a senior officer if this takes too long."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_empanelled_vendors",
+          "parameters": {
+            "state_code": {
+              "value": 8,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 12,
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state_code": "EXACT",
+            "district_code": "EXACT",
+            "pump_capacity_hp": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

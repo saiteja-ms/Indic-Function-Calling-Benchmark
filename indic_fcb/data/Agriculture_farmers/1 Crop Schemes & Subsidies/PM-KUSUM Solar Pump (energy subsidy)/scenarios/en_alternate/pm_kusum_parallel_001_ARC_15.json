@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pm_kusum_parallel_001_ARC_15",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_parallel_001",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to apply for the solar pump subsidy, but first I need to compare the subsidy amounts to decide what to buy. Calculate the subsidy for a 3 HP pump and a 5 HP pump. I am from Tamil Nadu."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "pump_capacity": {
+              "value": 3,
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "Tamil Nadu",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "pump_capacity": {
+              "value": 5,
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "Tamil Nadu",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

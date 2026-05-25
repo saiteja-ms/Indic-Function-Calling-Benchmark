@@ -1,0 +1,84 @@
+{
+  "scenario_id": "pmkusum_parallel_multiple_003_ARC_07",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_multiple_003",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "application_status": "approved",
+    "installation_status": "scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump application was approved, but I have not received any recent updates. Can you check my current application status and also tell me the installation schedule?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, my application ID is PK987654321 and my session token is TOK12345."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "PK987654321",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "application_id": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmkusum_get_installation_schedule",
+          "parameters": {
+            "application_id": {
+              "value": "PK987654321",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": "TOK12345",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "application_id": "EXACT",
+            "session_token": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

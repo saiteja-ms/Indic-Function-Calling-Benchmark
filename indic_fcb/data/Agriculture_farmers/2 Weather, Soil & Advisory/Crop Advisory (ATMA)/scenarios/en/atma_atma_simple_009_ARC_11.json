@@ -1,0 +1,69 @@
+{
+  "scenario_id": "atma_atma_simple_009_ARC_11",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_009",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "verified",
+    "training_registration_status": "not_registered",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cotton crop is getting ruined by pests. I heard there is a training programme at the KVK to help with this. I want to register for it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "training_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The training ID is TRG-882. Also, my session token is ST-9921."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_register_for_training",
+          "arguments": {
+            "session_token": "ST-9921",
+            "training_id": "TRG-882"
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "training_registration_status": "registered"
+  }
+}

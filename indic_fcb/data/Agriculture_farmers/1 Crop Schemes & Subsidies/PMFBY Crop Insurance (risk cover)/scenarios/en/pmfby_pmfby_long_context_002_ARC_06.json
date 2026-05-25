@@ -1,0 +1,178 @@
+{
+  "scenario_id": "pmfby_pmfby_long_context_002_ARC_06",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_long_context_002",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "applied",
+    "premium_payment_status": "failed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My premium payment failed yesterday. I went to the bank and they said my account is fine. Can you check?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am worried because the deadline is near. The bank manager told me to try again online."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I want to retry the payment now. My mobile number is 8654321097."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "mobile_number": {
+              "value": "8654321097",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I received the OTP. It is 456789."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "mobile_number": {
+              "value": "8654321097",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Can you check my enrollment status now?"
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_enrollment_status",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_TOKEN_PLACEHOLDER",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Okay, please pay the premium."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_pay_premium",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_TOKEN_PLACEHOLDER",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 7,
+      "speaker": "user",
+      "message": "Can I get the receipt?"
+    },
+    {
+      "turn_index": 7,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_premium_receipt",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_TOKEN_PLACEHOLDER",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "premium_payment_status": "paid"
+  }
+}

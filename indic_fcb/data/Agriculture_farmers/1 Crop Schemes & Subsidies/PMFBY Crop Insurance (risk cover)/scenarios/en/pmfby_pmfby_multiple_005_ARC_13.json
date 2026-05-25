@@ -1,0 +1,63 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_005_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_005",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID|001122334455",
+    "enrollment_status": "not_enrolled",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to insure my groundnut crop for the upcoming season. My Aadhaar number is 567890123457. I am farming on 1.8 hectares of land. My bank account number is 001122334455 and the IFSC code is BKID0001234. Please submit my enrollment directly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_submit_enrollment",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "567890123457",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "groundnut",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": "1.8",
+              "eval_mode": "EXACT"
+            },
+            "bank_account_number": {
+              "value": "001122334455",
+              "eval_mode": "EXACT"
+            },
+            "ifsc_code": {
+              "value": "BKID0001234",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

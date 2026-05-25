@@ -1,0 +1,47 @@
+{
+  "scenario_id": "pmkisan_multiple_013_ARC_01",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_013",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN|001122334455",
+    "has_active_grievance": true,
+    "grievance_status": "under_review"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for 3 months. The CSC operator filed a complaint for my installment. Can you check the status? The complaint number is GRV9876543. Is it being looked at?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV9876543",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

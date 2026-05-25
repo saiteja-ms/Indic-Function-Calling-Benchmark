@@ -1,0 +1,90 @@
+{
+  "scenario_id": "atma_atma_simple_017_ARC_01",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_017",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "verified",
+    "farm_school_visit_status": "not_scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crops are not doing well. I heard there is a farm school where I can see demonstrations. Can I visit?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district",
+        "preferred_date"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Hardoi district. Is that enough?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "preferred_date"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I want to go on 2024-06-10. If this doesn't work, I'll just give up."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_schedule_farm_school_visit",
+          "parameters": {
+            "session_token": {
+              "value": "sess_123",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "hardoi",
+              "eval_mode": "EXACT"
+            },
+            "preferred_date": {
+              "value": "2024-06-10",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farm_school_visit_status": "scheduled"
+  }
+}

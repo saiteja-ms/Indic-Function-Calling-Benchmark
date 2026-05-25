@@ -1,0 +1,58 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_014_ARC_16",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_014",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "farmer_share_payment_status": "pending"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check and process the payment for the remaining amount of my solar pump? I have all my details ready. My application ID is APP998877, my active session token is SESS123456, the exact payment amount is 50000, and my payment method is UPI."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_pay_farmer_share",
+          "parameters": {
+            "session_token": {
+              "value": "SESS123456",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "APP998877",
+              "eval_mode": "EXACT"
+            },
+            "payment_amount": {
+              "value": 50000,
+              "eval_mode": "EXACT"
+            },
+            "payment_method": {
+              "value": "UPI",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

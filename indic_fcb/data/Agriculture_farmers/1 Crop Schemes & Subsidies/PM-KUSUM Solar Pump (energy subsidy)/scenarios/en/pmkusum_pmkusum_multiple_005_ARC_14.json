@@ -1,0 +1,66 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_005_ARC_14",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_005",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "eligible"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is drying up and I need a solar pump. I want to know what pump capacity I can afford or get. The water depth is 30 meters."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "land_area_acres"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I have 2.2 acres of land. Just tell me the capacity quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 30,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 2.2,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

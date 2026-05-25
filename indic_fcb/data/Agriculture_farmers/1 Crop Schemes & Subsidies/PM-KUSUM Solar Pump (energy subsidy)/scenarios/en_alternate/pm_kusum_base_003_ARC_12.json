@@ -1,0 +1,119 @@
+{
+  "scenario_id": "pm_kusum_base_003_ARC_12",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_base_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "application_status": "payment_done",
+    "installation_status": "assigned",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to check my PM-KUSUM application status and file a grievance because the installation is delayed. Let's get the authentication out of the way. My Aadhaar is 456789012346, mobile is 6321098754, and the OTP is 456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6321098754",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My application ID is PK-998877. Please check the status now so we can proceed with the complaint."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_application_status",
+          "parameters": {
+            "session_token": {
+              "value": "TOKEN_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "PK-998877",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Since it is just sitting at 'assigned', please submit the grievance immediately. The installation is severely delayed and I will escalate this to the district officer if it is not resolved soon."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "TOKEN_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "PK-998877",
+              "eval_mode": "EXACT"
+            },
+            "complaint_description": {
+              "value": "The installation is severely delayed",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "grievance_status": "filed"
+  }
+}

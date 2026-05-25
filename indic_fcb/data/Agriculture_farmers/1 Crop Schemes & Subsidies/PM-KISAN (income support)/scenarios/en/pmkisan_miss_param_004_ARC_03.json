@@ -1,0 +1,112 @@
+{
+  "scenario_id": "pmkisan_miss_param_004_ARC_03",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_004",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_03_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_ARC_03_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_ARC_03_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for the last few months. The CSC operator checked and said my bank is not seeded. He gave me my session token TOK123 and beneficiary ID TN-987654. Please update my new account number 001122334455."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_ifsc_code",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Do you really need the IFSC code? I am an old man and get confused by all these details. It is a Canara Bank account in Madurai."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_ifsc_code",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Let me check my passbook... Okay, the IFSC code is CNRB0001234. Please update it, otherwise I will just give up."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "TOK123",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "TN-987654",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "001122334455",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "CNRB0001234",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

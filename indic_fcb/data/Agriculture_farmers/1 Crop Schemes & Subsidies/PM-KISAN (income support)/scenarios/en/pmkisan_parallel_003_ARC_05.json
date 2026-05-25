@@ -1,0 +1,92 @@
+{
+  "scenario_id": "pmkisan_parallel_003_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_parallel_003",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA|001122334455",
+    "registration_status": "registered",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_05_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_05_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_05_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "credited"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son is helping me check the scheme. Can you check if my two recent payments have cleared? I have the reference numbers written down."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "transaction_id",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, the first one is TXN1234567890123 and the second one is TXN9876543210987."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_payment",
+          "parameters": {
+            "transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_track_payment",
+          "parameters": {
+            "transaction_id": {
+              "value": "TXN9876543210987",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

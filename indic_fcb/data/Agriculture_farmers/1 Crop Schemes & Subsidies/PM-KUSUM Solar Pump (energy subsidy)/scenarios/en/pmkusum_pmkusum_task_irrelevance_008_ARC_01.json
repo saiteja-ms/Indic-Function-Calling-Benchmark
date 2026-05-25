@@ -1,0 +1,75 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_008_ARC_01",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_008",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "land_record_status": "not_validated",
+    "has_existing_grid_pump": false,
+    "vendor_selection_status": "not_required",
+    "installation_status": "not_scheduled",
+    "subsidy_disbursement_status": "not_initiated",
+    "farmer_share_payment_status": "not_due",
+    "pump_operational_status": "not_installed",
+    "scheme_component_selected": null,
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My field has no water and my crops are drying. I want to install a private solar pump from a local shop, not through any government scheme. Can you tell me how to do that?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Private solar installations are not covered by the PM-KUSUM government scheme."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Are you sure? I don't want the PM-KUSUM scheme, I just want you to tell me about private company installations and their prices."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Private solar installations are not covered by the PM-KUSUM government scheme."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Okay, never mind then. I will just ask the local shop directly."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Private solar installations are not covered by the PM-KUSUM government scheme."
+    }
+  ],
+  "expected_final_state": {}
+}

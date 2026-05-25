@@ -1,0 +1,66 @@
+{
+  "scenario_id": "pm_kusum_miss_param_003_ARC_09",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_miss_param_003",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "not_applied"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump application is still pending submission. I need to submit it now. My Aadhaar is 123456789012."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "component",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I want to apply for Component B."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_submit_application",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "123456789012",
+              "eval_mode": "EXACT"
+            },
+            "component": {
+              "value": "B",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "application_status": "submitted"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "scenario_id": "atma_atma_simple_010_ARC_02",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_010",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "training_registration_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, my grandson is helping me type this. I want to confirm my attendance for the ATMA training programme I registered for."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "training_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Can you check with the training ID TRG-8822?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "attendance_code"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "The secret code provided by the instructor at the venue is 5544."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "My grandson says our active session token is TOKEN-123."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_confirm_training_attendance",
+          "parameters": {
+            "session_token": {
+              "value": "TOKEN-123",
+              "eval_mode": "EXACT"
+            },
+            "training_id": {
+              "value": "TRG-8822",
+              "eval_mode": "EXACT"
+            },
+            "attendance_code": {
+              "value": "5544",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT",
+            "attendance_code": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "attendance_confirmed": true
+  }
+}

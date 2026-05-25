@@ -1,0 +1,76 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_param_002_ARC_09",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_param_002",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to calculate the premium for my 0.8 hectares of land in Sonitpur, Assam for the kharif season."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "crop_name",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I forgot to mention, the crop is paddy."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Assam",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Sonitpur",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "SUBSTRING"
+            },
+            "area_hectares": {
+              "value": 0.8,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,113 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_003_ARC_01",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_003",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I don't know when the insurance closes. Can you tell me the last date for both Kharif and Rabi seasons? I am worried I will miss it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Uttar Pradesh, my district is Hardoi. Is that enough?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I want to check for the year 2024. Please tell me quickly before I give up."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Hardoi",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Hardoi",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

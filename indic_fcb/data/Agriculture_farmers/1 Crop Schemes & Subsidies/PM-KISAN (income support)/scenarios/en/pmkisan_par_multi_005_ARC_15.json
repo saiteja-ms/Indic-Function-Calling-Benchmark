@@ -1,0 +1,87 @@
+{
+  "scenario_id": "pmkisan_par_multi_005_ARC_15",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_par_multi_005",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "installments_pending": 1,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_15_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_15_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_15_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to get my payment history and track the status of installment_3 simultaneously. My beneficiary ID is TN-PMK-789012 and my active session token is ST-554433. Please process this immediately, I don't want to wait."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": "ST-554433",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "TN-PMK-789012",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_track_installment_status",
+          "parameters": {
+            "beneficiary_id": {
+              "value": "TN-PMK-789012",
+              "eval_mode": "EXACT"
+            },
+            "installment_number": {
+              "value": "installment_3",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

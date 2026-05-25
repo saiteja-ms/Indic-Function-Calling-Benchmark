@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmkisan_miss_func_003_ARC_12",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_func_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "registration_status": "registered",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_12_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_12_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_12_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to register two beneficiaries on the same Aadhaar. My Aadhaar number is 456789012346. Please do it quickly, I don't want to go through unnecessary steps."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "Multiple registrations per Aadhaar are not allowed under PM-KISAN.",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "This is ridiculous. I have 5.5 hectares of land and need this done. I will complain to a senior agriculture officer about this rule."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

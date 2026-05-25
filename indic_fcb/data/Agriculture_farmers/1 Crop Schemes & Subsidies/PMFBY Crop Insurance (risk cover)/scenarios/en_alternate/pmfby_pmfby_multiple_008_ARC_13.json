@@ -1,0 +1,52 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_008_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_008",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the notified crops. Is soybean covered under PMFBY in Latur, Maharashtra for the kharif season of 2024?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_get_notified_crops",
+          "arguments": {
+            "state_name": "Maharashtra",
+            "district_name": "Latur",
+            "season": "kharif",
+            "year": 2024
+          },
+          "eval_modes": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "year": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

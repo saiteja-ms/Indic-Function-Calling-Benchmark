@@ -1,0 +1,84 @@
+{
+  "scenario_id": "pmkisan_simple_009_ARC_01",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_009",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "installments": [
+      {
+        "installment_id": "INST_01_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_01_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_01_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for the last few months because my bank account is not seeded. The CSC operator said I need to update it. He wrote down my details for me to tell you. My beneficiary ID is PMK123456789 and the session token is TOK98765. Please update my bank details to the new account. The new IFSC code is SBIN0009876 and the new account number is 001122334455. Is this going to work?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "TOK98765",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK123456789",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "SBIN0009876",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "001122334455",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

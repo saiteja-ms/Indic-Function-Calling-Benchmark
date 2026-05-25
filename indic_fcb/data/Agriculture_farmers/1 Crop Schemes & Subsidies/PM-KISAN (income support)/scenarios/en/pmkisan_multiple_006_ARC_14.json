@@ -1,0 +1,69 @@
+{
+  "scenario_id": "pmkisan_multiple_006_ARC_14",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_006",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "installments": [
+      {
+        "installment_id": "INST_14_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_14_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_14_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "credited"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for 3 months and I'm tired of waiting. I need to track my installment status right now. The reference ID I have is TXN1234567890123. Just tell me where it is stuck."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_payment",
+          "parameters": {
+            "transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

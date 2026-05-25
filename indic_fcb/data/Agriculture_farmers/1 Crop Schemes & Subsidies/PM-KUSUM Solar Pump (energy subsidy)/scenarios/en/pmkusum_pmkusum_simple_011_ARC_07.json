@@ -1,0 +1,65 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_011_ARC_07",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_011",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "farmer_share_payment_status": "paid"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My bank account was debited for the solar pump farmer share, but I haven't received any confirmation. Can you check if my payment status is updated?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, my Aadhaar number is 890123456789. Please check with this."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_farmer_share_payment_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456789",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "aadhaar_number": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

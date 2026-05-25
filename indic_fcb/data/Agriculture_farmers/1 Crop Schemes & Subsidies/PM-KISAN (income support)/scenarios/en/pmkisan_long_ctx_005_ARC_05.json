@@ -1,0 +1,152 @@
+{
+  "scenario_id": "pmkisan_long_ctx_005_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_long_ctx_005",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA|001122334455",
+    "registration_status": "registered",
+    "ekyc_status": "pending",
+    "has_pending_over_90_days": true,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_05_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_05_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_05_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, my son is helping me use this app. We went to the Aadhaar center yesterday because my fingerprint was not working."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The man at the center said the server was down and we waited for three hours. It was very tiring for me at my age."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Anyway, we came back home. Now my son wants to check my PM-KISAN status to see if everything is fine."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Can you check my status? My Aadhaar is 678901234567 and my mobile number is 9765432108."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234567",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "9765432108",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Ah, it says eKYC is pending. My son generated a session token TOKEN123 and my beneficiary ID is PMK123456. The Aadhaar OTP we just received is 456789. Please complete the eKYC."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_complete_ekyc",
+          "parameters": {
+            "session_token": {
+              "value": "TOKEN123",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK123456",
+              "eval_mode": "EXACT"
+            },
+            "aadhaar_otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "ekyc_status": "completed",
+    "has_pending_over_90_days": false
+  }
+}

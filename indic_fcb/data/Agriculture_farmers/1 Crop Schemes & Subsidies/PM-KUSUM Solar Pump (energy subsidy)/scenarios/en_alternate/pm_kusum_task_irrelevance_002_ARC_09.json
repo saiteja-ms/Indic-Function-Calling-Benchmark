@@ -1,0 +1,53 @@
+{
+  "scenario_id": "pm_kusum_task_irrelevance_002_ARC_09",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_task_irrelevance_002",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "We are facing a lot of problems because there is no electricity at our house. I want to apply for a free electricity connection for my home."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about domestic electricity connection, PM-KUSUM is strictly for agricultural solar pumps."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My son told me I should apply under the Saubhagya scheme for this. Can you please help me register for it?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about domestic electricity connection, PM-KUSUM is strictly for agricultural solar pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

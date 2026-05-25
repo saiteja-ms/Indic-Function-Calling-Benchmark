@@ -1,0 +1,75 @@
+{
+  "scenario_id": "atma_atma_simple_002_ARC_07",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_002",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is getting yellow leaves and I don't know what to do. I need to speak to an expert. I am farming in Sitapur district."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am in Uttar Pradesh."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_sms_contact",
+          "parameters": {
+            "state": {
+              "value": "uttar_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "sitapur",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "sugarcane",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

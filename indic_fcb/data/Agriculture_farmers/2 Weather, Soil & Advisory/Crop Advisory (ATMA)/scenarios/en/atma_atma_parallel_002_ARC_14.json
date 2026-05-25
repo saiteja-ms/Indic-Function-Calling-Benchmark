@@ -1,0 +1,120 @@
+{
+  "scenario_id": "atma_atma_parallel_002_ARC_14",
+  "usecase": "atma",
+  "intent_ref": "atma_parallel_002",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My wheat and mustard crops are having some growth issues. I need the advisory bulletins for both of them right away to see what I should do."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district",
+        "crop_stage",
+        "advisory_type"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am farming in Meerut, Uttar Pradesh. Both crops are currently in the vegetative stage. I am looking for crop_management advice."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_advisory_bulletin",
+          "parameters": {
+            "state": {
+              "value": "uttar_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "meerut",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            },
+            "crop_stage": {
+              "value": "vegetative",
+              "eval_mode": "EXACT"
+            },
+            "advisory_type": {
+              "value": "crop_management",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "crop_stage": "EXACT",
+            "advisory_type": "EXACT"
+          }
+        },
+        {
+          "tool_name": "atma_get_advisory_bulletin",
+          "parameters": {
+            "state": {
+              "value": "uttar_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "meerut",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "mustard",
+              "eval_mode": "EXACT"
+            },
+            "crop_stage": {
+              "value": "vegetative",
+              "eval_mode": "EXACT"
+            },
+            "advisory_type": {
+              "value": "crop_management",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "crop_stage": "EXACT",
+            "advisory_type": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

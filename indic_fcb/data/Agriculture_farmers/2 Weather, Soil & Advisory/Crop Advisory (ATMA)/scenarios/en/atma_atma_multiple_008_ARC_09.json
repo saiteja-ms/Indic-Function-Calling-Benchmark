@@ -1,0 +1,73 @@
+{
+  "scenario_id": "atma_atma_multiple_008_ARC_09",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_008",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "attendance_confirmed": true,
+    "certificate_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My training is finished but my completion certificate has not been downloaded yet. My son is helping me with the app. The training ID is TRN-8821."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Let me try again and give you the token. My son says the session token is ST-9988. Please save the certificate."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_download_training_certificate",
+          "parameters": {
+            "session_token": {
+              "value": "ST-9988",
+              "eval_mode": "EXACT"
+            },
+            "training_id": {
+              "value": "TRN-8821",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "certificate_status": "downloaded"
+  }
+}

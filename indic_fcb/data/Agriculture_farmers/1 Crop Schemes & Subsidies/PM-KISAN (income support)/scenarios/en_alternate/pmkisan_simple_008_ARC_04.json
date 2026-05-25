@@ -1,0 +1,87 @@
+{
+  "scenario_id": "pmkisan_simple_008_ARC_04",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_008",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "ekyc_status": "completed",
+    "authenticated": true,
+    "session_token": "tok_abc123",
+    "beneficiary_id": "MH12345678",
+    "installments": [
+      {
+        "installment_id": "INST_01",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "failed",
+        "transaction_id": "TXN9876543210123",
+        "failure_reason": "aadhaar_mismatch"
+      }
+    ],
+    "bank_account": "BKID0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN payment failed saying Aadhaar mismatch! I have already updated my Aadhaar details at the center. Why is this system so broken? Fix my payment immediately or I will file a formal complaint with the authorities!"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id and failed_transaction_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I don't have time for this back and forth! My beneficiary ID is MH12345678 and the transaction ID that failed is TXN9876543210123. Just retry the payment now, I don't want to hear any excuses."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "MH12345678",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN9876543210123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated Aadhaar",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

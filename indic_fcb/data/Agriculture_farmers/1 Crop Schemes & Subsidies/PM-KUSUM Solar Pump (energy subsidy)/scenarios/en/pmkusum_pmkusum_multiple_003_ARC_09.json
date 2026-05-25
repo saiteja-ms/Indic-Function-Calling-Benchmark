@@ -1,0 +1,75 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_003_ARC_09",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_003",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My family wants to install a solar pump under Component B, but we are worried about the cost. We need a 5 HP pump. Can you tell me how much subsidy we will get?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "farmer_category",
+        "state_region_category"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I belong to the general category, and since we live in Assam, it falls under the North Eastern Region."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_calculate_subsidy",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5",
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "general",
+              "eval_mode": "EXACT"
+            },
+            "state_region_category": {
+              "value": "North Eastern Region",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

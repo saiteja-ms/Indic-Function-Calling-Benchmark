@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmkisan_irrelevance_001_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_001",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crop insurance premium was deducted from my account, but I don't know if the policy is active. Can you check?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PMFBY handles crop insurance, not PM-KISAN."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Let me try giving you my Aadhaar number, it is 890123456789. Please check the insurance status with this."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PMFBY handles crop insurance, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

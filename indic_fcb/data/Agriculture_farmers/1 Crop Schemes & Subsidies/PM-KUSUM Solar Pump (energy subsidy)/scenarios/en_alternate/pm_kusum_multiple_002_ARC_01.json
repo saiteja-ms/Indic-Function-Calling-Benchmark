@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pm_kusum_multiple_002_ARC_01",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_multiple_002",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Ram Bhagat from Uttar Pradesh. I am a poor farmer and I need to install a 7.5 HP solar pump on my land because there is no electricity. I don't want to just check if I am eligible, I want to know the exact money. Can you calculate how much subsidy I will get for a 7.5 HP pump?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "pump_capacity_hp": {
+              "value": "7.5",
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

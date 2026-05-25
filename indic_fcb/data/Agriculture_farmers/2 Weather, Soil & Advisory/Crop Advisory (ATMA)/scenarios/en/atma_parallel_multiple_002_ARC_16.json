@@ -1,0 +1,75 @@
+{
+  "scenario_id": "atma_parallel_multiple_002_ARC_16",
+  "usecase": "atma",
+  "intent_ref": "atma_parallel_multiple_002",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the available in-person training programmes for wheat in Karnal, Haryana? Also, I would like to know the demonstration schedule for wheat plots in the same district."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_available_trainings",
+          "parameters": {
+            "state": {
+              "value": "haryana",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "karnal",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            },
+            "training_mode": {
+              "value": "in_person",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "atma_get_demonstration_schedule",
+          "parameters": {
+            "state": {
+              "value": "haryana",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "karnal",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,37 @@
+{
+  "scenario_id": "atma_atma_miss_func_001_ARC_04",
+  "usecase": "atma",
+  "intent_ref": "atma_miss_func_001",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "attendance_confirmed": false,
+    "certificate_status": "not_issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My training TRG-9988 is over but I haven't got the certificate. I want to download it now even though they haven't marked my attendance yet. I need it for my records."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "download a training certificate before attendance is confirmed",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

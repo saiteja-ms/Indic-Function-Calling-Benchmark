@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmkisan_miss_func_005_ARC_15",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_func_005",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_15_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_15_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_15_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Lakshmi. My Aadhaar is 789012345679 and my mobile number is 7321098654. I missed my PM-KISAN payments for the last two years because of a system error. I have all my documents ready and I want to claim those missed years retroactively right now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "PM-KISAN does not support retroactive claims for missed years.",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "This is completely unacceptable. I lost money due to your system failures. If you cannot process this, I will escalate this issue to the senior agricultural officer immediately."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

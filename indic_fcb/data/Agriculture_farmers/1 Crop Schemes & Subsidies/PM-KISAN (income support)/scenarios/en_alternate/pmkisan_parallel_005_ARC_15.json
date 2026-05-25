@@ -1,0 +1,57 @@
+{
+  "scenario_id": "pmkisan_parallel_005_ARC_15",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_parallel_005",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "authenticated": false,
+    "session_token": null,
+    "bank_account": "CNRB0001234|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to check the PM-KISAN eligibility for two Aadhaar numbers immediately. My Aadhaar is 789012345679 and my husband's is 789012345680. Please process both right now without any delays."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "789012345679",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "789012345680",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

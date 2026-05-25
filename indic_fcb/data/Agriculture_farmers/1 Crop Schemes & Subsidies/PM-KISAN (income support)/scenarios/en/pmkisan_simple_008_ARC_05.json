@@ -1,0 +1,84 @@
+{
+  "scenario_id": "pmkisan_simple_008_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_008",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA|001122334455",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_05_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_05_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "failed"
+      },
+      {
+        "installment_id": "INST_ARC_05_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My grandson helped me check my PM-KISAN account. My payment failed because of an Aadhaar mismatch. We have corrected the Aadhaar details now. Can you please retry the payment? My beneficiary ID is OR-334455, the failed transaction ID is TXN123456789012, and the active session token is ST-98765."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "ST-98765",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "OR-334455",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN123456789012",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "corrected the Aadhaar details",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

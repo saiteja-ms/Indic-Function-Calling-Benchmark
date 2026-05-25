@@ -1,0 +1,76 @@
+{
+  "scenario_id": "atma_atma_simple_002_ARC_05",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_002",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if there is a subject matter specialist available for paddy? My son is helping me look this up."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "We are farming in Cuttack, Odisha."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_sms_contact",
+          "parameters": {
+            "state": {
+              "value": "odisha",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "cuttack",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

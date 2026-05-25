@@ -1,0 +1,130 @@
+{
+  "scenario_id": "pmkisan_base_002_ARC_09",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_base_002",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "installments_pending": 1,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_09_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_09_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_09_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for the recent cycle. My Aadhaar is 123456789012 and my mobile number is 9654321087. Can you check my status?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "123456789012",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "9654321087",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Okay, since my status is registered, can you check my payment history to see which one is missing? I will try again if the connection drops."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "BEN_123456",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "It looks like installment_3 is the one pending. Please track its exact status."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_installment_status",
+          "parameters": {
+            "beneficiary_id": {
+              "value": "BEN_123456",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "installment_number": {
+              "value": "installment_3",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,62 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_015_ARC_16",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_015",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to inquire about filing a complaint. My application ID is APP-2023-8899 and my session token is TKN-9988. Please raise a grievance under the category 'installation_delay' with the remarks that the vendor has not visited my farm yet."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "TKN-9988",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "APP-2023-8899",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "installation_delay",
+              "eval_mode": "EXACT"
+            },
+            "grievance_remarks": {
+              "value": "the vendor has not visited my farm yet",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

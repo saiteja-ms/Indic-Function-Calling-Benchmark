@@ -1,0 +1,72 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_param_005_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_param_005",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "land_record_status": "not_validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to validate my land records for PMFBY. My land is in Gujarat, Rajkot district, village Mota Mava."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "survey_number",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Ah, sorry, I forgot. The survey number is 123/4."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_validate_land_records",
+          "parameters": {
+            "state_name": {
+              "value": "Gujarat",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Rajkot",
+              "eval_mode": "SUBSTRING"
+            },
+            "village_name": {
+              "value": "Mota Mava",
+              "eval_mode": "SUBSTRING"
+            },
+            "survey_number": {
+              "value": "123/4",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

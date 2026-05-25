@@ -1,0 +1,140 @@
+{
+  "scenario_id": "pmfby_parallel_multiple_003_ARC_02",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_003",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "policy_status": "active",
+    "premium_payment_status": "paid"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son is helping me check my crop insurance. Can you check my policy details and also give me the premium receipt?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "mobile_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, my mobile number is 8765432109."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "otp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "My son says the OTP is 456789."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "mobile_number": {
+              "value": "8765432109",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Okay, we are logged in. Can you check the details and the receipt now?"
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "policy_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "The policy number is POL987654321."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_policy_details",
+          "parameters": {
+            "policy_number": {
+              "value": "POL987654321",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": "12345abcde",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_premium_receipt",
+          "parameters": {
+            "policy_number": {
+              "value": "POL987654321",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": "12345abcde",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

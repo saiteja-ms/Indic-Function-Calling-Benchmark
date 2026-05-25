@@ -1,0 +1,54 @@
+{
+  "scenario_id": "atma_atma_simple_008_ARC_16",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_008",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the schedule for upcoming field demonstration plots for wheat in Karnal, Haryana? I would like to know the dates and locations."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_demonstration_schedule",
+          "parameters": {
+            "state": {
+              "value": "haryana",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "karnal",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

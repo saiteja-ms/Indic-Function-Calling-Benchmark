@@ -1,0 +1,69 @@
+{
+  "scenario_id": "shc_shc_parallel_001_ARC_09",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_001",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "sample_collection_status": "in_transit"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son helped me send two soil samples from our tea garden, but they haven't reached the lab yet. I want to check their status. One of the sample IDs is S-1001."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "sample_id",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The other sample ID is S-1002. Please check both."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_get_sample_status",
+          "arguments": {
+            "sample_id": "S-1001"
+          },
+          "eval_mode": {
+            "sample_id": "EXACT"
+          }
+        },
+        {
+          "name": "shc_get_sample_status",
+          "arguments": {
+            "sample_id": "S-1002"
+          },
+          "eval_mode": {
+            "sample_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

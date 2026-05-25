@@ -1,0 +1,96 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_multiple_002_ARC_07",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_002",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crops in Sitapur, Uttar Pradesh need to be insured. I want to know which crops are notified for insurance and what the last dates are to apply."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am asking for the kharif season of 2024."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_notified_crops",
+          "parameters": {
+            "state_name": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Sitapur",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2024,
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state_name": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Sitapur",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2024,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

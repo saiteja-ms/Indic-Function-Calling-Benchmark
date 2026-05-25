@@ -1,0 +1,64 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_012_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_012",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "premium_payment_status": "paid",
+    "policy_status": "not_issued",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Harpreet Kaur. My premium was deducted from my bank account but my crop insurance policy has not been issued yet. I want to file a complaint right now. Do not tell me to download the premium receipt, I already have it. Just raise the grievance."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "reference_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My application ID is APP-998877. File the complaint immediately or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "dummy_token",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "APP-998877",
+            "grievance_description": "Premium was deducted from bank account but crop insurance policy has not been issued."
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

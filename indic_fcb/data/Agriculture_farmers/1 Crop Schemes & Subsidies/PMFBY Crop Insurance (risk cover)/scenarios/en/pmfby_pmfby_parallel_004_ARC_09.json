@@ -1,0 +1,77 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_004_ARC_09",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_004",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "grievance_status": "under_review"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son helped me file two complaints about my paddy crop insurance, but they are still not resolved. I want to check what is happening with both of them."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, the complaint numbers are GRV-998877 and GRV-554433. Please check them."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV-998877",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmfby_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV-554433",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

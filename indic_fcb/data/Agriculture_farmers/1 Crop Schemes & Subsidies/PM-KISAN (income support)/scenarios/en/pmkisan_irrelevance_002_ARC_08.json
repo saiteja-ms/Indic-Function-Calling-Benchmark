@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmkisan_irrelevance_002_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_002",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the current mandi prices for my ragi and paddy crops?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "eNAM handles mandi prices, not PM-KISAN."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Okay, never mind then. I will ask someone else."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "eNAM handles mandi prices, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

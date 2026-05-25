@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_011_ARC_14",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_011",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "application_status": "submitted",
+    "eligibility_status": "eligible"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cows are falling sick and milk production is down. I need some livestock advisory quickly. Can you tell me what to do?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Cattle and livestock advisory is completely unrelated to solar pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

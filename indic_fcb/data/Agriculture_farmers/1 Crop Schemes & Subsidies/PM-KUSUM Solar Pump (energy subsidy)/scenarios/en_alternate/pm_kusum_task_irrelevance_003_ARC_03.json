@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pm_kusum_task_irrelevance_003_ARC_03",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_task_irrelevance_003",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am an old farmer and I am facing a lot of difficulty plowing my field. I want to buy a new tractor for my paddy crops, but I don't have enough money. Can you check the subsidy details for buying a tractor?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about tractor subsidy (SMAM), not solar pumps."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Are you sure? The boy at the CSC center told me I can get subsidy help here. Is there really no scheme for tractors that you can check for me?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about tractor subsidy (SMAM), not solar pumps."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Okay, I get confused by all these different schemes. I will just give up on this and visit the agriculture office tomorrow to ask them directly."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about tractor subsidy (SMAM), not solar pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

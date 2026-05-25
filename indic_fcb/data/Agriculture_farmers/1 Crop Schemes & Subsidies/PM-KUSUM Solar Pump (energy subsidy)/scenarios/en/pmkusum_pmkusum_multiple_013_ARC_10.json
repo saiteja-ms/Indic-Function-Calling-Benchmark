@@ -1,0 +1,82 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_013_ARC_10",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_013",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "farmer_share_payment_status": "pending"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to pay my farmer share for the solar pump immediately. Don't waste my time calculating subsidies, just tell me how to pay. My application ID is PK98765."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "payment_amount",
+        "payment_method",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I told you I'm in a hurry! The amount is 55000 and I will use UPI. My active session token is TKN-12345. Process it now or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_pay_farmer_share",
+          "parameters": {
+            "session_token": {
+              "value": "TKN-12345",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "PK98765",
+              "eval_mode": "EXACT"
+            },
+            "payment_amount": {
+              "value": 55000,
+              "eval_mode": "EXACT"
+            },
+            "payment_method": {
+              "value": "UPI",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "application_id": "EXACT",
+            "payment_amount": "EXACT",
+            "payment_method": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

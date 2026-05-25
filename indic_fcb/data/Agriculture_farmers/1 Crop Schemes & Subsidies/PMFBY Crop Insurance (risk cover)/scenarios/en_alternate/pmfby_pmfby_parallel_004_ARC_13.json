@@ -1,0 +1,55 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_004_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_004",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "grievance_status": "under_review"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to track the status of two complaints I filed recently. The grievance IDs are GRV-998877 and GRV-554433. Please check both."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV-998877",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV-554433",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,84 @@
+{
+  "scenario_id": "pmkisan_simple_011_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_011",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "registration_status": "registered",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "installments": [
+      {
+        "installment_id": "INST_06_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_06_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_06_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ],
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": true,
+    "grievance_status": "under_review",
+    "grievance_id": "GRV1234567"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Maine pichle hafte ek shikayat darj ki thi kyunki mera paisa nahi aaya tha. Mujhe janna hai ki meri shikayat ka kya hua. Kya aap bata sakte hain? Mujhe samajh nahi aa raha ki paisa kab milega."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "grievance_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Shikayat number? Haan, mere phone par ek message aaya tha jisme GRV1234567 likha hai. Kya ye number dena surakshit hai? Main bas apni shikayat ka status janna chahta hoon."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV1234567",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

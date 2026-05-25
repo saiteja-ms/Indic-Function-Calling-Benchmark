@@ -1,0 +1,113 @@
+{
+  "scenario_id": "pmkisan_base_006_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_base_006",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "beneficiary_id": "PMK_ARC08_123",
+    "installments": [
+      {
+        "installment_id": "INST_08_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_08_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_08_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "failed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if my registration is done and look at my payment history? I want to know why my money has not come. My beneficiary ID is PMK_ARC08_123."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK_ARC08_123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I see there is a bank issue and it is not seeded. I want to update my bank details then. My new IFSC code is CNRB0001234 and my new account number is 98765432100."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK_ARC08_123",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "CNRB0001234",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "98765432100",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

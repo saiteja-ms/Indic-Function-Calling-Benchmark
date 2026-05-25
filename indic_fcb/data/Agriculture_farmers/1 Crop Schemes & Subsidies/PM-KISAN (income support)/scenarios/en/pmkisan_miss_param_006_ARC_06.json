@@ -1,0 +1,94 @@
+{
+  "scenario_id": "pmkisan_miss_param_006_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_006",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "land_record_status": "not_validated",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_06_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_06_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_06_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come because it says my land record is not validated. I want to fix this problem. My plot number is A123 and the district code is 045. Can you check if my registration is done properly?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "state_code",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I am sorry, I forgot to tell you. My state code is 23 for Madhya Pradesh. Let me try again, is this enough information to validate it?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "23",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "045",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "A123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "land_record_status": "validated"
+  }
+}

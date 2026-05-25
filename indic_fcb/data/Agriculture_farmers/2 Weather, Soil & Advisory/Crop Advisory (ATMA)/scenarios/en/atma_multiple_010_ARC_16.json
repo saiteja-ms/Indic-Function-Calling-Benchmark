@@ -1,0 +1,70 @@
+{
+  "scenario_id": "atma_multiple_010_ARC_16",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_010",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "registered",
+    "query_status": "closed",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit Singh. I want to file a formal complaint. My query Q-9988 was closed without any response, which is very frustrating. Can you please file a grievance for query_not_answered? My session token is tok_123. For the details, please write: my question was ignored and closed without a proper answer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "tok_123",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "query_not_answered",
+              "eval_mode": "EXACT"
+            },
+            "query_id": {
+              "value": "Q-9988",
+              "eval_mode": "EXACT"
+            },
+            "grievance_details": {
+              "value": "my question was ignored and closed without a proper answer",
+              "eval_mode": "SUBSTRING"
+            }
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "grievance_category": "EXACT",
+            "query_id": "EXACT",
+            "grievance_details": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

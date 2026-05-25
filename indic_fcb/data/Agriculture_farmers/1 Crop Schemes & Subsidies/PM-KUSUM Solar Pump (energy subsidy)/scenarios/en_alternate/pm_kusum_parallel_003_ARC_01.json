@@ -1,0 +1,58 @@
+{
+  "scenario_id": "pm_kusum_parallel_003_ARC_01",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_parallel_003",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN|001122334455",
+    "solar_pump_installation_status": "applied",
+    "subsidy_status": "under_review",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am at the CSC center because I don't know how to use the phone. The operator says my applications might be stuck. I have two application numbers: APP-998877 and APP-554433. Can you please check the status for both of them? I am very worried."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP-998877",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pm_kusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP-554433",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

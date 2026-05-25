@@ -1,184 +1,368 @@
-You are building test personas for a function-calling
-benchmark for the PM-KISAN government service.
+You are designing farmer archetypes for a
+function-calling benchmark for Indian government
+services on UMANG.
 
-THE TOOLS:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\tools.jsonl
+This file is generated ONCE for the entire farmers
+domain and is shared across ALL farmer usecases
+(PM-KISAN, PMFBY, eNAM, CHC Machinery, and any
+future farmer usecases).
 
-THE INITIAL_STATE SCHEMA (from stub_logic.py):
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\stub_logic.py
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT AN ARCHETYPE IS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Your task: Generate exactly 8 farmer personas.
-Each persona is one filled-in instance of
-INITIAL_STATE representing a specific farmer
-with a specific situation.
+An archetype is a farmer profile. It captures:
+  - WHO the farmer is (demographic identity)
+  - HOW they access digital services
+  - WHAT scheme experience they have
+  - HOW they behave when interacting with services
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CRITICAL LOADING INSTRUCTION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+An archetype does NOT contain:
+  - usecase-specific state values
+    (state lives in intents per usecase)
+  - scheme situation details
 
-- Read BOTH:
-  1. tools.jsonl
-  2. stub_logic.py
+State is intent-driven, not person-driven. The same
+archetype may be in different states across different
+scenarios. The archetype defines the person; the
+intent defines the situation.
 
-- Extract:
-  → All tool names (for reasoning context)
-  → EXACT INITIAL_STATE structure
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GENERATE EXACTLY 16 ARCHETYPES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-STRICT:
-- DO NOT invent fields
-- DO NOT rename fields
-- DO NOT omit required fields
-- DO NOT introduce new schema keys
+These 16 archetypes will be reused across every
+farmer usecase. Each archetype represents one
+distinct combination of demographic, access,
+experience, and behavioural traits.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-COVERAGE — your 8 personas must cover these
-8 distinct code paths through the stubs
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ARCHETYPE STRUCTURE — 5 BLOCKS PER ARCHETYPE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PATH 1 — Not registered at all
-  registration_status: NOT_REGISTERED
+BLOCK 1 — DEMOGRAPHIC METADATA
 
-PATH 2 — Registered, eKYC pending
-  registration_status: REGISTERED
-  ekyc_status: PENDING
-  2 installments credited, 1 pending
+  age                    : integer 20-75
+  age_bracket            : young | middle | senior
+                           (20-35 | 35-55 | 55+)
+  gender                 : male | female
+  region                 : hindi_belt |
+                           south_india |
+                           maharashtra_gujarat |
+                           punjab_haryana |
+                           east_bengal_odisha |
+                           northeast_hilly
+  state                  : Indian state name
+  district               : Indian district name
+  years_farming          : integer
 
-PATH 3 — Registered, everything complete
-  registration_status: REGISTERED
-  ekyc_status: COMPLETE
-  All installments CREDITED
+BLOCK 2 — AGRICULTURAL PROFILE
 
-PATH 4 — Name mismatch causing rejection
-  registration_status: REGISTERED
-  ekyc_status: COMPLETE
-  name mismatch between records and Aadhaar
-  installment rejected with NAME_MISMATCH
+  landholding_category   : marginal | small |
+                           medium | large
+                           (<1ha | 1-2ha |
+                            2-4ha | >4ha)
+  landholding_hectares   : numeric
+  farmer_category        : owner | tenant |
+                           sharecropper | fpo_member
+  primary_crops          : array of crop names
+  irrigation_type        : irrigated | rain_fed |
+                           partially_irrigated
 
-PATH 5 — Payment delayed
-  registration_status: REGISTERED
-  ekyc_status: COMPLETE
-  installment PENDING > 90 days
-  active_complaints: []
+BLOCK 3 — DIGITAL ACCESS
 
-PATH 6 — Complaint already filed
-  registration_status: REGISTERED
-  active_complaints has OPEN complaint
+  digital_literacy       : level_1 | level_2 |
+                           level_3 | level_4 | level_5
+  smartphone_ownership   : true | false
+  internet_quality       : reliable | intermittent |
+                           none
+  access_method          : self_smartphone |
+                           self_with_difficulty |
+                           family_member_assists |
+                           csc_operator_assists
 
-PATH 7 — Migrated farmer
-  registration_status: REGISTERED
-  state updated to new state
-  bank updated accordingly
+BLOCK 4 — SCHEME EXPERIENCE
 
-PATH 8 — Urban farmer (edge case)
-  farmer_type: URBAN
+  prior_scheme_experience: first_time |
+                           repeat_beneficiary |
+                           has_filed_grievance_before
+  knowledge_of_scheme    : unaware |
+                           aware_of_basics |
+                           aware_of_details
+  documentation_readiness: docs_ready |
+                           docs_partial |
+                           docs_missing
+  parameter_recall       : remembers_aadhaar |
+                           remembers_partial |
+                           remembers_none
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STRICT DATA CONSISTENCY RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOCK 5 — BEHAVIOURAL ARCHETYPE
 
-These MUST hold, otherwise output is INVALID:
+  information_disclosure : upfront_complete |
+                           partial_then_supply |
+                           reactive_only
+  problem_framing        : task_oriented |
+                           problem_oriented |
+                           inquiry_oriented
+  patience_with_process  : patient_compliant |
+                           impatient_skips |
+                           uncertain_repeats
+  risk_orientation       : trusts_system |
+                           privacy_cautious |
+                           process_skeptical
+  persistence_on_blockers: retries |
+                           gives_up |
+                           escalates
 
-1. INSTALLMENT CONSISTENCY
-   - Exactly 3 installments
-   - Dates MUST be:
-     - 2024-04-15
-     - 2024-08-10
-     - 2024-12-05
-   - Amount ALWAYS 2000
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY DISTRIBUTION ACROSS THE 16 ARCHETYPES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-2. STATUS LOGIC
-   - CREDITED → must have valid date
-   - PENDING → no credit date
-   - REJECTED → must include rejection_reason
+These distributions reflect NSS-KI rural household
+data and ASER digital literacy surveys. Match
+EXACTLY:
 
-3. ekyc_status IMPACT
-   - If PENDING → latest installment must be PENDING
-   - If COMPLETE → no system-level blocking
+AGE BRACKET:
+  young (20-35)   : 3 archetypes
+  middle (35-55)  : 8 archetypes
+  senior (55+)    : 5 archetypes
 
-4. COMPLAINT STRUCTURE
-   - complaint_id format: "PMKISAN-CMP-XXXX"
-   - status: OPEN or CLOSED
-   - linked_installment_id must exist
+GENDER:
+  male            : 11 archetypes
+  female          : 5 archetypes
 
-5. NAME MISMATCH RULE
-   - Only 1–2 character typo allowed
-   - Must be realistic (drop letter / swap letters)
+REGION:
+  hindi_belt          : 6 archetypes
+  south_india         : 4 archetypes
+  maharashtra_gujarat : 2 archetypes
+  punjab_haryana      : 2 archetypes
+  east_bengal_odisha  : 1 archetype
+  northeast_hilly     : 1 archetype
 
-6. MIGRATION RULE
-   - state must change from original
-   - bank IFSC must correspond to new state
+LANDHOLDING:
+  marginal (<1 ha)    : 9 archetypes
+  small (1-2 ha)      : 4 archetypes
+  medium (2-4 ha)     : 2 archetypes
+  large (>4 ha)       : 1 archetype
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGIONAL DISTRIBUTION (MANDATORY)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DIGITAL LITERACY:
+  level_1            : 3 archetypes
+  level_2            : 5 archetypes
+  level_3            : 4 archetypes
+  level_4            : 2 archetypes
+  level_5            : 2 archetypes
 
-PATH 1-2 → Hindi belt (UP, Bihar, MP)
-PATH 3-4 → Punjab / Haryana
-PATH 5-6 → Maharashtra / Rajasthan
-PATH 7-8 → Tamil Nadu / Andhra Pradesh
+ACCESS METHOD:
+  self_smartphone        : 7 archetypes
+  self_with_difficulty   : 4 archetypes
+  family_member_assists  : 3 archetypes
+  csc_operator_assists   : 2 archetypes
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATA GENERATION RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FARMER CATEGORY:
+  owner             : 11 archetypes
+  tenant            : 2 archetypes
+  sharecropper      : 2 archetypes
+  fpo_member        : 1 archetype
 
-- Aadhaar: 12 digits, NOT repeating
-- Mobile: starts with 6/7/8/9
-- Bank format:
-  "IFSC0123456|00112233445566"
+SCHEME EXPERIENCE:
+  first_time            : 4 archetypes
+  repeat_beneficiary    : 9 archetypes
+  has_filed_grievance   : 3 archetypes
 
-- Names must:
-  - match region
-  - be realistic Indian names
-  - not repeated across personas
+INFORMATION DISCLOSURE PATTERN:
+  upfront_complete       : 3 archetypes
+  partial_then_supply    : 9 archetypes
+  reactive_only          : 4 archetypes
 
-- Language preference:
-  - hi (Hindi belt)
-  - pa (Punjab)
-  - mr (Maharashtra)
-  - ta (Tamil Nadu)
-  - te (Andhra)
+PROBLEM FRAMING:
+  task_oriented          : 4 archetypes
+  problem_oriented       : 8 archetypes
+  inquiry_oriented       : 4 archetypes
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STATE DETERMINISM REQUIREMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INTERNAL CONSISTENCY RULES (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Personas MUST be reproducible
-- No randomness in:
-  - dates
-  - installment ordering
-  - complaint structure
+The combination of attributes must be plausible.
+Apply these correlations:
 
-- Output must be stable across runs
+CORRELATION 1 — Age and digital literacy:
+  senior age → digital_literacy bias toward
+              level_1 or level_2
+  young age → digital_literacy bias toward
+              level_3 to level_5
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORRELATION 2 — Digital literacy and access method:
+  level_1 → access_method must be
+            csc_operator_assists OR
+            family_member_assists
+  level_2 → access_method usually
+            self_with_difficulty
+  level_4-5 → access_method self_smartphone
+
+CORRELATION 3 — Information disclosure and digital
+  literacy:
+  upfront_complete  → requires digital_literacy
+                     level_3 or higher
+  reactive_only     → typical of digital_literacy
+                     level_1 or level_2
+  partial_then_supply → most common across levels
+
+CORRELATION 4 — Smartphone ownership:
+  level_1 farmers: smartphone_ownership false
+  level_2+ farmers: smartphone_ownership true
+
+CORRELATION 5 — Internet quality:
+  northeast_hilly + hindi_belt rural: often
+    intermittent or none
+  punjab_haryana + south_india urban-fringe:
+    usually reliable
+
+CORRELATION 6 — Landholding and farmer category:
+  large farmers: usually owner
+  marginal farmers: more likely to be sharecropper
+    or tenant
+  fpo_member: spans across landholding sizes
+
+CORRELATION 7 — Region and primary crops:
+  hindi_belt: wheat, paddy, sugarcane, mustard
+  south_india: paddy, groundnut, cotton, ragi
+  maharashtra_gujarat: cotton, soybean, groundnut,
+    sugarcane
+  punjab_haryana: wheat, paddy, mustard
+  east_bengal_odisha: paddy, jute, pulses
+  northeast_hilly: paddy, maize, vegetables, tea
+
+CORRELATION 8 — Gender and farmer category:
+  female farmers more likely to be:
+    - widowed land inheritors
+    - tenant or sharecropper
+    - smaller landholding
+  but explicitly include 1-2 female owner-large
+  archetypes to avoid stereotyping
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NAMING RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use realistic Indian names appropriate for the
+region:
+  hindi_belt:          Ramesh Kumar, Sunita Devi,
+                       Bhola Singh, Ram Bhagat
+  south_india:         Murugan Selvam, Lakshmi V.,
+                       Ravi Krishna, Geetha R.
+  maharashtra_gujarat: Vishnu Patil, Manisha Patel,
+                       Suresh Joshi, Kavita Shah
+  punjab_haryana:      Ranjit Singh, Harpreet Kaur,
+                       Balwinder Singh
+  east_bengal_odisha:  Bishnu Mahapatra, Mamta Das
+  northeast_hilly:     Tarun Borah, Anuradha Negi
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OUTPUT FORMAT (STRICT)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Output each persona as:
+Each archetype is a single JSON object:
 
 {
-  "persona_id": "PERSONA_A",
-  "display_name": "Ramesh Kumar — UP, PATH 2",
-  "code_path": "PATH 2 — registered, eKYC pending",
-  "language_preference": "hi",
-  "interesting_characteristic": "one sentence describing real-world context",
-  "stub_test_assertion": "clear expected state change after a tool call",
-  "state_values": {
-    ... EXACT INITIAL_STATE fields ...
-  }
+  "archetype_id": "ARC_01",
+  "display_name": "Ramesh Kumar — Hindi belt
+    mid-age, low digital literacy",
+
+  "demographics": {
+    "name": "Ramesh Kumar",
+    "age": 42,
+    "age_bracket": "middle",
+    "gender": "male",
+    "region": "hindi_belt",
+    "state": "Uttar Pradesh",
+    "district": "Hardoi",
+    "years_farming": 20
+  },
+
+  "agricultural_profile": {
+    "landholding_category": "small",
+    "landholding_hectares": 1.5,
+    "farmer_category": "owner",
+    "primary_crops": ["wheat", "paddy"],
+    "irrigation_type": "rain_fed"
+  },
+
+  "digital_access": {
+    "digital_literacy": "level_2",
+    "smartphone_ownership": true,
+    "internet_quality": "intermittent",
+    "access_method": "self_with_difficulty"
+  },
+
+  "scheme_experience": {
+    "prior_scheme_experience": "repeat_beneficiary",
+    "knowledge_of_scheme": "aware_of_basics",
+    "documentation_readiness": "docs_partial",
+    "parameter_recall": "remembers_aadhaar"
+  },
+
+  "behavioural_archetype": {
+    "information_disclosure": "partial_then_supply",
+    "problem_framing": "problem_oriented",
+    "patience_with_process": "patient_compliant",
+    "risk_orientation": "trusts_system",
+    "persistence_on_blockers": "retries"
+  },
+
+  "archetype_summary": "Mid-age small landholder
+    from hindi belt with basic smartphone access.
+    Describes problems narratively rather than
+    providing structured parameters. Provides
+    Aadhaar and mobile when asked but does not
+    know terms like 'installment number'. Tends
+    to retry rather than escalate when blocked."
 }
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FINAL OUTPUT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION BEFORE OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Output EXACTLY 8 personas
-- Output MUST be a JSON array
-- NO markdown
-- NO explanation
-- NO comments
-- NO trailing commas
-- NO missing fields
-- NO extra fields
+Before outputting, verify ALL of these:
 
-Failure to follow ANY rule = INVALID OUTPUT
+  ✓ exactly 16 archetypes
+  ✓ no state_values field anywhere
+  ✓ no language preference field anywhere
+  ✓ no script preference field anywhere
+  ✓ no formality marker field anywhere
+  ✓ age_bracket distribution: 3 young, 8 middle,
+    5 senior
+  ✓ gender: 11 male, 5 female
+  ✓ region: 6 hindi_belt, 4 south_india,
+    2 maharashtra_gujarat, 2 punjab_haryana,
+    1 east_bengal_odisha, 1 northeast_hilly
+  ✓ landholding: 9 marginal, 4 small, 2 medium,
+    1 large
+  ✓ digital_literacy: 3 level_1, 5 level_2,
+    4 level_3, 2 level_4, 2 level_5
+  ✓ access_method: 7 self_smartphone,
+    4 self_with_difficulty, 3 family_member_assists,
+    2 csc_operator_assists
+  ✓ farmer_category: 11 owner, 2 tenant,
+    2 sharecropper, 1 fpo_member
+  ✓ scheme_experience: 4 first_time,
+    9 repeat_beneficiary, 3 has_filed_grievance
+  ✓ information_disclosure: 3 upfront_complete,
+    9 partial_then_supply, 4 reactive_only
+  ✓ problem_framing: 4 task_oriented,
+    8 problem_oriented, 4 inquiry_oriented
+  ✓ all internal consistency correlations satisfied
+  ✓ names match regions
+  ✓ primary_crops match regions
+  ✓ every archetype has all 5 blocks populated
+  ✓ every archetype has archetype_summary
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output ONLY a JSON array of 16 archetype objects.
+No markdown fences. No explanation. No comments.
+No trailing commas. No truncation.
+
+SAVE TO: persona.json

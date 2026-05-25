@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_004_ARC_01",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_004",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My wheat is harvested but I am not getting a good rate here. Can you check the mandi prices on eNAM for Hardoi? I don't know how to check it myself."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Mandi prices and eNAM are market-related and outside the scope of PMFBY."
+    }
+  ],
+  "expected_final_state": {}
+}

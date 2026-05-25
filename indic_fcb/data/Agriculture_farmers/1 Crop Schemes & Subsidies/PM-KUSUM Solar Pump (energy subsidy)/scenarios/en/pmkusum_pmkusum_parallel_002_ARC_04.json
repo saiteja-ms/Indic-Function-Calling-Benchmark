@@ -1,0 +1,95 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_002_ARC_04",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_002",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My barren land is sitting useless and I want to know if I can get a solar pump under Component A or Component B. I have 1.5 acres of land."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "electricity_connection_status"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I don't have any electricity connection right now. Just tell me if I am eligible quickly or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component A",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "barren",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 1.5,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "barren",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 1.5,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

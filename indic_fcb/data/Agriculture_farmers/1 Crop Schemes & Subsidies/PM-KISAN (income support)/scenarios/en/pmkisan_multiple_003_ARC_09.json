@@ -1,0 +1,81 @@
+{
+  "scenario_id": "pmkisan_multiple_003_ARC_09",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_003",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "ekyc_status": "pending",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_09_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_09_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_09_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN money has not come for a while. My son helped me check online because our internet is intermittent, and it says my eKYC is pending. I want to check if I am eligible to do eKYC and complete it now. My beneficiary ID is PMK123456. We already generated the session token TOK98765 and the Aadhaar OTP is 456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_complete_ekyc",
+          "parameters": {
+            "session_token": {
+              "value": "TOK98765",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK123456",
+              "eval_mode": "EXACT"
+            },
+            "aadhaar_otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "ekyc_status": "completed",
+    "has_pending_over_90_days": false
+  }
+}

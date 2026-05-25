@@ -1,0 +1,35 @@
+{
+  "scenario_id": "pmkisan_irrelevance_008_ARC_16",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_008",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you tell me how to apply for a PM-KUSUM solar pump for my farm? I have my Aadhaar 890123456780 and mobile 6210987543 ready if you need to check my details."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KUSUM handles solar pumps, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

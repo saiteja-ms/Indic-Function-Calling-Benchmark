@@ -1,0 +1,38 @@
+{
+  "scenario_id": "shc_shc_miss_func_001_ARC_01",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_miss_func_001",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "plot_registration_status": "verified",
+    "sampling_window_status": "closed",
+    "sample_collection_status": "not_requested"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My field is verified but I need someone to come collect the soil sample. Can you schedule it?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "request sample collection when sampling window is closed",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

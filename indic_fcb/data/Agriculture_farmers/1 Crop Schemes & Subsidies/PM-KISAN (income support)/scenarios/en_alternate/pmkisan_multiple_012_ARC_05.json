@@ -1,0 +1,59 @@
+{
+  "scenario_id": "pmkisan_multiple_012_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_012",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "bank_account": "UCBA0001234|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaskar. I am not registered for PM-KISAN yet, but my son is helping me apply. Can you please check my status?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, my Aadhaar number is 678901234567 and my mobile number is 9765432108."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234567",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

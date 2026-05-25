@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pm_kusum_multiple_002_ARC_09",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_multiple_002",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My family is helping me with this app because my internet keeps dropping. I am a marginal farmer from Assam. My application is not yet submitted, but I need to calculate the exact subsidy amount I would get for a 7.5 HP solar pump. Please calculate the subsidy for me."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "pump_capacity_hp": {
+              "value": 7.5,
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "Assam",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

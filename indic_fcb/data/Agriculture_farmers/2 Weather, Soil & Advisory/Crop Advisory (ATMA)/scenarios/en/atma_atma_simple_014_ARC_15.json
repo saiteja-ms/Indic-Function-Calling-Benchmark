@@ -1,0 +1,68 @@
+{
+  "scenario_id": "atma_atma_simple_014_ARC_15",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_014",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "verified",
+    "query_count_open": 0
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to submit a query to an agricultural expert immediately. My active session token is 12345. I am from coimbatore and my cotton crop is showing severe yellowing of leaves and stunted growth. Please assign this to a specialist. I don't have time for delays."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_submit_expert_query",
+          "parameters": {
+            "session_token": {
+              "value": "12345",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "coimbatore",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "cotton",
+              "eval_mode": "EXACT"
+            },
+            "query_text": {
+              "value": "severe yellowing of leaves and stunted growth",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "query_text": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "query_status": "submitted",
+    "query_count_open": 1
+  }
+}

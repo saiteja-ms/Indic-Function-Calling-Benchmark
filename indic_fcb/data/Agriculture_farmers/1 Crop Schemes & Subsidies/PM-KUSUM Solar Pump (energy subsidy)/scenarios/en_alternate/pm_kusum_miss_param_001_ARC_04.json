@@ -1,0 +1,76 @@
+{
+  "scenario_id": "pm_kusum_miss_param_001_ARC_04",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_miss_param_001",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am a general category farmer from Maharashtra. I need to know how much subsidy I will get for a submersible solar pump. The process is already so slow, just tell me the amount quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "pump_capacity",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is a 5 HP pump. Don't make me repeat things, just give me the calculation."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "state": {
+              "value": "Maharashtra",
+              "eval_mode": "EXACT"
+            },
+            "pump_type": {
+              "value": "submersible",
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "general",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity": {
+              "value": "5 HP",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

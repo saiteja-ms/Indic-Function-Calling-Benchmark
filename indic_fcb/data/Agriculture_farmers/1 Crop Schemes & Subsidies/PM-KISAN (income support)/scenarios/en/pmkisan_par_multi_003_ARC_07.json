@@ -1,0 +1,96 @@
+{
+  "scenario_id": "pmkisan_par_multi_003_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_par_multi_003",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_07_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_07_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_07_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come so I want to check my beneficiary status. Also, my wife applied recently, can you check if she is eligible? My mobile is 7543210986 and my Aadhaar is 890123456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_number",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh yes, her Aadhaar number is 999988887777. Please check for both of us."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "999988887777",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456789",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7543210986",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

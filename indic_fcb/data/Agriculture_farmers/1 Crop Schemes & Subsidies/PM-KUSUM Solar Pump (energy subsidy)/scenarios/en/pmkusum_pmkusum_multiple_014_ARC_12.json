@@ -1,0 +1,75 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_014_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_014",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "farmer_share_payment_status": "pending"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to make the payment for the remaining farmer share for my solar pump. My application ID is PK-7788 and my session token is TKN-123. Don't make me repeat things, just process it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "payment_amount",
+        "payment_method"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am paying 45000 using UPI. Do it now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_pay_farmer_share",
+          "parameters": {
+            "session_token": {
+              "value": "TKN-123",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "PK-7788",
+              "eval_mode": "EXACT"
+            },
+            "payment_amount": {
+              "value": 45000,
+              "eval_mode": "EXACT"
+            },
+            "payment_method": {
+              "value": "UPI",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

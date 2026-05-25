@@ -1,0 +1,150 @@
+{
+  "scenario_id": "pmkisan_long_ctx_003_ARC_13",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_long_ctx_003",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID|001122334455",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_13_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_13_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_13_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "failed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am an FPO member from Rajkot. I visited my BKID bank branch yesterday."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I spoke to the bank manager regarding my PM-KISAN installments."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "He informed me that my recent payment failed due to an Aadhaar mismatch."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I want to track this failed payment and then resolve the failure. The transaction ID is TXN1234567890123. My beneficiary ID is PMK998877, my session token is TOK1234567890123, and the resolution action is 'updated Aadhaar details at bank'."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_payment",
+          "parameters": {
+            "transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Since you have tracked it, please go ahead and resolve the payment failure using the details I provided."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "TOK1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK998877",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated Aadhaar details at bank",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

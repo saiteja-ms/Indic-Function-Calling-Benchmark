@@ -1,0 +1,74 @@
+{
+  "scenario_id": "pmkisan_multiple_002_ARC_11",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_002",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "installments_credited": 3,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_11_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_11_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_11_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "credited"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am facing a problem because my money has not come for the last 3 months. I want to check my status and see my past transaction records to understand what happened. My Aadhaar number is 345678901235, my mobile number is 7432109865, my beneficiary ID is PMK123456, and my session token is SESS8899."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": "SESS8899",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK123456",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

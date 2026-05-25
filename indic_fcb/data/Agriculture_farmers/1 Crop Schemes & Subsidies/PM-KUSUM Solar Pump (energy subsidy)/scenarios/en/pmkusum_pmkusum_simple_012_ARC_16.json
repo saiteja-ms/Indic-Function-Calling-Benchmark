@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_012_ARC_16",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_012",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "installation_status": "scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the installation schedule and assigned technician details for my solar pump? I want to ensure I am ready for the process. My application ID is PK998877."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_installation_schedule",
+          "parameters": {
+            "application_id": {
+              "value": "PK998877",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": null,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "application_id": "EXACT",
+            "session_token": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

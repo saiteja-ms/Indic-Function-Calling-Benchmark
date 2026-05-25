@@ -1,0 +1,63 @@
+{
+  "scenario_id": "shc_shc_multiple_003_ARC_11",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_003",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "test_status": "in_progress",
+    "card_status": "not_issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soil health card has not been issued yet. I want to know if it is ready to be downloaded now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "sample_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The sample ID they gave me is SMP-778899."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_get_test_status",
+          "arguments": {
+            "sample_id": "SMP-778899"
+          },
+          "eval_mode": {
+            "sample_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

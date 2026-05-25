@@ -1,0 +1,172 @@
+{
+  "scenario_id": "pmkisan_long_ctx_002_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_long_ctx_002",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "installments_pending": 1,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_06_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_06_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_06_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "The weather has been very dry this year in Vidisha. No rain at all."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My soybean crop is drying up. I am very worried about it."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I really need the government money to survive this. But my PM-KISAN money has not come."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Can you check my status? I am cautious about sharing details, but my Aadhaar is 789012345678 and mobile is 8654321097. Is it safe to check?"
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "789012345678",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "8654321097",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Okay, the status is checked. To check the history, the CSC center gave me my beneficiary ID as BENE999 and a session token SESS123. Can you check my payment history with these?"
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": "SESS123",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "BENE999",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "I see the history now. Can you track the status of installment_3? I want to be sure if it is coming or not."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_installment_status",
+          "parameters": {
+            "beneficiary_id": {
+              "value": "BENE999",
+              "eval_mode": "EXACT"
+            },
+            "installment_number": {
+              "value": "installment_3",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

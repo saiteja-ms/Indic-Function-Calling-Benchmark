@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_005_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_005",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the DBT amount for my fertilizer subsidy? I want to know how much was credited to my account."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Fertilizer subsidy DBT is managed by the Department of Fertilizers, not PMFBY."
+    }
+  ],
+  "expected_final_state": {}
+}

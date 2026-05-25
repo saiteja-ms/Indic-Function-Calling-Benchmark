@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_task_irrelevance_009_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_009",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit Singh from Karnal. I have been reading about government schemes and I want to inquire about the PM-KUSUM solar pump scheme. Can you provide details on how I can apply for a solar pump for my 2.5 hectares of land?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KUSUM solar pump scheme is unrelated to crop insurance."
+    }
+  ],
+  "expected_final_state": {}
+}

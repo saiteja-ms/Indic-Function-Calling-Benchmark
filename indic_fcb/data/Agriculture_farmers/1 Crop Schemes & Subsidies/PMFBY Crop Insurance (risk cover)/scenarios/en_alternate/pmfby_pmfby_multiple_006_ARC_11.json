@@ -1,0 +1,83 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_006_ARC_11",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_006",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "not_enrolled",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cotton crop is not registered yet, please register me for the crop insurance scheme. My Aadhaar number is 345678901235."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year",
+        "area_hectares"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I want to register for the Kharif season of 2023. The land area is 0.9 hectares."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_submit_enrollment",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "345678901235",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "cotton",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2023,
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": 0.9,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "enrollment_status": "applied"
+  }
+}

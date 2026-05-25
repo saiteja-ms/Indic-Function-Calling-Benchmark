@@ -1,0 +1,79 @@
+{
+  "scenario_id": "pmfby_parallel_multiple_002_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_002",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the notified crops and the cutoff dates for the Kharif 2024 season in Rajkot, Gujarat."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_notified_crops",
+          "parameters": {
+            "state_name": {
+              "value": "Gujarat",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Rajkot",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2024,
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state_name": {
+              "value": "Gujarat",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Rajkot",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2024,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

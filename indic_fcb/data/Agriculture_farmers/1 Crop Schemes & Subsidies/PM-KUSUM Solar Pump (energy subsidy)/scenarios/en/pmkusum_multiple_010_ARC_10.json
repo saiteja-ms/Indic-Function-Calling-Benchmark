@@ -1,0 +1,76 @@
+{
+  "scenario_id": "pmkusum_multiple_010_ARC_10",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_010",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "pump_operational_status": "operational"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to report a problem. My solar panels have stopped working completely. Fix this immediately or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My application ID is APP-998877 and my session token is 123456. Just register the complaint."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_report_pump_issue",
+          "parameters": {
+            "application_id": {
+              "value": "APP-998877",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": "123456",
+              "eval_mode": "EXACT"
+            },
+            "issue_description": {
+              "value": "solar panels have stopped working completely",
+              "eval_mode": "SUBSTRING"
+            }
+          },
+          "eval_mode": {
+            "application_id": "EXACT",
+            "session_token": "EXACT",
+            "issue_description": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

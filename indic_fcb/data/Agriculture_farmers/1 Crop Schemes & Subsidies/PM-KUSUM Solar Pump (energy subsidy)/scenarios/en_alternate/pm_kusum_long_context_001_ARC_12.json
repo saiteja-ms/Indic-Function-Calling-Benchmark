@@ -1,0 +1,236 @@
+{
+  "scenario_id": "pm_kusum_long_context_001_ARC_12",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_long_context_001",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "application_status": "not_applied",
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "land_records_verified": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I have 5.5 hectares of land in Ludhiana. My old diesel pump broke down last week and it is a complete disaster for my farm."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The water scarcity is getting worse here in Punjab. I cannot rely on diesel anymore, it is too expensive and keeps failing when I need it the most."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I heard about the PM-KUSUM scheme for solar pumps. I need to get this sorted quickly before my wheat crop dies."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I want to apply for the solar pump subsidy now. My Aadhaar is 456789012346 and mobile is 6321098754. Send the OTP."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6321098754",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "The OTP is 456789. Let's move fast, I don't want to waste time."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6321098754",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Check my eligibility for a 7.5 HP pump. I am the owner of the land."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_check_eligibility",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "pump_capacity_hp": {
+              "value": 7.5,
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "owner",
+              "eval_mode": "EXACT"
+            },
+            "land_size_hectares": {
+              "value": 5.5,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 7,
+      "speaker": "user",
+      "message": "Okay, calculate the subsidy for Punjab."
+    },
+    {
+      "turn_index": 7,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "pump_capacity_hp": {
+              "value": 7.5,
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "Punjab",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 8,
+      "speaker": "user",
+      "message": "Submit the application. My bank account is PUNB|001122334455."
+    },
+    {
+      "turn_index": 8,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_submit_application",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "pump_capacity_hp": {
+              "value": 7.5,
+              "eval_mode": "EXACT"
+            },
+            "bank_account": {
+              "value": "PUNB|001122334455",
+              "eval_mode": "EXACT"
+            },
+            "land_size_hectares": {
+              "value": 5.5,
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "owner",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "application_status": "submitted"
+  }
+}

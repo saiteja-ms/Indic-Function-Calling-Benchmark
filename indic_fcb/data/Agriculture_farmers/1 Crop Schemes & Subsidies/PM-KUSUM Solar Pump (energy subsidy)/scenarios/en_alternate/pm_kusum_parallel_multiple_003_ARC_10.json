@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pm_kusum_parallel_multiple_003_ARC_10",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_parallel_multiple_003",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to get the vendor list for Kota district in Rajasthan and calculate the subsidy for a 10 HP submersible pump. Do this quickly, I don't want to waste time."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_vendor_list",
+          "parameters": {
+            "state": {
+              "value": "Rajasthan",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Kota",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "state": {
+              "value": "Rajasthan",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": 10,
+              "eval_mode": "EXACT"
+            },
+            "pump_type": {
+              "value": "submersible",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

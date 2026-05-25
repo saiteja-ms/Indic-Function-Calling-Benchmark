@@ -1,0 +1,64 @@
+{
+  "scenario_id": "pmfby_multiple_011_ARC_05",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_011",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "premium_payment_status": "refunded",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check my account? My premium refund is delayed and I want to raise a grievance. My reference ID is REF9988."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_description",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My son is helping me with this app. He says our session token is TOK123. The issue is that the premium refund has been delayed for over a month and I need it resolved."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "TOK123",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "REF9988",
+            "grievance_description": "The premium refund has been delayed for over a month and I need it resolved."
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

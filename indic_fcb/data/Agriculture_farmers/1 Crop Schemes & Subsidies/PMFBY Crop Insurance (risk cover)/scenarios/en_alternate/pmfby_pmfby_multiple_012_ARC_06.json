@@ -1,0 +1,98 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_012_ARC_06",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_012",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN001122334455",
+    "premium_payment_status": "paid",
+    "policy_status": "not_issued",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money was deducted but my policy is not issued. I want to file a complaint about this."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "reference_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do you need that? Okay, my application reference is APP12345. Is that enough?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_description"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I need to explain more? The premium of 500 rupees was deducted from my bank account last week but the policy status still says not issued. Please register this."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "This is very confusing. My session token is TOKEN123. Can you just file it now?"
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "TOKEN123",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "APP12345",
+            "grievance_description": "The premium of 500 rupees was deducted from my bank account last week but the policy status still says not issued. Please register this."
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "grievance_status": "filed"
+  }
+}

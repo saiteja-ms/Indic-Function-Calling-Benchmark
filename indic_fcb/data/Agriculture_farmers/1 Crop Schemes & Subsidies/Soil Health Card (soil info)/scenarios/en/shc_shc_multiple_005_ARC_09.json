@@ -1,0 +1,75 @@
+{
+  "scenario_id": "shc_shc_multiple_005_ARC_09",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_005",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "test_status": "completed",
+    "retest_window_days_left": 10,
+    "retest_status": "not_applicable"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "The soil test results for my tea garden are completely wrong. I disagree with the report and want to challenge it to get a retest."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token",
+        "sample_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My sample ID is SMP-7742 and my session token is ST-8899."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_request_retest",
+          "parameters": {
+            "session_token": {
+              "value": "ST-8899",
+              "eval_mode": "EXACT"
+            },
+            "sample_id": {
+              "value": "SMP-7742",
+              "eval_mode": "EXACT"
+            },
+            "dispute_reason": {
+              "value": "The soil test results for my tea garden are completely wrong. I disagree with the report",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "retest_status": "requested"
+  }
+}

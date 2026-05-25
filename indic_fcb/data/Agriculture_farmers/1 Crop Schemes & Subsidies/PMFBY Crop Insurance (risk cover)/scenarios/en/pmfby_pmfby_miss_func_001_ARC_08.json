@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_func_001_ARC_08",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_001",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "cutoff_date_passed": true,
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I can still enroll for crop insurance? I know the season has started but I want to apply now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "enroll after the season cutoff date has passed",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

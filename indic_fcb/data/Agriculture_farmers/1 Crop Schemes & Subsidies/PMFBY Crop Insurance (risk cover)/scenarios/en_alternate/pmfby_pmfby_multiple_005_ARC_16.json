@@ -1,0 +1,69 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_005_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_005",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "enrollment_status": "not_enrolled",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to insure my paddy crop for the Kharif 2023 season. I have 2.5 hectares of land. My Aadhaar number is 890123456780 and my bank account is PUNB001122334455. Could you please submit my enrollment application?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_submit_enrollment",
+          "parameters": {
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2023",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": 2.5,
+              "eval_mode": "EXACT"
+            },
+            "aadhaar_number": {
+              "value": "890123456780",
+              "eval_mode": "EXACT"
+            },
+            "bank_account": {
+              "value": "PUNB001122334455",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "enrollment_status": "applied"
+  }
+}

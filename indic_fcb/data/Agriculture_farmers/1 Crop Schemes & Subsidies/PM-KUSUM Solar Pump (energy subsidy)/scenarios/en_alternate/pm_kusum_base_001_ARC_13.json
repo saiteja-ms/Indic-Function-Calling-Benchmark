@@ -1,0 +1,183 @@
+{
+  "scenario_id": "pm_kusum_base_001_ARC_13",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_base_001",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to apply for the solar pump subsidy. I have all my details ready. My Aadhaar is 567890123457, mobile is 9543210876, and the OTP is 456789. I want a 5 HP pump under Component B. I am an FPO member from Rajkot, Gujarat. My bank account is BKID|001122334455. Please authenticate me first."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "567890123457",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "9543210876",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Now that authentication is done, please check my eligibility for the 5 HP pump under Component B."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_check_eligibility",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "aadhaar_number": {
+              "value": "567890123457",
+              "eval_mode": "EXACT"
+            },
+            "component_type": {
+              "value": "B",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity": {
+              "value": 5,
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "Gujarat",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Since I am eligible, please calculate the subsidy amount for this 5 HP pump in Gujarat."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "component_type": {
+              "value": "B",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity": {
+              "value": 5,
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "Gujarat",
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "fpo_member",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Now, please submit my application using my bank account BKID|001122334455."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_submit_application",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "aadhaar_number": {
+              "value": "567890123457",
+              "eval_mode": "EXACT"
+            },
+            "component_type": {
+              "value": "B",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity": {
+              "value": 5,
+              "eval_mode": "EXACT"
+            },
+            "bank_account": {
+              "value": "BKID|001122334455",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "application_status": "submitted",
+    "component_type": "B",
+    "pump_capacity_requested": 5
+  }
+}

@@ -1,201 +1,544 @@
 You are building an intent registry for a
-function-calling benchmark.
+function-calling benchmark for PM-KUSUM
+(Pradhan Mantri Kisan Urja Suraksha evam
+Utthaan Mahabhiyan — solar pump subsidy).
 
 READ:
-  - tools.json from the current usecase directory
-  - personas.json from the current usecase directory
+  - tools.jsonl from path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM Solar Pump (energy subsidy)\tools.jsonl"
+  - persona.json (16 farmer archetypes shared
+    across all farmer usecases) from path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM Solar Pump (energy subsidy)\persona.json"
 
-USECASE: PM-KUSUM solar pump (energy subsidy)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL — ARCHETYPE ID FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-TOOLS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\tools.jsonl
+Archetype IDs in compatible_archetypes MUST be
+the canonical IDs from persona.json:
 
-PERSONAS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\personas.json
+  ARC_01, ARC_02, ARC_03, ARC_04, ARC_05,
+  ARC_06, ARC_07, ARC_08, ARC_09, ARC_10,
+  ARC_11, ARC_12, ARC_13, ARC_14, ARC_15, ARC_16
 
-STUB LOGIC FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\stub_logic.py
+DO NOT invent descriptive IDs like
+"arch_01_small_owner_hindi_belt" or
+"arch_03_large_owner_punjab". These will fail
+matching against persona.json and the scenario
+generator will skip them.
 
-STUB FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\stubs.py
+To pick compatible archetypes:
+  1. READ persona.json
+  2. Inspect each archetype's attributes
+     (landholding_category, farmer_category,
+      region, irrigation_type, digital_literacy,
+      scheme_experience, etc.)
+  3. Decide if that archetype could plausibly
+     hold this intent
+  4. Reference it by ITS archetype_id from
+     persona.json (ARC_XX format)
 
-OUTPUT FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\intents.json
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AXIS 1 — conversation_length:
+  single_turn = exactly one user message in
+                the conversation
+  multi_turn  = two or more user messages
+
+AXIS 2 — tool_calls_per_turn:
+  single_step = every ground_truth turn has
+                at most ONE tool_call
+  multi_step  = at least one ground_truth turn
+                has TWO or more tool_calls
+
+AXIS 3 — task_type:
+  simple              = at most one tool call
+                        per turn AND no
+                        irrelevance pattern
+  parallel_multiple   = multiple tool calls in
+                        one turn AND those calls
+                        target DIFFERENT tools
+  irrelevance         = ALL ground_truth turns
+                        have null_call: true AND
+                        at least one has an
+                        irrelevance_reason
+
+NOTE: parallel (same tool, different params,
+multiple calls in one turn) maps to task_type
+"simple" in the 3-axis grid — the multi-step
+nature is captured by AXIS 2, not AXIS 3.
+parallel_multiple is reserved for DIFFERENT
+tools called together.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY TO AXIS MAPPING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+simple           : single_turn, single_step, simple
+multiple         : single_turn, single_step, simple
+parallel         : single_turn, multi_step, simple
+parallel_multiple: single_turn, multi_step,
+                   parallel_multiple
+task_irrelevance : single_turn, single_step,
+                   irrelevance
+base             : multi_turn, single_step, simple
+miss_param       : multi_turn, single_step, simple
+miss_func        : multi_turn, single_step,
+                   irrelevance (one turn only)
+long_context     : multi_turn, single_step, simple
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WHAT IS AN INTENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-An intent is an abstract user goal, independent
-of language and phrasing. Later, 3 scenario
-variants (A, B, C) will be generated per intent.
+An intent carries:
+  - three-axis position
+  - state_preconditions
+  - state_transition (reads + writes)
+  - compatible_archetypes
 
-An intent contains NO user prompt text —
-only the abstract goal and metadata.
+State preconditions + transitions are the
+SPECIFICATION for stub_logic.py to implement.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GUIDING PRINCIPLE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE FIELDS AVAILABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Do NOT target a fixed number of intents.
-Generate AS MANY intents as needed to achieve
-COMPLETE COVERAGE of every category.
+  authenticated              : true | false
+  session_token              : string | null
+  eligibility_status         : unknown | eligible |
+                               ineligible
+  application_status         : not_submitted |
+                               submitted |
+                               under_review |
+                               approved | rejected
+  land_record_status         : not_validated |
+                               validated | mismatch
+  has_existing_grid_pump     : true | false
+  vendor_selection_status    : not_required |
+                               pending | confirmed |
+                               expired
+  installation_status        : not_scheduled |
+                               scheduled |
+                               in_progress |
+                               completed | failed
+  subsidy_disbursement_status: not_initiated |
+                               calculated | approved |
+                               disbursed | failed
+  farmer_share_payment_status: not_due | pending |
+                               paid | refunded
+  pump_operational_status    : not_installed |
+                               operational | faulty |
+                               under_repair
+  scheme_component_selected  : component_a |
+                               component_b |
+                               component_c | null
+  has_active_grievance       : true | false
+  grievance_status           : not_filed | filed |
+                               under_review |
+                               resolved | rejected
 
-Complete coverage means:
-  - every tool exercised in every meaningful way
-  - every distractor trap covered
-  - every domain-enforced chain covered
-  - every commonly omitted parameter covered
-  - every plausible-but-unavailable action covered
-  - every adjacent-but-out-of-scope topic covered
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE PRINCIPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-More coverage is always better than less.
+Coverage-driven. No fixed count.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CATEGORY DEFINITIONS AND COVERAGE RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Must achieve:
+  - every tool exercised meaningfully
+  - every distractor trap covered twice
+  - every base chain covered
+  - every missing param covered
+  - every genuinely unavailable action covered
+  - every out-of-scope topic covered
+  - every 3-axis grid cell covered
+  - every archetype in at least 3 intents
 
-── SIMPLE ──────────────────────────────
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY-SPECIFIC COVERAGE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Definition:
-  One tool call. All required parameters will
-  be present in the user message.
+── SIMPLE ──────────────────────────────────────────
 
-How many to generate:
-  - At minimum: one intent per tool
-  - Additionally: one extra intent per tool
-    that has meaningful parameter variations
+One intent per tool minimum.
 
-Coverage complete when:
-  Every tool has been exercised in every
-  distinct parameter combination that a
-  real farmer might use.
+── MULTIPLE ────────────────────────────────────────
 
-── MULTIPLE ────────────────────────────
+Distractor traps — each appears twice with
+different user phrasings.
 
-Definition:
-  Many tools available. Only ONE is correct.
-  Distractor tools look tempting but are wrong.
+A distractor trap is two tools that would
+plausibly seem to solve the SAME user request
+but only ONE is correct.
 
-How many to generate:
-  One intent per distractor trap.
-  Each trap must appear at least twice.
+  TRAP A: "am I eligible for PM-KUSUM"
+    Correct  : pmkusum_check_eligibility
+    Distractor: pmkusum_validate_land_records
+    Trap: land validation is one input to
+    eligibility, but eligibility check is the
+    user's actual goal.
 
-Coverage complete when:
-  Every trap appears at least twice.
+  TRAP B: "what subsidy will I get"
+    Correct  : pmkusum_calculate_subsidy
+    Distractor: pmkusum_get_subsidy_disbursement_status
+    Trap: calculation is for pre-application;
+    disbursement is post-approval status.
 
-── PARALLEL ────────────────────────────
+  TRAP C: "how much pump can I afford"
+    Correct  : pmkusum_get_pump_capacity_options
+    Distractor: pmkusum_calculate_subsidy
+    Trap: user wants capacity choices; subsidy
+    calculation comes after capacity is chosen.
 
-Definition:
-  Two calls to the SAME tool with different
-  parameters simultaneously.
+  TRAP D: "which vendor should I pick"
+    Correct  : pmkusum_get_empanelled_vendors
+    Distractor: pmkusum_select_vendor
+    Trap: user wants to BROWSE vendors;
+    selection is the action after browsing.
 
-Coverage complete when:
-  Every tool with natural parallel use
-  has at least one parallel intent.
+  TRAP E: "my installed pump is broken"
+    Correct  : pmkusum_report_pump_issue
+    Distractor: pmkusum_raise_grievance
+    Trap: report_pump_issue is for technical
+    faults; grievance is for service complaints.
 
-── PARALLEL MULTIPLE ───────────────────
+  TRAP F: "when will my pump be installed"
+    Correct  : pmkusum_get_installation_schedule
+    Distractor: pmkusum_get_application_status
+    Trap: schedule is for installation date;
+    application status is approval lifecycle.
 
-How many to generate:
-  At least 5 distinct parallel multiple intents.
+  TRAP G: "how do I pay my share of the cost"
+    Correct  : pmkusum_pay_farmer_share
+    Distractor: pmkusum_calculate_subsidy
+    Trap: user wants to PAY; calculation is
+    pre-application step.
 
-Definition:
-  Two or more DIFFERENT tools called at the
-  same time. Independent execution.
+── PARALLEL ────────────────────────────────────────
 
-Coverage complete when:
-  Every natural cross-tool pair covered.
+Same-tool simultaneous calls:
+  - get_empanelled_vendors for two districts
+  - check_eligibility for two scheme components
+  - get_pump_capacity_options for two land sizes
+  - track_grievance_status for two IDs
+  - get_application_status for two application IDs
 
-── TASK IRRELEVANCE ────────────────────
+── PARALLEL_MULTIPLE ───────────────────────────────
 
-How many to generate:
-  At least 5 distinct task irrelevance intents (e.g. cricket, medical, railway, irrelevant scheme).
+Different-tool simultaneous calls:
+  - check_eligibility + get_pump_capacity_options
+  - get_empanelled_vendors + calculate_subsidy
+  - get_application_status + get_installation_schedule
+  - get_subsidy_disbursement_status +
+    get_farmer_share_payment_status
+  - get_pump_capacity_options + get_empanelled_vendors
 
-Definition:
-  Farmer query but NO tool applies.
+STRICT: never pair tools where one depends on
+the other's output.
 
-Coverage complete when:
-  All adjacent domains are covered.
+── TASK_IRRELEVANCE ────────────────────────────────
 
-── BASE (multi-turn) ───────────────────
+Topics where no PM-KUSUM tool applies:
+  - PM-KISAN income support installments
+  - PMFBY crop insurance enrollment
+  - soil health card status
+  - fertilizer subsidy DBT (iFMS)
+  - eNAM mandi prices
+  - MSP procurement token
+  - regular electricity bill payment
+  - private (non-government) solar installation
+  - MNRE rooftop solar subsidy (urban scheme)
+  - tractor or farm machinery subsidy
+  - cattle/livestock advisory
 
-How many to generate:
-  At least 5 distinct multi-turn flows (chains of 2 to 3 tools).
+── BASE ────────────────────────────────────────────
 
-Definition:
-  Multi-step chain with domain constraints.
+Multi-turn chains. chain_order_enforced: true.
 
-Coverage complete when:
-  All real-world flows covered.
+  CHAIN A — New Component B application flow
+    domain_constraint: "subsidy can be calculated
+    only after eligibility is confirmed, vendor
+    can be selected only after application is
+    approved, farmer share can be paid only
+    after vendor is confirmed"
+    Order: authenticate → check_eligibility →
+           validate_land_records →
+           calculate_subsidy → submit_application →
+           get_empanelled_vendors → select_vendor →
+           pay_farmer_share
 
-── MISS_PARAM (multi-turn) ─────────────
+  CHAIN B — Application status and installation
+    domain_constraint: "installation schedule
+    is available only after application is approved"
+    Order: authenticate → get_application_status →
+           get_installation_schedule
 
-Definition:
-  Missing required parameter.
+  CHAIN C — Post-installation pump issue
+    domain_constraint: "pump issue can be
+    reported only after installation is completed"
+    Order: authenticate → get_application_status →
+           report_pump_issue
 
-Coverage complete when:
-  All common missing parameters covered.
+  CHAIN D — Subsidy disbursement tracking
+    domain_constraint: "disbursement status is
+    available only after application is approved"
+    Order: authenticate → get_application_status →
+           get_subsidy_disbursement_status
 
-── MISS_FUNC (multi-turn) ──────────────
+  CHAIN E — Grievance flow
+    domain_constraint: "grievance requires an
+    application record to file against"
+    Order: authenticate → get_application_status →
+           raise_grievance
 
-Definition:
-  Unsupported action requested.
+── MISS_PARAM ──────────────────────────────────────
 
-Coverage complete when:
-  All realistic unsupported actions covered.
+Parameters commonly omitted:
+  - scheme_component missing from eligibility
+  - district missing from vendor lookup
+  - pump_capacity_hp missing from subsidy calc
+  - land_area_acres missing from eligibility
+  - vendor_id missing from vendor selection
+  - application_id missing from status check
+  - otp missing from authentication
+  - farmer_category missing from subsidy calc
 
-── LONG_CONTEXT (multi-turn) ───────────
+── MISS_FUNC ───────────────────────────────────────
 
-Definition:
-  Same as base but with long context.
+Actions PM-KUSUM genuinely cannot perform:
+  - apply for Component B with existing grid
+    electricity connection for irrigation
+  - apply for Component B on non-cultivable land
+  - select a vendor not empanelled for the district
+  - submit a second Component B application for
+    the same landholding
+  - request subsidy disbursement before
+    installation is verified
+  - cancel application after vendor is confirmed
+    and installation is scheduled
+  - request a pump above 7.5 HP for Component B
+  - transfer approval to another farmer
 
-Coverage complete when:
-  Equal to base count.
+── LONG_CONTEXT ────────────────────────────────────
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT SCHEMA (EVERY INTENT)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+One long_context intent per base chain (5 total).
+Each has 3-5 padding user turns BEFORE the chain
+begins. Padding turns have tool_calls: [] and
+null_call: true.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPATIBLE ARCHETYPE GUIDANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Compatibility uses ONLY archetype attributes
+from persona.json (demographics, agricultural
+profile, digital access, scheme experience,
+behaviour). NEVER use state fields as filters.
+
+Always reference archetypes by their canonical
+ID (ARC_01 to ARC_16) from persona.json. Do
+NOT invent descriptive IDs.
+
+MORE COMPATIBLE:
+  - landholding_category: small, medium, large
+    (PM-KUSUM has 0.5-acre minimum)
+  - farmer_category: owner
+  - region: hindi_belt, maharashtra_gujarat,
+    punjab_haryana (high PM-KUSUM adoption)
+  - irrigation_type: rain_fed (Component B
+    targets off-grid farms)
+  - scheme_experience: aware_of_details
+    (the scheme is complex)
+
+LESS COMPATIBLE:
+  - landholding_category: marginal (under 0.5 acres
+    may not meet minimum)
+  - urban_fringe archetypes
+
+FORCED COMPATIBLE:
+  - tenant or sharecropper archetypes MUST appear
+    in miss_func intents (cannot apply without
+    land ownership)
+  - marginal landholding archetypes MUST appear
+    in miss_func intents (minimum area rule)
+
+PROCESS for picking compatible archetypes:
+  1. Open persona.json
+  2. For each of ARC_01 through ARC_16, check:
+     - landholding_category
+     - farmer_category
+     - region
+     - irrigation_type
+     - digital_literacy
+     - scheme_experience
+  3. Apply rules above to decide compatibility
+  4. List archetype_id values (ARC_XX format)
+
+Every archetype must appear in at least 3 intents
+across all categories.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 {
   "intent_id": "pmkusum_simple_001",
-  "usecase": "pmkusum",
+  "usecase": "pm_kusum",
   "category": "simple",
-  "abstract_goal": "...",
-  "required_tools": ["..."],
+
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+
+  "abstract_goal": "farmer wants to check
+    eligibility for Component B solar pump",
+
+  "required_tools": [
+    "pmkusum_check_eligibility"
+  ],
+
   "chain_order_enforced": false,
   "domain_constraint": null,
-  "suggested_persona": "PERSONA_A",
+
   "distractor_tools": [],
   "parallel_tools": [],
   "missing_param": null,
   "missing_func": null,
   "irrelevance_reason": null,
-  "eval_notes": "..."
+
+  "state_preconditions": {
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted"
+  },
+
+  "state_transition": {
+    "reads": ["eligibility_status",
+              "land_record_status"],
+    "writes": {
+      "eligibility_status": "eligible"
+    }
+  },
+
+  "compatible_archetypes": [
+    "ARC_03", "ARC_06", "ARC_09", "ARC_14"
+  ],
+
+  "eval_notes": "model must distinguish
+    eligibility check from land record validation"
 }
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SELF-VALIDATION BEFORE OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIELD RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✓ every tool in tools.json appears in required_tools at least once  
-✓ no invented tool names anywhere  
-✓ all suggested_persona values exist in personas.json  
-✓ chain_order_enforced true only for base and long_context  
-✓ distractor_tools non-empty for multiple  
-✓ parallel_tools non-empty for parallel and parallel_multiple  
-✓ missing_param non-null for miss_param  
-✓ missing_func non-null for miss_func  
-✓ irrelevance_reason non-null for task_irrelevance  
-✓ long_context count matches base count  
+intent_id: pmkusum_{category}_{NNN}, NNN zero-padded
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+axes: use CATEGORY TO AXIS MAPPING exactly
+
+required_tools: exact names from tools.jsonl
+
+chain_order_enforced: true only for base and
+  long_context
+
+domain_constraint: one sentence ONLY when
+  chain_order_enforced is true
+
+distractor_tools: non-empty for multiple only
+  Contains the DISTRACTOR side of the trap
+
+parallel_tools: non-empty for parallel and
+  parallel_multiple
+
+missing_param: non-null for miss_param
+  Format: {"turn_index": <int>,
+           "param_name": "<exact from tools.jsonl>"}
+
+missing_func: non-null for miss_func
+  Format: {"turn_index": <int>,
+           "requested_action": "<one sentence>"}
+
+irrelevance_reason: non-null for task_irrelevance
+  One sentence
+
+state_preconditions: MANDATORY
+  Empty {} only for task_irrelevance
+  Use only state fields from STATE FIELDS AVAILABLE
+
+state_transition: MANDATORY
+  reads: array of state fields (non-empty)
+  writes: dict (empty {} for read-only intents)
+
+compatible_archetypes: MUST use canonical IDs
+  ARC_01 to ARC_16 from persona.json.
+  NEVER use descriptive IDs like
+  "arch_03_large_owner_punjab".
+  Every archetype in at least 3 intents.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURAL:
+  ✓ every intent has axes block
+  ✓ axes match CATEGORY TO AXIS MAPPING
+  ✓ intent_id format pmkusum_{category}_{NNN}
+  ✓ every required field present
+
+TOOLS:
+  ✓ every tool in tools.jsonl in required_tools
+    at least once
+  ✓ no invented tool names
+  ✓ no tool in BOTH required_tools and
+    distractor_tools of same intent
+
+CATEGORY:
+  ✓ chain_order_enforced true only for base
+    and long_context
+  ✓ domain_constraint non-null when
+    chain_order_enforced true
+  ✓ distractor_tools non-empty for multiple
+  ✓ parallel_tools non-empty for parallel
+  ✓ missing_param non-null for miss_param
+  ✓ missing_func non-null for miss_func
+  ✓ irrelevance_reason non-null for task_irrelevance
+
+STATE:
+  ✓ no invented state field names
+  ✓ state_preconditions on every intent
+  ✓ state_transition on every intent
+  ✓ reads is non-empty array
+
+ARCHETYPES (CRITICAL — most common error source):
+  ✓ EVERY archetype_id in compatible_archetypes
+    matches the canonical pattern ARC_XX where
+    XX is 01-16
+  ✓ NO descriptive IDs like
+    "arch_03_large_owner_punjab"
+  ✓ all archetype_ids exist in persona.json
+  ✓ compatibility uses only archetype attributes
+  ✓ every archetype appears in at least 3 intents
+  ✓ tenant/sharecropper in miss_func intents
+  ✓ marginal landholding in miss_func intents
+
+DOMAIN-SPECIFIC:
+  ✓ Component B grid-pump exclusion in miss_func
+  ✓ 0.5-acre minimum in miss_func
+  ✓ 7.5 HP cap in miss_func
+  ✓ vendor empanelment per district in miss_func
+
+COVERAGE:
+  ✓ every 3-axis grid cell covered
+  ✓ every distractor trap covered twice
+  ✓ every base chain covered
+  ✓ every miss_func action covered
+  ✓ every irrelevance topic covered
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OUTPUT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Output ONLY a JSON array.
-No markdown. No explanation.
-No trailing commas. No missing fields.
-No extra fields. No truncation.
+Output ONLY a JSON array of intent objects.
+No markdown. No explanation. No trailing commas.
 
-SAVE TO:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KUSUM solar pump (energy subsidy)\intents.json
+SAVE TO: intents.json

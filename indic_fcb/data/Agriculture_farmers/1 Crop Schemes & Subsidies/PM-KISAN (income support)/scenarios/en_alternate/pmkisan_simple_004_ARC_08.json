@@ -1,0 +1,61 @@
+{
+  "scenario_id": "pmkisan_simple_004_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_004",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "bank_account": "CNRB0001234|001122334455",
+    "authenticated": false,
+    "session_token": null
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaskara. I am a tenant farmer and this is my first time looking into government schemes. I want to know if I am eligible to apply for PM-KISAN. Could you please tell me how to check?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, I have my Aadhaar card with me. The number is 901234567890. Please check if I am eligible."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "901234567890",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

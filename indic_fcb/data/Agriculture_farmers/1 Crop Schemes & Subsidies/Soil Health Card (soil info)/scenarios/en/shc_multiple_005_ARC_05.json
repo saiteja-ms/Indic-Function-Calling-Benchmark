@@ -1,0 +1,71 @@
+{
+  "scenario_id": "shc_multiple_005_ARC_05",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_005",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA|001122334455",
+    "test_status": "completed",
+    "retest_window_days_left": 10,
+    "retest_status": "not_applicable"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My grandson is helping me use this app. Can you check how I can challenge my soil test results? I disagree with them. My sample ID is SAMP456."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token",
+        "dispute_reason"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The reason is that the nitrogen levels are shown as zero, which is impossible. My session token is TOK789."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_request_retest",
+          "arguments": {
+            "session_token": "TOK789",
+            "sample_id": "SAMP456",
+            "dispute_reason": "nitrogen levels are shown as zero, which is impossible"
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "sample_id": "EXACT",
+            "dispute_reason": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "retest_status": "requested"
+  }
+}

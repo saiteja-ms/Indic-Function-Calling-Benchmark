@@ -1,0 +1,89 @@
+{
+  "scenario_id": "atma_atma_multiple_013_ARC_02",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_013",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "verified",
+    "farm_school_visit_status": "not_scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I can book a visit to the demonstration plot in my block?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My grandson is helping me check. We are from Patna district."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "preferred_date"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Can we schedule it for 2024-05-20?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_schedule_farm_school_visit",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "patna",
+              "eval_mode": "EXACT"
+            },
+            "preferred_date": {
+              "value": "2024-05-20",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farm_school_visit_status": "scheduled"
+  }
+}

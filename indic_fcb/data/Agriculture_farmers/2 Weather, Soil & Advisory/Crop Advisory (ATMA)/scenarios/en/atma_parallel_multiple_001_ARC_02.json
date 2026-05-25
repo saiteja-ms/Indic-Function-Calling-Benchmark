@@ -1,0 +1,118 @@
+{
+  "scenario_id": "atma_parallel_multiple_001_ARC_02",
+  "usecase": "atma",
+  "intent_ref": "atma_parallel_multiple_001",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check where the nearest KVK is? I also need to get the SMS contact for my crop."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district",
+        "crop_name"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Bihar."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district",
+        "crop_name"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "My district is Patna."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "crop_name"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I need the contact for paddy."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_find_nearest_kvk",
+          "parameters": {
+            "state": {
+              "value": "bihar",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "patna",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "atma_get_sms_contact",
+          "parameters": {
+            "state": {
+              "value": "bihar",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "patna",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

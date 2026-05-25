@@ -1,0 +1,40 @@
+{
+  "scenario_id": "pmkisan_irrelevance_001_ARC_02",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_001",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "none",
+    "task_type": "task_irrelevance"
+  },
+  "initial_state": {
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "registration_status": "registered",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "installments": [],
+    "bank_account": "CNRB0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "What is the mandi price for wheat in my district today?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "mandi prices are handled by eNAM, not PM-KISAN"
+    }
+  ],
+  "expected_final_state": {}
+}

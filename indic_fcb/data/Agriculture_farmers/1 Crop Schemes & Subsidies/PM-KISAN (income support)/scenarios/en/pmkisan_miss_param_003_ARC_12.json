@@ -1,0 +1,99 @@
+{
+  "scenario_id": "pmkisan_miss_param_003_ARC_12",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "beneficiary_id": "PMK_ARC12_999",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_12_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_12_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_12_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "processed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to update my bank details for PM-KISAN immediately. My beneficiary ID is PMK_ARC12_999, my session token is SESS_888, and the new IFSC code is PUNB0001234. Do it fast."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_account_number",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why are there so many steps? The new account number is 998877665544. If this isn't fixed today, I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "SESS_888",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK_ARC12_999",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "PUNB0001234",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "998877665544",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

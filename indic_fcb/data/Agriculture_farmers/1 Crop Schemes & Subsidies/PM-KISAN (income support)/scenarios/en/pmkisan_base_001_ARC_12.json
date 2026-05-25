@@ -1,0 +1,83 @@
+{
+  "scenario_id": "pmkisan_base_001_ARC_12",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_base_001",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "land_record_status": "not_validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to register for PM-KISAN. Check my eligibility first. My Aadhaar number is 456789012346."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do I need to give more details for the next step? Fine, let's get this over with. My state code is 03, district code is 015, and plot number is P-452. Validate the land records quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "03",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "015",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "P-452",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible",
+    "land_record_status": "validated"
+  }
+}

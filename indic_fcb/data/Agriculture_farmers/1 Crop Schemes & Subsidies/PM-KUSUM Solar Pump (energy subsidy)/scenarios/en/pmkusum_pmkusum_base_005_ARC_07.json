@@ -1,0 +1,116 @@
+{
+  "scenario_id": "pmkusum_pmkusum_base_005_ARC_07",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_base_005",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "application_status": "approved",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application APP98765 is approved but the vendor hasn't contacted me. I want to file a complaint about vendor delay."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP98765",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Can you please authenticate me so I can file the grievance? My Aadhaar is 890123456789 and the OTP is 456789."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456789",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Now please file the grievance for vendor delay."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_TOKEN",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "APP98765",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "vendor_delay",
+              "eval_mode": "EXACT"
+            },
+            "grievance_remarks": {
+              "value": "vendor hasn't contacted me",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

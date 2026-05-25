@@ -1,0 +1,84 @@
+{
+  "scenario_id": "pmkisan_multiple_009_ARC_16",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_009",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_16_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_16_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_16_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "processed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I would like to inquire about updating my bank details for PM-KISAN. Can you process this update for me? My beneficiary ID is PMK-16-9988. The new IFSC code is PUNB0000001 and the new account number is 001122334455. Also, I have already verified my land records for state code 06, district code 013, and plot number 45B, so they are fine and you do not need to validate them again. My active session token is SESSION_123."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": "SESSION_123",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK-16-9988",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "PUNB0000001",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "001122334455",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

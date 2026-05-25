@@ -1,0 +1,76 @@
+{
+  "scenario_id": "pmfby_miss_param_002_ARC_06",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_param_002",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to know how much premium I have to pay for my 0.9 hectares of land in Vidisha, Madhya Pradesh for the kharif season."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "crop_name",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I forgot to mention. The crop is soybean."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Madhya Pradesh",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Vidisha",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "soybean",
+              "eval_mode": "SUBSTRING"
+            },
+            "area_hectares": {
+              "value": 0.9,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

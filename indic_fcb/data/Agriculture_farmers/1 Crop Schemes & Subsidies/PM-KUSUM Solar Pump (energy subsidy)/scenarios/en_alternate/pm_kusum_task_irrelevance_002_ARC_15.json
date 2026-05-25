@@ -1,0 +1,39 @@
+{
+  "scenario_id": "pm_kusum_task_irrelevance_002_ARC_15",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_task_irrelevance_002",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to apply for a free electricity connection for my home under the Saubhagya scheme. Please process this immediately, I don't want to face any delays or have to escalate this."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about domestic electricity connection, PM-KUSUM is strictly for agricultural solar pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

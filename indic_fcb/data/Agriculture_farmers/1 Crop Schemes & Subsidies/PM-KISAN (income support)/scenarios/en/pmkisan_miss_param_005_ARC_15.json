@@ -1,0 +1,99 @@
+{
+  "scenario_id": "pmkisan_miss_param_005_ARC_15",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_005",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "has_active_grievance": false,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_15_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_15_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_15_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "credited"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to submit a grievance right now. My beneficiary ID is PMK789012. The description of my problem is that my land records are showing as unverified despite submitting all documents last month. File this complaint immediately."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "category",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The category is registration_issue. Just file it, I don't have time for this back and forth. If this isn't resolved I will escalate to the nodal officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK789012",
+              "eval_mode": "EXACT"
+            },
+            "category": {
+              "value": "registration_issue",
+              "eval_mode": "EXACT"
+            },
+            "description": {
+              "value": "land records are showing as unverified",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

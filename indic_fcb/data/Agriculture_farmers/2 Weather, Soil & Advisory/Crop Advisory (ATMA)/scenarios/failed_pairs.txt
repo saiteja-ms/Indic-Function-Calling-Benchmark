@@ -1,0 +1,3 @@
+atma_simple_014 x ARC_02: Expecting property name enclosed in double quotes: line 30 column 25 (char 810)
+atma_multiple_009 x ARC_06: Unterminated string starting at: line 29 column 18 (char 854)
+atma_multiple_010 x ARC_11: Expecting property name enclosed in double quotes: line 27 column 23 (char 838)

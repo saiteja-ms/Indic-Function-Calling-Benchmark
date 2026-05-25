@@ -1,0 +1,160 @@
+{
+  "scenario_id": "atma_atma_base_002_ARC_12",
+  "usecase": "atma",
+  "intent_ref": "atma_base_002",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "not_registered",
+    "query_count_open": 0
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to register my profile, submit a query about my wheat crop, and track it. My Aadhaar is 456789012346 and the OTP is 456789. Let's get this done quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am Harpreet Kaur from Ludhiana, Punjab. My village is Gill. Register my profile now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_farmer_profile",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "farmer_name": {
+              "value": "Harpreet Kaur",
+              "eval_mode": "SUBSTRING"
+            },
+            "state": {
+              "value": "punjab",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "ludhiana",
+              "eval_mode": "EXACT"
+            },
+            "village_name": {
+              "value": "Gill",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "My wheat crop has yellowing leaves and stunted growth. Submit this query to the specialist."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_submit_expert_query",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "district": {
+              "value": "ludhiana",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            },
+            "query_text": {
+              "value": "My wheat crop has yellowing leaves and stunted growth.",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Okay, the query ID is Q-998. Can you track the response for it?"
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_track_query_response",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "query_id": {
+              "value": "Q-998",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "farmer_profile_status": "registered",
+    "query_status": "submitted",
+    "query_count_open": 1
+  }
+}

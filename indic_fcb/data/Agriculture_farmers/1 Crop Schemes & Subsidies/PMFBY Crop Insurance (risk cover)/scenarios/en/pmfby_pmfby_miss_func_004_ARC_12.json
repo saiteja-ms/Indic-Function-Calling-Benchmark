@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_func_004_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_004",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "policy_status": "active"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to transfer my active PMFBY policy for wheat to another farmer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "transfer policy to another farmer",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "This is ridiculous. I have all the documents ready. If you can't do this simple transfer, I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "transfer policy to another farmer",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

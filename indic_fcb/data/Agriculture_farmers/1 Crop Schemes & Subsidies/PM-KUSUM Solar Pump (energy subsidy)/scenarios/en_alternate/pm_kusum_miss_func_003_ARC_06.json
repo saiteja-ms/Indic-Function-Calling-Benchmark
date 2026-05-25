@@ -1,0 +1,61 @@
+{
+  "scenario_id": "pm_kusum_miss_func_003_ARC_06",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_miss_func_003",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "installed",
+    "installation_status": "completed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Bhola Singh. My solar pump was installed recently, but I am not sure about it... I want to cancel it and get my money back. Can you check my application? The application ID is APP123456. Please check."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP123456",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, it is installed. But I really want to cancel it now. Can you please process my refund? I will try again if needed, but please cancel it and send the money back."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "Refunds cannot be processed once the solar pump installation is completed.",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

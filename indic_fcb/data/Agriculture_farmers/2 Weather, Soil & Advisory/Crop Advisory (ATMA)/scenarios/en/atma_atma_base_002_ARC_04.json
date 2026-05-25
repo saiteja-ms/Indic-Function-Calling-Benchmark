@@ -1,0 +1,197 @@
+{
+  "scenario_id": "atma_atma_base_002_ARC_04",
+  "usecase": "atma",
+  "intent_ref": "atma_base_002",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "farmer_profile_status": "not_registered",
+    "query_count_open": 0,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cotton crop is getting destroyed by pests. I want to register my profile, ask an expert about this, and track the response. I am Vishnu Patil from Nashik, Maharashtra, and my village is Ozar. I don't have time for delays."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Fine, my Aadhaar is 567890123456 and the OTP I just got is 456789. Authenticate me now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "567890123456",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "aadhaar_number": "EXACT",
+            "otp": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Now register my profile quickly."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_farmer_profile",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "EXACT"
+            },
+            "farmer_name": {
+              "value": "Vishnu Patil",
+              "eval_mode": "EXACT"
+            },
+            "state": {
+              "value": "maharashtra",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "nashik",
+              "eval_mode": "EXACT"
+            },
+            "village_name": {
+              "value": "Ozar",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "TYPE_ONLY",
+            "farmer_name": "SUBSTRING",
+            "state": "EXACT",
+            "district": "EXACT",
+            "village_name": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Profile is done. Now submit my query about the cotton pests."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_submit_expert_query",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "nashik",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "cotton",
+              "eval_mode": "EXACT"
+            },
+            "query_text": {
+              "value": "cotton crop is getting destroyed by pests",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "TYPE_ONLY",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "query_text": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Okay, I got the query ID Q-8823. Check its status right now, I need to know if anyone replied."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_track_query_response",
+          "parameters": {
+            "session_token": {
+              "value": "token_123",
+              "eval_mode": "EXACT"
+            },
+            "query_id": {
+              "value": "Q-8823",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "TYPE_ONLY",
+            "query_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "farmer_profile_status": "registered",
+    "query_status": "submitted",
+    "query_count_open": 1
+  }
+}

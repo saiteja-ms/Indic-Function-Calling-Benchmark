@@ -1,353 +1,543 @@
-You are generating benchmark scenarios for an
-Indic function-calling benchmark in the style
-of BFCL and tau-bench.
+You are generating ONE evaluation scenario for the
+Indic Function Calling Benchmark (IFCB) for the
+Crop Advisory (ATMA)
+service on UMANG.
 
-READ:
-  - tools.json from the current usecase directory
-  - personas.json from the current usecase directory
-  - intents.json from the current usecase directory
+You will be given:
+  - ONE intent (the goal and ground truth structure)
+  - ONE archetype (the farmer's behaviour pattern)
+  - The RELEVANT tools (only those this intent uses)
 
-USECASE: Crop Advisory (ATMA) (expert advice)
+Generate exactly ONE scenario JSON object that
+combines them.
 
-TOOLS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA) (expert advice)\tools.jsonl
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — CORE PRINCIPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PERSONAS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA) (expert advice)\personas.json
+A scenario has FOUR parts:
+  1. initial_state  — what the stub is seeded with
+  2. conversation   — alternating user and
+                      ground_truth turns
+  3. axes           — DERIVED from the conversation
+                      structure (not copied)
+  4. expected_final_state — only changed fields
 
-INTENTS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA) (expert advice)\intents.json
+The intent defines the GOAL and the STATE.
+The archetype defines the CONVERSATION SHAPE.
+The conversation shape determines the AXES.
 
-STUB LOGIC FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA) (expert advice)\stub_logic.py
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — CONVERSATION SHAPE (DRIVEN BY ARCHETYPE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-OUTPUT FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA) (expert advice)\scenarios\en\
+The archetype's INFORMATION DISCLOSURE attribute
+controls how many user turns the conversation has.
 
-GENERATE: one scenario file per intent per variant.
+upfront_complete:
+  Single user turn containing every parameter.
+  Even for "miss_param" or "base" category intents,
+  this archetype gives everything in one message.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SYSTEM PROMPT TO USE FOR ALL SCENARIOS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Conversation length: usually 1 user turn for
+    simple/multiple/parallel/parallel_multiple/
+    task_irrelevance categories
+  For BASE chains (genuinely multi-step):
+    still multi-turn because chain order forces it
 
-Use this system prompt in every scenario:
+partial_then_supply:
+  Two user turns: first turn describes the problem
+  with some identifiers, second turn provides the
+  rest after model asks.
 
-"""
-You are a helpful assistant for Indian farmers
-using the UMANG government services app.
-You have access to tools for the Crop Advisory (ATMA) (expert advice)
-service. Help farmers complete their government
-service requests accurately.
+  Conversation length: 2 user turns minimum.
+  For BASE chains: 2-3 user turns.
 
-Rules:
-- When a required parameter is missing, ask
-  for it clearly. Do not guess or hallucinate.
-- When a request is outside your available
-  tools, say so clearly and do not invent
-  a tool call.
-- Always call authentication tools first
-  when a session_token is needed.
-- Never reveal session tokens to the user.
-"""
+reactive_only:
+  Three or more user turns: each parameter comes
+  in a separate user message after explicit ask.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-VARIANT DEFINITIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Conversation length: 3+ user turns.
 
-For each intent, generate 3 variants:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — TURN STRUCTURE (STRICT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-VARIANT A — direct and specific:
-  Farmer states all required parameter values
-  explicitly in the first message. Nothing is
-  missing. Prompt is unambiguous.
-  User sounds like a literate farmer typing
-  carefully on a phone.
+Each turn has TWO entries: one for user, one for
+ground_truth — both with the SAME turn_index.
 
-VARIANT B — indirect and colloquial:
-  Farmer describes their situation or problem
-  without explicitly stating all parameters.
-  Parameters must be inferrable from context
-  but are not stated as raw values.
-  User sounds like a semi-literate farmer
-  speaking naturally.
+Turn pattern:
+  turn 1:
+    {speaker: "user",         turn_index: 1, ...}
+    {speaker: "ground_truth", turn_index: 1, ...}
+  turn 2:
+    {speaker: "user",         turn_index: 2, ...}
+    {speaker: "ground_truth", turn_index: 2, ...}
 
-VARIANT C — over-specified or multi-turn:
-  For single-turn intents: farmer gives
-  excessive context before the actual request.
-  For multi-turn intents: farmer spreads
-  information across multiple messages
-  naturally, the way a real conversation flows.
+Ground truth for a turn is what the model SHOULD
+do AFTER reading that turn's user message.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FUNCTION ARRAY RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — GROUND TRUTH RULES PER CATEGORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-For single-turn categories (simple, multiple,
-parallel, parallel_multiple, task_irrelevance):
-  - Include the correct tool(s)
-  - For multiple: include distractor_tools from
-    the intent + correct tool
-  - Total tools in function array: 3-8
-  - Do not include all 14 tools — only relevant ones
+The intent's category determines what the
+ground truth looks like on each turn.
 
-For multi-turn categories (base, miss_param,
-miss_func, long_context):
-  - Include all tools needed across the full chain
-  - Include 1-2 distractors to test disambiguation
-  - session_token tools always included when chain
-    starts with authentication
+CATEGORY: simple
+  One user turn, one tool call in ground truth.
+  null_call: false on every turn.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GROUND TRUTH RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: multiple
+  One user turn, one tool call in ground truth.
+  null_call: false.
+  The intent's distractor_tools must NOT appear
+  in ground truth tool_calls — they are wrong
+  options the model must reject.
 
-single-turn:
-  ground_truth.calls is a flat list
-  one entry per expected tool call
-  parallel: multiple entries at same level
+CATEGORY: parallel
+  One user turn, multiple tool_calls in the SAME
+  ground_truth turn (calls to the SAME tool with
+  different parameters).
 
-multi-turn:
-  ground_truth.calls is a list of lists
-  one inner list per conversation turn
-  empty list [] for miss_param and miss_func
-  turns where model should NOT call a tool
+CATEGORY: parallel_multiple
+  One user turn, multiple tool_calls in the SAME
+  ground_truth turn (calls to DIFFERENT tools,
+  no dependency between them).
 
-eval_mode per argument:
-  "exact"     → enums, numbers, booleans,
-                Aadhaar numbers, mobile numbers
-  "substring" → names, free-text descriptions,
-                complaint details
-  "type_only" → session_token, any output-derived
-                ID (request_id, grievance_id etc.)
+CATEGORY: task_irrelevance
+  Every ground_truth turn has:
+    tool_calls: []
+    null_call: true
+    irrelevance_reason: "<which service handles
+      this and why ATMA advisory does not>"
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT SCHEMA (ONE FILE PER SCENARIO)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: base
+  Multi-turn chain with domain-enforced order.
+  Each ground_truth turn has exactly one tool call.
+  Tools called in the chain order specified by
+  the intent's required_tools list.
+
+CATEGORY: miss_param
+  Multi-turn. ONE turn has a missing parameter.
+  That turn's ground_truth has:
+    tool_calls: []
+    null_call: true
+    model_should_ask_for: "<exact param_name from
+      tools.jsonl>"
+  The NEXT turn provides the param, and ground
+  truth makes the tool call.
+
+CATEGORY: miss_func
+  Multi-turn. ONE turn requests an unavailable
+  action. That turn's ground_truth has:
+    tool_calls: []
+    null_call: true
+    model_should_decline: "<one sentence why>"
+
+CATEGORY: long_context
+  Multi-turn base chain with 3-5 padding user
+  turns BEFORE the actual chain begins. Padding
+  turns have ground_truth with tool_calls: []
+  and null_call: true (model just acknowledges).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — eval_mode SELECTION (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Every parameter in every tool_call has an
+eval_mode. There are exactly THREE options.
+
+  EXACT
+    The parameter value must match exactly.
+    Use for: all structured identifiers
+      (aadhaar_number, mobile_number, otp,
+       grievance_id, advisory_id,
+       farmer_id,
+       district_code,
+       village_code,
+       crop_season,
+       soil_card_id,
+       weather_alert_id,
+       transaction_id,
+       dates, enum values, booleans,
+       acreage, yield_numbers)
+
+  SUBSTRING
+    The value must appear as a substring.
+    Use ONLY for free-text fields:
+       crop_issue_description,
+       pest_symptoms,
+       disease_description,
+       advisory_question,
+       grievance_remarks,
+       recommendation_notes,
+       weather_impact_notes,
+       address_details,
+       resolution_notes
+
+  TYPE_ONLY
+    Only the value's type is checked.
+    Use ONLY for values the model CANNOT KNOW
+    until they are returned by a prior tool
+    call within this same conversation.
+
+    The ONLY legitimate use cases:
+       session_token (returned by authenticate)
+       advisory_id when returned by
+         request_crop_advisory
+       grievance_id when returned by
+         raise_grievance
+       weather_alert_id when returned by
+         subscribe_weather_alerts
+       transaction_id when returned by
+         payment-initiation tools
+
+DECISION FLOW for eval_mode:
+
+  Step 1: Does the value appear in any user
+          message in this conversation?
+          YES → cannot be TYPE_ONLY.
+                Go to Step 3.
+          NO  → Go to Step 2.
+
+  Step 2: Was the value returned by a prior
+          tool call within this conversation?
+          YES → eval_mode = TYPE_ONLY
+          NO  → ERROR. The value must come
+                from somewhere. Re-examine
+                the scenario.
+
+  Step 3: Is the field a structured identifier
+          or fixed value (numbers, dates,
+          enums, IDs, booleans)?
+          YES → eval_mode = EXACT
+          NO  → eval_mode = SUBSTRING (only
+                for free-text)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — AXES DERIVATION (NEVER COPY FROM INTENT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The axes block is DERIVED from the conversation
+you generated. Do NOT copy from the intent.
+Compute it as follows:
+
+  conversation_length:
+    Count distinct turn_index values where
+    speaker == "user".
+    If count == 1: "single_turn"
+    If count >= 2: "multi_turn"
+
+  tool_calls_per_turn:
+    Find max(len(tool_calls)) across all
+    ground_truth turns.
+    If max > 1: "multi_step"
+    Else:       "single_step"
+
+  task_type:
+    Let G = list of all ground_truth turns.
+    If ALL turns in G have null_call: true
+       AND at least one has irrelevance_reason:
+         "irrelevance"
+    Else if max tool_calls per turn > 1
+         AND those calls are to DIFFERENT tools:
+         "parallel_multiple"
+    Else:
+         "simple"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — INITIAL STATE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Derive initial_state from the intent's
+state_preconditions. Add minimum extra fields
+needed for the stub to function. Apply these
+fixed rules:
+
+  authenticated:
+    ALWAYS false in initial_state
+    (authentication happens during conversation)
+
+  session_token:
+    ALWAYS null in initial_state
+    (token is acquired via authenticate tool)
+
+  aadhaar_number, mobile_number:
+    From the per-archetype assignment table
+    in Section 9.
+
+  crop_type:
+    one realistic crop value:
+      paddy
+      wheat
+      cotton
+      maize
+      sugarcane
+      groundnut
+      millet
+      pulses
+
+  crop_stage:
+    sowing
+    vegetative
+    flowering
+    harvesting
+
+  advisory_subscription_status:
+    active
+    inactive
+    pending
+
+  pest_alert_status:
+    none
+    active
+    resolved
+
+  weather_risk_level:
+    low
+    medium
+    high
+
+  soil_health_status:
+    healthy
+    nutrient_deficient
+    testing_pending
+
+  farmer_training_status:
+    not_registered
+    registered
+    attended
+
+  Any field not in state_preconditions:
+    Use a sensible default that does not
+    block the intent from succeeding.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8 — EXPECTED FINAL STATE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+expected_final_state contains ONLY the fields
+that changed during the conversation. Derive
+from the intent's state_transition.writes.
+
+If the intent has state_transition.writes == {}:
+  expected_final_state: {}
+
+If the intent writes specific fields:
+  list only those changed fields with new values.
+
+NEVER repeat fields from initial_state that
+do not change.
+
+NEVER include session_token in expected_final_state
+(it is transient).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 9 — ARCHETYPE FIXED ASSIGNMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each archetype has FIXED identifier values. Use
+these EXACTLY — same archetype must have the
+same Aadhaar/mobile across all scenarios.
+
+Aadhaar / Mobile per archetype:
+  ARC_01: 234567890123 / 9876543210
+  ARC_02: 345678901234 / 8765432109
+  ARC_03: 456789012345 / 7654321098
+  ARC_04: 567890123456 / 6543210987
+  ARC_05: 678901234567 / 9765432108
+  ARC_06: 789012345678 / 8654321097
+  ARC_07: 890123456789 / 7543210986
+  ARC_08: 901234567890 / 6432109875
+  ARC_09: 123456789012 / 9654321087
+  ARC_10: 234567890124 / 8543210976
+  ARC_11: 345678901235 / 7432109865
+  ARC_12: 456789012346 / 6321098754
+  ARC_13: 567890123457 / 9543210876
+  ARC_14: 678901234568 / 8432109765
+  ARC_15: 789012345679 / 7321098654
+  ARC_16: 890123456780 / 6210987543
+
+OTP value in ALL scenarios: 456789
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 10 — CONVERSATION VOICE (ENGLISH ONLY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This file is for the English version. Write all
+user messages in English. The translation phase
+will later produce Hindi/Tamil/Telugu/code-mixed
+variants from this English source.
+
+Voice should reflect the archetype's behaviour:
+
+  problem_framing:
+    task_oriented   → "I want crop advisory for
+                       pest management."
+    problem_oriented → "My crop leaves are turning
+                        yellow and spreading fast."
+    inquiry_oriented → "Can you check whether there
+                        is any advisory for heavy
+                        rainfall this week?"
+
+  patience_with_process:
+    patient_compliant   → answers cleanly,
+                          no complaints
+    impatient_skips     → bundles requests,
+                          shows frustration
+    uncertain_repeats   → asks for confirmation,
+                          hesitates, repeats
+
+  persistence_on_blockers:
+    retries     → "Let me try again..."
+    gives_up    → "Okay, I will visit the office."
+    escalates   → "I will speak with the agriculture
+                   extension officer."
+
+Do NOT insert vernacular phrases. Keep it English;
+the translation phase handles localization later.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 11 — SCENARIO FILE STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Output a single JSON object with this exact
+top-level structure:
 
 {
-  "scenario_id": "atma_simple_001_PERSONA_C_A",
-  "intent_id": "atma_simple_001",
-  "persona_id": "PERSONA_C",
-  "variant": "A",
-  "category": "simple",
-  "language": "en",
-  "system_prompt": "...",
+  "scenario_id": "{intent_id}_{archetype_id}",
+  "usecase": "crop_advisory_atma",
+  "intent_ref": "<intent_id>",
+  "archetype_ref": "<archetype_id>",
+  "axes": {
+    "conversation_length": "<derived>",
+    "tool_calls_per_turn": "<derived>",
+    "task_type": "<derived>"
+  },
+  "initial_state": { ... },
   "conversation": [
     {
-      "role": "user",
-      "content": "..."
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "..."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "...",
+          "parameters": {
+            "<param>": {
+              "value": "...",
+              "eval_mode": "EXACT|SUBSTRING|TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
     }
   ],
-  "function": [
-    { ...tool schema from tools.json... }
-  ],
-  "ground_truth": {
-    "calls": [
-      {
-        "tool": "atma_get_crop_advice",
-        "args": {
-          "crop_type": "paddy"
-        },
-        "eval_mode": {
-          "crop_type": "substring"
-        }
-      }
-    ],
-    "call_order": "any",
-    "stub_persona": "PERSONA_C"
-  },
-  "evaluation": {
-    "type": "execution",
-    "requires_stub_execution": true,
-    "stub_stateful": false
-  }
+  "expected_final_state": { ... }
 }
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FIELD RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For miss_param turns:
+  "tool_calls": [],
+  "null_call": true,
+  "model_should_ask_for": "<param_name>"
 
-scenario_id:
-  {intent_id}_{persona_id}_{variant}
-  example: atma_simple_001_PERSONA_C_A
+For miss_func turns:
+  "tool_calls": [],
+  "null_call": true,
+  "model_should_decline": "<one-sentence reason>"
 
-persona_id:
-  use suggested_persona from the intent
-  as the default
-  if suggested_persona is PERSONA_C, use
-  PERSONA_C's state_values for all parameter
-  values in ground_truth.args
+For task_irrelevance turns:
+  "tool_calls": [],
+  "null_call": true,
+  "irrelevance_reason": "<reason>"
 
-conversation:
-  single-turn: one user message
-  multi-turn: list of user messages
-  parameter values in the conversation MUST
-  match the persona's state_values exactly
-  never invent parameter values
-  every tool argument used later MUST be
-  grounded in user-provided content
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 12 — SELF-VALIDATION (RUN BEFORE OUTPUT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-function:
-  copy full tool schema objects from tools.json
-  only include tools relevant to this scenario
-  never truncate or summarise a tool schema
-  tool schema must be byte-identical to source
+Walk through every check. If any fails, fix
+the scenario before outputting.
 
-call_order:
-  "any"        → parallel calls, order irrelevant
-  "sequential" → multi-turn chains, order matters
+STRUCTURAL:
+  ✓ scenario_id matches "{intent_id}_{archetype_id}"
+  ✓ every turn has both user and ground_truth
+    entries with the same turn_index
+  ✓ turn_index starts at 1 and increments
+    by 1 (no gaps)
 
-requires_stub_execution:
-  true  → always true for all categories (execution evaluation)
+AXES:
+  ✓ conversation_length matches actual user
+    turn count (1 → single_turn, 2+ → multi_turn)
+  ✓ tool_calls_per_turn matches actual max
+    calls per ground_truth turn
+  ✓ task_type derived per Section 6 rules
+  ✓ NOT copied from intent
 
-stub_stateful:
-  false → single-turn, miss_param, miss_func
-  true  → multi-turn base and long_context
-          where state changes between turns
+EVAL_MODE:
+  ✓ no parameter has TYPE_ONLY if its value
+    appears in any user message
+  ✓ all structured identifiers (aadhaar, mobile,
+    otp, advisory_id, weather_alert_id,
+    transaction_id, district_code,
+    dates, acreage) are EXACT
+  ✓ SUBSTRING used only for free-text fields
+  ✓ session_token is TYPE_ONLY when the
+    authenticate tool was called earlier in
+    this conversation
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SPECIAL RULES PER CATEGORY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INITIAL STATE:
+  ✓ authenticated: false
+  ✓ session_token: null
+  ✓ aadhaar_number matches Section 9 for
+    this archetype
+  ✓ mobile_number matches Section 9 for
+    this archetype
+  ✓ no field invented outside state_preconditions
+    that conflicts with the intent
 
-simple:
-  conversation has exactly 1 user message
-  ground_truth.calls has exactly 1 entry
-  requires_stub_execution: true
+CATEGORY CONSISTENCY:
+  ✓ task_irrelevance: every turn has null_call:
+    true and irrelevance_reason populated
+  ✓ miss_param: exactly one turn has null_call:
+    true with model_should_ask_for populated
+  ✓ miss_func: exactly one turn has null_call:
+    true with model_should_decline populated
+  ✓ multiple: ground_truth tool_calls does NOT
+    contain any tool from intent's
+    distractor_tools list
+  ✓ parallel / parallel_multiple: at least one
+    ground_truth turn has 2+ tool_calls
 
-multiple:
-  conversation has exactly 1 user message
-  ground_truth.calls has exactly 1 entry
-  function array must include distractor tools
-  from the intent's distractor_tools field
-  distractor tools MUST NOT appear in ground_truth
+VALUE CONSISTENCY:
+  ✓ Aadhaar in conversation matches initial_state
+  ✓ Mobile in conversation matches initial_state
+  ✓ OTP in conversation == 456789 (only when
+    authenticate tool is used)
+  ✓ All identifiers stated by user appear in
+    ground_truth with EXACT eval_mode
 
-parallel:
-  conversation has exactly 1 user message
-  ground_truth.calls has 2+ entries
-  all entries use the same tool name
-  call_order: "any"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 13 — OUTPUT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-parallel_multiple:
-  conversation has exactly 1 user message
-  ground_truth.calls has 2+ entries
-  entries use different tool names
-  call_order: "any"
+Output ONE scenario as a SINGLE JSON object.
+No array wrapping. No markdown fences.
+No explanation. No comments. No trailing commas.
 
-task_irrelevance:
-  conversation has exactly 1 user message
-  ground_truth.calls is an empty list []
-  requires_stub_execution: true
-  stub_stateful: false
+The JSON must be syntactically valid and
+parseable in one pass.
 
-base:
-  conversation has one message per chain step
-  ground_truth.calls is a list of lists
-  requires_stub_execution: true
-  stub_stateful: true
-  call_order: "sequential"
-  tool sequence MUST respect domain constraints
-  defined in intents.json
-
-miss_param:
-  at the missing-param turn:
-    conversation message asks for something
-    without the required parameter
-    ground_truth inner list for that turn is []
-  at the next turn:
-    user provides the missing value
-    ground_truth inner list has the tool call
-  assistant MUST ask clarification before next call
-
-miss_func:
-  at the missing-func turn:
-    user requests an unavailable action
-    ground_truth inner list for that turn is []
-  assistant must refuse clearly
-  conversation then pivots to a valid action
-  ground_truth for pivot turn has the tool call
-
-long_context:
-  same chain as base
-  add 4-6 padding turns at the start
-  key parameter values (aadhaar, mobile) given
-  ONLY in turn 1 — never repeated
-  ground_truth for padding turns is []
-  model must retrieve values from context
-  without asking user to repeat them
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PARAMETER VALUE SOURCING (CRITICAL)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-All parameter values in:
-  - conversation content
-  - ground_truth.args
-
-MUST come from the persona's state_values.
-
-Never invent an Aadhaar number, mobile number,
-bank account, or installment date.
-Always use the exact values from the persona.
-
-Values must remain identical across:
-  - conversation
-  - ground_truth.args
-(no reformatting, no truncation, no masking)
-
-For type_only arguments (session_token):
-  use placeholder string: "<from_auth_step>"
-  evaluator will type-check only
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TOOL SELECTION AND USAGE CONSISTENCY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-- Every tool in ground_truth MUST appear in function array
-- No tool outside tools.json may appear anywhere
-- required_tools from intent MUST be used
-- distractor_tools MUST NOT be used in ground_truth
-- tool arguments MUST strictly follow tool schema
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STUB EXECUTION COMPATIBILITY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Scenarios MUST be executable under stub_logic.py:
-
-- tool order must be valid
-- required state must exist before each call
-- authentication must precede dependent calls
-- no domain constraint violations allowed
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SELF-VALIDATION BEFORE OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Before producing each scenario verify:
-  ✓ scenario_id format is correct
-  ✓ all parameter values match persona state
-  ✓ tool names in ground_truth exist in function
-  ✓ tool names in function exist in tools.json
-  ✓ eval_mode assigned to every argument
-  ✓ multi-turn: turn count matches call list count
-  ✓ miss_param turn: inner list is []
-  ✓ miss_func turn: inner list is []
-  ✓ type_only used for session_token everywhere
-  ✓ no extra or missing tools
-  ✓ schema strictly followed
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Generate ALL scenarios for ALL intents.
-One JSON object per scenario.
-Output as a JSON array of all scenarios.
-
-No markdown. No explanation. No truncation.
-No missing fields. No extra fields.
-No invented parameter values.
+File naming:
+  scenarios/en/{scenario_id}.json
 
 SAVE TO:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA) (expert advice)\scenarios\en\
-  one file per scenario named {scenario_id}.json
+  scenarios/en/{scenario_id}.json

@@ -1,0 +1,6 @@
+{
+  "USECASE_DISPLAY_NAME": "PM-KISAN (income support)",
+  "USECASE_ID": "pm_kisan",
+  "USECASE_PREFIX": "pmkisan",
+  "USECASE_STATE_FIELDS_BLOCK": "  registration_status: not_registered | applied | registered | rejected\n  ekyc_status: not_started | pending | completed | failed\n  bank_seeding_status: not_seeded | pending | seeded | failed\n  land_record_status: not_validated | validated | mismatch\n  eligibility_status: not_checked | eligible | ineligible\n  installments_credited: integer 0-3\n  installments_pending: integer 0-3\n  installments_rejected: integer 0-3\n  has_pending_over_90_days: true | false\n  has_active_grievance: true | false\n  grievance_status: not_filed | filed | under_review | resolved | rejected\n  payment_failure_reason: null | bank_account_invalid | aadhaar_mismatch | ekyc_pending | land_record_dispute"
+}

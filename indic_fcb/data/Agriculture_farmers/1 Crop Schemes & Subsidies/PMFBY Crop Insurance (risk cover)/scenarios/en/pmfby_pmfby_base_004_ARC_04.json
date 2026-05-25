@@ -1,0 +1,107 @@
+{
+  "scenario_id": "pmfby_pmfby_base_004_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_base_004",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "enrollment_status": "enrolled",
+    "cutoff_date_passed": false,
+    "crop_declared": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crop declaration needs to be updated to soybean before the deadline. My Aadhaar is 567890123456 and mobile is 6543210987. Send the OTP."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "567890123456",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6543210987",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The OTP is 456789. Now check my enrollment and update the crop to soybean quickly, I don't want to file another grievance."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_enrollment_status",
+          "parameters": {
+            "session_token": {
+              "value": "mock_session_token",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I am enrolled. Just update the crop to soybean."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_update_crop_declaration",
+          "parameters": {
+            "session_token": {
+              "value": "mock_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "crop_name": {
+              "value": "soybean",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "crop_declared": true
+  }
+}

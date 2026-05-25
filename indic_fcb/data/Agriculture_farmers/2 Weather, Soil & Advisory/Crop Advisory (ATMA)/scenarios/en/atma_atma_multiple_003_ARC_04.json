@@ -1,0 +1,80 @@
+{
+  "scenario_id": "atma_atma_multiple_003_ARC_04",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_003",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cotton crop is failing and I am losing money. I need to attend a formal indoor training programme next month to learn better methods. I am from Maharashtra. Don't give me useless advice, just tell me what's available."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am in Nashik district. I want in-person training only. Hurry up and check, if this app doesn't work I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_available_trainings",
+          "parameters": {
+            "state": {
+              "value": "maharashtra",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "nashik",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "cotton",
+              "eval_mode": "EXACT"
+            },
+            "training_mode": {
+              "value": "in_person",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "training_mode": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

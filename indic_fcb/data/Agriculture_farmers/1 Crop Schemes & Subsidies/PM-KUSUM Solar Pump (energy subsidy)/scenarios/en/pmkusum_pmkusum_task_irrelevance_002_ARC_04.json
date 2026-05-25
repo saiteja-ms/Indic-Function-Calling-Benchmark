@@ -1,0 +1,61 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_002_ARC_04",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_002",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "land_record_status": "not_validated",
+    "has_existing_grid_pump": false,
+    "vendor_selection_status": "not_required",
+    "installation_status": "not_scheduled",
+    "subsidy_disbursement_status": "not_initiated",
+    "farmer_share_payment_status": "not_due",
+    "pump_operational_status": "not_installed",
+    "scheme_component_selected": null,
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soybean crop was completely ruined by the unseasonal rain. I need to enroll in the PMFBY crop insurance right now to claim my losses. My Aadhaar number is 567890123456."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PMFBY crop insurance is unrelated to PM-KUSUM solar pump scheme."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why are you not processing my enrollment? I have all my documents ready and my survey number is 45/2. If you don't help me with this insurance immediately, I will complain to a senior officer!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PMFBY crop insurance is unrelated to PM-KUSUM solar pump scheme."
+    }
+  ],
+  "expected_final_state": {}
+}

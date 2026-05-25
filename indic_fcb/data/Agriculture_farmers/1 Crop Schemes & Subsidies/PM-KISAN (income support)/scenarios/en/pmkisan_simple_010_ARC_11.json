@@ -1,0 +1,80 @@
+{
+  "scenario_id": "pmkisan_simple_010_ARC_11",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_010",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "land_record_status": "not_validated",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_11_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_11_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_11_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My land records are showing as not validated and I am worried my PM-KISAN money will stop. Please validate my land ownership. I am from Andhra Pradesh, my state code is 28, district code is 548, and my plot number is P-9981."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "28",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "548",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "P-9981",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "land_record_status": "validated"
+  }
+}

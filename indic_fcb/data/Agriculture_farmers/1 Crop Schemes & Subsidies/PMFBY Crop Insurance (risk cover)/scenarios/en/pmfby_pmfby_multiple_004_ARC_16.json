@@ -1,0 +1,62 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_004_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_004",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check what the estimated premium cost would be to insure 2 hectares of wheat? I am from Karnal district in Haryana, and this is for the rabi season."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Haryana",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Karnal",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "SUBSTRING"
+            },
+            "area_hectares": {
+              "value": 2,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

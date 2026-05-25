@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pmkisan_multiple_008_ARC_04",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_008",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "registration_status": "registered",
+    "payment_failure_reason": "bank_account_invalid",
+    "authenticated": true,
+    "session_token": "tok_123",
+    "beneficiary_id": "MH1234567890",
+    "bank_account": "BKID0001234|1234567890",
+    "installments": [
+      {
+        "installment_id": "INST_01",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "failed",
+        "transaction_id": "TXN1234567890123"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN payment failed because of an invalid bank account. This is very frustrating, I want to raise a grievance! But I already went to the bank and updated my account details. Just resolve the failure and retry the payment. I am giving you my details so you don't waste my time asking: Beneficiary ID is MH1234567890, and the failed transaction ID is TXN1234567890123. Do it immediately."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "tok_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "MH1234567890",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updat",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

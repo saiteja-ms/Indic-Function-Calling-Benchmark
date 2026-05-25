@@ -1,0 +1,87 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_003_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the enrollment cutoff dates for both Kharif and Rabi seasons for my farm in Punjab."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "For the year 2024. Please give me the details quickly, I have other tasks to manage."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Punjab",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Punjab",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

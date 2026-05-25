@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_001_ARC_11",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_001",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB|001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN money has not come to my bank account yet. Can you check the installment status?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KISAN income support is a separate scheme and not handled by PMFBY enrollment tools."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I have my Aadhaar number 345678901235 ready. Are you sure you cannot check the PM-KISAN installment for me?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KISAN income support is a separate scheme and not handled by PMFBY enrollment tools."
+    }
+  ],
+  "expected_final_state": {}
+}

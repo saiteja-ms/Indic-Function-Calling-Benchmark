@@ -1,0 +1,96 @@
+{
+  "scenario_id": "pmfby_parallel_multiple_004_ARC_10",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_004",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the notified crops for my district Kota in Rajasthan, and I also need the contact details of the insurance company for my area. Tell me quickly, I don't have all day."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is for the rabi season of 2023. Just give me the details now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_notified_crops",
+          "parameters": {
+            "state_name": {
+              "value": "Rajasthan",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Kota",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2023,
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_insurer_contact",
+          "parameters": {
+            "state_name": {
+              "value": "Rajasthan",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Kota",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2023,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

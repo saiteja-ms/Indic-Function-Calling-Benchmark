@@ -1,0 +1,86 @@
+{
+  "scenario_id": "pmkisan_parallel_001_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_parallel_001",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "installments": [
+      {
+        "installment_id": "INST_06_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_06_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_06_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for the last few months, and my wife's money is also stopped. I am not sure if our registration is okay, let me check again. My Aadhaar is 789012345678 and mobile is 8654321097. My wife's Aadhaar is 123412341234 and her mobile is 9876987654. Please check both our statuses."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "789012345678",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "8654321097",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "123412341234",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "9876987654",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

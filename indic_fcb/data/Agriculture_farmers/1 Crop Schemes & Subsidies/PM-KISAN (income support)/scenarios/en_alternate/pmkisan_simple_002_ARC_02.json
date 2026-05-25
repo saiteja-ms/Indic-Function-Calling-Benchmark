@@ -1,0 +1,81 @@
+{
+  "scenario_id": "pmkisan_simple_002_ARC_02",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_002",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "registration_status": "registered",
+    "installments_credited": 2,
+    "payment_failure_reason": null,
+    "beneficiary_id": "PMK345678901",
+    "authenticated": true,
+    "session_token": "tok_123",
+    "bank_account": "SBIN0001234|001122334455",
+    "installments": [
+      {
+        "installment_id": "INST_02_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_02_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Beta, can you tell me how many times the PM-KISAN money has come to my account? My grandson is helping me ask."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "He says my beneficiary ID is PMK345678901."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK345678901",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

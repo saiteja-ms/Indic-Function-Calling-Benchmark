@@ -1,0 +1,91 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_006_ARC_09",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_006",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN0001234|001122334455",
+    "enrollment_status": "not_enrolled",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My paddy crop is not insured yet. I want to register my farm for the insurance scheme. My Aadhaar number is 123456789012."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year",
+        "area_hectares",
+        "bank_account_number",
+        "ifsc_code"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am planting for Kharif 2024 on 0.8 hectares. My bank account is 001122334455 and the IFSC code is SBIN0001234."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_submit_enrollment",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "123456789012",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": "0.8",
+              "eval_mode": "EXACT"
+            },
+            "bank_account_number": {
+              "value": "001122334455",
+              "eval_mode": "EXACT"
+            },
+            "ifsc_code": {
+              "value": "SBIN0001234",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

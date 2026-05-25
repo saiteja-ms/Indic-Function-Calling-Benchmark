@@ -1,201 +1,564 @@
 You are building an intent registry for a
-function-calling benchmark.
+function-calling benchmark for the Soil Health
+Card (SHC) Scheme — covering plot registration,
+sample collection request, lab testing, and
+card receipt — on UMANG.
+
+This is the SHC SCHEME usecase (enrollment and
+testing workflow). It is DISTINCT from the SHC
+PORTAL usecase (Cluster 2) which covers reading
+and acting on an already-issued card.
 
 READ:
-  - tools.jsonl from the current usecase directory
-  - personas.json from the current usecase directory
+  - tools.jsonl from path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\tools.jsonl"
+  - persona.json (16 farmer archetypes shared
+    across all farmer usecases) from path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\persona.json"
 
-USECASE: Soil Health Card (soil info)
 
-TOOLS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\tools.jsonl
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL — ARCHETYPE ID FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PERSONAS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\personas.json
+Archetype IDs in compatible_archetypes MUST be
+the canonical IDs from persona.json:
 
-STUB LOGIC FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\stub_logic.py
+  ARC_01, ARC_02, ARC_03, ARC_04, ARC_05,
+  ARC_06, ARC_07, ARC_08, ARC_09, ARC_10,
+  ARC_11, ARC_12, ARC_13, ARC_14, ARC_15, ARC_16
 
-STUB FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\stubs.py
+DO NOT invent descriptive IDs like
+"arch_01_small_owner_hindi_belt". These will
+fail matching against persona.json and the
+scenario generator will skip them.
 
-OUTPUT FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\intents.json
+To pick compatible archetypes:
+  1. READ persona.json
+  2. Inspect each archetype's attributes
+     (landholding_category, farmer_category,
+      region, irrigation_type, digital_literacy,
+      scheme_experience, etc.)
+  3. Decide if that archetype could plausibly
+     hold this intent
+  4. Reference it by ITS archetype_id from
+     persona.json (ARC_XX format)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION — STRUCTURAL DEFINITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AXIS 1 — conversation_length:
+  single_turn = exactly one user message in
+                the conversation
+  multi_turn  = two or more user messages
+
+AXIS 2 — tool_calls_per_turn:
+  single_step = every ground_truth turn has
+                at most ONE tool_call
+  multi_step  = at least one ground_truth turn
+                has TWO or more tool_calls
+
+AXIS 3 — task_type:
+  simple              = at most one tool call
+                        per turn AND no
+                        irrelevance pattern
+  parallel_multiple   = multiple tool calls in
+                        one turn AND those calls
+                        target DIFFERENT tools
+  irrelevance         = ALL ground_truth turns
+                        have null_call: true AND
+                        at least one has an
+                        irrelevance_reason
+
+NOTE: parallel (same tool, different params,
+multiple calls in one turn) maps to task_type
+"simple" — the multi-step nature is captured
+by AXIS 2, not AXIS 3. parallel_multiple is
+reserved for DIFFERENT tools called together.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY TO AXIS MAPPING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+simple           : single_turn, single_step, simple
+multiple         : single_turn, single_step, simple
+                   (with distractors)
+parallel         : single_turn, multi_step, simple
+parallel_multiple: single_turn, multi_step,
+                   parallel_multiple
+task_irrelevance : single_turn, single_step,
+                   irrelevance
+base             : multi_turn, single_step, simple
+miss_param       : multi_turn, single_step, simple
+miss_func        : multi_turn, single_step,
+                   irrelevance (one turn only)
+long_context     : multi_turn, single_step, simple
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WHAT IS AN INTENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-An intent is an abstract user goal, independent
-of language and phrasing. Later, 3 scenario
-variants (A, B, C) will be generated per intent.
+An intent carries:
+  - three-axis position
+  - state_preconditions
+  - state_transition (reads + writes)
+  - compatible_archetypes
 
-An intent contains NO user prompt text —
-only the abstract goal and metadata.
+State preconditions + transitions are the
+SPECIFICATION for stub_logic.py to implement.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GUIDING PRINCIPLE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE FIELDS AVAILABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Do NOT target a fixed number of intents.
-Generate AS MANY intents as needed to achieve
-COMPLETE COVERAGE of every category.
+  authenticated              : true | false
+  session_token              : string | null
+  plot_registration_status   : not_registered |
+                               registered | verified
+  sample_collection_status   : not_requested |
+                               requested | scheduled |
+                               collected | in_transit |
+                               received_at_lab
+  test_status                : not_started |
+                               in_progress |
+                               completed | failed |
+                               disputed
+  card_status                : not_issued | issued |
+                               expired | revoked
+  retest_status              : not_applicable |
+                               requested | approved |
+                               rejected | completed
+  lab_assignment_status      : pending | assigned |
+                               reassigned
+  sampling_window_status     : open | closed
+  card_count_for_plot        : integer 0+
+  retest_window_days_left    : integer 0-15
+  has_active_grievance       : true | false
+  grievance_status           : not_filed | filed |
+                               under_review |
+                               resolved | rejected
 
-Complete coverage means:
-  - every tool exercised in every meaningful way
-  - every distractor trap covered
-  - every domain-enforced chain covered
-  - every commonly omitted parameter covered
-  - every plausible-but-unavailable action covered
-  - every adjacent-but-out-of-scope topic covered
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE PRINCIPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-More coverage is always better than less.
+Coverage-driven. No fixed count.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CATEGORY DEFINITIONS AND COVERAGE RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Must achieve:
+  - every tool exercised meaningfully
+  - every distractor trap covered twice
+  - every base chain covered
+  - every missing param covered
+  - every genuinely unavailable action covered
+  - every out-of-scope topic covered
+  - every 3-axis grid cell covered
+  - every archetype in at least 3 intents
 
-── SIMPLE ──────────────────────────────
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY-SPECIFIC COVERAGE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Definition:
-  One tool call. All required parameters will
-  be present in the user message.
+── SIMPLE ──────────────────────────────────────────
 
-How many to generate:
-  - At minimum: one intent per tool
-  - Additionally: one extra intent per tool
-    that has meaningful parameter variations
+One intent per tool minimum.
 
-Coverage complete when:
-  Every tool has been exercised in every
-  distinct parameter combination that a
-  real farmer might use.
+── MULTIPLE ────────────────────────────────────────
 
-── MULTIPLE ────────────────────────────
+Distractor traps — each appears twice with
+different user phrasings.
 
-Definition:
-  Many tools available. Only ONE is correct.
-  Distractor tools look tempting but are wrong.
+A distractor trap is two tools that would
+plausibly seem to solve the SAME user request
+but only ONE is correct.
 
-How many to generate:
-  One intent per distractor trap.
-  Each trap must appear at least twice.
+  TRAP A: "where is my soil sample right now"
+    Correct  : shc_get_sample_status
+    Distractor: shc_get_test_status
+    Trap: sample status is logistics location;
+    test status is lab processing.
 
-Coverage complete when:
-  Every trap appears at least twice.
+  TRAP B: "is my soil health card ready yet"
+    Correct  : shc_get_test_status
+    Distractor: shc_get_soil_health_card
+    Trap: get_card retrieves the card; user
+    wants to KNOW if it is ready first.
 
-── PARALLEL ────────────────────────────
+  TRAP C: "what fertilizer should I use for
+          my paddy field"
+    Correct  : shc_get_fertilizer_recommendation
+    Distractor: shc_get_soil_health_card
+    Trap: card shows nutrient levels;
+    recommendation is the actionable advice
+    derived from those levels.
 
-Definition:
-  Two calls to the SAME tool with different
-  parameters simultaneously.
+  TRAP D: "I disagree with my soil test results"
+    Correct  : shc_request_retest
+    Distractor: shc_raise_grievance
+    Trap: retest is the formal dispute
+    mechanism; grievance is for service
+    complaints not technical disputes.
 
-Coverage complete when:
-  Every tool with natural parallel use
-  has at least one parallel intent.
+  TRAP E: "where can I get my soil tested in
+          my district"
+    Correct  : shc_get_nearby_labs
+    Distractor: shc_get_lab_assignment
+    Trap: nearby_labs is informational lookup;
+    assignment is for an already-collected
+    sample.
 
-── PARALLEL MULTIPLE ───────────────────
+  TRAP F: "when can I request a soil sample
+          collection"
+    Correct  : shc_get_sampling_window
+    Distractor: shc_request_sample_collection
+    Trap: window is informational about timing;
+    request is the action of asking for one.
 
-How many to generate:
-  At least 5 distinct parallel multiple intents.
+  TRAP G: "compare my new card to last year's"
+    Correct  : shc_compare_historical_cards
+    Distractor: shc_get_soil_health_card
+    Trap: get_card returns one card; compare
+    returns trend across cycles.
 
-Definition:
-  Two or more DIFFERENT tools called at the
-  same time. Independent execution.
+── PARALLEL ────────────────────────────────────────
 
-Coverage complete when:
-  Every natural cross-tool pair covered.
+Same-tool simultaneous calls. The intent has
+multiple calls to ONE tool in a single turn:
+  - get_sample_status for two plot IDs
+  - get_test_status for two sample IDs
+  - get_nearby_labs for two districts
+  - track_grievance_status for two IDs
+  - get_fertilizer_recommendation for two crops
 
-── TASK IRRELEVANCE ────────────────────
+── PARALLEL_MULTIPLE ───────────────────────────────
 
-How many to generate:
-  At least 5 distinct task irrelevance intents (e.g. cricket, medical, railway, irrelevant scheme).
+Different-tool simultaneous calls. The intent
+has calls to MULTIPLE DIFFERENT tools in a
+single turn, with no dependency between them:
+  - get_sample_status + get_lab_assignment
+  - get_test_status + get_lab_assignment
+  - get_nearby_labs + get_sampling_window
+  - validate_land_records + get_sampling_window
+  - get_soil_health_card +
+    get_fertilizer_recommendation
 
-Definition:
-  Farmer query but NO tool applies.
+STRICT: never pair tools where one depends on
+the other's output.
 
-Coverage complete when:
-  All adjacent domains are covered.
+── TASK_IRRELEVANCE ────────────────────────────────
 
-── BASE (multi-turn) ───────────────────
+Topics where no SHC scheme tool applies:
+  - PM-KISAN income support installments
+  - PMFBY crop insurance enrollment
+  - PM-KUSUM solar pump application
+  - fertilizer subsidy DBT (iFMS)
+  - mandi price lookup (eNAM)
+  - weather forecast (Kisan Suvidha)
+  - crop sowing advisory (ATMA / Kisan Suvidha)
+  - eNAM trading
+  - MSP procurement
+  - cattle or livestock advisory
+  - reading specific soil nutrient values for
+    fertilizer planning (that is the SHC portal
+    usecase, available only AFTER a card is
+    issued through this scheme)
 
-How many to generate:
-  At least 5 distinct multi-turn flows (chains of 2 to 3 tools).
+── BASE ────────────────────────────────────────────
 
-Definition:
-  Multi-step chain with domain constraints.
+Multi-turn chains. chain_order_enforced: true.
 
-Coverage complete when:
-  All real-world flows covered.
+  CHAIN A — New plot registration to sample
+            request
+    domain_constraint: "plot must be registered
+    and verified before sample collection can
+    be requested, and sampling window must be
+    open"
+    Order: authenticate → validate_land_records →
+           register_plot → get_sampling_window →
+           request_sample_collection
 
-── MISS_PARAM (multi-turn) ─────────────
+  CHAIN B — Sample to card retrieval
+    domain_constraint: "card is issued only
+    after test is completed"
+    Order: authenticate → get_sample_status →
+           get_test_status → get_soil_health_card
 
-Definition:
-  Missing required parameter.
+  CHAIN C — Retest flow
+    domain_constraint: "retest can be requested
+    only within 15 days of completed test"
+    Order: authenticate → get_sample_status →
+           get_test_status → request_retest
 
-Coverage complete when:
-  All common missing parameters covered.
+  CHAIN D — Grievance flow
+    domain_constraint: "grievance requires a
+    sample record to file against"
+    Order: authenticate → get_sample_status →
+           raise_grievance
 
-── MISS_FUNC (multi-turn) ──────────────
+── MISS_PARAM ──────────────────────────────────────
 
-Definition:
-  Unsupported action requested.
+Parameters commonly omitted:
+  - plot_id missing from sample request
+  - sample_id missing from test status check
+  - card_id missing from card retrieval
+  - district missing from nearby labs lookup
+  - crop missing from fertilizer recommendation
+  - otp missing from authentication
+  - land_area missing from plot registration
+  - irrigation_type missing from sample request
 
-Coverage complete when:
-  All realistic unsupported actions covered.
+── MISS_FUNC ───────────────────────────────────────
 
-── LONG_CONTEXT (multi-turn) ───────────
+Actions SHC scheme genuinely cannot perform —
+no tool exists for these:
 
-Definition:
-  Same as base but with long context.
+  - request sample collection when sampling
+    window is closed (system blocks; no
+    out-of-cycle requests)
+  - request a second sample for the same plot
+    in the same cycle (one card per plot per
+    cycle rule)
+  - request retest after the 15-day dispute
+    window has passed (window-based, no
+    extension)
+  - retrieve a card before test is completed
+    (no early issuance)
+  - compare historical cards when only one
+    card exists for the plot (system needs at
+    least two cycles)
+  - register a plot owned by another person
+    (ownership verification required)
+  - retrieve a card for a plot not registered
+    to this farmer (no cross-farmer access)
+  - request expedited test processing (no
+    priority lane in the scheme)
 
-Coverage complete when:
-  Equal to base count.
+── LONG_CONTEXT ────────────────────────────────────
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT SCHEMA (EVERY INTENT)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+One long_context intent per base chain (4 total).
+Each has 3-5 padding user turns BEFORE the chain
+begins. Padding turns have tool_calls: [] and
+null_call: true.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPATIBLE ARCHETYPE GUIDANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Compatibility uses ONLY archetype attributes
+from persona.json. NEVER use state fields as
+filters. Always reference archetypes by their
+canonical ID (ARC_01 to ARC_16). Do NOT invent
+descriptive IDs.
+
+MORE COMPATIBLE for SHC scheme:
+  - landholding_category: small, medium, large
+    (higher need for soil testing)
+  - farmer_category: owner (plot registration
+    requires ownership)
+  - irrigation_type: rain_fed (highest soil
+    data need due to nutrient depletion)
+  - scheme_experience: aware_of_basics or
+    higher
+  - all regions (SHC is nationwide)
+
+LESS COMPATIBLE:
+  - farmer_category: tenant or sharecropper
+    for plot registration intents (land is
+    not in their name)
+
+FORCED COMPATIBLE:
+  - tenant/sharecropper archetypes MUST appear
+    in miss_func intents (cannot register
+    plot without ownership)
+  - digital_literacy level_1 archetypes MUST
+    appear in simple and multiple intents
+    (low-literacy use cases via CSC)
+
+PROCESS for picking compatible archetypes:
+  1. Open persona.json
+  2. For each of ARC_01 through ARC_16, check:
+     - landholding_category
+     - farmer_category
+     - region
+     - irrigation_type
+     - digital_literacy
+     - scheme_experience
+  3. Apply rules above to decide compatibility
+  4. List archetype_id values (ARC_XX format)
+
+Every archetype must appear in at least 3 intents
+across all categories.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 {
-  "intent_id": "soilhealth_simple_001",
-  "usecase": "soilhealth",
+  "intent_id": "shc_simple_001",
+  "usecase": "shc_scheme",
   "category": "simple",
-  "abstract_goal": "...",
-  "required_tools": ["..."],
+
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+
+  "abstract_goal": "farmer wants to check
+    status of their soil sample collection",
+
+  "required_tools": [
+    "shc_get_sample_status"
+  ],
+
   "chain_order_enforced": false,
   "domain_constraint": null,
-  "suggested_persona": "PERSONA_A",
+
   "distractor_tools": [],
   "parallel_tools": [],
   "missing_param": null,
   "missing_func": null,
   "irrelevance_reason": null,
-  "eval_notes": "..."
+
+  "state_preconditions": {
+    "plot_registration_status": "verified",
+    "sample_collection_status": "in_transit"
+  },
+
+  "state_transition": {
+    "reads": ["sample_collection_status",
+              "lab_assignment_status"],
+    "writes": {}
+  },
+
+  "compatible_archetypes": [
+    "ARC_02", "ARC_05", "ARC_08", "ARC_11"
+  ],
+
+  "eval_notes": "model must distinguish sample
+    status (logistics) from test status (lab
+    processing)"
 }
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SELF-VALIDATION BEFORE OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIELD RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✓ every tool in tools.jsonl appears in required_tools at least once  
-✓ no invented tool names anywhere  
-✓ all suggested_persona values exist in personas.json  
-✓ chain_order_enforced true only for base and long_context  
-✓ distractor_tools non-empty for multiple  
-✓ parallel_tools non-empty for parallel and parallel_multiple  
-✓ missing_param non-null for miss_param  
-✓ missing_func non-null for miss_func  
-✓ irrelevance_reason non-null for task_irrelevance  
-✓ long_context count matches base count  
+intent_id: shc_{category}_{NNN}, NNN zero-padded
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+axes: use CATEGORY TO AXIS MAPPING exactly
+
+required_tools: exact names from tools.jsonl
+
+chain_order_enforced: true only for base and
+  long_context
+
+domain_constraint: one sentence ONLY when
+  chain_order_enforced is true
+
+distractor_tools: non-empty for multiple only
+  Contains the DISTRACTOR side of the trap
+
+parallel_tools: non-empty for parallel and
+  parallel_multiple
+
+missing_param: non-null for miss_param
+  Format: {"turn_index": <int>,
+           "param_name": "<exact from tools.jsonl>"}
+
+missing_func: non-null for miss_func
+  Format: {"turn_index": <int>,
+           "requested_action": "<one sentence>"}
+
+irrelevance_reason: non-null for task_irrelevance
+  One sentence
+
+state_preconditions: MANDATORY
+  Empty {} only for task_irrelevance
+  Use only state fields from STATE FIELDS AVAILABLE
+
+state_transition: MANDATORY
+  reads: array of state fields (non-empty)
+  writes: dict (empty {} for read-only intents)
+
+compatible_archetypes: MUST use canonical IDs
+  ARC_01 to ARC_16 from persona.json.
+  NEVER use descriptive IDs like
+  "arch_03_large_owner_punjab".
+  Every archetype in at least 3 intents.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURAL:
+  ✓ every intent has axes block
+  ✓ axes match CATEGORY TO AXIS MAPPING
+  ✓ intent_id format shc_{category}_{NNN}
+  ✓ every required field present
+
+TOOLS:
+  ✓ every tool in tools.jsonl in required_tools
+    at least once
+  ✓ no invented tool names
+  ✓ no tool in BOTH required_tools and
+    distractor_tools of same intent
+
+CATEGORY:
+  ✓ chain_order_enforced true only for base
+    and long_context
+  ✓ domain_constraint non-null when
+    chain_order_enforced true
+  ✓ distractor_tools non-empty for multiple
+  ✓ parallel_tools non-empty for parallel and
+    parallel_multiple
+  ✓ missing_param non-null for miss_param
+  ✓ missing_func non-null for miss_func
+  ✓ irrelevance_reason non-null for
+    task_irrelevance
+
+STATE:
+  ✓ no invented state field names
+  ✓ state_preconditions on every intent
+  ✓ state_transition on every intent
+  ✓ reads is non-empty array
+
+ARCHETYPES (CRITICAL — most common error source):
+  ✓ EVERY archetype_id in compatible_archetypes
+    matches the canonical pattern ARC_XX where
+    XX is 01-16
+  ✓ NO descriptive IDs like
+    "arch_03_large_owner_punjab"
+  ✓ all archetype_ids exist in persona.json
+  ✓ compatibility uses only archetype attributes
+  ✓ every archetype appears in at least 3 intents
+  ✓ tenant/sharecropper in miss_func intents
+
+DOMAIN-SPECIFIC:
+  ✓ sampling window closed reflected in miss_func
+  ✓ 15-day retest window reflected in miss_func
+  ✓ one card per plot per cycle reflected in
+    miss_func
+  ✓ early card issuance absent in miss_func
+  ✓ historical comparison with single card
+    absent in miss_func
+  ✓ plot ownership requirement reflected in
+    miss_func
+  ✓ cross-farmer card access absent in miss_func
+  ✓ portal content (specific nutrient values
+    for fertilizer planning) excluded from this
+    usecase via task_irrelevance
+
+COVERAGE:
+  ✓ every 3-axis grid cell covered
+  ✓ every distractor trap covered twice
+  ✓ every base chain covered
+  ✓ every miss_func action covered
+  ✓ every irrelevance topic covered
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OUTPUT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Output ONLY a JSON array.
-No markdown. No explanation.
-No trailing commas. No missing fields.
-No extra fields. No truncation.
+Output ONLY a JSON array of intent objects.
+No markdown. No explanation. No trailing commas.
 
-SAVE TO:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\Soil Health Card (soil info)\intents.json
+SAVE TO: intents.json

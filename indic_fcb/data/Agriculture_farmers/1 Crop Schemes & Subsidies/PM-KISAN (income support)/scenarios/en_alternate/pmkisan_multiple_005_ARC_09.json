@@ -1,0 +1,89 @@
+{
+  "scenario_id": "pmkisan_multiple_005_ARC_09",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_005",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "registration_status": "registered",
+    "installments_pending": 1,
+    "beneficiary_id": "AS123456789",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "installments": [
+      {
+        "installment_id": "INST_03_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_03_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_03_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ],
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My 3rd installment payment is delayed. I want to track this payment."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My beneficiary ID is AS123456789. Please check it."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_installment_status",
+          "parameters": {
+            "beneficiary_id": {
+              "value": "AS123456789",
+              "eval_mode": "EXACT"
+            },
+            "installment_number": {
+              "value": "installment_3",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,39 @@
+{
+  "scenario_id": "pm_kusum_task_irrelevance_003_ARC_16",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_task_irrelevance_003",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "active",
+    "land_records_verified": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit Singh. I want to know if I can get a subsidy for buying a new tractor for my wheat and mustard fields. My Aadhaar is 890123456780 and mobile is 6210987543. Can you check the details for this?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about tractor subsidy (SMAM), not solar pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

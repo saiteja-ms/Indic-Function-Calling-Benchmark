@@ -1,0 +1,79 @@
+{
+  "scenario_id": "atma_atma_simple_003_ARC_09",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_003",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My tea plants are not growing well. I need to check the latest advisory bulletin for Assam, Sonitpur district."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "crop_stage",
+        "advisory_type"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The plants are in the vegetative stage, and I am looking for nutrient management advice."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_advisory_bulletin",
+          "parameters": {
+            "state": {
+              "value": "assam",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "sonitpur",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "tea",
+              "eval_mode": "EXACT"
+            },
+            "crop_stage": {
+              "value": "vegetative",
+              "eval_mode": "EXACT"
+            },
+            "advisory_type": {
+              "value": "nutrient_management",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

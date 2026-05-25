@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmkisan_irrelevance_004_ARC_14",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_004",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My fertilizer subsidy DBT hasn't come to my account yet. This is very frustrating, why is it delayed?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "iFMS handles fertilizer subsidy DBT, not PM-KISAN."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Let me try again. My Aadhaar is 678901234568. Just check the status quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "iFMS handles fertilizer subsidy DBT, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

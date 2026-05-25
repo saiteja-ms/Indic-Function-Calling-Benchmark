@@ -1,0 +1,154 @@
+{
+  "scenario_id": "pm_kusum_base_002_ARC_14",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_base_002",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "pending_payment",
+    "beneficiary_share_paid": false,
+    "solar_pump_installation_status": "approved",
+    "subsidy_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application APP-9988 is stuck on pending payment. I want to pay 50000 via UPI and track the installation immediately. My Aadhaar is 678901234568, mobile 8432109765, and OTP is 456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234568",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "8432109765",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Did it authenticate? Check the status for APP-9988 quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_application_status",
+          "parameters": {
+            "session_token": {
+              "value": "mock_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "APP-9988",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Process the UPI payment of 50000 now."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_pay_beneficiary_share",
+          "parameters": {
+            "session_token": {
+              "value": "mock_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "APP-9988",
+              "eval_mode": "EXACT"
+            },
+            "amount": {
+              "value": "50000",
+              "eval_mode": "EXACT"
+            },
+            "payment_method": {
+              "value": "UPI",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Payment is done. Track the installation status."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_track_installation",
+          "parameters": {
+            "session_token": {
+              "value": "mock_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "APP-9988",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "beneficiary_share_paid": true,
+    "application_status": "payment_done",
+    "installation_status": "assigned"
+  }
+}

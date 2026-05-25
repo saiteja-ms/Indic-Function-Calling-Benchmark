@@ -1,0 +1,108 @@
+{
+  "scenario_id": "pmkisan_base_003_ARC_04",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_base_003",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "installments": [
+      {
+        "installment_id": "INST_04_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_04_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_04_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "failed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for the last installment! The transaction ID is TXN9876543210123. I am very frustrated and will complain to the agriculture officer if this isn't fixed!"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_payment",
+          "parameters": {
+            "transaction_id": {
+              "value": "TXN9876543210123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I already updated my Aadhaar details to fix the mismatch. My beneficiary ID is PMK998877 and my active session token is SESS_8899. Just retry the payment now before I escalate this further!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "SESS_8899",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK998877",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN9876543210123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated my Aadhaar details",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

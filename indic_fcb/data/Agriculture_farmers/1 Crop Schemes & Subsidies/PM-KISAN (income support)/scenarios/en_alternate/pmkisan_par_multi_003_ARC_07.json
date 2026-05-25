@@ -1,0 +1,96 @@
+{
+  "scenario_id": "pmkisan_par_multi_003_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_par_multi_003",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "registration_status": "registered",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "installments": [
+      {
+        "installment_id": "INST_07_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_07_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_07_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ],
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, I am Ramesh. I am worried about my PM-KISAN money and want to check my status. Also, my wife wants to know if she can get the money too, so we need to check her eligibility. My Aadhaar is 890123456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "mobile_number and wife's aadhaar_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My mobile number is 7543210986 and my wife's Aadhaar is 890123456788. Please check."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456788",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456789",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7543210986",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

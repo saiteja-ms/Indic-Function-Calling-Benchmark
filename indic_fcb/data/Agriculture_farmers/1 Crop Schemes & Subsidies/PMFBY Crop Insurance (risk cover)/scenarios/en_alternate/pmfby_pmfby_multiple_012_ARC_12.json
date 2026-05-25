@@ -1,0 +1,66 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_012_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_012",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "premium_payment_status": "paid",
+    "policy_status": "not_issued",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to file a complaint. My premium money was deducted but the policy was not issued. My application ID is APP-12345."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My session token is ST-9999. Just file the complaint quickly, I will escalate to a senior officer if this isn't resolved."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "ST-9999",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "APP-12345",
+            "grievance_description": "My premium money was deducted but the policy was not issued"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "grievance_status": "filed"
+  }
+}

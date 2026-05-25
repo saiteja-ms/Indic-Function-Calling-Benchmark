@@ -1,0 +1,68 @@
+{
+  "scenario_id": "atma_multiple_004_ARC_05",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_004",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son is helping me use this app. Can you check if there are any in-person classroom training sessions on organic farming for paddy in our state of Odisha?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "We live in Cuttack district."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_get_available_trainings",
+          "arguments": {
+            "state": "odisha",
+            "district": "cuttack",
+            "crop_name": "paddy",
+            "training_mode": "in_person"
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "training_mode": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

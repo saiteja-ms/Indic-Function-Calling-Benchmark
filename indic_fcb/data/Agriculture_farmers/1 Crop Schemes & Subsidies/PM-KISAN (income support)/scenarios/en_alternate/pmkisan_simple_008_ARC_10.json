@@ -1,0 +1,86 @@
+{
+  "scenario_id": "pmkisan_simple_008_ARC_10",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_008",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "ekyc_status": "completed",
+    "authenticated": true,
+    "session_token": "sess_abc123",
+    "beneficiary_id": "PMK10293847",
+    "installments": [
+      {
+        "installment_id": "INST_10_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "failed",
+        "transaction_id": "TXN9876543210123"
+      }
+    ],
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to resolve the payment failure for my PM-KISAN. It failed because of Aadhaar mismatch. Fix it quickly, I don't want to keep waiting."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do you need so many things? Fine, my beneficiary ID is PMK10293847 and the failed transaction ID is TXN9876543210123. I have already updated my Aadhaar name at the CSC center. Just retry the payment now or I will raise a formal complaint."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "sess_abc123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK10293847",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN9876543210123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated my Aadhaar name at the CSC center",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

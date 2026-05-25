@@ -1,0 +1,58 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_004_ARC_13",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_004",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to estimate the government contribution for a solar pump under the PM-KUSUM scheme. I am planning for Component B with a 5 HP pump capacity. I am applying under the general farmer category, and my state region category is normal. Please calculate the subsidy amounts."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_calculate_subsidy",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5",
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "general",
+              "eval_mode": "EXACT"
+            },
+            "state_region_category": {
+              "value": "normal",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

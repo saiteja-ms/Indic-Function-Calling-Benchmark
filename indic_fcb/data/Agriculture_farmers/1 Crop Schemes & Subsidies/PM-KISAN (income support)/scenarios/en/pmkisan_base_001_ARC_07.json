@@ -1,0 +1,83 @@
+{
+  "scenario_id": "pmkisan_base_001_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_base_001",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "land_record_status": "not_validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am a farmer but I am not getting any money from the government. I want to register for PM-KISAN. My Aadhaar number is 890123456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, please check my land details. The state code is 09, district code is 153, and my plot number is A-45."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "09",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "153",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "A-45",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible",
+    "land_record_status": "validated"
+  }
+}

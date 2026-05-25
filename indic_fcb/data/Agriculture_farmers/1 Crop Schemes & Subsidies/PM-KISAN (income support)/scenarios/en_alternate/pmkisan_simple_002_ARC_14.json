@@ -1,0 +1,87 @@
+{
+  "scenario_id": "pmkisan_simple_002_ARC_14",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_002",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "registration_status": "registered",
+    "installments_credited": 2,
+    "payment_failure_reason": "Bank account validation failed",
+    "authenticated": true,
+    "session_token": "SESS_123456",
+    "beneficiary_id": "UP12345678",
+    "bank_account": "SBIN0001234|001122334455",
+    "installments": [
+      {
+        "installment_id": "INST_14_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_14_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_14_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "failed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Bhai, mere pichle payments toh aaye the par abhi problem lag rahi hai. Mujhe apna past payment history check karna hai. Mera Aadhaar 678901234568 hai, jaldi batao."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Aadhaar toh diya tha na! Baar baar details kyun maangte ho? Beneficiary ID UP12345678 hai. Ab jaldi check karke batao kahan atka hai paisa."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "UP12345678",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

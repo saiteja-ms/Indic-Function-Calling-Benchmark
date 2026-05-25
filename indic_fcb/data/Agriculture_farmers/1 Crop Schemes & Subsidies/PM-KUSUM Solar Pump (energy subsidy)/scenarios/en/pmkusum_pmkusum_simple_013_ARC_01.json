@@ -1,0 +1,95 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_013_ARC_01",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_013",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "pump_operational_status": "operational",
+    "installation_status": "completed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump has stopped working completely. The motor makes a loud noise but no water comes out. Can you help me?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I have my application number, it is APP98765. Is that what you need?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "The CSC operator gave me a session token, it is TOKEN123. Let me know if this is correct."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_report_pump_issue",
+          "parameters": {
+            "session_token": {
+              "value": "TOKEN123",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "APP98765",
+              "eval_mode": "EXACT"
+            },
+            "issue_description": {
+              "value": "motor makes a loud noise but no water comes out",
+              "eval_mode": "SUBSTRING"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "application_id": "EXACT",
+            "issue_description": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "pump_operational_status": "faulty"
+  }
+}

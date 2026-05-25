@@ -1,0 +1,68 @@
+{
+  "scenario_id": "pmfby_pmfby_simple_004_ARC_09",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_simple_004",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "policy_status": "active"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My paddy crop has been damaged by the recent rains and I need to report this problem. Can you give me the contact details of the insurance company for Assam for the Kharif 2023 season?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My district is Sonitpur."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_get_insurer_contact",
+          "arguments": {
+            "state": "Assam",
+            "district": "Sonitpur",
+            "season": "Kharif",
+            "year": "2023"
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "season": "EXACT",
+            "year": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

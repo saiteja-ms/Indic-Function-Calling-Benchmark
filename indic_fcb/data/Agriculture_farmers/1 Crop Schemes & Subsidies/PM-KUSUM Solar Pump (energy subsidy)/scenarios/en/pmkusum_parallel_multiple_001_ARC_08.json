@@ -1,0 +1,89 @@
+{
+  "scenario_id": "pmkusum_parallel_multiple_001_ARC_08",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_multiple_001",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I am eligible for Component B of the PM-KUSUM scheme? Also, I want to know what pump capacity options I can get. I have 0.7 acres of land."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "land_type",
+        "electricity_connection_status",
+        "water_table_depth_meters"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My land is agricultural, I don't have an active electricity connection, and the water table depth is 30 meters."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "agricultural",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 0.7,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 30,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 0.7,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

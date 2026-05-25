@@ -1,0 +1,74 @@
+{
+  "scenario_id": "pmkisan_multiple_002_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_002",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "installments_credited": 3,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_08_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_08_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_08_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "credited"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Geetha from Karnataka. Can you check my status? I want to see my past transaction records because I am not sure if my money came. My Aadhaar is 901234567890, my mobile is 6432109875. My beneficiary ID is PMK901234 and my session token is ABC987. Please help me."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": "ABC987",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK901234",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

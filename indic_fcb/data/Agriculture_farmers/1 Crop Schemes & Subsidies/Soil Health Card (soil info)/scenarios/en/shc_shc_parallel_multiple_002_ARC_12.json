@@ -1,0 +1,79 @@
+{
+  "scenario_id": "shc_shc_parallel_multiple_002_ARC_12",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_multiple_002",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "sampling_window_status": "closed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to find nearby soil testing labs in Punjab and check when the sampling window opens for the rabi season. Tell me quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district_code"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Ludhiana. Just give me the details."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_nearby_labs",
+          "parameters": {
+            "state_code": {
+              "value": "Punjab",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "Ludhiana",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "shc_get_sampling_window",
+          "parameters": {
+            "district_code": {
+              "value": "Ludhiana",
+              "eval_mode": "EXACT"
+            },
+            "cropping_season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

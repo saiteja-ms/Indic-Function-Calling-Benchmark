@@ -1,0 +1,57 @@
+{
+  "scenario_id": "atma_atma_multiple_013_ARC_15",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_013",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "verified",
+    "farm_school_visit_status": "not_scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to book a visit to the demonstration plot at the farm school in coimbatore for 2024-06-15. My session token is tok_123. Schedule it immediately, I don't want to waste time dealing with system errors again or I will escalate this to a senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_schedule_farm_school_visit",
+          "parameters": {
+            "session_token": {
+              "value": "tok_123",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "coimbatore",
+              "eval_mode": "EXACT"
+            },
+            "preferred_date": {
+              "value": "2024-06-15",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farm_school_visit_status": "scheduled"
+  }
+}

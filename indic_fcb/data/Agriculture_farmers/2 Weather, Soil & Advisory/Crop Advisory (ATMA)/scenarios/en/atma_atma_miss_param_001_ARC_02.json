@@ -1,0 +1,68 @@
+{
+  "scenario_id": "atma_atma_miss_param_001_ARC_02",
+  "usecase": "atma",
+  "intent_ref": "atma_miss_param_001",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check where the nearest Krishi Vigyan Kendra is in Bihar?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "district",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am in Patna district."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_find_nearest_kvk",
+          "parameters": {
+            "state": {
+              "value": "bihar",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "patna",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

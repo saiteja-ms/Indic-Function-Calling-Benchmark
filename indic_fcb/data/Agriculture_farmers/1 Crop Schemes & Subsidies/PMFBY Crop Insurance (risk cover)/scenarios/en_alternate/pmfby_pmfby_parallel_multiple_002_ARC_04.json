@@ -1,0 +1,95 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_multiple_002_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_002",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My district Nashik in Maharashtra is always late with information. I need to know the notified crops and the cutoff dates for the kharif season immediately before I complain to the senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am talking about the year 2023. Just give me the details now!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_notified_crops",
+          "parameters": {
+            "state_name": {
+              "value": "Maharashtra",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Nashik",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2023,
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state_name": {
+              "value": "Maharashtra",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Nashik",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2023,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

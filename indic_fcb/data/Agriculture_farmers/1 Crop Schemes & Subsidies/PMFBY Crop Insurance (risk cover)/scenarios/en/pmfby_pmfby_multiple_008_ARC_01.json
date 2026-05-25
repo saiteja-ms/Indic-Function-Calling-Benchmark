@@ -1,0 +1,94 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_008_ARC_01",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_008",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crops might not be covered. Can you check which crops are covered under the insurance scheme here? I am not sure."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state_name",
+        "district_name",
+        "season",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Hardoi district in Uttar Pradesh. Do you need anything else to check?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "It is for the rabi season for the year 2023. Please check now."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_notified_crops",
+          "parameters": {
+            "state_name": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Hardoi",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2023,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

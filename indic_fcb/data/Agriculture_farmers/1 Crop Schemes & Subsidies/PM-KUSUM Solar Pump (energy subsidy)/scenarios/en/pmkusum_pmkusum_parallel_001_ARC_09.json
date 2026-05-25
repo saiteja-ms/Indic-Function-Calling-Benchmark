@@ -1,0 +1,97 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_001_ARC_09",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_001",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application is approved but I am facing a problem finding vendors. I need the list of empanelled vendors for a 5 HP pump in state code 18. I want to check for two different districts."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district_code"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Please check for district code 284 and district code 285."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_empanelled_vendors",
+          "parameters": {
+            "state_code": {
+              "value": 18,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 284,
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_code": "EXACT",
+            "district_code": "EXACT",
+            "pump_capacity_hp": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmkusum_get_empanelled_vendors",
+          "parameters": {
+            "state_code": {
+              "value": 18,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 285,
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_code": "EXACT",
+            "district_code": "EXACT",
+            "pump_capacity_hp": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

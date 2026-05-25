@@ -1,0 +1,72 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_param_001_ARC_16",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_param_001",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check my eligibility for the PM-KUSUM scheme. I have 2.5 acres of agricultural land, which is irrigated, and I currently have no active electricity connection."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "scheme_component",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am interested in Component B."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "agricultural",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 2.5,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

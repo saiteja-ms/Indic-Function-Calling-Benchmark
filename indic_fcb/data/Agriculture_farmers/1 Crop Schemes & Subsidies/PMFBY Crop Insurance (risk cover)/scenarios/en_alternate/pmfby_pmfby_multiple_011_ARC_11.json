@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_011_ARC_11",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_011",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "premium_payment_status": "failed",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My premium payment failed and I want to complain about the delayed premium refund. The category is premium_deduction_dispute."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "reference_id",
+        "session_token",
+        "grievance_description"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My reference ID is REF-9876, my session token is tok_123, and the description is 'Premium deducted from my CNRB account but status is failed and refund is delayed'."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "tok_123",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "REF-9876",
+            "grievance_description": "Premium deducted from my CNRB account but status is failed and refund is delayed"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "grievance_category": "EXACT",
+            "reference_id": "EXACT",
+            "grievance_description": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "grievance_status": "filed"
+  }
+}

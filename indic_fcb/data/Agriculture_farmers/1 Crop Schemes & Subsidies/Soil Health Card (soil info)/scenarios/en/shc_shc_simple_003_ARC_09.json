@@ -1,0 +1,74 @@
+{
+  "scenario_id": "shc_shc_simple_003_ARC_09",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_simple_003",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "test_status": "completed",
+    "card_status": "issued",
+    "plot_registration_status": "verified",
+    "sample_collection_status": "collected",
+    "retest_status": "not_applicable",
+    "lab_assignment_status": "assigned",
+    "sampling_window_status": "closed",
+    "card_count_for_plot": 1,
+    "retest_window_days_left": 0,
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son checked the portal and saw that my soil test is completed, but we are having trouble downloading the issued card. The sample ID is SMP-7788."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "He says the active session token on the screen is TKN-9900. Can you get the card now?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_get_soil_health_card",
+          "arguments": {
+            "session_token": "TKN-9900",
+            "sample_id": "SMP-7788"
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "sample_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

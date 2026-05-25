@@ -1,0 +1,77 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_004_ARC_01",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_004",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "has_active_grievance": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump is not working properly. The CSC boy helped me file two complaints a while ago. I want to check if anything is happening with them."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "He gave me two numbers on a slip... let me check. Yes, one is GRV-8899 and the other is GRV-7766. Can you check both? I don't know if they will ever fix it."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV-8899",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmkusum_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "GRV-7766",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_task_irrelevance_010_ARC_03",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_010",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My paddy sowing is coming up soon. Can you check and tell me if it will rain next week in Madurai? I need the weather forecast before I start."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Weather forecasting services are provided by IMD, not the PMFBY enrollment system."
+    }
+  ],
+  "expected_final_state": {}
+}

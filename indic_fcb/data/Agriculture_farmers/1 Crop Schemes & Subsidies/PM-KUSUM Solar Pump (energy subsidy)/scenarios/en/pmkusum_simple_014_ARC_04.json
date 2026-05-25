@@ -1,0 +1,65 @@
+{
+  "scenario_id": "pmkusum_simple_014_ARC_04",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_014",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "subsidy_disbursement_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump installation is done, but the vendor is saying the subsidy hasn't reached them. I want to check the subsidy disbursement status. This process is so slow, I will complain to a senior officer if it's stuck."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Here is my application ID: PK-MH-998877. Check it quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_subsidy_disbursement_status",
+          "parameters": {
+            "application_id": {
+              "value": "PK-MH-998877",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "application_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

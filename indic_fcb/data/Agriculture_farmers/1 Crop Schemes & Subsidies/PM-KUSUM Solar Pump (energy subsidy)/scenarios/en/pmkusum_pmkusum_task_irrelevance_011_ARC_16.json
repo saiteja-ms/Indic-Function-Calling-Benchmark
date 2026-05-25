@@ -1,0 +1,38 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_011_ARC_16",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_011",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "has_existing_grid_pump": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check and provide me with a detailed cattle and livestock advisory? I want to know the best feed practices to increase milk production for my cows."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Cattle and livestock advisory is completely unrelated to solar pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

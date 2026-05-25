@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_009_ARC_08",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_009",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I can apply for a solar pump for my farm here?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KUSUM solar pump applications are not processed through the PMFBY insurance portal."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I thought I could do it through this scheme. Okay, never mind then."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KUSUM solar pump applications are not processed through the PMFBY insurance portal."
+    }
+  ],
+  "expected_final_state": {}
+}

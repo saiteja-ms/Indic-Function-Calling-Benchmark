@@ -1,0 +1,86 @@
+{
+  "scenario_id": "pmkisan_simple_008_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_008",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "ekyc_status": "completed",
+    "authenticated": true,
+    "session_token": "TOK_123",
+    "beneficiary_id": "BEN987654321",
+    "installments": [
+      {
+        "installment_id": "INST_05_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "failed",
+        "transaction_id": "TXN1234567890123"
+      }
+    ],
+    "bank_account": "UCBA0001234|1234567890",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaskar. My grandson is helping me check my PM-KISAN account. It shows my payment failed due to an Aadhaar mismatch. My beneficiary ID is BEN987654321 and the failed transaction number is TXN1234567890123. Can you tell me how to resolve this?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "resolution_action",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "We have already corrected the Aadhaar details at the CSC center. Please retry the payment."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "BEN987654321",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "corrected the Aadhaar details",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

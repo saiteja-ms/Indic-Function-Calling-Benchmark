@@ -1,0 +1,118 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_002_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_002",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to calculate the insurance premium for my crops in Ludhiana, Punjab. I need to check for both Wheat and Paddy."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "area_hectares"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It's for the rabi season. I have 3 hectares for wheat and 2.5 hectares for paddy. Just give me the numbers quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Punjab",
+              "eval_mode": "EXACT"
+            },
+            "district_name": {
+              "value": "Ludhiana",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "Wheat",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": 3,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "crop_name": "SUBSTRING",
+            "area_hectares": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Punjab",
+              "eval_mode": "EXACT"
+            },
+            "district_name": {
+              "value": "Ludhiana",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "Paddy",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": 2.5,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "crop_name": "SUBSTRING",
+            "area_hectares": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

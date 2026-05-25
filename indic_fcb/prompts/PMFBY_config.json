@@ -1,0 +1,6 @@
+{
+  "USECASE_DISPLAY_NAME": "PMFBY (crop insurance enrollment)",
+  "USECASE_ID": "pmfby",
+  "USECASE_PREFIX": "pmfby",
+  "USECASE_STATE_FIELDS_BLOCK": "  enrollment_status: not_enrolled | applied | enrolled | rejected | lapsed\n  premium_payment_status: not_paid | paid | failed | refunded\n  policy_status: not_issued | active | expired | cancelled\n  crop_declared: true | false\n  land_record_status: not_validated | validated | mismatch\n  bank_seeding_status: not_seeded | seeded | failed\n  cutoff_date_passed: true | false\n  has_active_policy: true | false\n  has_pending_premium: true | false\n  farmer_owns_land: true | false\n  grievance_status: not_filed | filed | under_review | resolved | rejected"
+}

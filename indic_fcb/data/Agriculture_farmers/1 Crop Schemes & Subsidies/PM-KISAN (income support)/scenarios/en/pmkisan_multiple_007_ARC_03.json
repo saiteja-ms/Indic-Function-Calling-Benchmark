@@ -1,0 +1,85 @@
+{
+  "scenario_id": "pmkisan_multiple_007_ARC_03",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_007",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "has_active_grievance": false,
+    "installments": [
+      {
+        "installment_id": "INST_ARC_03_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_03_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "processed"
+      },
+      {
+        "installment_id": "INST_ARC_03_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "failed"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come for the last installment. I went to the CSC center and the operator said my payment failed. He told me to file a formal complaint and wrote down my beneficiary ID PMK778899 and session token TOK123 for me. Can you please register my complaint about the payment not received? I want to complain that my payment failed. Are you sure this will work? Please file the grievance, if it doesn't work I will just give up."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "TOK123",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK778899",
+              "eval_mode": "EXACT"
+            },
+            "category": {
+              "value": "payment_not_received",
+              "eval_mode": "EXACT"
+            },
+            "description": {
+              "value": "payment failed for the last installment",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

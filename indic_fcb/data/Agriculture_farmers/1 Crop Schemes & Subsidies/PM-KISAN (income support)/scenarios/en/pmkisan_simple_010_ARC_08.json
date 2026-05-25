@@ -1,0 +1,80 @@
+{
+  "scenario_id": "pmkisan_simple_010_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_010",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB|001122334455",
+    "registration_status": "registered",
+    "land_record_status": "not_validated",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_08_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_08_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_ARC_08_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if my land records are validated for the scheme? I am a tenant farmer from Karnataka. My state code is 29, district code is 057, and the plot number is 45A. Please verify this for me."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "29",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "057",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "45A",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "land_record_status": "validated"
+  }
+}

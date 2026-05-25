@@ -1,0 +1,99 @@
+{
+  "scenario_id": "pmkisan_miss_param_005_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_005",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA|001122334455",
+    "registration_status": "registered",
+    "has_active_grievance": false,
+    "installments": [
+      {
+        "installment_id": "INST_05_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_05_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "success"
+      },
+      {
+        "installment_id": "INST_05_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "success"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, my son helped me log into the portal. Our session token is TOK-9988 and my beneficiary ID is OD-123456. Can you please help me register a complaint? The system keeps giving an error when we try to update my details."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "category",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I forgot to mention. The issue is regarding my eKYC. Please categorize it as an ekyc_issue."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "TOK-9988",
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "OD-123456",
+              "eval_mode": "EXACT"
+            },
+            "category": {
+              "value": "ekyc_issue",
+              "eval_mode": "EXACT"
+            },
+            "description": {
+              "value": "system keeps giving an error when we try to update my details",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

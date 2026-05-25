@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmkisan_irrelevance_003_ARC_12",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the status of my Soil Health Card for my wheat farm."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil Health Card scheme handles soil testing, not PM-KISAN."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why are you not checking it? I am giving you my Aadhaar 456789012346. Check it right now or I will complain to the senior agriculture officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil Health Card scheme handles soil testing, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

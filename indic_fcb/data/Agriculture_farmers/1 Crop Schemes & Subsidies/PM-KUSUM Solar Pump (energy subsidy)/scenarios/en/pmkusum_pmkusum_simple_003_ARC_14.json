@@ -1,0 +1,77 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_003_ARC_14",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_003",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "land_record_status": "not_validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My land records are not validated yet for the solar pump application and it's delaying everything. I am from UP, state code 9, district code 15. Can you fix this quickly?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "survey_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Fine, my khasra number is K-4592. Just validate it so I can move forward."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": 9,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 15,
+              "eval_mode": "EXACT"
+            },
+            "survey_number": {
+              "value": "K-4592",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state_code": "EXACT",
+            "district_code": "EXACT",
+            "survey_number": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "land_record_status": "validated"
+  }
+}

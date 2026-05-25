@@ -1,0 +1,69 @@
+{
+  "scenario_id": "pmkusum_multiple_013_ARC_04",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_013",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "farmer_share_payment_status": "pending"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application APP9876 is stuck and my farmer share payment is pending! I already know I have to pay 55000 rupees, so do not calculate the subsidy again. I want to pay my share right now. Why are there so many delays?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "payment_method",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I will use UPI. My session token is TOKEN123. Process this immediately or I will complain to a senior officer!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_pay_farmer_share",
+          "arguments": {
+            "session_token": "TOKEN123",
+            "application_id": "APP9876",
+            "payment_amount": 55000,
+            "payment_method": "UPI"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "application_id": "EXACT",
+            "payment_amount": "EXACT",
+            "payment_method": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

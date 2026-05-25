@@ -3,899 +3,2603 @@
     "intent_id": "pmfby_simple_001",
     "usecase": "pmfby",
     "category": "simple",
-    "abstract_goal": "Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to check enrollment status for kharif paddy",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_get_enrollment_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "state_preconditions": {
+      "enrollment_status": "applied"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_02",
+      "ARC_03",
+      "ARC_04"
+    ],
+    "eval_notes": "basic single tool call for enrollment status"
   },
   {
     "intent_id": "pmfby_simple_002",
     "usecase": "pmfby",
     "category": "simple",
-    "abstract_goal": "Verifies the OTP and returns a session_token for PMFBY operations.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to calculate the premium amount for their crop",
     "required_tools": [
-      "pmfby_verify_otp"
+      "pmfby_calculate_premium"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_05",
+      "ARC_06",
+      "ARC_07",
+      "ARC_08"
+    ],
+    "eval_notes": "basic single tool call for premium calculation"
   },
   {
     "intent_id": "pmfby_simple_003",
     "usecase": "pmfby",
     "category": "simple",
-    "abstract_goal": "Checks whether the farmer is eligible to enroll in PMFBY for the current season based on land ownership, crop type, and region.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to know which crops are notified for insurance in their district",
     "required_tools": [
-      "pmfby_check_eligibility"
+      "pmfby_get_notified_crops"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_09",
+      "ARC_10",
+      "ARC_11",
+      "ARC_12"
+    ],
+    "eval_notes": "basic single tool call for notified crops"
   },
   {
     "intent_id": "pmfby_simple_004",
     "usecase": "pmfby",
     "category": "simple",
-    "abstract_goal": "Returns the enrollment window dates for the current crop season.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to check the last date to apply for insurance",
     "required_tools": [
-      "pmfby_get_season_window"
+      "pmfby_get_cutoff_dates"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "state_preconditions": {
+      "cutoff_date_passed": false
+    },
+    "state_transition": {
+      "reads": [
+        "cutoff_date_passed"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_13",
+      "ARC_14",
+      "ARC_15",
+      "ARC_16"
+    ],
+    "eval_notes": "basic single tool call for cutoff dates"
   },
   {
     "intent_id": "pmfby_simple_005",
     "usecase": "pmfby",
     "category": "simple",
-    "abstract_goal": "Enrolls the farmer in PMFBY crop insurance for a specific crop and land parcel for the current season.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to get the contact details of the insurance company",
     "required_tools": [
-      "pmfby_enroll_policy"
+      "pmfby_get_insurer_contact"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_006",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Calculates the insurance premium for an enrolled PMFBY policy.",
-    "required_tools": [
-      "pmfby_calculate_premium"
+    "state_preconditions": {
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_05",
+      "ARC_09",
+      "ARC_13"
     ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_007",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Processes the farmer's premium payment for PMFBY.",
-    "required_tools": [
-      "pmfby_pay_premium"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_008",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Retrieves the current status and details of a PMFBY policy including policy_status ('not_enrolled', 'enrolled', 'active', 'expired'), crop, land parcel, premium paid, and coverage amount.",
-    "required_tools": [
-      "pmfby_get_policy_status"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_009",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Reports a crop loss event for a specific policy and land parcel.",
-    "required_tools": [
-      "pmfby_report_crop_loss"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_010",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Submits a formal insurance claim for a reported crop loss event.",
-    "required_tools": [
-      "pmfby_submit_claim"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_011",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Tracks the current status of a submitted PMFBY claim.",
-    "required_tools": [
-      "pmfby_track_claim_status"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_012",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Tracks the field survey status for a PMFBY claim.",
-    "required_tools": [
-      "pmfby_track_survey_status"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_013",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Tracks the compensation payment status for an approved PMFBY claim.",
-    "required_tools": [
-      "pmfby_track_compensation"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_014",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Raises a grievance related to PMFBY.",
-    "required_tools": [
-      "pmfby_raise_grievance"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "pmfby_simple_015",
-    "usecase": "pmfby",
-    "category": "simple",
-    "abstract_goal": "Tracks the status of a previously raised PMFBY grievance.",
-    "required_tools": [
-      "pmfby_track_grievance_status"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "eval_notes": "basic single tool call for insurer contact"
   },
   {
     "intent_id": "pmfby_multiple_001",
     "usecase": "pmfby",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'what is my insurance status'",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_get_enrollment_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
     "distractor_tools": [
-      "pmfby_verify_otp"
+      "pmfby_get_policy_details"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "state_preconditions": {
+      "enrollment_status": "applied"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_06",
+      "ARC_10",
+      "ARC_14"
+    ],
+    "eval_notes": "Trap A: enrollment status vs policy details"
   },
   {
     "intent_id": "pmfby_multiple_002",
     "usecase": "pmfby",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'is my application for crop insurance approved yet'",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_get_enrollment_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_E",
     "distractor_tools": [
-      "pmfby_check_eligibility"
+      "pmfby_get_policy_details"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "state_preconditions": {
+      "enrollment_status": "applied"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_07",
+      "ARC_11",
+      "ARC_15"
+    ],
+    "eval_notes": "Trap A: enrollment status vs policy details (variation)"
   },
   {
     "intent_id": "pmfby_multiple_003",
     "usecase": "pmfby",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'how much will I pay for insurance'",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_calculate_premium"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [
-      "pmfby_get_season_window"
+      "pmfby_get_premium_receipt"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_08",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "Trap B: calculate premium vs premium receipt"
   },
   {
     "intent_id": "pmfby_multiple_004",
     "usecase": "pmfby",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'what is the cost to insure 2 hectares of wheat'",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_calculate_premium"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_G",
     "distractor_tools": [
-      "pmfby_enroll_policy"
+      "pmfby_get_premium_receipt"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_06",
+      "ARC_11",
+      "ARC_16"
+    ],
+    "eval_notes": "Trap B: calculate premium vs premium receipt (variation)"
   },
   {
     "intent_id": "pmfby_multiple_005",
     "usecase": "pmfby",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP to the mobile number linked with the farmer's Aadhaar for PMFBY authentication.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'I want to insure my paddy crop'",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_submit_enrollment"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_G",
     "distractor_tools": [
-      "pmfby_calculate_premium"
+      "pmfby_check_eligibility"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled",
+      "land_record_status": "validated"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status",
+        "land_record_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_07",
+      "ARC_12",
+      "ARC_13"
+    ],
+    "eval_notes": "Trap C: submit enrollment vs check eligibility"
+  },
+  {
+    "intent_id": "pmfby_multiple_006",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'please register my farm for the insurance scheme'",
+    "required_tools": [
+      "pmfby_submit_enrollment"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled",
+      "land_record_status": "validated"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status",
+        "land_record_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_08",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "Trap C: submit enrollment vs check eligibility (variation)"
+  },
+  {
+    "intent_id": "pmfby_multiple_007",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'can I get insurance for cotton in my district'",
+    "required_tools": [
+      "pmfby_get_notified_crops"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "Trap D: notified crops vs check eligibility"
+  },
+  {
+    "intent_id": "pmfby_multiple_008",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'which crops are covered under PMFBY here'",
+    "required_tools": [
+      "pmfby_get_notified_crops"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "Trap D: notified crops vs check eligibility (variation)"
+  },
+  {
+    "intent_id": "pmfby_multiple_009",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'show me my insurance policy'",
+    "required_tools": [
+      "pmfby_get_policy_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_get_premium_receipt"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "Trap E: policy details vs premium receipt"
+  },
+  {
+    "intent_id": "pmfby_multiple_010",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'I need to download my policy document'",
+    "required_tools": [
+      "pmfby_get_policy_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_get_premium_receipt"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "Trap E: policy details vs premium receipt (variation)"
+  },
+  {
+    "intent_id": "pmfby_multiple_011",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'I want to complain about delayed premium refund'",
+    "required_tools": [
+      "pmfby_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_get_premium_receipt"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "premium_payment_status": "refunded",
+      "grievance_status": "not_filed"
+    },
+    "state_transition": {
+      "reads": [
+        "premium_payment_status",
+        "grievance_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "Trap F: raise grievance vs premium receipt"
+  },
+  {
+    "intent_id": "pmfby_multiple_012",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'my premium was deducted but policy not issued, I want to file a complaint'",
+    "required_tools": [
+      "pmfby_raise_grievance"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_get_premium_receipt"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "premium_payment_status": "paid",
+      "policy_status": "not_issued",
+      "grievance_status": "not_filed"
+    },
+    "state_transition": {
+      "reads": [
+        "premium_payment_status",
+        "policy_status",
+        "grievance_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "Trap F: raise grievance vs premium receipt (variation)"
+  },
+  {
+    "intent_id": "pmfby_multiple_013",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'check if I can apply for insurance'",
+    "required_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_get_notified_crops"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "Trap G: check eligibility vs notified crops"
+  },
+  {
+    "intent_id": "pmfby_multiple_014",
+    "usecase": "pmfby",
+    "category": "multiple",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer asks 'am I eligible to get PMFBY benefits'",
+    "required_tools": [
+      "pmfby_check_eligibility"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [
+      "pmfby_get_notified_crops"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "Trap G: check eligibility vs notified crops (variation)"
   },
   {
     "intent_id": "pmfby_parallel_001",
     "usecase": "pmfby",
     "category": "parallel",
-    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfby_generate_otp.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to check enrollment status for two different crops",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_get_enrollment_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_generate_otp"
+      "pmfby_get_enrollment_status"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel execution."
+    "state_preconditions": {
+      "enrollment_status": "applied"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "parallel calls to get_enrollment_status"
   },
   {
     "intent_id": "pmfby_parallel_002",
     "usecase": "pmfby",
     "category": "parallel",
-    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfby_verify_otp.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to calculate premium for two different crop types",
     "required_tools": [
-      "pmfby_verify_otp"
+      "pmfby_calculate_premium"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_F",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_verify_otp"
+      "pmfby_calculate_premium"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel execution."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "parallel calls to calculate_premium"
   },
   {
     "intent_id": "pmfby_parallel_003",
     "usecase": "pmfby",
     "category": "parallel",
-    "abstract_goal": "Perform this action twice simultaneously for two different entities: pmfby_check_eligibility.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to get cutoff dates for two different seasons",
     "required_tools": [
-      "pmfby_check_eligibility"
+      "pmfby_get_cutoff_dates"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_G",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_check_eligibility"
+      "pmfby_get_cutoff_dates"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel execution."
+    "state_preconditions": {
+      "cutoff_date_passed": false
+    },
+    "state_transition": {
+      "reads": [
+        "cutoff_date_passed"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "parallel calls to get_cutoff_dates"
+  },
+  {
+    "intent_id": "pmfby_parallel_004",
+    "usecase": "pmfby",
+    "category": "parallel",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to track grievance status for two different grievance IDs",
+    "required_tools": [
+      "pmfby_track_grievance_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_track_grievance_status"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "grievance_status": "under_review"
+    },
+    "state_transition": {
+      "reads": [
+        "grievance_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "parallel calls to track_grievance_status"
+  },
+  {
+    "intent_id": "pmfby_parallel_005",
+    "usecase": "pmfby",
+    "category": "parallel",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to get notified crops for two different districts",
+    "required_tools": [
+      "pmfby_get_notified_crops"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [
+      "pmfby_get_notified_crops"
+    ],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "parallel calls to get_notified_crops"
   },
   {
     "intent_id": "pmfby_parallel_multiple_001",
     "usecase": "pmfby",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: pmfby_verify_otp and pmfby_track_claim_status.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "parallel_multiple"
+    },
+    "abstract_goal": "farmer wants to check enrollment status and get premium receipt simultaneously",
     "required_tools": [
-      "pmfby_verify_otp",
-      "pmfby_track_claim_status"
+      "pmfby_get_enrollment_status",
+      "pmfby_get_premium_receipt"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_verify_otp",
-      "pmfby_track_claim_status"
+      "pmfby_get_enrollment_status",
+      "pmfby_get_premium_receipt"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "state_preconditions": {
+      "enrollment_status": "enrolled",
+      "premium_payment_status": "paid"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status",
+        "premium_payment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "parallel multiple tools: status and receipt"
   },
   {
     "intent_id": "pmfby_parallel_multiple_002",
     "usecase": "pmfby",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: pmfby_calculate_premium and pmfby_pay_premium.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "parallel_multiple"
+    },
+    "abstract_goal": "farmer wants to know notified crops and cutoff dates simultaneously",
     "required_tools": [
-      "pmfby_calculate_premium",
-      "pmfby_pay_premium"
+      "pmfby_get_notified_crops",
+      "pmfby_get_cutoff_dates"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_calculate_premium",
-      "pmfby_pay_premium"
+      "pmfby_get_notified_crops",
+      "pmfby_get_cutoff_dates"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "parallel multiple tools: notified crops and cutoff dates"
   },
   {
     "intent_id": "pmfby_parallel_multiple_003",
     "usecase": "pmfby",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: pmfby_check_eligibility and pmfby_track_grievance_status.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "parallel_multiple"
+    },
+    "abstract_goal": "farmer wants to get policy details and premium receipt simultaneously",
     "required_tools": [
-      "pmfby_check_eligibility",
-      "pmfby_track_grievance_status"
+      "pmfby_get_policy_details",
+      "pmfby_get_premium_receipt"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_E",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_check_eligibility",
-      "pmfby_track_grievance_status"
+      "pmfby_get_policy_details",
+      "pmfby_get_premium_receipt"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "state_preconditions": {
+      "policy_status": "active",
+      "premium_payment_status": "paid"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status",
+        "premium_payment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "parallel multiple tools: policy details and receipt"
   },
   {
     "intent_id": "pmfby_parallel_multiple_004",
     "usecase": "pmfby",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: pmfby_verify_otp and pmfby_track_survey_status.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "parallel_multiple"
+    },
+    "abstract_goal": "farmer wants to get notified crops and insurer contact simultaneously",
     "required_tools": [
-      "pmfby_verify_otp",
-      "pmfby_track_survey_status"
+      "pmfby_get_notified_crops",
+      "pmfby_get_insurer_contact"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_verify_otp",
-      "pmfby_track_survey_status"
+      "pmfby_get_notified_crops",
+      "pmfby_get_insurer_contact"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "parallel multiple tools: notified crops and insurer contact"
   },
   {
     "intent_id": "pmfby_parallel_multiple_005",
     "usecase": "pmfby",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: pmfby_get_policy_status and pmfby_submit_claim.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "multi_step",
+      "task_type": "parallel_multiple"
+    },
+    "abstract_goal": "farmer wants to get cutoff dates and insurer contact simultaneously",
     "required_tools": [
-      "pmfby_get_policy_status",
-      "pmfby_submit_claim"
+      "pmfby_get_cutoff_dates",
+      "pmfby_get_insurer_contact"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
     "distractor_tools": [],
     "parallel_tools": [
-      "pmfby_get_policy_status",
-      "pmfby_submit_claim"
+      "pmfby_get_cutoff_dates",
+      "pmfby_get_insurer_contact"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "state_preconditions": {
+      "cutoff_date_passed": false
+    },
+    "state_transition": {
+      "reads": [
+        "cutoff_date_passed"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "parallel multiple tools: cutoff dates and insurer contact"
   },
   {
-    "intent_id": "pmfby_irrelevance_001",
+    "intent_id": "pmfby_task_irrelevance_001",
     "usecase": "pmfby",
     "category": "task_irrelevance",
-    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to check PM-KISAN income support installment status",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
-    "distractor_tools": [
-      "pmfby_generate_otp",
-      "pmfby_track_grievance_status"
-    ],
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Out of scope loan request.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "PM-KISAN income support is a separate scheme and not handled by PMFBY enrollment tools.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "irrelevance: PM-KISAN"
   },
   {
-    "intent_id": "pmfby_irrelevance_002",
+    "intent_id": "pmfby_task_irrelevance_002",
     "usecase": "pmfby",
     "category": "task_irrelevance",
-    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to check soil health card status or test results",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
-    "distractor_tools": [
-      "pmfby_generate_otp",
-      "pmfby_track_grievance_status"
-    ],
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Completely unrelated general knowledge query.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "Soil health card services are not part of the PMFBY crop insurance enrollment portal.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "irrelevance: soil health card"
   },
   {
-    "intent_id": "pmfby_irrelevance_003",
+    "intent_id": "pmfby_task_irrelevance_003",
     "usecase": "pmfby",
     "category": "task_irrelevance",
-    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to book an MSP procurement token",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [
-      "pmfby_generate_otp",
-      "pmfby_track_grievance_status"
-    ],
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Unrelated medical query.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "MSP procurement token booking is handled by state procurement portals, not PMFBY.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "irrelevance: MSP procurement"
   },
   {
-    "intent_id": "pmfby_irrelevance_004",
+    "intent_id": "pmfby_task_irrelevance_004",
     "usecase": "pmfby",
     "category": "task_irrelevance",
-    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to check mandi prices on eNAM",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [
-      "pmfby_generate_otp",
-      "pmfby_track_grievance_status"
-    ],
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Unrelated booking request.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "Mandi prices and eNAM services are outside the scope of PMFBY enrollment.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "irrelevance: eNAM mandi prices"
   },
   {
-    "intent_id": "pmfby_irrelevance_005",
+    "intent_id": "pmfby_task_irrelevance_005",
     "usecase": "pmfby",
     "category": "task_irrelevance",
-    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to check fertilizer subsidy DBT amount",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
-    "distractor_tools": [
-      "pmfby_generate_otp",
-      "pmfby_track_grievance_status"
-    ],
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Out of scope international query.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "Fertilizer subsidy DBT is managed by the Department of Fertilizers, not PMFBY.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "irrelevance: fertilizer subsidy"
+  },
+  {
+    "intent_id": "pmfby_task_irrelevance_006",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to claim SDRF/NDRF disaster relief",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "SDRF/NDRF disaster relief is a separate government mechanism from PMFBY crop insurance.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "irrelevance: SDRF/NDRF"
+  },
+  {
+    "intent_id": "pmfby_task_irrelevance_007",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to file a PMFBY post-disaster loss claim",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Post-disaster loss claims are handled by the claims module, not the enrollment portal.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "irrelevance: PMFBY loss claim (handled in Cluster 4)"
+  },
+  {
+    "intent_id": "pmfby_task_irrelevance_008",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to check KCC loan status",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Kisan Credit Card (KCC) loan status is managed by banks, not the PMFBY portal.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "irrelevance: KCC loan"
+  },
+  {
+    "intent_id": "pmfby_task_irrelevance_009",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to apply for a PM-KUSUM solar pump",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "PM-KUSUM solar pump applications are not processed through the PMFBY insurance portal.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "irrelevance: PM-KUSUM"
+  },
+  {
+    "intent_id": "pmfby_task_irrelevance_010",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to check the weather forecast for sowing",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "Weather forecasting services are provided by IMD, not the PMFBY enrollment system.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "irrelevance: weather forecast"
+  },
+  {
+    "intent_id": "pmfby_task_irrelevance_011",
+    "usecase": "pmfby",
+    "category": "task_irrelevance",
+    "axes": {
+      "conversation_length": "single_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to get cattle or livestock insurance",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": "PMFBY covers only crops; livestock insurance is a separate scheme.",
+    "state_preconditions": {},
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "irrelevance: livestock insurance"
   },
   {
     "intent_id": "pmfby_base_001",
     "usecase": "pmfby",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: pmfby_generate_otp, pmfby_verify_otp.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to complete a new enrollment flow from start to finish",
     "required_tools": [
-      "pmfby_generate_otp",
-      "pmfby_verify_otp"
+      "pmfby_authenticate",
+      "pmfby_check_eligibility",
+      "pmfby_validate_land_records",
+      "pmfby_calculate_premium",
+      "pmfby_submit_enrollment",
+      "pmfby_pay_premium"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_B",
+    "domain_constraint": "premium can only be calculated after eligibility is confirmed, and enrollment can only be submitted after land records are validated",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "land_record_status"
+      ],
+      "writes": {
+        "authenticated": true,
+        "enrollment_status": "applied",
+        "premium_payment_status": "paid"
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "Chain A: New enrollment flow"
   },
   {
     "intent_id": "pmfby_base_002",
     "usecase": "pmfby",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: pmfby_raise_grievance, pmfby_track_grievance_status.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to retry a failed premium payment",
     "required_tools": [
-      "pmfby_raise_grievance",
-      "pmfby_track_grievance_status"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_pay_premium",
+      "pmfby_get_premium_receipt"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_H",
+    "domain_constraint": "premium can be paid only after an enrollment record exists",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "applied",
+      "premium_payment_status": "failed"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "premium_payment_status"
+      ],
+      "writes": {
+        "authenticated": true,
+        "premium_payment_status": "paid"
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "Chain B: Premium payment retry"
   },
   {
     "intent_id": "pmfby_base_003",
     "usecase": "pmfby",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: pmfby_generate_otp, pmfby_check_eligibility.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to verify their policy details after enrollment",
     "required_tools": [
-      "pmfby_generate_otp",
-      "pmfby_check_eligibility"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_get_policy_details"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_D",
+    "domain_constraint": "policy details are available only after enrollment is confirmed",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "enrolled",
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "policy_status"
+      ],
+      "writes": {
+        "authenticated": true
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "Chain C: Policy verification"
   },
   {
     "intent_id": "pmfby_base_004",
     "usecase": "pmfby",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: pmfby_generate_otp, pmfby_verify_otp, pmfby_check_eligibility.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to update their crop declaration before the cutoff",
     "required_tools": [
-      "pmfby_generate_otp",
-      "pmfby_verify_otp",
-      "pmfby_check_eligibility"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_update_crop_declaration"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_H",
+    "domain_constraint": "declaration update requires active enrollment before cutoff",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "enrolled",
+      "cutoff_date_passed": false
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "cutoff_date_passed"
+      ],
+      "writes": {
+        "authenticated": true,
+        "crop_declared": true
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "Chain D: Crop declaration update"
   },
   {
     "intent_id": "pmfby_base_005",
     "usecase": "pmfby",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: pmfby_verify_otp, pmfby_check_eligibility.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to file a grievance regarding their enrollment",
     "required_tools": [
-      "pmfby_verify_otp",
-      "pmfby_check_eligibility"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_raise_grievance"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_E",
+    "domain_constraint": "grievance requires an enrollment to file against",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "enrolled",
+      "grievance_status": "not_filed"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "grievance_status"
+      ],
+      "writes": {
+        "authenticated": true,
+        "grievance_status": "filed"
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "Chain E: Grievance flow"
   },
   {
     "intent_id": "pmfby_miss_param_001",
     "usecase": "pmfby",
     "category": "miss_param",
-    "abstract_goal": "Attempt to perform pmfby_generate_otp but do not provide the necessary aadhaar_number.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to check eligibility but forgets to provide aadhaar number",
     "required_tools": [
-      "pmfby_generate_otp"
+      "pmfby_check_eligibility"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [],
-    "missing_param": "aadhaar_number",
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "aadhaar_number"
+    },
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Miss param coverage."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "missing param: aadhaar_number"
   },
   {
     "intent_id": "pmfby_miss_param_002",
     "usecase": "pmfby",
     "category": "miss_param",
-    "abstract_goal": "Attempt to perform pmfby_verify_otp but do not provide the necessary aadhaar_number.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to calculate premium but forgets to specify the crop name",
     "required_tools": [
-      "pmfby_verify_otp"
+      "pmfby_calculate_premium"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
-    "missing_param": "aadhaar_number",
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "crop_name"
+    },
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Miss param coverage."
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "missing param: crop_name"
   },
   {
     "intent_id": "pmfby_miss_param_003",
     "usecase": "pmfby",
     "category": "miss_param",
-    "abstract_goal": "Attempt to perform pmfby_check_eligibility but do not provide the necessary session_token.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to get cutoff dates but forgets to mention the season",
     "required_tools": [
-      "pmfby_check_eligibility"
+      "pmfby_get_cutoff_dates"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
-    "missing_param": "session_token",
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "season"
+    },
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Miss param coverage."
+    "state_preconditions": {
+      "cutoff_date_passed": false
+    },
+    "state_transition": {
+      "reads": [
+        "cutoff_date_passed"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "missing param: season"
+  },
+  {
+    "intent_id": "pmfby_miss_param_004",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to calculate premium but forgets to provide land area in hectares",
+    "required_tools": [
+      "pmfby_calculate_premium"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "land_area_hectares"
+    },
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "missing param: land_area_hectares"
+  },
+  {
+    "intent_id": "pmfby_miss_param_005",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to validate land records but forgets to provide survey number",
+    "required_tools": [
+      "pmfby_validate_land_records"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "survey_number"
+    },
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "land_record_status": "not_validated"
+    },
+    "state_transition": {
+      "reads": [
+        "land_record_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "missing param: survey_number"
+  },
+  {
+    "intent_id": "pmfby_miss_param_006",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to authenticate but forgets to provide the OTP",
+    "required_tools": [
+      "pmfby_authenticate"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "otp"
+    },
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "authenticated": false
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "missing param: otp"
+  },
+  {
+    "intent_id": "pmfby_miss_param_007",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to get notified crops but forgets to provide the district",
+    "required_tools": [
+      "pmfby_get_notified_crops"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "district"
+    },
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "missing param: district"
+  },
+  {
+    "intent_id": "pmfby_miss_param_008",
+    "usecase": "pmfby",
+    "category": "miss_param",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer wants to get policy details but forgets to provide insurer ID",
+    "required_tools": [
+      "pmfby_get_policy_details"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": {
+      "turn_index": 1,
+      "param_name": "insurer_id"
+    },
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "missing param: insurer_id"
   },
   {
     "intent_id": "pmfby_miss_func_001",
     "usecase": "pmfby",
     "category": "miss_func",
-    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to enroll after the season cutoff date has passed",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_F",
-    "distractor_tools": [
-      "pmfby_generate_otp"
-    ],
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
-    "missing_func": "delete_account",
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "enroll after the season cutoff date has passed"
+    },
     "irrelevance_reason": null,
-    "eval_notes": "Miss func coverage."
+    "state_preconditions": {
+      "cutoff_date_passed": true,
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "cutoff_date_passed",
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "miss_func: enroll after cutoff"
+  },
+  {
+    "intent_id": "pmfby_miss_func_002",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to change insured crop after policy is issued",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "change insured crop after policy is issued"
+    },
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "miss_func: change crop mid-policy"
+  },
+  {
+    "intent_id": "pmfby_miss_func_003",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to request premium refund for an active policy",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "request premium refund for an active policy"
+    },
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "policy_status": "active",
+      "premium_payment_status": "paid"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status",
+        "premium_payment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "miss_func: refund active policy"
+  },
+  {
+    "intent_id": "pmfby_miss_func_004",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to transfer policy to another farmer",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "transfer policy to another farmer"
+    },
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "miss_func: transfer policy"
+  },
+  {
+    "intent_id": "pmfby_miss_func_005",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to reduce sum insured after enrollment",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "reduce sum insured after enrollment"
+    },
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "miss_func: reduce sum insured"
+  },
+  {
+    "intent_id": "pmfby_miss_func_006",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "tenant farmer wants to enroll without owner consent",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "enroll a tenant farmer without owner consent"
+    },
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "farmer_owns_land": false,
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "farmer_owns_land",
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "miss_func: tenant enrollment without ownership"
+  },
+  {
+    "intent_id": "pmfby_miss_func_007",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to file a loss claim through this enrollment portal",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "file a loss claim through this enrollment portal"
+    },
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "policy_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "miss_func: loss claim via enrollment portal"
+  },
+  {
+    "intent_id": "pmfby_miss_func_008",
+    "usecase": "pmfby",
+    "category": "miss_func",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "irrelevance"
+    },
+    "abstract_goal": "farmer wants to enroll for a non-notified crop in the district",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": {
+      "turn_index": 1,
+      "requested_action": "enroll for a non-notified crop in the district"
+    },
+    "irrelevance_reason": null,
+    "state_preconditions": {
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "enrollment_status"
+      ],
+      "writes": {}
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "miss_func: non-notified crop enrollment"
   },
   {
     "intent_id": "pmfby_long_context_001",
     "usecase": "pmfby",
     "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_generate_otp, pmfby_verify_otp.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer chats about weather and farming before completing a new enrollment flow",
     "required_tools": [
-      "pmfby_generate_otp",
-      "pmfby_verify_otp"
+      "pmfby_authenticate",
+      "pmfby_check_eligibility",
+      "pmfby_validate_land_records",
+      "pmfby_calculate_premium",
+      "pmfby_submit_enrollment",
+      "pmfby_pay_premium"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_G",
+    "domain_constraint": "premium can only be calculated after eligibility is confirmed, and enrollment can only be submitted after land records are validated",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "not_enrolled"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "land_record_status"
+      ],
+      "writes": {
+        "authenticated": true,
+        "enrollment_status": "applied",
+        "premium_payment_status": "paid"
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "long context version of Chain A"
   },
   {
     "intent_id": "pmfby_long_context_002",
     "usecase": "pmfby",
     "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_raise_grievance, pmfby_track_grievance_status.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer discusses bank issues before retrying a failed premium payment",
     "required_tools": [
-      "pmfby_raise_grievance",
-      "pmfby_track_grievance_status"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_pay_premium",
+      "pmfby_get_premium_receipt"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_G",
+    "domain_constraint": "premium can be paid only after an enrollment record exists",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "applied",
+      "premium_payment_status": "failed"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "premium_payment_status"
+      ],
+      "writes": {
+        "authenticated": true,
+        "premium_payment_status": "paid"
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_03",
+      "ARC_06",
+      "ARC_09",
+      "ARC_14"
+    ],
+    "eval_notes": "long context version of Chain B"
   },
   {
     "intent_id": "pmfby_long_context_003",
     "usecase": "pmfby",
     "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_generate_otp, pmfby_check_eligibility.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer talks about crop yield expectations before verifying policy details",
     "required_tools": [
-      "pmfby_generate_otp",
-      "pmfby_check_eligibility"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_get_policy_details"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_F",
+    "domain_constraint": "policy details are available only after enrollment is confirmed",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "enrolled",
+      "policy_status": "active"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "policy_status"
+      ],
+      "writes": {
+        "authenticated": true
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_04",
+      "ARC_05",
+      "ARC_10",
+      "ARC_15"
+    ],
+    "eval_notes": "long context version of Chain C"
   },
   {
     "intent_id": "pmfby_long_context_004",
     "usecase": "pmfby",
     "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_generate_otp, pmfby_verify_otp, pmfby_check_eligibility.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer explains changing their mind about what to sow before updating crop declaration",
     "required_tools": [
-      "pmfby_generate_otp",
-      "pmfby_verify_otp",
-      "pmfby_check_eligibility"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_update_crop_declaration"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_A",
+    "domain_constraint": "declaration update requires active enrollment before cutoff",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "enrolled",
+      "cutoff_date_passed": false
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "cutoff_date_passed"
+      ],
+      "writes": {
+        "authenticated": true,
+        "crop_declared": true
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_01",
+      "ARC_07",
+      "ARC_12",
+      "ARC_16"
+    ],
+    "eval_notes": "long context version of Chain D"
   },
   {
     "intent_id": "pmfby_long_context_005",
     "usecase": "pmfby",
     "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: pmfby_verify_otp, pmfby_check_eligibility.",
+    "axes": {
+      "conversation_length": "multi_turn",
+      "tool_calls_per_turn": "single_step",
+      "task_type": "simple"
+    },
+    "abstract_goal": "farmer vents about poor customer service before filing a grievance",
     "required_tools": [
-      "pmfby_verify_otp",
-      "pmfby_check_eligibility"
+      "pmfby_authenticate",
+      "pmfby_get_enrollment_status",
+      "pmfby_raise_grievance"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_E",
+    "domain_constraint": "grievance requires an enrollment to file against",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "state_preconditions": {
+      "authenticated": false,
+      "enrollment_status": "enrolled",
+      "grievance_status": "not_filed"
+    },
+    "state_transition": {
+      "reads": [
+        "authenticated",
+        "enrollment_status",
+        "grievance_status"
+      ],
+      "writes": {
+        "authenticated": true,
+        "grievance_status": "filed"
+      }
+    },
+    "compatible_archetypes": [
+      "ARC_02",
+      "ARC_08",
+      "ARC_11",
+      "ARC_13"
+    ],
+    "eval_notes": "long context version of Chain E"
   }
 ]

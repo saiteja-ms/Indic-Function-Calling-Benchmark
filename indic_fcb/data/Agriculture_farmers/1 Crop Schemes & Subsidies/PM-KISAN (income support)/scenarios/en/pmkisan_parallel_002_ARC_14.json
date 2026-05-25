@@ -1,0 +1,102 @@
+{
+  "scenario_id": "pmkisan_parallel_002_ARC_14",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_parallel_002",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "installments_pending": 2,
+    "beneficiary_id": "PMK987654321",
+    "installments": [
+      {
+        "installment_id": "INST_14_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_14_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "pending"
+      },
+      {
+        "installment_id": "INST_14_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My money has not come. I need to check the status of my 1st and 2nd installments right now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My beneficiary ID is PMK987654321. Please check it quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_track_installment_status",
+          "parameters": {
+            "beneficiary_id": {
+              "value": "PMK987654321",
+              "eval_mode": "EXACT"
+            },
+            "installment_number": {
+              "value": "installment_1",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_track_installment_status",
+          "parameters": {
+            "beneficiary_id": {
+              "value": "PMK987654321",
+              "eval_mode": "EXACT"
+            },
+            "installment_number": {
+              "value": "installment_2",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

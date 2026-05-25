@@ -1,0 +1,113 @@
+{
+  "scenario_id": "pmkisan_parallel_001_ARC_03",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_parallel_001",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "registration_status": "registered",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "installments": [
+      {
+        "installment_id": "INST_03_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_03_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_03_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ],
+    "bank_account": "CNRB0001234|123456789012",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Thambi, the PM-KISAN money has not come for me and my wife. We are worried. Can you find out what happened?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "Aadhaar and mobile numbers for both farmers",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, yes. My Aadhaar is 456789012345. My wife's Aadhaar is 456789012346. Can you check now? We really need the money."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "mobile numbers for both farmers",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Oh, mobile number? My number is 7654321098. My wife's number is 7654321099. Are you checking for both of us? Please make sure."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012345",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7654321098",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7654321099",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

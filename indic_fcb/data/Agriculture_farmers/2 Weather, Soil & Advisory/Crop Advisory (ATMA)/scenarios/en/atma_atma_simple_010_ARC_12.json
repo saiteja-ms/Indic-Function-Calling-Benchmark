@@ -1,0 +1,78 @@
+{
+  "scenario_id": "atma_atma_simple_010_ARC_12",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_010",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "training_registration_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to confirm my attendance for the ATMA training programme. The training ID is TR-PUN-099. Just tell me what else you need so we can get this done quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "attendance_code",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Here is the attendance code the instructor gave: 7412. And my session token is tok_998877. Confirm it now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_confirm_training_attendance",
+          "parameters": {
+            "session_token": {
+              "value": "tok_998877",
+              "eval_mode": "EXACT"
+            },
+            "training_id": {
+              "value": "TR-PUN-099",
+              "eval_mode": "EXACT"
+            },
+            "attendance_code": {
+              "value": "7412",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT",
+            "attendance_code": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "attendance_confirmed": true
+  }
+}

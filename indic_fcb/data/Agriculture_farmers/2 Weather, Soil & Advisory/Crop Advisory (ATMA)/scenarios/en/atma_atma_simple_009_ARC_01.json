@@ -1,0 +1,83 @@
+{
+  "scenario_id": "atma_atma_simple_009_ARC_01",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_009",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "verified",
+    "training_registration_status": "not_registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My wheat crop is failing. The CSC operator told me to ask you about joining a training class to help me."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "training_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Training class? I just want to learn how to save my crop. Do I need to give you some number for this?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "training_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Oh, the operator wrote down TRG-4598 on a slip for me. Is that what you need?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_register_for_training",
+          "arguments": {
+            "session_token": "sess_84729",
+            "training_id": "TRG-4598"
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "training_registration_status": "registered"
+  }
+}

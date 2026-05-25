@@ -1,0 +1,72 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_014_ARC_09",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_014",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My family is trying to enroll me but we are not sure if I am eligible to get PMFBY benefits this year. My land is in Sonitpur, Assam."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year",
+        "farmer_category"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am an owner farmer. We are checking for the kharif season of 2024."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_check_eligibility",
+          "arguments": {
+            "state_name": "Assam",
+            "district_name": "Sonitpur",
+            "season": "kharif",
+            "year": 2024,
+            "farmer_category": "owner"
+          },
+          "eval_modes": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "year": "EXACT",
+            "farmer_category": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

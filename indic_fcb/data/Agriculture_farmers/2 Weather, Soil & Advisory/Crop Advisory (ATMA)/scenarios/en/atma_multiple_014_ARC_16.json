@@ -1,0 +1,62 @@
+{
+  "scenario_id": "atma_multiple_014_ARC_16",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_014",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "verified",
+    "farm_school_visit_status": "not_scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit Singh. I want to know about the new wheat seed variety demonstration in Karnal, Haryana. Can you check and reserve a spot for me to visit the farm school on 2024-05-20?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_schedule_farm_school_visit",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "karnal",
+              "eval_mode": "EXACT"
+            },
+            "preferred_date": {
+              "value": "2024-05-20",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "session_token": "TYPE_ONLY",
+            "district": "EXACT",
+            "preferred_date": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farm_school_visit_status": "scheduled"
+  }
+}

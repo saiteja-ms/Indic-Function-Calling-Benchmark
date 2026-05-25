@@ -1,0 +1,36 @@
+{
+  "scenario_id": "shc_shc_miss_func_006_ARC_10",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_miss_func_006",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "plot_registration_status": "not_registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to register a plot for the Soil Health Card scheme. The survey number is 123/4, area is 2.5 hectares, and it is irrigated. However, I am a tenant farmer and the plot is owned by someone else."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "register a plot owned by another person",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

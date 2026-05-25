@@ -1,0 +1,89 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_005_ARC_07",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_005",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN|001122334455",
+    "enrollment_status": "not_enrolled",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My paddy crop needs to be insured. I want to submit the enrollment for it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year",
+        "area_hectares",
+        "survey_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is for the Kharif season of 2023. The area is 1.2 hectares and the survey number is 101."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_submit_enrollment",
+          "parameters": {
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2023",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": "1.2",
+              "eval_mode": "EXACT"
+            },
+            "survey_number": {
+              "value": "101",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "crop_name": "EXACT",
+            "season": "EXACT",
+            "year": "EXACT",
+            "area_hectares": "EXACT",
+            "survey_number": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,73 @@
+{
+  "scenario_id": "atma_atma_multiple_002_ARC_07",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_002",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "verified",
+    "query_count_open": 0
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My wheat crop has a strange disease. The leaves are turning yellow with black spots. I need an expert to look at it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Sitapur district. My session token is 778899."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_submit_expert_query",
+          "arguments": {
+            "session_token": "778899",
+            "district": "sitapur",
+            "crop_name": "wheat",
+            "query_text": "wheat crop has a strange disease. The leaves are turning yellow with black spots"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "query_text": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "query_status": "submitted",
+    "query_count_open": 1
+  }
+}

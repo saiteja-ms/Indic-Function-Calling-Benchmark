@@ -1,0 +1,50 @@
+{
+  "scenario_id": "atma_miss_func_002_ARC_05",
+  "usecase": "atma",
+  "intent_ref": "atma_miss_func_002",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "farmer_profile_status": "not_registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I can ask an expert about my paddy crop? My son is helping me use this app."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "submit an expert query without a registered farmer profile",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I see. I am from Cuttack district and the problem is with my paddy crop. The leaves are turning yellow. Can you submit the query anyway?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "submit an expert query without a registered farmer profile",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

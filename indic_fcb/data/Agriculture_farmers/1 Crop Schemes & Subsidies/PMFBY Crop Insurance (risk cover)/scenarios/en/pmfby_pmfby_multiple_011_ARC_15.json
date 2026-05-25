@@ -1,0 +1,59 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_011_ARC_15",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_011",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "premium_payment_status": "refunded",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Lakshmi. I want to complain about my delayed premium refund. This is completely unacceptable and I will escalate this to a senior officer if it is not resolved immediately. My application reference is APP98765 and my active session token is AUTH789. File a grievance for a premium deduction dispute right now. The refund has been delayed for weeks and I need it sorted."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "AUTH789",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "premium_deduction_dispute",
+              "eval_mode": "EXACT"
+            },
+            "reference_id": {
+              "value": "APP98765",
+              "eval_mode": "EXACT"
+            },
+            "grievance_description": {
+              "value": "The refund has been delayed for weeks and I need it sorted.",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

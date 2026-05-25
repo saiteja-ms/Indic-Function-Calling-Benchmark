@@ -1,0 +1,108 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_003_ARC_11",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_003",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crops need insurance but I don't know the deadlines. What are the cutoff dates for Kharif and Rabi seasons in Guntur district?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "year"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Andhra Pradesh and I need the dates for the year 2024."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Andhra Pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Guntur",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "season": "EXACT",
+            "year": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmfby_get_cutoff_dates",
+          "parameters": {
+            "state": {
+              "value": "Andhra Pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Guntur",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2024",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "season": "EXACT",
+            "year": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,83 @@
+{
+  "scenario_id": "pmkisan_simple_002_ARC_10",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_002",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "beneficiary_id": "RJ1029384756",
+    "registration_status": "registered",
+    "ekyc_status": "completed",
+    "authenticated": true,
+    "session_token": "tok_12345",
+    "installments_credited": 2,
+    "installments": [
+      {
+        "installment_id": "INST_10_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_10_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      }
+    ],
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check my past payment history for PM-KISAN. Get me the details right now, I don't have all day."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "You people always ask for something! My beneficiary ID is RJ1029384756. Now show me the history immediately before I complain to the senior officers."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "RJ1029384756",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

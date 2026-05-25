@@ -1,0 +1,35 @@
+{
+  "scenario_id": "pmkusum_task_irrelevance_010_ARC_13",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_010",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check my eligibility for a tractor and farm machinery subsidy. I have 1.8 hectares of irrigated land and I am looking to buy a new tractor for my groundnut and cotton crops."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Tractor and farm machinery subsidies are handled by SMAM, not PM-KUSUM."
+    }
+  ],
+  "expected_final_state": {}
+}

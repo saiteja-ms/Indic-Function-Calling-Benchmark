@@ -1,0 +1,75 @@
+{
+  "scenario_id": "pmkusum_multiple_001_ARC_10",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_001",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check if my land records make me eligible for PM-KUSUM Component B. It is agricultural land."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "land_area_acres",
+        "electricity_connection_status"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I have 7.4 acres of land and no electricity connection. Just check it quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "agricultural",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 7.4,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

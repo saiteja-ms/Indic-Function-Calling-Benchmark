@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_func_004_ARC_11",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_func_004",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My first Component B application was approved, but I want to submit a second Component B application for the same landholding."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "submit a second Component B application for the same landholding",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

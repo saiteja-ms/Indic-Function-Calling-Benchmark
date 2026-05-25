@@ -1,0 +1,55 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_005_ARC_13",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_005",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "application_status": "submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the status of my two PM-KUSUM applications. The application IDs are APP-GJ-1001 and APP-GJ-1002."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_get_application_status",
+          "arguments": {
+            "application_id": "APP-GJ-1001"
+          },
+          "eval_mode": {
+            "application_id": "EXACT"
+          }
+        },
+        {
+          "name": "pmkusum_get_application_status",
+          "arguments": {
+            "application_id": "APP-GJ-1002"
+          },
+          "eval_mode": {
+            "application_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

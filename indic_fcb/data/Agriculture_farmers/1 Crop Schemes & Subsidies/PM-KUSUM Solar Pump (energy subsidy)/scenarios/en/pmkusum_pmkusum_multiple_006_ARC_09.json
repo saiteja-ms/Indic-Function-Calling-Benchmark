@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_006_ARC_09",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_006",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "eligible"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am facing an issue figuring out the PM-KUSUM scheme. My tea garden needs a solar pump, but I don't know what size is allowed for my land. I have 0.8 acres of land."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "water_table_depth_meters"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The groundwater depth is 20 meters."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 20,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 0.8,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "water_table_depth_meters": "EXACT",
+            "land_area_acres": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

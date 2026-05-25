@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_task_irrelevance_005_ARC_11",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_005",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My fertilizer subsidy DBT amount has not been credited to my account yet. Can you check what the problem is?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Fertilizer subsidy DBT is managed by the Department of Fertilizers, not PMFBY."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Let me try again, maybe I need to give my Aadhaar number? It is 345678901235. Please check the fertilizer subsidy."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Fertilizer subsidy DBT is managed by the Department of Fertilizers, not PMFBY."
+    }
+  ],
+  "expected_final_state": {}
+}

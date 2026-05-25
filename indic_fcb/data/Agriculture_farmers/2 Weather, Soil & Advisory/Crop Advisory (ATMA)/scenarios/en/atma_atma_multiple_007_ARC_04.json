@@ -1,0 +1,73 @@
+{
+  "scenario_id": "atma_atma_multiple_007_ARC_04",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_007",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "attendance_confirmed": true,
+    "certificate_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My training is finished but my certificate has not been given to me! I need to download it immediately. The training ID is TRG-2023."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why are there so many steps? Fine, my session token is ABC-12345. Download it now or I will complain to a senior officer!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_download_training_certificate",
+          "parameters": {
+            "session_token": {
+              "value": "ABC-12345",
+              "eval_mode": "EXACT"
+            },
+            "training_id": {
+              "value": "TRG-2023",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "certificate_status": "downloaded"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "scenario_id": "atma_simple_017_ARC_14",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_017",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "verified",
+    "farm_school_visit_status": "not_scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is having some issues and I want to see practical solutions. I need to schedule a visit to a farm school demonstration plot. I am from Meerut."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "preferred_date",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I want to visit on 2024-06-15. Just book it quickly, my session token is tok_8899."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_schedule_farm_school_visit",
+          "parameters": {
+            "session_token": {
+              "value": "tok_8899",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "meerut",
+              "eval_mode": "EXACT"
+            },
+            "preferred_date": {
+              "value": "2024-06-15",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farm_school_visit_status": "scheduled"
+  }
+}

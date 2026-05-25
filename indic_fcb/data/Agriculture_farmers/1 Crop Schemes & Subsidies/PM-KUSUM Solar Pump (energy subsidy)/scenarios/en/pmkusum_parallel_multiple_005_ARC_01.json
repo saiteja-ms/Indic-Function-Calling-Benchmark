@@ -1,0 +1,106 @@
+{
+  "scenario_id": "pmkusum_parallel_multiple_005_ARC_01",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_multiple_005",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "eligible",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application got approved, but I am confused. I don't know what pump capacity I need for my field, and I also don't know any vendors who sell them. Can you help me with both?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "water_table_depth_meters",
+        "land_area_acres",
+        "state_code",
+        "district_code",
+        "pump_capacity_hp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My land is 2 acres and the water is at 30 meters depth. Is that enough information?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state_code",
+        "district_code",
+        "pump_capacity_hp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "For the vendors, my state code is 9 and district code is 150. Let's check for a 5 HP pump. Can you check now?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 30,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 2,
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkusum_get_empanelled_vendors",
+          "parameters": {
+            "state_code": {
+              "value": 9,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 150,
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

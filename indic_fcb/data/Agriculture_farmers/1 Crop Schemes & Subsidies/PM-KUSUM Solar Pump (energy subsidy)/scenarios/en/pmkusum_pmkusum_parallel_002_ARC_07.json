@@ -1,0 +1,107 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_002_ARC_07",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_002",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crops are drying up because I don't have a proper irrigation setup. I want to check if I am eligible for a solar pump under Component A or Component B of the scheme. I have 1.2 acres of barren land."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "electricity_connection_status"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I do not have any electricity connection on my farm right now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component A",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "barren",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 1.2,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "scheme_component": "EXACT",
+            "land_type": "EXACT",
+            "land_area_acres": "EXACT",
+            "electricity_connection_status": "EXACT"
+          }
+        },
+        {
+          "name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "barren",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 1.2,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "scheme_component": "EXACT",
+            "land_type": "EXACT",
+            "land_area_acres": "EXACT",
+            "electricity_connection_status": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

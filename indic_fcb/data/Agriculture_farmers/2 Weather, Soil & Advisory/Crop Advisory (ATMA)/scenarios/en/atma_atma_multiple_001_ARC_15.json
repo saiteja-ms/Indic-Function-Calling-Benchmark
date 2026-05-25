@@ -1,0 +1,68 @@
+{
+  "scenario_id": "atma_atma_multiple_001_ARC_15",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_001",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "verified",
+    "query_count_open": 0
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am facing a specific issue with my paddy crop—the leaves are turning yellow with brown spots. I need personalized advice from an expert immediately. I am based in Coimbatore district. To save time, my active session token is XYZ123. Please submit this query right away."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_submit_expert_query",
+          "parameters": {
+            "session_token": {
+              "value": "XYZ123",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "coimbatore",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            },
+            "query_text": {
+              "value": "leaves are turning yellow with brown spots",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "query_text": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "query_status": "submitted",
+    "query_count_open": 1
+  }
+}

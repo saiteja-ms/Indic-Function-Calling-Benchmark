@@ -1,0 +1,50 @@
+{
+  "scenario_id": "shc_shc_simple_004_ARC_13",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_simple_004",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to get the fertilizer recommendations for groundnut. My soil health card number is SHC-GJ-98765."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_get_fertilizer_recommendation",
+          "arguments": {
+            "card_id": {
+              "value": "SHC-GJ-98765",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "groundnut",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

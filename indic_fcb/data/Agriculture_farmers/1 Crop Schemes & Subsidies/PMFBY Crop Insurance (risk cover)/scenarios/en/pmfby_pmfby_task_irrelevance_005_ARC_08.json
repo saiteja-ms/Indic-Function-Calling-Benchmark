@@ -1,0 +1,52 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_005_ARC_08",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_005",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check my DBT amount? My Aadhaar is 901234567890."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "scheme_name"
+      ],
+      "model_should_decline": false,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I want to check the fertilizer subsidy DBT amount."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": true,
+      "irrelevance_reason": "Fertilizer subsidy DBT is managed by the Department of Fertilizers, not PMFBY."
+    }
+  ],
+  "expected_final_state": {}
+}

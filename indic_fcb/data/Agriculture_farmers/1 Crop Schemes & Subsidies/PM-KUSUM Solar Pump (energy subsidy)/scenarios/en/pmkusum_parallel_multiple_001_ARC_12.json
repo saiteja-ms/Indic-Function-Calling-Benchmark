@@ -1,0 +1,81 @@
+{
+  "scenario_id": "pmkusum_parallel_multiple_001_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_multiple_001",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB|001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to check my eligibility for Component B and get pump capacity options. I have 5.5 acres of land. Tell me quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "water_table_depth_meters",
+        "land_type",
+        "electricity_connection_status"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The land is agricultural, there is no grid connection, and the water table is at 40 meters. Just process it."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_check_eligibility",
+          "arguments": {
+            "scheme_component": "Component B",
+            "land_type": "agricultural",
+            "land_area_acres": 5.5,
+            "electricity_connection_status": "no_connection"
+          },
+          "eval_mode": {
+            "scheme_component": "EXACT",
+            "land_type": "EXACT",
+            "land_area_acres": "EXACT",
+            "electricity_connection_status": "EXACT"
+          }
+        },
+        {
+          "name": "pmkusum_get_pump_capacity_options",
+          "arguments": {
+            "water_table_depth_meters": 40,
+            "land_area_acres": 5.5
+          },
+          "eval_mode": {
+            "water_table_depth_meters": "EXACT",
+            "land_area_acres": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

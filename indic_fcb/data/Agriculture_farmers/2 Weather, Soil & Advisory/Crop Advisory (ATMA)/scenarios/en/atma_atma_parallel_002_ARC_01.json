@@ -1,0 +1,136 @@
+{
+  "scenario_id": "atma_atma_parallel_002_ARC_01",
+  "usecase": "atma",
+  "intent_ref": "atma_parallel_002",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My wheat and mustard crops are having some issues. I need the advisory bulletins for both of them."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Hardoi district in Uttar Pradesh. Are you sure you can get the bulletins?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "crop_stage"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Yes, they are in the vegetative stage right now."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "advisory_type"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I need crop management advice for both. Please check."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_advisory_bulletin",
+          "parameters": {
+            "state": {
+              "value": "uttar_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "hardoi",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            },
+            "crop_stage": {
+              "value": "vegetative",
+              "eval_mode": "EXACT"
+            },
+            "advisory_type": {
+              "value": "crop_management",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "atma_get_advisory_bulletin",
+          "parameters": {
+            "state": {
+              "value": "uttar_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "hardoi",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "mustard",
+              "eval_mode": "EXACT"
+            },
+            "crop_stage": {
+              "value": "vegetative",
+              "eval_mode": "EXACT"
+            },
+            "advisory_type": {
+              "value": "crop_management",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

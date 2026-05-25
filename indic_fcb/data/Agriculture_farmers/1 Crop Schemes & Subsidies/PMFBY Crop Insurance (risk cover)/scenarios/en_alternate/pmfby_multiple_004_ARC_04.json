@@ -1,0 +1,78 @@
+{
+  "scenario_id": "pmfby_multiple_004_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_004",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "premium_payment_status": "not_paid"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My 2 hectares of wheat needs insurance, but the portal is always so confusing. I just want to know what the premium amount is for Nashik, Maharashtra. Tell me the amount quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is for the rabi season. Hurry up and calculate it before I have to complain to a senior officer about this delay."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_calculate_premium",
+          "arguments": {
+            "state_name": {
+              "value": "Maharashtra",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Nashik",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "SUBSTRING"
+            },
+            "area_hectares": {
+              "value": 2,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

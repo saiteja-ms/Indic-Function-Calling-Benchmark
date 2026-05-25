@@ -1,0 +1,73 @@
+{
+  "scenario_id": "atma_simple_013_ARC_14",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_013",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "farmer_profile_status": "not_registered",
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is having issues and I need help fast. Register my profile in the ATMA system right now. My name is Amit Chaudhary and I am from Kithaur village. My session token is tok_123. Don't make me wait."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I told you I'm in a hurry. State is uttar_pradesh and district is meerut. Just do it."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_register_farmer_profile",
+          "arguments": {
+            "session_token": "tok_123",
+            "farmer_name": "Amit Chaudhary",
+            "state": "uttar_pradesh",
+            "district": "meerut",
+            "village_name": "Kithaur"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "farmer_name": "SUBSTRING",
+            "state": "EXACT",
+            "district": "EXACT",
+            "village_name": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farmer_profile_status": "registered"
+  }
+}

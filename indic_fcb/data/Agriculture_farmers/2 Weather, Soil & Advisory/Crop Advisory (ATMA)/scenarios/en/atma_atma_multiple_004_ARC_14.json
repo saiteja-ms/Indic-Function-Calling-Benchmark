@@ -1,0 +1,81 @@
+{
+  "scenario_id": "atma_atma_multiple_004_ARC_14",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_004",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane yields are dropping and I want to learn about organic farming to fix my soil. Are there any indoor classroom sessions I can attend?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Meerut, Uttar Pradesh. Please check quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_available_trainings",
+          "parameters": {
+            "state": {
+              "value": "uttar_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "meerut",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "sugarcane",
+              "eval_mode": "EXACT"
+            },
+            "training_mode": {
+              "value": "in_person",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "training_mode": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

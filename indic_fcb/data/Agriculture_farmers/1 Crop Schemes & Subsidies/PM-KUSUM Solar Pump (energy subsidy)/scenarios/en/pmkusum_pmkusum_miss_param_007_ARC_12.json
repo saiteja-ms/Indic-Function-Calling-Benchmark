@@ -1,0 +1,79 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_param_007_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_param_007",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "land_record_status": "not_validated",
+    "has_existing_grid_pump": false,
+    "vendor_selection_status": "not_required",
+    "installation_status": "not_scheduled",
+    "subsidy_disbursement_status": "not_initiated",
+    "farmer_share_payment_status": "not_due",
+    "pump_operational_status": "not_installed",
+    "scheme_component_selected": null,
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to log in to my PM-KUSUM account. My Aadhaar is 456789012346 and my mobile number is 6321098754."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "otp",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, right. The OTP is 456789."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012346",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6321098754",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

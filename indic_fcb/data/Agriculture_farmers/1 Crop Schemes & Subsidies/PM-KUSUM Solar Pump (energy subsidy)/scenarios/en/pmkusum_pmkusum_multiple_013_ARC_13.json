@@ -1,0 +1,52 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_013_ARC_13",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_013",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "farmer_share_payment_status": "pending"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to pay my farmer share of the cost for the solar pump. My application ID is PK-123456, the payment amount is 45000, and I want to use UPI. My session token is ST-554433."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_pay_farmer_share",
+          "arguments": {
+            "session_token": "ST-554433",
+            "application_id": "PK-123456",
+            "payment_amount": 45000,
+            "payment_method": "UPI"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "application_id": "EXACT",
+            "payment_amount": "EXACT",
+            "payment_method": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,35 @@
+{
+  "scenario_id": "shc_shc_task_irrelevance_001_ARC_03",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_task_irrelevance_001",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN installment money has not come to my bank account yet. Can you check the status for me?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about PM-KISAN income support installments, which is outside the scope of the Soil Health Card scheme."
+    }
+  ],
+  "expected_final_state": {}
+}

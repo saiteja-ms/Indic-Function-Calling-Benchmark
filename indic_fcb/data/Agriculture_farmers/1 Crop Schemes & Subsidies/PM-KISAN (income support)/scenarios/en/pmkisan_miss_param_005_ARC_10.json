@@ -1,0 +1,100 @@
+{
+  "scenario_id": "pmkisan_miss_param_005_ARC_10",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_miss_param_005",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "registered",
+    "has_active_grievance": false,
+    "beneficiary_id": "PMK_10_999",
+    "installments": [
+      {
+        "installment_id": "INST_ARC_10_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "date": "2024-04-15",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_10_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "date": "2024-08-10",
+        "status": "credited"
+      },
+      {
+        "installment_id": "INST_ARC_10_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "date": "2024-12-05",
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to file a complaint immediately. My beneficiary ID is PMK_10_999. My money has not come for the last installment and I am facing a lot of issues. Register this right now, otherwise I will complain to a senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "category",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Put it under payment_not_received. Just do it quickly and give me the confirmation."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "EXACT"
+            },
+            "beneficiary_id": {
+              "value": "PMK_10_999",
+              "eval_mode": "EXACT"
+            },
+            "category": {
+              "value": "payment_not_received",
+              "eval_mode": "EXACT"
+            },
+            "description": {
+              "value": "money has not come for the last installment",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

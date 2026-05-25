@@ -1,0 +1,68 @@
+{
+  "scenario_id": "pmkisan_parallel_005_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_parallel_005",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "bank_account": "SBIN0001234|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, I am Ramesh from Sitapur. I want to know if my brother and I can get the PM-KISAN money. We both have land but haven't registered yet."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, my Aadhaar number is 890123456789 and my brother's is 890123456780. Please check for both of us."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456780",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

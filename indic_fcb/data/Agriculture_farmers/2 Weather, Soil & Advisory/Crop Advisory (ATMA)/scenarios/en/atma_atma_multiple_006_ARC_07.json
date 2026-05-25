@@ -1,0 +1,73 @@
+{
+  "scenario_id": "atma_atma_multiple_006_ARC_07",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_006",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "farmer_profile_status": "verified",
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is getting ruined by pests. I want to sign up for the pest management workshop to learn how to fix this."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "training_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The training ID is PEST-001. Also, my session token is 9876."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_for_training",
+          "parameters": {
+            "session_token": {
+              "value": "9876",
+              "eval_mode": "EXACT"
+            },
+            "training_id": {
+              "value": "PEST-001",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "training_registration_status": "registered"
+  }
+}

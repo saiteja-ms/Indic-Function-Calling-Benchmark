@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_func_008_ARC_12",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_008",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to enroll my farm for a non-notified crop in Ludhiana district. Can you do that?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "enroll for a non-notified crop in the district",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

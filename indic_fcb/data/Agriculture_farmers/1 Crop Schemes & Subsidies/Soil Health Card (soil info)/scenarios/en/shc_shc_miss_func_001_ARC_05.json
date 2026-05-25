@@ -1,0 +1,52 @@
+{
+  "scenario_id": "shc_shc_miss_func_001_ARC_05",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_miss_func_001",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "plot_registration_status": "verified",
+    "sampling_window_status": "closed",
+    "sample_collection_status": "not_requested"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I can request a soil sample collection for my plot PLOT-123 on 2024-05-10? My grandson is helping me check this."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "request sample collection when sampling window is closed",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Okay, I understand the window is closed right now. I will wait and try again later."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User acknowledged the closed window and ended the inquiry."
+    }
+  ],
+  "expected_final_state": {}
+}

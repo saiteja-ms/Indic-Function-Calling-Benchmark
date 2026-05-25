@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmkisan_multiple_012_ARC_10",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_012",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN|001122334455",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check my PM-KISAN status. I am not registered yet, but I need to check my eligibility for a new registration. My Aadhaar is 234567890124. Do it fast, I don't want to waste time and will escalate this to a senior officer if it doesn't work."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "234567890124",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

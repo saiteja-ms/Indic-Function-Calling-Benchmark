@@ -1,0 +1,72 @@
+{
+  "scenario_id": "pmkisan_multiple_010_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_010",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "registration_status": "registered",
+    "land_record_status": "not_validated",
+    "ekyc_status": "completed",
+    "authenticated": false,
+    "session_token": null,
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, my PM-KISAN money is stopped because my land record is not validated. I already updated my bank account details yesterday, so that is fine. Please validate my land record. My state code is 09."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "district_code and plot_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My district code is 153 for Sitapur, and my plot number is P-452."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": "09",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "153",
+              "eval_mode": "EXACT"
+            },
+            "plot_number": {
+              "value": "P-452",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "land_record_status": "validated"
+  }
+}

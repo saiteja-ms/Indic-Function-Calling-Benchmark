@@ -1,0 +1,49 @@
+{
+  "scenario_id": "shc_multiple_008_ARC_16",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_008",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "card_count_for_plot": 2,
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the historical trends for my soil? I want to compare my new soil health card to last year's card for my plot. My plot ID is PLT-4567 and my session token is STK-8899."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_compare_historical_cards",
+          "arguments": {
+            "session_token": "STK-8899",
+            "plot_id": "PLT-4567"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "plot_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

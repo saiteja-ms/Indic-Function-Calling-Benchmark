@@ -1,0 +1,100 @@
+{
+  "scenario_id": "pmkisan_multiple_009_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_009",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "authenticated": true,
+    "session_token": "sess_abc123",
+    "beneficiary_id": "PMK789012345",
+    "bank_account": "SBIN0001234|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, mera PM-KISAN ka paisa nahi aa raha hai. Mujhe apna bank khata badalna hai. Mera zameen ka record toh bilkul theek hai, usme koi dikkat nahi hai."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Mera beneficiary ID PMK789012345 hai. Kya aur kuch jankari chahiye? Main zyada detail nahi dena chahta."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_ifsc_code",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Theek hai, naya IFSC code SBIN0009876 hai. Par mera zameen ka record theek hai na? Baar baar wahi toh nahi check karna padega?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_account_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Mera naya khata number 112233445566 hai. Bas ab mera bank account update kar dijiye."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK789012345",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "SBIN0009876",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "112233445566",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

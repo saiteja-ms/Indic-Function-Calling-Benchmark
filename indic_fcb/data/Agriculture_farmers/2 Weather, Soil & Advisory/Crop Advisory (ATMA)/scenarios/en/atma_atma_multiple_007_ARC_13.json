@@ -1,0 +1,53 @@
+{
+  "scenario_id": "atma_atma_multiple_007_ARC_13",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_007",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID|001122334455",
+    "attendance_confirmed": true,
+    "certificate_status": "issued",
+    "farmer_profile_status": "verified",
+    "training_registration_status": "attended"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to download my official ATMA training certificate. I have completed the programme and my attendance is confirmed. The training ID is TRG-2023-88. I am already logged in with session token ST-1234."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_download_training_certificate",
+          "arguments": {
+            "session_token": "ST-1234",
+            "training_id": "TRG-2023-88"
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "certificate_status": "downloaded"
+  }
+}

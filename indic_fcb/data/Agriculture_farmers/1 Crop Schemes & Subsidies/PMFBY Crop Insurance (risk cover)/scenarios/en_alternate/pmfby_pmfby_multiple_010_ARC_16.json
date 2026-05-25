@@ -1,0 +1,46 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_010_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_010",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "policy_status": "active"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am checking the details of my crop insurance. I need to download my PMFBY policy document to verify the exact coverage terms. My policy number is POL123456789. Can you please fetch my policy details?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_get_policy_details",
+          "arguments": {
+            "policy_number": "POL123456789"
+          },
+          "eval_modes": {
+            "policy_number": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

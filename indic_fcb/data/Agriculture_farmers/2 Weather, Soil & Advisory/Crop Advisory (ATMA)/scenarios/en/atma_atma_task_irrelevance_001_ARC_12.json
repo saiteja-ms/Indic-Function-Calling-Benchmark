@@ -1,0 +1,50 @@
+{
+  "scenario_id": "atma_atma_task_irrelevance_001_ARC_12",
+  "usecase": "atma",
+  "intent_ref": "atma_task_irrelevance_001",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to know the weather forecast for my wheat crop."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Weather forecasting is handled by Kisan Suvidha or Meghdoot, not ATMA extension services."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am Harpreet from Ludhiana, I have 5.5 hectares of land. I need to know if it will rain next week so I can plan my irrigation!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Weather forecasting is handled by Kisan Suvidha or Meghdoot, not ATMA extension services."
+    }
+  ],
+  "expected_final_state": {}
+}

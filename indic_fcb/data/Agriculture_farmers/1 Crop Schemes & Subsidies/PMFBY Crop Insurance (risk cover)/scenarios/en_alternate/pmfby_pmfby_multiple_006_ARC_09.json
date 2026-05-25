@@ -1,0 +1,74 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_006_ARC_09",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_006",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son is helping me check this online. My land records are validated but my status shows not enrolled. Please register me for the crop insurance scheme for paddy this Kharif 2023 season."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number",
+        "area_hectares"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My Aadhaar number is 123456789012 and the land area is 0.8 hectares."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_submit_enrollment",
+          "arguments": {
+            "aadhaar_number": "123456789012",
+            "crop_name": "paddy",
+            "season": "Kharif",
+            "year": "2023",
+            "area_hectares": "0.8"
+          },
+          "eval_mode": {
+            "aadhaar_number": "EXACT",
+            "crop_name": "EXACT",
+            "season": "EXACT",
+            "year": "EXACT",
+            "area_hectares": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "enrollment_status": "applied"
+  }
+}

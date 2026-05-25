@@ -1,0 +1,36 @@
+{
+  "scenario_id": "atma_miss_func_002_ARC_01",
+  "usecase": "atma",
+  "intent_ref": "atma_miss_func_002",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "not_registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My wheat crop is turning yellow. I want to ask an expert about it. I am from Hardoi district."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "submit an expert query without a registered farmer profile",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,64 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_013_ARC_09",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_013",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "pump_operational_status": "operational",
+    "installation_status": "completed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump is not working properly. It is making a loud grinding noise and no water is coming out. I need to report this issue."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, sorry. My application ID is PK-998877."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_report_pump_issue",
+          "arguments": {
+            "application_id": "PK-998877",
+            "issue_description": "pump is not working properly, making a loud grinding noise and no water is coming out",
+            "session_token": ""
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "pump_operational_status": "faulty"
+  }
+}

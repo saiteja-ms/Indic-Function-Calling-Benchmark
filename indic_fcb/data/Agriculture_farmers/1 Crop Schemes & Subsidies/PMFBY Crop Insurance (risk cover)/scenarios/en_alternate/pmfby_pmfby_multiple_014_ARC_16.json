@@ -1,0 +1,58 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_014_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_014",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "cutoff_date_passed": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I am eligible to get PMFBY benefits this year? I am farming in Karnal, Haryana, and I want to know my eligibility for the rabi season of 2024."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_check_eligibility",
+          "parameters": {
+            "state_name": {
+              "value": "Haryana",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Karnal",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2024,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,97 @@
+{
+  "scenario_id": "atma_atma_multiple_004_ARC_01",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_004",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "programme_availability": "open"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My yields are dropping and I want to learn about organic farming. Are there any indoor classroom sessions I can attend? I am not looking for field demonstrations, just classroom training. Can you check?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state",
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I live in Uttar Pradesh. Is that enough information? I don't know how this works."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "My district is Hardoi. Please check now, otherwise I will just give up."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_available_trainings",
+          "parameters": {
+            "state": {
+              "value": "uttar_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "hardoi",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "organic_farming",
+              "eval_mode": "EXACT"
+            },
+            "training_mode": {
+              "value": "in_person",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "training_mode": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

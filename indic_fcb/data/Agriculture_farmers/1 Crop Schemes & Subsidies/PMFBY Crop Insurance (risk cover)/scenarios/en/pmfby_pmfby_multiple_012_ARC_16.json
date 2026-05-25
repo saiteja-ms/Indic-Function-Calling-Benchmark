@@ -1,0 +1,66 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_012_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_012",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "premium_payment_status": "paid",
+    "policy_status": "not_issued",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit Singh. I want to file a complaint because my premium was deducted but my policy has not been issued yet. Can you please raise a grievance for this enrollment issue? My application reference ID is APP123456 and my session token is SESS9988. The issue is that the premium amount left my bank account last week but the policy document is still pending."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "SESS9988",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "enrollment_issue",
+              "eval_mode": "EXACT"
+            },
+            "reference_id": {
+              "value": "APP123456",
+              "eval_mode": "EXACT"
+            },
+            "grievance_description": {
+              "value": "Premium was deducted but policy has not been issued yet. The premium amount left my bank account last week but the policy document is still pending.",
+              "eval_mode": "SUBSTRING"
+            }
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "grievance_category": "EXACT",
+            "reference_id": "EXACT",
+            "grievance_description": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

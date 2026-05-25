@@ -1,0 +1,160 @@
+{
+  "scenario_id": "pm_kusum_long_context_002_ARC_04",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_long_context_002",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "application_status": "payment_done",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "The weather in Nashik has been terrible lately, absolutely no rain for my cotton and soybean crops."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "To make matters worse, the local electricity board is completely useless! We face power cuts every single day. I can't even run my old water pump."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I am so tired of this broken system. I applied for the PM-KUSUM solar pump to solve this, but it's just endless waiting."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I want to check my application status and file a grievance right now! My Aadhaar is 567890123456 and my mobile number is 6543210987. I already have the portal OTP, it is 456789. Log me in."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "567890123456",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6543210987",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Now tell me the status of my application. The application ID is APP-MH-7765."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP-MH-7765",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "See? The payment is done but there is no sign of the pump! File a grievance immediately stating that the installation is severely delayed. I will escalate this to the district officer if it is not resolved!"
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_raise_grievance",
+          "parameters": {
+            "application_id": {
+              "value": "APP-MH-7765",
+              "eval_mode": "EXACT"
+            },
+            "complaint_description": {
+              "value": "installation is severely delayed",
+              "eval_mode": "SUBSTRING"
+            },
+            "session_token": {
+              "value": "dummy_token",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "grievance_status": "filed"
+  }
+}

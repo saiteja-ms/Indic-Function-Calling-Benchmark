@@ -1,0 +1,102 @@
+{
+  "scenario_id": "pmkisan_par_multi_001_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_par_multi_001",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "beneficiary_id": "BEN_08_123",
+    "registration_status": "registered",
+    "ekyc_status": "pending",
+    "authenticated": false,
+    "session_token": null,
+    "installments": [
+      {
+        "installment_id": "INST_08_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_08_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_08_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ],
+    "installments_pending": 1,
+    "bank_account": "CNRB0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaskara. I am a tenant farmer and this is my first time using this. Can you please tell me if my registration is done? And also, can you check if my third installment is coming?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_number, mobile_number, beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I usually don't share these, but if it's needed... My Aadhaar number is 901234567890, my mobile number is 6432109875, and my beneficiary ID is BEN_08_123."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_beneficiary_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "901234567890",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6432109875",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkisan_track_installment_status",
+          "parameters": {
+            "beneficiary_id": {
+              "value": "BEN_08_123",
+              "eval_mode": "EXACT"
+            },
+            "installment_number": {
+              "value": "installment_3",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

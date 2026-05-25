@@ -1,0 +1,76 @@
+{
+  "scenario_id": "pmkisan_simple_007_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_007",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "registration_status": "registered",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed",
+    "authenticated": true,
+    "session_token": "SESSION_999",
+    "beneficiary_id": "BEN901234567",
+    "bank_account": "CNRB0001234|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you tell me how to find out why my PM-KISAN money hasn't come? I would like to raise a complaint."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, my beneficiary ID is BEN901234567."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "BEN901234567",
+              "eval_mode": "EXACT"
+            },
+            "category": {
+              "value": "payment_not_received",
+              "eval_mode": "EXACT"
+            },
+            "description": {
+              "value": "money hasn't come",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

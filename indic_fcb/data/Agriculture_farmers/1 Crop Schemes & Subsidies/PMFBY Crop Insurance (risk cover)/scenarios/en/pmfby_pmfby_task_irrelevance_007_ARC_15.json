@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_007_ARC_15",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_007",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to file a PMFBY post-disaster loss claim for my cotton crop immediately. My Aadhaar is 789012345679 and my mobile number is 7321098654. Please process this right away, I don't want to deal with any system delays or have to escalate this to a senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Post-disaster loss claims are handled by the claims module, not the enrollment portal."
+    }
+  ],
+  "expected_final_state": {}
+}

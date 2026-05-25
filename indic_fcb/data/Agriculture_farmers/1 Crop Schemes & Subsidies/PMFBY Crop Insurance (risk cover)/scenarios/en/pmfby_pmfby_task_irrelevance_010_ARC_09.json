@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_010_ARC_09",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_010",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am facing a problem planning my paddy sowing this season due to some uncertainty. Can you help me?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "specific details about the assistance required",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My son usually helps me check this, but our internet is dropping today. I just need to know the weather forecast for Sonitpur district for the next week so I can start sowing."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Weather forecasting services are provided by IMD, not the PMFBY enrollment system."
+    }
+  ],
+  "expected_final_state": {}
+}

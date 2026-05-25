@@ -1,0 +1,188 @@
+{
+  "scenario_id": "pmfby_long_context_005_ARC_11",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_long_context_005",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "enrolled",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am very frustrated with the customer service. I called the helpline three times yesterday and nobody picked up. They just put me on hold for 20 minutes each time."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is completely unacceptable. We farmers rely on this insurance and when we have a problem, there is no one to talk to. The local office is also closed most of the time."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I even tried sending an email, but it bounced back saying the inbox is full. How are we supposed to get any help?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Anyway, my actual problem is that my compensation is delayed. I want to file a grievance about this. My Aadhaar is 345678901235 and my mobile is 7432109865."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "345678901235",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7432109865",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "The OTP I received is 456789."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "345678901235",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7432109865",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Now please check my enrollment status so we can file the grievance."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_enrollment_status",
+          "parameters": {
+            "session_token": {
+              "value": "<session_token>",
+              "eval_mode": "TYPE_ONLY"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 7,
+      "speaker": "user",
+      "message": "Okay, please file the grievance for compensation_delayed. The description is 'My compensation has been delayed for over two months despite approval'."
+    },
+    {
+      "turn_index": 7,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "<session_token>",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "grievance_category": {
+              "value": "compensation_delayed",
+              "eval_mode": "EXACT"
+            },
+            "reference_id": {
+              "value": "<application_id>",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "grievance_description": {
+              "value": "My compensation has been delayed for over two months despite approval",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "grievance_status": "filed"
+  }
+}

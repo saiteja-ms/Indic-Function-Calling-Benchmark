@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_009_ARC_15",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_009",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to calculate the subsidy for the MNRE rooftop solar scheme for my house in Coimbatore. I need to know the exact amount immediately so I can proceed. Please provide the details right away."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "MNRE rooftop solar is an urban scheme, distinct from PM-KUSUM agricultural pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

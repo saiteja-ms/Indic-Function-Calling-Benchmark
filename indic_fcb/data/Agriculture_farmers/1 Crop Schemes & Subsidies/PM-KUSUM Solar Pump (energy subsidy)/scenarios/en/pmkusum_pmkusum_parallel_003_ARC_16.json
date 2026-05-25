@@ -1,0 +1,63 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_003_ARC_16",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_003",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "eligibility_status": "eligible"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the solar pump capacity options for my land? I am looking at two different plots to see which one is better suited for the scheme. One plot is 2.5 acres and the other is 4.0 acres. The water table depth in my area is 30 meters for both."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 30,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 2.5,
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 30,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 4.0,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

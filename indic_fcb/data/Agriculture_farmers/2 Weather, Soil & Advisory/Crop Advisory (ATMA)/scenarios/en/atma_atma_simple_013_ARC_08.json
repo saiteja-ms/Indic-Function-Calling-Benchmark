@@ -1,0 +1,82 @@
+{
+  "scenario_id": "atma_atma_simple_013_ARC_08",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_013",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "not_registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check how I can register my profile in the ATMA system? I am a tenant farmer from Mandya district in Karnataka."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "farmer_name",
+        "village_name",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My name is Geetha R. and my village is Maddur. My session token is tok_123."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_register_farmer_profile",
+          "parameters": {
+            "session_token": {
+              "value": "tok_123",
+              "eval_mode": "EXACT"
+            },
+            "farmer_name": {
+              "value": "Geetha R.",
+              "eval_mode": "SUBSTRING"
+            },
+            "state": {
+              "value": "karnataka",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "mandya",
+              "eval_mode": "EXACT"
+            },
+            "village_name": {
+              "value": "Maddur",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farmer_profile_status": "registered"
+  }
+}

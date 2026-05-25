@@ -1,0 +1,79 @@
+{
+  "scenario_id": "atma_atma_simple_014_ARC_12",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_014",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "farmer_profile_status": "verified",
+    "query_count_open": 0
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to submit a query to the agriculture expert right now. My wheat crop's leaves are turning yellow and drying up. Please do this quickly, I have a lot of work and don't want to waste time."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Ludhiana district. My session token is ST-998877. Just submit it already."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_submit_expert_query",
+          "parameters": {
+            "session_token": {
+              "value": "ST-998877",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "ludhiana",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "wheat",
+              "eval_mode": "EXACT"
+            },
+            "query_text": {
+              "value": "wheat crop's leaves are turning yellow and drying up",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "query_status": "submitted",
+    "query_count_open": 1
+  }
+}

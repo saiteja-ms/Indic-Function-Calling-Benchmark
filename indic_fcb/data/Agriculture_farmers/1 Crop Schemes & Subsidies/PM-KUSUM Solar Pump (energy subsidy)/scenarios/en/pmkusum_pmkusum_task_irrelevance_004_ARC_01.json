@@ -1,0 +1,38 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_004_ARC_01",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_004",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "subsidy_disbursement_status": "not_initiated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My fertilizer subsidy money has not come to my bank account yet. Can you check the DBT status for my urea purchase?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Fertilizer subsidy DBT is managed by iFMS, not PM-KUSUM."
+    }
+  ],
+  "expected_final_state": {}
+}

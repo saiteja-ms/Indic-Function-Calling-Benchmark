@@ -1,0 +1,101 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_010_ARC_03",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_010",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "farmer_share_payment_status": "pending",
+    "vendor_selection_status": "confirmed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump vendor is confirmed, but my farmer share payment is pending. I want to pay my share now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "application_id",
+        "session_token",
+        "payment_amount",
+        "payment_method"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am at the CSC. The operator says my application ID is PK12345 and the session token is TKN9988. Did you get that?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "payment_amount",
+        "payment_method"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "The amount to be paid is 55000. Is that correct?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "payment_method"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I will pay through UPI. Will it work?"
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_pay_farmer_share",
+          "arguments": {
+            "session_token": "TKN9988",
+            "application_id": "PK12345",
+            "payment_amount": 55000,
+            "payment_method": "UPI"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "farmer_share_payment_status": "paid"
+  }
+}

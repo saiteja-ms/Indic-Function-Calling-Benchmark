@@ -1,0 +1,77 @@
+{
+  "scenario_id": "pmkisan_simple_009_ARC_04",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_009",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "authenticated": true,
+    "session_token": "SESS_98765",
+    "beneficiary_id": "BEN_456789",
+    "bank_account": "BKID0001234|1122334455",
+    "ekyc_status": "completed",
+    "has_active_grievance": true,
+    "grievance_status": "in_progress"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN money has stopped coming because my bank account is not seeded. I am tired of this broken system! I want to update my bank details right now. My beneficiary ID is BEN_456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_ifsc_code and new_account_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I don't have all day for this! The new account number is 999988887777 and the IFSC code is BKID0009999. If this doesn't work, I will escalate this to the district magistrate!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "BEN_456789",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "BKID0009999",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "999988887777",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

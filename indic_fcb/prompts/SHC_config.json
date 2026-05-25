@@ -1,0 +1,6 @@
+{
+  "USECASE_DISPLAY_NAME": "Soil Health Card Scheme (enrollment and testing)",
+  "USECASE_ID": "shc_scheme",
+  "USECASE_PREFIX": "shc",
+  "USECASE_STATE_FIELDS_BLOCK": "  plot_registration_status: not_registered | registered | verified\n  sample_collection_status: not_requested | requested | scheduled | collected | in_transit | received_at_lab\n  test_status: not_started | in_progress | completed | failed | disputed\n  card_status: not_issued | issued | expired | revoked\n  retest_status: not_applicable | requested | approved | rejected | completed\n  lab_assignment_status: pending | assigned | reassigned\n  sampling_window_status: open | closed\n  card_count_for_plot: integer 0+\n  retest_window_days_left: integer 0-15\n  has_active_grievance: true | false\n  grievance_status: not_filed | filed | under_review | resolved | rejected"
+}

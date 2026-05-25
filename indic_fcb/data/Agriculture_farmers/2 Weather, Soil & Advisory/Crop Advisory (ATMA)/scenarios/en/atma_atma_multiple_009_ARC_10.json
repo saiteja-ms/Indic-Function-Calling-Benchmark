@@ -1,0 +1,66 @@
+{
+  "scenario_id": "atma_atma_multiple_009_ARC_10",
+  "usecase": "atma",
+  "intent_ref": "atma_multiple_009",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "query_status": "closed",
+    "has_active_grievance": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to file a grievance immediately. The agriculture officer never answered my query Q-998. This is unacceptable and I will complain to a senior officer if you don't register my complaint now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do you need that? Fine, my session token is TOK-7788. Now file the grievance and don't make me repeat myself."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_raise_grievance",
+          "arguments": {
+            "session_token": "TOK-7788",
+            "grievance_category": "query_not_answered",
+            "query_id": "Q-998",
+            "grievance_details": "The agriculture officer never answered my query Q-998. This is unacceptable and I will complain to a senior officer if you don't register my complaint now."
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

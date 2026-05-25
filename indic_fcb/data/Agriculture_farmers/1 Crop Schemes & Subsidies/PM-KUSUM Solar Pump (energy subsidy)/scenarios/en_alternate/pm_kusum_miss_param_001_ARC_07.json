@@ -1,0 +1,74 @@
+{
+  "scenario_id": "pm_kusum_miss_param_001_ARC_07",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_miss_param_001",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "not_applied",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am struggling with irrigation costs and want to install a submersible solar pump. I am a small farmer from Uttar Pradesh. Can you tell me how much subsidy I will get?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "pump_capacity",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Oh, I forgot to mention. I need a 5 HP pump."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "state": {
+              "value": "Uttar Pradesh",
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "small",
+              "eval_mode": "EXACT"
+            },
+            "pump_type": {
+              "value": "submersible",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity": {
+              "value": "5 HP",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

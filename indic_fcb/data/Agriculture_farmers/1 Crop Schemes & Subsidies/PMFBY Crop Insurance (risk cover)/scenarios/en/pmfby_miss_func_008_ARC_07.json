@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_miss_func_008_ARC_07",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_008",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to enroll my new Dragon Fruit crop for insurance in Sitapur district."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "enroll for a non-notified crop in the district",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Is there any other way to get it insured under PMFBY? I have all the land documents ready."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "enroll for a non-notified crop in the district",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

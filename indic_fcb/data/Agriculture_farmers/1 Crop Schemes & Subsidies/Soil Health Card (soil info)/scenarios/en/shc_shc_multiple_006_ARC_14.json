@@ -1,0 +1,70 @@
+{
+  "scenario_id": "shc_shc_multiple_006_ARC_14",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_006",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "plot_registration_status": "verified"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My plot is verified, but I have a problem with my soil quality and need to get it tested. Can you tell me where the testing labs are in Uttar Pradesh?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "district_code"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Meerut district. Just tell me the labs there quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_nearby_labs",
+          "parameters": {
+            "state_code": {
+              "value": "UP",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "MEERUT",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_code": "EXACT",
+            "district_code": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

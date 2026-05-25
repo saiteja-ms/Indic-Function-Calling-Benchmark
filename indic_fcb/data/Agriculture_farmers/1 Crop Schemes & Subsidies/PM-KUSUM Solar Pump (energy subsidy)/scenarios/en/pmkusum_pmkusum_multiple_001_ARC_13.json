@@ -1,0 +1,64 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_001_ARC_13",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_001",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check my eligibility for the PM-KUSUM scheme. I am interested in Component B. My land type is irrigated, I have 4.45 acres of land, and my electricity connection status is no_connection."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "irrigated",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 4.45,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "scheme_component": "EXACT",
+            "land_type": "EXACT",
+            "land_area_acres": "EXACT",
+            "electricity_connection_status": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

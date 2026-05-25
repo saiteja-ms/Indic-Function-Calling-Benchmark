@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_task_irrelevance_010_ARC_06",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_010",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soybean sowing is delayed. Can you tell me the weather forecast for Vidisha?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Weather forecasting services are provided by IMD, not the PMFBY enrollment system."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Are you sure you cannot check? I am worried about the rain and need to know before I plant."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Weather forecasting services are provided by IMD, not the PMFBY enrollment system."
+    }
+  ],
+  "expected_final_state": {}
+}

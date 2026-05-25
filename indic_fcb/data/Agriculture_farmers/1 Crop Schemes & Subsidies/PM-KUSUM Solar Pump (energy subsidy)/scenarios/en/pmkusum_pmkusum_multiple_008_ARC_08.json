@@ -1,0 +1,75 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_008_ARC_08",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_008",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check which companies are installing solar pumps in my area? I am from Karnataka, state code 29, and Mandya district, code 572."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "pump_capacity_hp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am looking for a 5 HP pump."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_empanelled_vendors",
+          "parameters": {
+            "state_code": {
+              "value": 29,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 572,
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "state_code": "EXACT",
+            "district_code": "EXACT",
+            "pump_capacity_hp": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

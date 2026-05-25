@@ -1,0 +1,322 @@
+{
+  "scenario_id": "pmkusum_pmkusum_base_001_ARC_03",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_base_001",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "land_record_status": "not_validated",
+    "vendor_selection_status": "not_required",
+    "farmer_share_payment_status": "not_due"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My name is Murugan. I want to apply for a new solar pump under Component B. Can you help me?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number",
+        "mobile_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My Aadhaar is 456789012345 and mobile is 7654321098."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "456789012345",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "7654321098",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Okay, what next? I have 0.9 acres of agricultural land and no electricity connection."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "agricultural",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 0.9,
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "My state code is 33, district code is 625, and survey number is 123/4."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_validate_land_records",
+          "parameters": {
+            "state_code": {
+              "value": 33,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 625,
+              "eval_mode": "EXACT"
+            },
+            "survey_number": {
+              "value": "123/4",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "I want a 5 HP pump. I am a marginal farmer from a general state region."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_calculate_subsidy",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5 HP",
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "marginal",
+              "eval_mode": "EXACT"
+            },
+            "state_region_category": {
+              "value": "general",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Please submit my application now."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_submit_application",
+          "parameters": {
+            "session_token": {
+              "value": "<TYPE_ONLY>",
+              "eval_mode": "EXACT"
+            },
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "survey_number": {
+              "value": "123/4",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5 HP",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 7,
+      "speaker": "user",
+      "message": "Can you show me the vendors for my district?"
+    },
+    {
+      "turn_index": 7,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_empanelled_vendors",
+          "parameters": {
+            "state_code": {
+              "value": 33,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 625,
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5 HP",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 8,
+      "speaker": "user",
+      "message": "I will select vendor VEND-998."
+    },
+    {
+      "turn_index": 8,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_select_vendor",
+          "parameters": {
+            "session_token": {
+              "value": "<TYPE_ONLY>",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "<TYPE_ONLY>",
+              "eval_mode": "EXACT"
+            },
+            "vendor_id": {
+              "value": "VEND-998",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 9,
+      "speaker": "user",
+      "message": "I want to pay my share of 50000 using UPI."
+    },
+    {
+      "turn_index": 9,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_pay_farmer_share",
+          "parameters": {
+            "session_token": {
+              "value": "<TYPE_ONLY>",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "<TYPE_ONLY>",
+              "eval_mode": "EXACT"
+            },
+            "payment_amount": {
+              "value": 50000,
+              "eval_mode": "EXACT"
+            },
+            "payment_method": {
+              "value": "UPI",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "eligibility_status": "eligible",
+    "land_record_status": "validated",
+    "application_status": "approved",
+    "vendor_selection_status": "confirmed",
+    "farmer_share_payment_status": "paid"
+  }
+}

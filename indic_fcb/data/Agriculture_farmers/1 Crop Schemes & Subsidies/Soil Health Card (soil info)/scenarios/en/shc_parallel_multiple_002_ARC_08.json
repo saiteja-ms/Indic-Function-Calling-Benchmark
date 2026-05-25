@@ -1,0 +1,75 @@
+{
+  "scenario_id": "shc_parallel_multiple_002_ARC_08",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_multiple_002",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB|001122334455",
+    "sampling_window_status": "closed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check when the sampling window opens and also find nearby soil testing labs? I am from Mandya district in Karnataka."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "cropping_season"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I want to check for the kharif season."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_get_nearby_labs",
+          "arguments": {
+            "state_code": "Karnataka",
+            "district_code": "Mandya"
+          },
+          "eval_mode": {
+            "state_code": "EXACT",
+            "district_code": "EXACT"
+          }
+        },
+        {
+          "name": "shc_get_sampling_window",
+          "arguments": {
+            "district_code": "Mandya",
+            "cropping_season": "kharif"
+          },
+          "eval_mode": {
+            "district_code": "EXACT",
+            "cropping_season": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

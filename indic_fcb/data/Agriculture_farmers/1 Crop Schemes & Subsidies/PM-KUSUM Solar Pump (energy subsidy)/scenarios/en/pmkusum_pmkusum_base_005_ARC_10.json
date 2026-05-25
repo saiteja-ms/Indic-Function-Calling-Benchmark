@@ -1,0 +1,120 @@
+{
+  "scenario_id": "pmkusum_pmkusum_base_005_ARC_10",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_base_005",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "application_status": "approved",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to file a grievance for my PM-KUSUM application APP9988. My Aadhaar is 234567890124, mobile is 8543210976, and the OTP is 456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "234567890124",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "8543210976",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Now check the status of my application."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_application_status",
+          "parameters": {
+            "application_id": {
+              "value": "APP9988",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "File a grievance for vendor_delay. The vendor is not responding to my calls."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "<session_token>",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "APP9988",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "vendor_delay",
+              "eval_mode": "EXACT"
+            },
+            "grievance_remarks": {
+              "value": "The vendor is not responding to my calls.",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

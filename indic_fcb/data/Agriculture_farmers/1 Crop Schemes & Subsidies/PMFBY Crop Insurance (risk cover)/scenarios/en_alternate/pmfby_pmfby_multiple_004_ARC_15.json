@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_004_ARC_15",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_004",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "premium_payment_status": "not_paid"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to calculate the premium amount for 2 hectares of wheat for the rabi season in Coimbatore, Tamil Nadu. Please tell me quickly."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_calculate_premium",
+          "arguments": {
+            "state_name": "Tamil Nadu",
+            "district_name": "Coimbatore",
+            "season": "rabi",
+            "crop_name": "wheat",
+            "area_hectares": 2
+          },
+          "eval_modes": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "crop_name": "SUBSTRING",
+            "area_hectares": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

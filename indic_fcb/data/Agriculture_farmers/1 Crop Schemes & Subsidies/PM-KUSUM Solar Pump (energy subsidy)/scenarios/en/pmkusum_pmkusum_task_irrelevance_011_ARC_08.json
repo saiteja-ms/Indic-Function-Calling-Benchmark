@@ -1,0 +1,47 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_011_ARC_08",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_011",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "land_record_status": "not_validated",
+    "has_existing_grid_pump": false,
+    "vendor_selection_status": "not_required",
+    "installation_status": "not_scheduled",
+    "subsidy_disbursement_status": "not_initiated",
+    "farmer_share_payment_status": "not_due",
+    "pump_operational_status": "not_installed",
+    "scheme_component_selected": null,
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check and tell me what kind of feed I should give to my cows to increase milk production?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Cattle and livestock advisory is completely unrelated to solar pumps."
+    }
+  ],
+  "expected_final_state": {}
+}

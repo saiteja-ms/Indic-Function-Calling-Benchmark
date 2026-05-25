@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_012_ARC_09",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_012",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN001122334455",
+    "installation_status": "scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My pump is scheduled for setup, but I don't know when they will arrive. Can you tell me the date the vendor will come? My application ID is PK998877."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My session token is TOKEN9988. Please check."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_installation_schedule",
+          "parameters": {
+            "application_id": {
+              "value": "PK998877",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": "TOKEN9988",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "application_id": "EXACT",
+            "session_token": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

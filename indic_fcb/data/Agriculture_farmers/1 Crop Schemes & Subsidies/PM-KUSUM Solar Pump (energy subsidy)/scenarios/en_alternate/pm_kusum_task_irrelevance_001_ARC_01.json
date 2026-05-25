@@ -1,0 +1,39 @@
+{
+  "scenario_id": "pm_kusum_task_irrelevance_001_ARC_01",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_task_irrelevance_001",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN money has not come yet. I am very worried. Can you tell me when the next installment will be credited to my account?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about PM-KISAN income support, which is out of scope for PM-KUSUM solar pump tools."
+    }
+  ],
+  "expected_final_state": {}
+}

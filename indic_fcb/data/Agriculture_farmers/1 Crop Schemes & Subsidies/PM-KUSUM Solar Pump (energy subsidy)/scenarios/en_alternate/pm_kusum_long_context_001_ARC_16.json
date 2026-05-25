@@ -1,0 +1,195 @@
+{
+  "scenario_id": "pm_kusum_long_context_001_ARC_16",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_long_context_001",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "application_status": "not_applied",
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit Singh from Karnal. I want to inquire about the PM-KUSUM solar pump application. My old diesel pump broke down completely last week."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It has been very difficult because the water scarcity in our region is severe right now, and my wheat and mustard crops are drying up."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "I really need a reliable irrigation solution. I read that the government provides subsidies for solar pumps under this scheme."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "I want to go through the new application flow. I have all my details ready. My Aadhaar is 890123456780, mobile is 6210987543, and the OTP is 456789. I have 2.5 hectares of land, I want a 5 HP pump, and my bank account is PUNB 001122334455. Please authenticate me, check my eligibility, calculate the subsidy, and submit the application."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "890123456780",
+              "eval_mode": "EXACT"
+            },
+            "mobile_number": {
+              "value": "6210987543",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Since authentication is done, please check my eligibility for the 2.5 hectares of land."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_check_eligibility",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "land_size_hectares": {
+              "value": 2.5,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Great. Now calculate the subsidy for the 5 HP pump."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_calculate_subsidy",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "pump_capacity_hp": {
+              "value": 5,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 7,
+      "speaker": "user",
+      "message": "Looks good, please submit my application with my bank details PUNB and 001122334455."
+    },
+    {
+      "turn_index": 7,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_submit_application",
+          "parameters": {
+            "session_token": {
+              "value": "dummy_session_token",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "pump_capacity_hp": {
+              "value": 5,
+              "eval_mode": "EXACT"
+            },
+            "land_size_hectares": {
+              "value": 2.5,
+              "eval_mode": "EXACT"
+            },
+            "bank_account_number": {
+              "value": "001122334455",
+              "eval_mode": "EXACT"
+            },
+            "ifsc_code": {
+              "value": "PUNB",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "application_status": "submitted"
+  }
+}

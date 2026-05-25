@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_008_ARC_06",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_008",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My farm's electricity bill is very high and I am facing problems with power cuts. I want to set up a private solar plant on my land completely on my own, without any government subsidy or scheme. Can you tell me how to do this private installation?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Private solar installations are not covered by the PM-KUSUM government scheme."
+    }
+  ],
+  "expected_final_state": {}
+}

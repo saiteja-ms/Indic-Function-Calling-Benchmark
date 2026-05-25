@@ -1,0 +1,72 @@
+{
+  "scenario_id": "pmkisan_multiple_003_ARC_12",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "registration_status": "registered",
+    "ekyc_status": "pending",
+    "authenticated": true,
+    "session_token": "sess_abc123",
+    "bank_account": "PUNB0001234|1234567890",
+    "has_pending_over_90_days": true,
+    "installments": []
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to complete my eKYC for PM-KISAN. Check if I am eligible to do it right now. My beneficiary ID is PB12345678. I don't want to share my Aadhaar number unnecessarily, so just use the ID."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "aadhaar_otp",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do you need more details? Fine, the OTP I received is 456789. Just finish it quickly, I have farm work to manage and can't waste time."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_complete_ekyc",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PB12345678",
+              "eval_mode": "EXACT"
+            },
+            "aadhaar_otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "ekyc_status": "completed",
+    "has_pending_over_90_days": false
+  }
+}

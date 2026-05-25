@@ -1,0 +1,96 @@
+{
+  "scenario_id": "pmkisan_multiple_009_ARC_11",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_009",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "registration_status": "registered",
+    "bank_seeding_status": "not_seeded",
+    "authenticated": true,
+    "session_token": "sess_abc123",
+    "beneficiary_id": "PMK11223344",
+    "ekyc_status": "completed",
+    "bank_account": "ANDB0001234|112233445566",
+    "installments": [
+      {
+        "installment_id": "INST_11_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_11_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "failed"
+      },
+      {
+        "installment_id": "INST_11_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "pending"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaskaram. I am Ravi Krishna from Guntur. My PM-KISAN money has stopped coming because my bank account is not seeded. My land records are perfectly fine and verified, so there is no issue with that. I need to update my bank details to fix this problem. My beneficiary ID is PMK11223344."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "new_ifsc_code, new_account_number",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, I have the details ready. My bank is Andhra Bank. The IFSC code is ANDB0001234 and my account number is 112233445566. Please update it."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_update_bank_details",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK11223344",
+              "eval_mode": "EXACT"
+            },
+            "new_ifsc_code": {
+              "value": "ANDB0001234",
+              "eval_mode": "EXACT"
+            },
+            "new_account_number": {
+              "value": "112233445566",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "bank_seeding_status": "seeded"
+  }
+}

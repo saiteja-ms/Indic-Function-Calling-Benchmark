@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_002_ARC_10",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_002",
+  "archetype_ref": "ARC_10",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890124",
+    "mobile_number": "8543210976",
+    "bank_account": "SBIN001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to enroll my mustard and wheat crops for PMFBY crop insurance. Do it quickly, I don't have time to waste."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PMFBY crop insurance is unrelated to PM-KUSUM solar pump scheme."
+    }
+  ],
+  "expected_final_state": {}
+}

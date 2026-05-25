@@ -1,0 +1,48 @@
+{
+  "scenario_id": "pmfby_pmfby_simple_004_ARC_16",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_simple_004",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "policy_status": "active"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the contact details of the insurance company for my district? I am from Karnal, Haryana."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_insurer_contact",
+          "arguments": {
+            "state": "Haryana",
+            "district": "Karnal"
+          },
+          "eval_modes": {
+            "state": "EXACT",
+            "district": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

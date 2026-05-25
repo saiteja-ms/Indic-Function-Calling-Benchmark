@@ -1,0 +1,706 @@
+[
+  {
+    "archetype_id": "ARC_01",
+    "display_name": "Ram Bhagat — Hindi belt senior, low digital literacy",
+    "demographics": {
+      "name": "Ram Bhagat",
+      "age": 65,
+      "age_bracket": "senior",
+      "gender": "male",
+      "region": "hindi_belt",
+      "state": "Uttar Pradesh",
+      "district": "Hardoi",
+      "years_farming": 40
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.8,
+      "farmer_category": "sharecropper",
+      "primary_crops": [
+        "wheat",
+        "paddy"
+      ],
+      "irrigation_type": "rain_fed"
+    },
+    "digital_access": {
+      "digital_literacy": "level_1",
+      "smartphone_ownership": false,
+      "internet_quality": "none",
+      "access_method": "csc_operator_assists"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "first_time",
+      "knowledge_of_scheme": "unaware",
+      "documentation_readiness": "docs_missing",
+      "parameter_recall": "remembers_none"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "reactive_only",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "uncertain_repeats",
+      "risk_orientation": "process_skeptical",
+      "persistence_on_blockers": "gives_up"
+    },
+    "archetype_summary": "Senior marginal sharecropper from the Hindi belt with no digital literacy. Relies entirely on CSC operators for access. Highly skeptical of the process, struggles to recall parameters, and tends to give up easily when blocked."
+  },
+  {
+    "archetype_id": "ARC_02",
+    "display_name": "Sunita Devi — Hindi belt senior, family assisted",
+    "demographics": {
+      "name": "Sunita Devi",
+      "age": 60,
+      "age_bracket": "senior",
+      "gender": "female",
+      "region": "hindi_belt",
+      "state": "Bihar",
+      "district": "Patna",
+      "years_farming": 30
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.5,
+      "farmer_category": "tenant",
+      "primary_crops": [
+        "paddy",
+        "mustard"
+      ],
+      "irrigation_type": "partially_irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_1",
+      "smartphone_ownership": false,
+      "internet_quality": "intermittent",
+      "access_method": "family_member_assists"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_partial",
+      "parameter_recall": "remembers_none"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "reactive_only",
+      "problem_framing": "inquiry_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Senior female tenant farmer from Bihar. Has no smartphone and relies on family members to access services. Trusts the system and is patient, but only provides information reactively and asks many questions."
+  },
+  {
+    "archetype_id": "ARC_03",
+    "display_name": "Murugan Selvam — South India senior, CSC dependent",
+    "demographics": {
+      "name": "Murugan Selvam",
+      "age": 68,
+      "age_bracket": "senior",
+      "gender": "male",
+      "region": "south_india",
+      "state": "Tamil Nadu",
+      "district": "Madurai",
+      "years_farming": 45
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.9,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "paddy",
+        "groundnut"
+      ],
+      "irrigation_type": "rain_fed"
+    },
+    "digital_access": {
+      "digital_literacy": "level_1",
+      "smartphone_ownership": false,
+      "internet_quality": "intermittent",
+      "access_method": "csc_operator_assists"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_partial",
+      "parameter_recall": "remembers_partial"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "reactive_only",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "uncertain_repeats",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "gives_up"
+    },
+    "archetype_summary": "Elderly marginal owner from Tamil Nadu. Uses CSCs for all digital needs due to lack of digital literacy. Explains issues narratively, trusts the government, but gets confused by complex processes and gives up if blocked."
+  },
+  {
+    "archetype_id": "ARC_04",
+    "display_name": "Vishnu Patil — Maharashtra senior, grievance experienced",
+    "demographics": {
+      "name": "Vishnu Patil",
+      "age": 58,
+      "age_bracket": "senior",
+      "gender": "male",
+      "region": "maharashtra_gujarat",
+      "state": "Maharashtra",
+      "district": "Nashik",
+      "years_farming": 35
+    },
+    "agricultural_profile": {
+      "landholding_category": "small",
+      "landholding_hectares": 1.5,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "cotton",
+        "soybean"
+      ],
+      "irrigation_type": "partially_irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_2",
+      "smartphone_ownership": true,
+      "internet_quality": "intermittent",
+      "access_method": "self_with_difficulty"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "has_filed_grievance_before",
+      "knowledge_of_scheme": "aware_of_details",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "impatient_skips",
+      "risk_orientation": "process_skeptical",
+      "persistence_on_blockers": "escalates"
+    },
+    "archetype_summary": "Senior smallholder from Maharashtra who uses a smartphone with difficulty. Having filed grievances before, he is skeptical of the process, impatient with repetitive steps, and quick to escalate issues."
+  },
+  {
+    "archetype_id": "ARC_05",
+    "display_name": "Mamta Das — East India senior, family assisted",
+    "demographics": {
+      "name": "Mamta Das",
+      "age": 56,
+      "age_bracket": "senior",
+      "gender": "female",
+      "region": "east_bengal_odisha",
+      "state": "Odisha",
+      "district": "Cuttack",
+      "years_farming": 25
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.6,
+      "farmer_category": "sharecropper",
+      "primary_crops": [
+        "paddy",
+        "jute"
+      ],
+      "irrigation_type": "rain_fed"
+    },
+    "digital_access": {
+      "digital_literacy": "level_2",
+      "smartphone_ownership": true,
+      "internet_quality": "intermittent",
+      "access_method": "family_member_assists"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_partial",
+      "parameter_recall": "remembers_partial"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "inquiry_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Senior female sharecropper from Odisha. Owns a smartphone but relies on family to navigate apps. Patient and compliant, she asks questions to understand the process and supplies information when prompted."
+  },
+  {
+    "archetype_id": "ARC_06",
+    "display_name": "Bhola Singh — Hindi belt mid-age, cautious user",
+    "demographics": {
+      "name": "Bhola Singh",
+      "age": 45,
+      "age_bracket": "middle",
+      "gender": "male",
+      "region": "hindi_belt",
+      "state": "Madhya Pradesh",
+      "district": "Vidisha",
+      "years_farming": 20
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.9,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "wheat",
+        "soybean"
+      ],
+      "irrigation_type": "rain_fed"
+    },
+    "digital_access": {
+      "digital_literacy": "level_2",
+      "smartphone_ownership": true,
+      "internet_quality": "intermittent",
+      "access_method": "self_with_difficulty"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_partial",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "reactive_only",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "uncertain_repeats",
+      "risk_orientation": "privacy_cautious",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Middle-aged marginal farmer from MP. Uses a smartphone but struggles with complex interfaces. Cautious about sharing data, he only provides details when explicitly asked and frames his needs around his immediate problems."
+  },
+  {
+    "archetype_id": "ARC_07",
+    "display_name": "Ramesh Kumar — Hindi belt mid-age, basic smartphone user",
+    "demographics": {
+      "name": "Ramesh Kumar",
+      "age": 42,
+      "age_bracket": "middle",
+      "gender": "male",
+      "region": "hindi_belt",
+      "state": "Uttar Pradesh",
+      "district": "Sitapur",
+      "years_farming": 18
+    },
+    "agricultural_profile": {
+      "landholding_category": "small",
+      "landholding_hectares": 1.2,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "sugarcane",
+        "wheat"
+      ],
+      "irrigation_type": "partially_irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_2",
+      "smartphone_ownership": true,
+      "internet_quality": "intermittent",
+      "access_method": "self_with_difficulty"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_partial",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Mid-age small landholder from the Hindi belt with basic smartphone access. Describes problems narratively rather than providing structured parameters. Provides Aadhaar when asked and tends to retry patiently when blocked."
+  },
+  {
+    "archetype_id": "ARC_08",
+    "display_name": "Geetha R. — South India mid-age, first-time tenant",
+    "demographics": {
+      "name": "Geetha R.",
+      "age": 38,
+      "age_bracket": "middle",
+      "gender": "female",
+      "region": "south_india",
+      "state": "Karnataka",
+      "district": "Mandya",
+      "years_farming": 15
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.7,
+      "farmer_category": "tenant",
+      "primary_crops": [
+        "ragi",
+        "paddy"
+      ],
+      "irrigation_type": "irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_2",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_with_difficulty"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "first_time",
+      "knowledge_of_scheme": "unaware",
+      "documentation_readiness": "docs_missing",
+      "parameter_recall": "remembers_none"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "inquiry_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "privacy_cautious",
+      "persistence_on_blockers": "gives_up"
+    },
+    "archetype_summary": "Middle-aged female tenant farmer from Karnataka. First-time user of digital schemes, she is unaware of requirements and lacks documentation. She asks many questions but gives up if the process becomes too complex."
+  },
+  {
+    "archetype_id": "ARC_09",
+    "display_name": "Tarun Borah — Northeast mid-age, family assisted",
+    "demographics": {
+      "name": "Tarun Borah",
+      "age": 40,
+      "age_bracket": "middle",
+      "gender": "male",
+      "region": "northeast_hilly",
+      "state": "Assam",
+      "district": "Sonitpur",
+      "years_farming": 20
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.8,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "tea",
+        "paddy"
+      ],
+      "irrigation_type": "rain_fed"
+    },
+    "digital_access": {
+      "digital_literacy": "level_3",
+      "smartphone_ownership": true,
+      "internet_quality": "intermittent",
+      "access_method": "family_member_assists"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_partial"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Mid-age marginal farmer from Assam. Has moderate digital literacy but prefers family assistance due to intermittent internet. Patient and compliant, he supplies information as requested and retries when connectivity drops."
+  },
+  {
+    "archetype_id": "ARC_10",
+    "display_name": "Ram Niwas — Hindi belt mid-age, medium landholder",
+    "demographics": {
+      "name": "Ram Niwas",
+      "age": 50,
+      "age_bracket": "middle",
+      "gender": "male",
+      "region": "hindi_belt",
+      "state": "Rajasthan",
+      "district": "Kota",
+      "years_farming": 25
+    },
+    "agricultural_profile": {
+      "landholding_category": "medium",
+      "landholding_hectares": 3.0,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "mustard",
+        "wheat"
+      ],
+      "irrigation_type": "irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_3",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_smartphone"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "has_filed_grievance_before",
+      "knowledge_of_scheme": "aware_of_details",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "task_oriented",
+      "patience_with_process": "impatient_skips",
+      "risk_orientation": "process_skeptical",
+      "persistence_on_blockers": "escalates"
+    },
+    "archetype_summary": "Medium landholder from Rajasthan who is comfortable using his smartphone. Having faced issues before, he is task-oriented, impatient with delays, and quick to escalate if the system blocks him."
+  },
+  {
+    "archetype_id": "ARC_11",
+    "display_name": "Ravi Krishna — South India mid-age, independent user",
+    "demographics": {
+      "name": "Ravi Krishna",
+      "age": 48,
+      "age_bracket": "middle",
+      "gender": "male",
+      "region": "south_india",
+      "state": "Andhra Pradesh",
+      "district": "Guntur",
+      "years_farming": 22
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.9,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "cotton",
+        "paddy"
+      ],
+      "irrigation_type": "partially_irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_3",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_smartphone"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Mid-age marginal farmer from Andhra Pradesh. Uses his smartphone independently with reliable internet. He is a repeat beneficiary who trusts the system, frames issues around his problems, and patiently retries if needed."
+  },
+  {
+    "archetype_id": "ARC_12",
+    "display_name": "Harpreet Kaur — Punjab mid-age, large landholder",
+    "demographics": {
+      "name": "Harpreet Kaur",
+      "age": 44,
+      "age_bracket": "middle",
+      "gender": "female",
+      "region": "punjab_haryana",
+      "state": "Punjab",
+      "district": "Ludhiana",
+      "years_farming": 15
+    },
+    "agricultural_profile": {
+      "landholding_category": "large",
+      "landholding_hectares": 5.5,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "wheat",
+        "paddy"
+      ],
+      "irrigation_type": "irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_3",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_smartphone"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_details",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "task_oriented",
+      "patience_with_process": "impatient_skips",
+      "risk_orientation": "privacy_cautious",
+      "persistence_on_blockers": "escalates"
+    },
+    "archetype_summary": "Female large landholder from Punjab. Manages her farm digitally and is highly task-oriented. She knows scheme details well but is impatient with redundant steps and cautious about data privacy."
+  },
+  {
+    "archetype_id": "ARC_13",
+    "display_name": "Suresh Joshi — Gujarat mid-age, FPO member",
+    "demographics": {
+      "name": "Suresh Joshi",
+      "age": 36,
+      "age_bracket": "middle",
+      "gender": "male",
+      "region": "maharashtra_gujarat",
+      "state": "Gujarat",
+      "district": "Rajkot",
+      "years_farming": 12
+    },
+    "agricultural_profile": {
+      "landholding_category": "small",
+      "landholding_hectares": 1.8,
+      "farmer_category": "fpo_member",
+      "primary_crops": [
+        "groundnut",
+        "cotton"
+      ],
+      "irrigation_type": "irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_4",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_smartphone"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "first_time",
+      "knowledge_of_scheme": "aware_of_details",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "upfront_complete",
+      "problem_framing": "task_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Progressive FPO member from Gujarat. Highly digitally literate, he provides all necessary information upfront to complete tasks efficiently. Though a first-time user of specific schemes, he is well-prepared and compliant."
+  },
+  {
+    "archetype_id": "ARC_14",
+    "display_name": "Amit Chaudhary — Hindi belt young, tech-savvy",
+    "demographics": {
+      "name": "Amit Chaudhary",
+      "age": 28,
+      "age_bracket": "young",
+      "gender": "male",
+      "region": "hindi_belt",
+      "state": "Uttar Pradesh",
+      "district": "Meerut",
+      "years_farming": 8
+    },
+    "agricultural_profile": {
+      "landholding_category": "marginal",
+      "landholding_hectares": 0.9,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "sugarcane",
+        "wheat"
+      ],
+      "irrigation_type": "irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_4",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_smartphone"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "repeat_beneficiary",
+      "knowledge_of_scheme": "aware_of_basics",
+      "documentation_readiness": "docs_partial",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "partial_then_supply",
+      "problem_framing": "problem_oriented",
+      "patience_with_process": "impatient_skips",
+      "risk_orientation": "privacy_cautious",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Young marginal farmer from UP. Very comfortable with smartphones but impatient with slow processes. He is privacy-cautious, supplies information as needed, and frames his interactions around solving specific farm issues."
+  },
+  {
+    "archetype_id": "ARC_15",
+    "display_name": "Lakshmi V. — South India young, highly literate",
+    "demographics": {
+      "name": "Lakshmi V.",
+      "age": 25,
+      "age_bracket": "young",
+      "gender": "female",
+      "region": "south_india",
+      "state": "Tamil Nadu",
+      "district": "Coimbatore",
+      "years_farming": 5
+    },
+    "agricultural_profile": {
+      "landholding_category": "small",
+      "landholding_hectares": 1.4,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "cotton",
+        "groundnut"
+      ],
+      "irrigation_type": "irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_5",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_smartphone"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "has_filed_grievance_before",
+      "knowledge_of_scheme": "aware_of_details",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "upfront_complete",
+      "problem_framing": "task_oriented",
+      "patience_with_process": "impatient_skips",
+      "risk_orientation": "process_skeptical",
+      "persistence_on_blockers": "escalates"
+    },
+    "archetype_summary": "Young, highly educated female farmer from Tamil Nadu. Expects seamless digital experiences and provides all data upfront. Having faced system failures before, she is skeptical and escalates issues immediately if blocked."
+  },
+  {
+    "archetype_id": "ARC_16",
+    "display_name": "Ranjit Singh — Punjab young, inquiry-driven",
+    "demographics": {
+      "name": "Ranjit Singh",
+      "age": 30,
+      "age_bracket": "young",
+      "gender": "male",
+      "region": "punjab_haryana",
+      "state": "Haryana",
+      "district": "Karnal",
+      "years_farming": 10
+    },
+    "agricultural_profile": {
+      "landholding_category": "medium",
+      "landholding_hectares": 2.5,
+      "farmer_category": "owner",
+      "primary_crops": [
+        "wheat",
+        "mustard"
+      ],
+      "irrigation_type": "irrigated"
+    },
+    "digital_access": {
+      "digital_literacy": "level_5",
+      "smartphone_ownership": true,
+      "internet_quality": "reliable",
+      "access_method": "self_smartphone"
+    },
+    "scheme_experience": {
+      "prior_scheme_experience": "first_time",
+      "knowledge_of_scheme": "aware_of_details",
+      "documentation_readiness": "docs_ready",
+      "parameter_recall": "remembers_aadhaar"
+    },
+    "behavioural_archetype": {
+      "information_disclosure": "upfront_complete",
+      "problem_framing": "inquiry_oriented",
+      "patience_with_process": "patient_compliant",
+      "risk_orientation": "trusts_system",
+      "persistence_on_blockers": "retries"
+    },
+    "archetype_summary": "Young medium landholder from Haryana. Highly digitally literate and well-researched on scheme details. Though a first-time applicant, he provides complete information upfront and asks detailed questions to ensure he understands the process."
+  }
+]

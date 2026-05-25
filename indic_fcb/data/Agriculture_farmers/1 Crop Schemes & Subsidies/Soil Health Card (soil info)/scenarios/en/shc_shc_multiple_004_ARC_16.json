@@ -1,0 +1,54 @@
+{
+  "scenario_id": "shc_shc_multiple_004_ARC_16",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_004",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB001122334455",
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check what fertilizer I should use for paddy? My soil health card ID is SHC-HR-998877."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_fertilizer_recommendation",
+          "parameters": {
+            "card_id": {
+              "value": "SHC-HR-998877",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "card_id": "EXACT",
+            "crop_name": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

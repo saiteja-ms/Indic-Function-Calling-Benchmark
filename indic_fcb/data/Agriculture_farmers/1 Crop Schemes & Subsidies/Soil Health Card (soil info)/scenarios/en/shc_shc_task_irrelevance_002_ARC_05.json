@@ -1,0 +1,36 @@
+{
+  "scenario_id": "shc_shc_task_irrelevance_002_ARC_05",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_task_irrelevance_002",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My grandson is helping me check my soil health card on the phone. Can you tell me the exact nitrogen and phosphorus levels from my issued card so we can plan the fertilizer for our paddy crop?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User wants to read specific soil nutrient values for fertilizer planning, which belongs to the SHC portal usecase, not the enrollment and testing workflow."
+    }
+  ],
+  "expected_final_state": {}
+}

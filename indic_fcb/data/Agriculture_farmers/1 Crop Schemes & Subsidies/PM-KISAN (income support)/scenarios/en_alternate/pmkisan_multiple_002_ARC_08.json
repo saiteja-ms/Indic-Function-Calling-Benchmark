@@ -1,0 +1,88 @@
+{
+  "scenario_id": "pmkisan_multiple_002_ARC_08",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_002",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "registration_status": "registered",
+    "installments_credited": 3,
+    "authenticated": true,
+    "session_token": "SESS_12345",
+    "ekyc_status": "completed",
+    "bank_account": "CNRB0001234|001122334455",
+    "beneficiary_id": "PMK90123456",
+    "installments": [
+      {
+        "installment_id": "INST_08_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-04-15"
+      },
+      {
+        "installment_id": "INST_08_2",
+        "installment_number": "installment_2",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-08-10"
+      },
+      {
+        "installment_id": "INST_08_3",
+        "installment_number": "installment_3",
+        "amount": 2000,
+        "status": "credited",
+        "credit_date": "2024-12-05"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaskara. I want to check my PM-KISAN status. Can you show me the records of my past transactions? My Aadhaar number is 901234567890 and mobile is 6432109875."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Yes, I have my beneficiary ID. It is PMK90123456. Is it safe to share this with you?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_get_payment_history",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK90123456",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {}
+}

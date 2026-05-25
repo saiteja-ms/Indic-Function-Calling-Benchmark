@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_func_008_ARC_05",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_func_008",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application APP98765 has been approved for the solar pump. However, I am unable to continue farming and want to transfer this approval to my brother's name. Can you please transfer it for me?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "transfer approval to another farmer",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

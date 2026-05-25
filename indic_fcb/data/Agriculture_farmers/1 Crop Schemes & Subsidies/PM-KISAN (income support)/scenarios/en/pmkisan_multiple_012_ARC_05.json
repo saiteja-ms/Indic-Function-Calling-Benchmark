@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmkisan_multiple_012_ARC_05",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_012",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA|001122334455",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My grandson is helping me use this app. I want to check my status for the PM-KISAN scheme. I am not registered yet, but I want to see if I am eligible for a new registration. My Aadhaar number is 678901234567 and my mobile number is 9765432108. Can you please check for me?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234567",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

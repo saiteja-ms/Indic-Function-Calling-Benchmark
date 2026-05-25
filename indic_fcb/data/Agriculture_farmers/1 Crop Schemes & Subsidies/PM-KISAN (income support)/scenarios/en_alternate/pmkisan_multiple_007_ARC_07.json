@@ -1,0 +1,86 @@
+{
+  "scenario_id": "pmkisan_multiple_007_ARC_07",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_007",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "registration_status": "registered",
+    "ekyc_status": "completed",
+    "authenticated": true,
+    "session_token": "tok_123",
+    "beneficiary_id": "UP123456789",
+    "installments": [
+      {
+        "installment_id": "INST_07_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "failed",
+        "credit_date": "2024-04-15"
+      }
+    ],
+    "bank_account": "SBIN0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Namaste, mera PM-KISAN ka pichla kist fail ho gaya hai. Mujhe iske baare mein ek formal complaint darj karni hai."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Mera beneficiary ID UP123456789 hai. Likh dijiye ki mera payment fail ho gaya hai aur mujhe paisa nahi mila."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "tok_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "UP123456789",
+              "eval_mode": "EXACT"
+            },
+            "category": {
+              "value": "payment_not_received",
+              "eval_mode": "EXACT"
+            },
+            "description": {
+              "value": "fail",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

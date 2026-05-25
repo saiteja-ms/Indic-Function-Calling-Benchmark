@@ -1,0 +1,81 @@
+{
+  "scenario_id": "pmkusum_multiple_002_ARC_08",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_002",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I qualify for the solar pump scheme? I want to apply for Component B. I have 1.7 acres of land in Karnataka, Mandya district, survey number 123/4."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "land_type",
+        "electricity_connection_status"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My land is irrigated and I currently have no grid connection."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_check_eligibility",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 1.7,
+              "eval_mode": "EXACT"
+            },
+            "land_type": {
+              "value": "irrigated",
+              "eval_mode": "EXACT"
+            },
+            "electricity_connection_status": {
+              "value": "no_connection",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "scheme_component": "EXACT",
+            "land_area_acres": "EXACT",
+            "land_type": "EXACT",
+            "electricity_connection_status": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

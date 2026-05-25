@@ -1,0 +1,62 @@
+{
+  "scenario_id": "pmkisan_multiple_008_ARC_16",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_008",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "registration_status": "registered",
+    "payment_failure_reason": "bank_account_invalid",
+    "authenticated": true,
+    "session_token": "sess_abc123",
+    "beneficiary_id": "BEN987654321",
+    "failed_transaction_id": "TXN1234567890123",
+    "bank_account": "PUNB0001234|1234567890"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, I am Ranjit Singh. I am quite aggrieved that my recent PM-KISAN payment failed due to an invalid bank account. I have already updated my bank account details to fix this. Can you please resolve this payment failure and initiate a retry? My beneficiary ID is BEN987654321 and the failed transaction ID is TXN1234567890123. Will this be processed soon?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "BEN987654321",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated bank account",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

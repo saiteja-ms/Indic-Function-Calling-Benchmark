@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_func_006_ARC_02",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_func_006",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "vendor_selection_status": "confirmed",
+    "installation_status": "scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you cancel my application? The vendor is confirmed and installation is scheduled."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "cancel application after vendor is confirmed and installation is scheduled",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

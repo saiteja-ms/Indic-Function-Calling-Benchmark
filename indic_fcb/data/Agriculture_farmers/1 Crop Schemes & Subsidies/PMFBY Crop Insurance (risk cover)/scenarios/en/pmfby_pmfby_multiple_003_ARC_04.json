@@ -1,0 +1,71 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_003_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_003",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My enrollment is not done yet because I don't know the cost. I want to calculate the premium for my cotton crop. I am from Nashik, Maharashtra."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "area_hectares"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am planting for the kharif season on 1.5 hectares. Just tell me the amount quickly, I don't want to go round in circles."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_calculate_premium",
+          "arguments": {
+            "state_name": "Maharashtra",
+            "district_name": "Nashik",
+            "season": "kharif",
+            "crop_name": "cotton",
+            "area_hectares": 1.5
+          },
+          "eval_modes": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "crop_name": "SUBSTRING",
+            "area_hectares": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

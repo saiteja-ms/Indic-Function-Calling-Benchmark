@@ -1,0 +1,93 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_004_ARC_03",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_004",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "has_active_grievance": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump is not working properly and the subsidy is also delayed. I went to the CSC center and they filed two complaints for me. Can you check what happened to them?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The CSC operator gave me a slip with the complaint numbers. I am not sure how to check them. Do you need the numbers from the slip?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Okay, let me read them. The first complaint number is TN-GRV-8822 and the second one is TN-GRV-9933. Please check both."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "TN-GRV-8822",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmkusum_track_grievance_status",
+          "parameters": {
+            "grievance_id": {
+              "value": "TN-GRV-9933",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

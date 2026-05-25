@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_func_001_ARC_02",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_func_001",
+  "archetype_ref": "ARC_02",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901234",
+    "mobile_number": "8765432109",
+    "bank_account": "SBIN001122334455",
+    "has_existing_grid_pump": true
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check if I can apply for Component B? I already have an active grid electricity connection for irrigation."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "apply for Component B with existing grid electricity connection for irrigation",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

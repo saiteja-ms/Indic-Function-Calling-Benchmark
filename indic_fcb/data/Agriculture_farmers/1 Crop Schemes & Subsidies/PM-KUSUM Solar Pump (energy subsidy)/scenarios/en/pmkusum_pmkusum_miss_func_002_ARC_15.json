@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_func_002_ARC_15",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_func_002",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to apply for Component B on my non-cultivable land. I have 1.4 acres and no electricity connection."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "apply for Component B on non-cultivable land",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

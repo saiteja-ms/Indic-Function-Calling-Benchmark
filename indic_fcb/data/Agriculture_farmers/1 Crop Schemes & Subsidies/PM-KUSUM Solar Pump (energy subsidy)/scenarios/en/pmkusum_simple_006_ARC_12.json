@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmkusum_simple_006_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_006",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "application_status": "not_submitted",
+    "eligibility_status": "eligible",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to submit my PM-KUSUM application for component_a. My session token is TOKEN123."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "survey_number",
+        "pump_capacity_hp"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My survey number is 456/7 and I need a 7.5 HP pump. Please do it quickly, I don't have all day."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_submit_application",
+          "arguments": {
+            "session_token": "TOKEN123",
+            "scheme_component": "component_a",
+            "survey_number": "456/7",
+            "pump_capacity_hp": "7.5"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "scheme_component": "EXACT",
+            "survey_number": "EXACT",
+            "pump_capacity_hp": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "application_status": "submitted"
+  }
+}

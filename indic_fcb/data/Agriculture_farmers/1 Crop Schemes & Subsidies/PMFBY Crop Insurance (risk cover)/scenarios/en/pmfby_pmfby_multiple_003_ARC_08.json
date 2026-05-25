@@ -1,0 +1,86 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_003_ARC_08",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_003",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check how much I will pay for insurance? I want to insure my ragi crop in Mandya, Karnataka."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "area_hectares"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is for the kharif season, and I have 0.7 hectares of land."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Karnataka",
+              "eval_mode": "EXACT"
+            },
+            "district_name": {
+              "value": "Mandya",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "ragi",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": 0.7,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_name": "SUBSTRING",
+            "district_name": "SUBSTRING",
+            "season": "EXACT",
+            "crop_name": "SUBSTRING",
+            "area_hectares": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

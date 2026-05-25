@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_func_001_ARC_11",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_001",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "cutoff_date_passed": true,
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crop insurance enrollment is pending and I want to enroll now, even though the season cutoff date has passed."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "enroll after the season cutoff date has passed",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

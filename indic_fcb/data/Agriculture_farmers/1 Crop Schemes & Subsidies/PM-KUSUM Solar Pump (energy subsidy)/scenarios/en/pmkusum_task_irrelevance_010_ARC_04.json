@@ -1,0 +1,47 @@
+{
+  "scenario_id": "pmkusum_task_irrelevance_010_ARC_04",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_010",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted",
+    "land_record_status": "not_validated",
+    "has_existing_grid_pump": false,
+    "vendor_selection_status": "not_required",
+    "installation_status": "not_scheduled",
+    "subsidy_disbursement_status": "not_initiated",
+    "farmer_share_payment_status": "not_due",
+    "pump_operational_status": "not_installed",
+    "scheme_component_selected": null,
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My old tractor is completely broken and I cannot farm properly. I need a subsidy for a new tractor immediately. My Aadhaar is 567890123456. If you don't process this quickly, I will complain to a senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Tractor and farm machinery subsidies are handled by SMAM, not PM-KUSUM."
+    }
+  ],
+  "expected_final_state": {}
+}

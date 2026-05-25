@@ -1,0 +1,67 @@
+{
+  "scenario_id": "pmkusum_parallel_multiple_003_ARC_04",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_multiple_003",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "application_status": "approved",
+    "installation_status": "scheduled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My solar pump application is approved but I don't know the current status or when it will be installed. My application ID is PK98765."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am losing patience with these repetitive steps. My session token is TKN-8822. Tell me the status and schedule right now or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmkusum_get_application_status",
+          "arguments": {
+            "application_id": "PK98765"
+          }
+        },
+        {
+          "name": "pmkusum_get_installation_schedule",
+          "arguments": {
+            "application_id": "PK98765",
+            "session_token": "TKN-8822"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

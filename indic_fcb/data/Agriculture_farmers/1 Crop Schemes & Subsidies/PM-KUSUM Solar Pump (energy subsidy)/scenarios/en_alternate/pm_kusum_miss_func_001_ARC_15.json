@@ -1,0 +1,54 @@
+{
+  "scenario_id": "pm_kusum_miss_func_001_ARC_15",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_miss_func_001",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "land_ownership": "tenant",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to apply for a standalone solar pump under Component B. I am a tenant farmer and I do not have the landowner's consent, but I need the pump immediately. My Aadhaar is 789012345679 and mobile is 7321098654. Process this application right now."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "I cannot process the application because PM-KUSUM requires land ownership or explicit landowner consent for installation.",
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "This is unacceptable. I have been farming this land for 5 years. If you don't approve this, I will raise a formal complaint with the district agricultural officer today."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

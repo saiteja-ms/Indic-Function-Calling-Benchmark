@@ -1,0 +1,80 @@
+{
+  "scenario_id": "atma_atma_simple_016_ARC_07",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_016",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "query_status": "closed",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I submitted a question to the agriculture expert, but they just closed it without giving me any reply. I want to file a formal complaint about this."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "query_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My query ID is Q-7765. Also, my session token is 98765. Please file the grievance."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "98765",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "query_not_answered",
+              "eval_mode": "EXACT"
+            },
+            "query_id": {
+              "value": "Q-7765",
+              "eval_mode": "EXACT"
+            },
+            "grievance_details": {
+              "value": "submitted a question to the agriculture expert, but they just closed it without giving me any reply",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

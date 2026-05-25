@@ -1,0 +1,209 @@
+{
+  "scenario_id": "atma_base_003_ARC_01",
+  "usecase": "atma",
+  "intent_ref": "atma_base_003",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN001122334455",
+    "farmer_profile_status": "verified",
+    "certificate_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son is helping me at the CSC. I want to find out about training for wheat in Hardoi, Uttar Pradesh. I need to go in person."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_get_available_trainings",
+          "arguments": {
+            "state": "uttar_pradesh",
+            "district": "hardoi",
+            "crop_name": "wheat",
+            "training_mode": "in_person"
+          },
+          "eval_mode": {
+            "state": "EXACT",
+            "district": "EXACT",
+            "crop_name": "EXACT",
+            "training_mode": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Okay, I want to register for the training with ID TRN-998. But I don't know how to log in."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number",
+        "mobile_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "My Aadhaar is 234567890123 and mobile is 9876543210."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_authenticate",
+          "arguments": {
+            "aadhaar_number": "234567890123",
+            "mobile_number": "9876543210"
+          },
+          "eval_mode": {
+            "aadhaar_number": "EXACT",
+            "mobile_number": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "The OTP is 456789."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_authenticate",
+          "arguments": {
+            "aadhaar_number": "234567890123",
+            "mobile_number": "9876543210",
+            "otp": "456789"
+          },
+          "eval_mode": {
+            "aadhaar_number": "EXACT",
+            "mobile_number": "EXACT",
+            "otp": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Now please register me for TRN-998."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_register_for_training",
+          "arguments": {
+            "session_token": "token_123",
+            "training_id": "TRN-998"
+          },
+          "eval_mode": {
+            "session_token": "TYPE_ONLY",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "I went to the training. The code they gave me is ATT-55. Can you confirm my attendance?"
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_confirm_training_attendance",
+          "arguments": {
+            "session_token": "token_123",
+            "training_id": "TRN-998",
+            "attendance_code": "ATT-55"
+          },
+          "eval_mode": {
+            "session_token": "TYPE_ONLY",
+            "training_id": "EXACT",
+            "attendance_code": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 7,
+      "speaker": "user",
+      "message": "Okay, now I need to download the certificate for TRN-998."
+    },
+    {
+      "turn_index": 7,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "atma_download_training_certificate",
+          "arguments": {
+            "session_token": "token_123",
+            "training_id": "TRN-998"
+          },
+          "eval_mode": {
+            "session_token": "TYPE_ONLY",
+            "training_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "training_registration_status": "registered",
+    "attendance_confirmed": true,
+    "certificate_status": "downloaded"
+  }
+}

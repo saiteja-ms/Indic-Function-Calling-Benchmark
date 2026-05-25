@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmkisan_irrelevance_003_ARC_03",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_003",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My paddy crop is not growing well. I gave my soil for testing and applied for a Soil Health Card. Can you tell me if my card is ready?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil Health Card scheme handles soil testing, not PM-KISAN."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Are you sure you cannot check it? I don't know how to check it myself. I will just leave it and ask the CSC operator next time."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil Health Card scheme handles soil testing, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,70 @@
+{
+  "scenario_id": "pmkusum_pmkusum_multiple_005_ARC_08",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_multiple_005",
+  "archetype_ref": "ARC_08",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "901234567890",
+    "mobile_number": "6432109875",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "eligible"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check what capacity of solar pump I can get for my farm? I am a tenant farmer and I have 1.7 acres of land."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "water_table_depth_meters"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The groundwater depth is 40 meters."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 40,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 1.7,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "water_table_depth_meters": "EXACT",
+            "land_area_acres": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,53 @@
+{
+  "scenario_id": "pm_kusum_simple_003_ARC_09",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_simple_003",
+  "archetype_ref": "ARC_09",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "123456789012",
+    "mobile_number": "9654321087",
+    "bank_account": "SBIN|001122334455",
+    "solar_pump_installation_status": "not_applied",
+    "subsidy_status": "not_started",
+    "electricity_connection_status": "unavailable",
+    "land_records_verified": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My son is helping me look this up because our internet keeps dropping. We are having trouble finding reliable solar pump installers for our farm. Can you give me the list of empanelled vendors for Sonitpur district in Assam?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_get_vendor_list",
+          "parameters": {
+            "state": {
+              "value": "Assam",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "Sonitpur",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

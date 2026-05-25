@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmkusum_task_irrelevance_003_ARC_14",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_003",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is not doing well. I applied for a soil health card last month but haven't received it yet. Can you check the status of my soil health card quickly?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil health card status cannot be checked using PM-KUSUM tools."
+    }
+  ],
+  "expected_final_state": {}
+}

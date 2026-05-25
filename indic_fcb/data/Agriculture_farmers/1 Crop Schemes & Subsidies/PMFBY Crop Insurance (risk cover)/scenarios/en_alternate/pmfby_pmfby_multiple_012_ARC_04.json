@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_012_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_012",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "premium_payment_status": "paid",
+    "policy_status": "not_issued",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My premium was deducted but the policy is not issued yet. I want to file a complaint. My application ID is APP-998877."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_category",
+        "grievance_description"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I don't have time for this back and forth! The category is premium_deduction_dispute. For the description, write: Premium was deducted from my Bank of India account but policy is still not issued. Please resolve this immediately or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "dummy_token",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "APP-998877",
+            "grievance_description": "Premium was deducted from my Bank of India account but policy is still not issued. Please resolve this immediately or I will complain to a senior officer."
+          },
+          "eval_mode": {
+            "session_token": "TYPE_ONLY",
+            "grievance_category": "EXACT",
+            "reference_id": "EXACT",
+            "grievance_description": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "grievance_status": "filed"
+  }
+}

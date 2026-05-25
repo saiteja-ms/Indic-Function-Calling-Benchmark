@@ -1,0 +1,71 @@
+{
+  "scenario_id": "shc_shc_parallel_multiple_002_ARC_16",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_parallel_multiple_002",
+  "archetype_ref": "ARC_16",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456780",
+    "mobile_number": "6210987543",
+    "bank_account": "PUNB|001122334455",
+    "sampling_window_status": "closed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the nearby soil testing labs for Haryana state (state code HR) and district code KRN? Also, I need to know the sampling window for the rabi cropping season in the same district."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_nearby_labs",
+          "parameters": {
+            "state_code": {
+              "value": "HR",
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": "KRN",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_code": "EXACT",
+            "district_code": "EXACT"
+          }
+        },
+        {
+          "tool_name": "shc_get_sampling_window",
+          "parameters": {
+            "district_code": {
+              "value": "KRN",
+              "eval_mode": "EXACT"
+            },
+            "cropping_season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "district_code": "EXACT",
+            "cropping_season": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

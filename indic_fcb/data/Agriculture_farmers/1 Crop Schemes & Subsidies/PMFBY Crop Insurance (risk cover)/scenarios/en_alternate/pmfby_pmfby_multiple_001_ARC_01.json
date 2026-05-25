@@ -1,0 +1,62 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_001_ARC_01",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_001",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN|001122334455",
+    "enrollment_status": "applied"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "The CSC operator filled my form for crop insurance, but I don't know what happened to it. My application is stuck maybe? I want to know my insurance status."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "aadhaar_number"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Let me check... my Aadhaar number is 234567890123. Can you check now? Please check if it is applied."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_get_enrollment_status",
+          "arguments": {
+            "aadhaar_number": "234567890123"
+          },
+          "eval_mode": {
+            "aadhaar_number": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

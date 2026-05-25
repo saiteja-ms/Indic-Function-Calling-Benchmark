@@ -1,0 +1,125 @@
+{
+  "scenario_id": "pmkusum_parallel_multiple_002_ARC_03",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_multiple_002",
+  "archetype_ref": "ARC_03",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012345",
+    "mobile_number": "7654321098",
+    "bank_account": "CNRB001122334455",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My application got approved, but I am confused about the next steps. I need to know the subsidy amount I will get and also the list of vendors who can install the pump. Can you help me with both?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "state_code",
+        "district_code",
+        "pump_capacity_hp",
+        "scheme_component",
+        "farmer_category",
+        "state_region_category"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am from Tamil Nadu, state code 33, and Madurai district, code 604. I want a 5 HP pump. Did you get that correctly?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "scheme_component",
+        "farmer_category",
+        "state_region_category"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "It is for Component B. I belong to the general category, and my state is in the normal region. Can you check both things now?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_empanelled_vendors",
+          "parameters": {
+            "state_code": {
+              "value": 33,
+              "eval_mode": "EXACT"
+            },
+            "district_code": {
+              "value": 604,
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5 HP",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "state_code": "EXACT",
+            "district_code": "EXACT",
+            "pump_capacity_hp": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmkusum_calculate_subsidy",
+          "parameters": {
+            "scheme_component": {
+              "value": "Component B",
+              "eval_mode": "EXACT"
+            },
+            "pump_capacity_hp": {
+              "value": "5 HP",
+              "eval_mode": "EXACT"
+            },
+            "farmer_category": {
+              "value": "general",
+              "eval_mode": "EXACT"
+            },
+            "state_region_category": {
+              "value": "normal",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "scheme_component": "EXACT",
+            "pump_capacity_hp": "EXACT",
+            "farmer_category": "EXACT",
+            "state_region_category": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

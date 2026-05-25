@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmkusum_pmkusum_task_irrelevance_001_ARC_15",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_001",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "eligibility_status": "unknown",
+    "application_status": "not_submitted"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the status of my PM-KISAN income support installment. My Aadhaar is 789012345679 and my mobile number is 7321098654. Please tell me immediately when the next amount will be credited to my account, I don't want to wait."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "PM-KISAN income support is a different scheme and not handled by PM-KUSUM tools."
+    }
+  ],
+  "expected_final_state": {}
+}

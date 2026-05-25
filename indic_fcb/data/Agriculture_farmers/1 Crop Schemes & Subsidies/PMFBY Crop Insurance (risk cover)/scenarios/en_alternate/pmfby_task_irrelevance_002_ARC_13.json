@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_task_irrelevance_002_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_002",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the status of my soil health card and the recent soil test results for my groundnut and cotton fields. My Aadhaar number is 567890123457 and my mobile number is 9543210876."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil health card status is unrelated to crop insurance enrollment."
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmkusum_task_irrelevance_003_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_task_irrelevance_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "application_status": "not_submitted",
+    "eligibility_status": "unknown"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the status of my soil health card. Pull up the details quickly, I don't have time to waste."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Soil health card status cannot be checked using PM-KUSUM tools."
+    }
+  ],
+  "expected_final_state": {}
+}

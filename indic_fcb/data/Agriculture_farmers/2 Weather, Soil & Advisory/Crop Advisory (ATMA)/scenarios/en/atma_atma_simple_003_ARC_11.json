@@ -1,0 +1,79 @@
+{
+  "scenario_id": "atma_atma_simple_003_ARC_11",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_003",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB001122334455",
+    "farmer_profile_status": "registered"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My cotton crop is facing some issues and I need to check the latest advisory bulletin for it. I am from Guntur, Andhra Pradesh."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "crop_stage",
+        "advisory_type"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The crop is currently in the vegetative stage, and I am looking for crop management advice."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_get_advisory_bulletin",
+          "parameters": {
+            "state": {
+              "value": "andhra_pradesh",
+              "eval_mode": "EXACT"
+            },
+            "district": {
+              "value": "guntur",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "cotton",
+              "eval_mode": "EXACT"
+            },
+            "crop_stage": {
+              "value": "vegetative",
+              "eval_mode": "EXACT"
+            },
+            "advisory_type": {
+              "value": "crop_management",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

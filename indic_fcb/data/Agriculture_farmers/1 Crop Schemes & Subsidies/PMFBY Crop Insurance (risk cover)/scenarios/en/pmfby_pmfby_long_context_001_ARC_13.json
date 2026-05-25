@@ -1,0 +1,296 @@
+{
+  "scenario_id": "pmfby_pmfby_long_context_001_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_long_context_001",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Hello, the weather has been quite unpredictable lately in Gujarat."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am hoping the monsoon will be good for my groundnut crop this year."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Being part of an FPO helps, but we still worry about crop losses."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Anyway, I want to enroll for crop insurance. My mobile number is 9543210876 and Aadhaar is 567890123457. The OTP is 456789. I want to check eligibility for groundnut in kharif season in Rajkot, Gujarat. My land is in village Mota, survey number 123/4, area 1.8 hectares. I also want to calculate the premium, submit the enrollment, and pay the premium."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_authenticate",
+          "parameters": {
+            "mobile_number": {
+              "value": "9543210876",
+              "eval_mode": "EXACT"
+            },
+            "aadhaar_number": {
+              "value": "567890123457",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 5,
+      "speaker": "user",
+      "message": "Please proceed with checking eligibility."
+    },
+    {
+      "turn_index": 5,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_check_eligibility",
+          "parameters": {
+            "session_token": {
+              "value": "<session_token>",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "state_name": {
+              "value": "Gujarat",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Rajkot",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "groundnut",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 6,
+      "speaker": "user",
+      "message": "Now validate my land records."
+    },
+    {
+      "turn_index": 6,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_validate_land_records",
+          "parameters": {
+            "state_name": {
+              "value": "Gujarat",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Rajkot",
+              "eval_mode": "SUBSTRING"
+            },
+            "village_name": {
+              "value": "Mota",
+              "eval_mode": "SUBSTRING"
+            },
+            "survey_number": {
+              "value": "123/4",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 7,
+      "speaker": "user",
+      "message": "Calculate the premium."
+    },
+    {
+      "turn_index": 7,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_calculate_premium",
+          "parameters": {
+            "state_name": {
+              "value": "Gujarat",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Rajkot",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "groundnut",
+              "eval_mode": "SUBSTRING"
+            },
+            "area_hectares": {
+              "value": 1.8,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 8,
+      "speaker": "user",
+      "message": "Submit the enrollment."
+    },
+    {
+      "turn_index": 8,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_submit_enrollment",
+          "parameters": {
+            "session_token": {
+              "value": "<session_token>",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "state_name": {
+              "value": "Gujarat",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Rajkot",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "groundnut",
+              "eval_mode": "SUBSTRING"
+            },
+            "area_hectares": {
+              "value": 1.8,
+              "eval_mode": "EXACT"
+            },
+            "survey_number": {
+              "value": "123/4",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 9,
+      "speaker": "user",
+      "message": "Pay the premium."
+    },
+    {
+      "turn_index": 9,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_pay_premium",
+          "parameters": {
+            "session_token": {
+              "value": "<session_token>",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "application_id": {
+              "value": "<application_id>",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "payment_method": {
+              "value": "upi",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "enrollment_status": "applied",
+    "premium_payment_status": "paid"
+  }
+}

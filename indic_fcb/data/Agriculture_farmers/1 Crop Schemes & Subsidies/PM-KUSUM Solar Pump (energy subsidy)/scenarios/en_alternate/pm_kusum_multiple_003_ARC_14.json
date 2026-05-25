@@ -1,0 +1,52 @@
+{
+  "scenario_id": "pm_kusum_multiple_003_ARC_14",
+  "usecase": "pm_kusum_solar_pump",
+  "intent_ref": "pm_kusum_multiple_003",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN|001122334455",
+    "application_status": "not_applied"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop needs water badly, so I need to submit my application for Component B of the PM-KUSUM scheme. My Aadhaar is 678901234568 and my mobile number is 8432109765. Please process the application, I don't want to file any complaints."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pm_kusum_submit_application",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234568",
+              "eval_mode": "EXACT"
+            },
+            "component": {
+              "value": "B",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "application_status": "submitted"
+  }
+}

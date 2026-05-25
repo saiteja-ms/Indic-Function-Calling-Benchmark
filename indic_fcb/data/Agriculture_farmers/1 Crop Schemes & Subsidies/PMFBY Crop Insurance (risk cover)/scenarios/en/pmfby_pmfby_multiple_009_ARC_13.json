@@ -1,0 +1,49 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_009_ARC_13",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_009",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "policy_status": "active"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to view my crop insurance policy details. My policy number is POL987654321. My Aadhaar is 567890123457 and my mobile number is 9543210876. Please show me the policy document, not the premium receipt."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_policy_details",
+          "parameters": {
+            "policy_number": {
+              "value": "POL987654321",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_modes": {
+            "policy_number": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

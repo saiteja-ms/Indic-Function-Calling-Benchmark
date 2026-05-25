@@ -1,0 +1,86 @@
+{
+  "scenario_id": "atma_simple_016_ARC_04",
+  "usecase": "atma",
+  "intent_ref": "atma_simple_016",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "query_status": "closed",
+    "has_active_grievance": false
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My query about my soybean crop was closed without any answer! This is useless. I want to file a grievance right now. I will complain to a senior officer if you don't help me."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "query_id",
+        "session_token",
+        "grievance_details"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "My query ID is Q-5543. The details are that the officer completely ignored my question about pest control. My session token is TOK-123. Just file it quickly!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "atma_raise_grievance",
+          "parameters": {
+            "session_token": {
+              "value": "TOK-123",
+              "eval_mode": "EXACT"
+            },
+            "grievance_category": {
+              "value": "query_not_answered",
+              "eval_mode": "EXACT"
+            },
+            "query_id": {
+              "value": "Q-5543",
+              "eval_mode": "EXACT"
+            },
+            "grievance_details": {
+              "value": "officer completely ignored my question about pest control",
+              "eval_mode": "SUBSTRING"
+            }
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "grievance_category": "EXACT",
+            "query_id": "EXACT",
+            "grievance_details": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "has_active_grievance": true,
+    "grievance_status": "filed"
+  }
+}

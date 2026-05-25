@@ -1,0 +1,71 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_004_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_004",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "grievance_status": "under_review"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crop loss complaints are still pending and no one is helping. I have two grievances filed and I want to check their status. One of the IDs is GRV-9988."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_id"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The second one is GRV-7766. Check both of them right now, I am losing patience with this process and will escalate this to a senior officer if I don't get an answer."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_track_grievance_status",
+          "arguments": {
+            "grievance_id": {
+              "value": "GRV-9988",
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "name": "pmfby_track_grievance_status",
+          "arguments": {
+            "grievance_id": {
+              "value": "GRV-7766",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

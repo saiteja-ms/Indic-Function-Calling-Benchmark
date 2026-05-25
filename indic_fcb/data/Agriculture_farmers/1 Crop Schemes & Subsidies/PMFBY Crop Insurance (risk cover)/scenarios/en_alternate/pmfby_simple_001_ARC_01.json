@@ -1,0 +1,56 @@
+{
+  "scenario_id": "pmfby_simple_001_ARC_01",
+  "usecase": "pmfby_crop_insurance",
+  "intent_ref": "pmfby_simple_001",
+  "archetype_ref": "ARC_01",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "234567890123",
+    "mobile_number": "9876543210",
+    "bank_account": "SBIN|001122334455",
+    "enrollment_status": "applied",
+    "crop_season": "kharif",
+    "insured_crop": "paddy"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My crop insurance for paddy is not showing up. I applied for the kharif season but I don't know what happened. Can you check? My Aadhaar is 234567890123. Please tell me if it is registered, I am very worried."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_enrollment_status",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "234567890123",
+              "eval_mode": "EXACT"
+            },
+            "crop_season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "insured_crop": {
+              "value": "paddy",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

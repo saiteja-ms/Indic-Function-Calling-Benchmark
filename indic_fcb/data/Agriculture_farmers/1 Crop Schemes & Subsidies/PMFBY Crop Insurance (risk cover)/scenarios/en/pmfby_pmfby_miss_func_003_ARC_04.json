@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_func_003_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_003",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "policy_status": "active",
+    "premium_payment_status": "paid"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My policy is active and I have paid the premium, but I want to cancel it and get a refund. Can you process a premium refund for my active policy?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "request premium refund for an active policy",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

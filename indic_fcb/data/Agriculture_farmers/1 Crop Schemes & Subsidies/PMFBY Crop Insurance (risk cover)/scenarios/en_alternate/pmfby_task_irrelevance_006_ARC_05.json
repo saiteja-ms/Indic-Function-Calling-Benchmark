@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmfby_task_irrelevance_006_ARC_05",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_006",
+  "archetype_ref": "ARC_05",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234567",
+    "mobile_number": "9765432108",
+    "bank_account": "UCBA001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "Can you check the status of my SDRF disaster relief claim? My paddy crop was damaged in the recent cyclone and my son is helping me check if the relief money has been sanctioned."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "SDRF/NDRF disaster relief is separate from PMFBY crop insurance."
+    }
+  ],
+  "expected_final_state": {}
+}

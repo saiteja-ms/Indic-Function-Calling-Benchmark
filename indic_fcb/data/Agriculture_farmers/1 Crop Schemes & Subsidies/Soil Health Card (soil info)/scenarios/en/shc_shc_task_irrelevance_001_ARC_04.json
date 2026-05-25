@@ -1,0 +1,46 @@
+{
+  "scenario_id": "shc_shc_task_irrelevance_001_ARC_04",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_task_irrelevance_001",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID|001122334455",
+    "plot_registration_status": "registered",
+    "sample_collection_status": "not_requested",
+    "test_status": "not_started",
+    "card_status": "not_issued",
+    "retest_status": "not_applicable",
+    "lab_assignment_status": "pending",
+    "sampling_window_status": "open",
+    "card_count_for_plot": 0,
+    "retest_window_days_left": 0,
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My PM-KISAN installment has not been credited to my bank account yet. I am tired of waiting. Check the status immediately or I will complain to a senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "User is asking about PM-KISAN income support installments, which is outside the scope of the Soil Health Card scheme."
+    }
+  ],
+  "expected_final_state": {}
+}

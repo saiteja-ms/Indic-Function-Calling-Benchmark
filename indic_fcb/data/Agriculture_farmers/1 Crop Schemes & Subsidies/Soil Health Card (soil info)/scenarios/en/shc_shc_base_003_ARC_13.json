@@ -1,0 +1,136 @@
+{
+  "scenario_id": "shc_shc_base_003_ARC_13",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_base_003",
+  "archetype_ref": "ARC_13",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123457",
+    "mobile_number": "9543210876",
+    "bank_account": "BKID001122334455",
+    "sample_collection_status": "received_at_lab",
+    "test_status": "completed",
+    "retest_window_days_left": 5,
+    "retest_status": "not_applicable"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the status of my soil sample SMPL123 and its test status. If it is completed, I want to request a retest because the nitrogen levels seem incorrect. My Aadhaar is 567890123457 and the OTP is 456789."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_authenticate",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "567890123457",
+              "eval_mode": "EXACT"
+            },
+            "otp": {
+              "value": "456789",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Authentication is done. Please check the sample status."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_sample_status",
+          "parameters": {
+            "sample_id": {
+              "value": "SMPL123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Now check the test status."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_test_status",
+          "parameters": {
+            "sample_id": {
+              "value": "SMPL123",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 4,
+      "speaker": "user",
+      "message": "Since it is completed, please submit the retest request."
+    },
+    {
+      "turn_index": 4,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_request_retest",
+          "parameters": {
+            "session_token": {
+              "value": "AUTH_TOKEN_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "sample_id": {
+              "value": "SMPL123",
+              "eval_mode": "EXACT"
+            },
+            "dispute_reason": {
+              "value": "nitrogen levels seem incorrect",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "authenticated": true,
+    "retest_status": "requested"
+  }
+}

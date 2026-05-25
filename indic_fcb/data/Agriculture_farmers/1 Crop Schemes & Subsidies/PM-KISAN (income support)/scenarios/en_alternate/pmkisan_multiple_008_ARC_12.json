@@ -1,0 +1,73 @@
+{
+  "scenario_id": "pmkisan_multiple_008_ARC_12",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_008",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "registration_status": "registered",
+    "payment_failure_reason": "bank_account_invalid",
+    "authenticated": true,
+    "session_token": "tok_123",
+    "bank_account": "PUNB0001234|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am very aggrieved that my PM-KISAN money bounced because of an invalid bank account. I want to resolve this payment failure right now. I have already corrected my bank account at Punjab National Bank."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "beneficiary_id and failed_transaction_id",
+      "model_should_decline": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why are you asking for more details? I don't have time for this, I have a large farm to run! If this isn't fixed I will escalate it to the agriculture officer. My beneficiary ID is PMK123456789 and the failed transaction ID is TXN9876543210123. Just do it."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": "tok_123",
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "PMK123456789",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN9876543210123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "corrected bank account",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

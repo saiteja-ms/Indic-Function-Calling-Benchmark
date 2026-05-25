@@ -1,0 +1,80 @@
+{
+  "scenario_id": "pmfby_parallel_multiple_004_ARC_15",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_multiple_004",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "parallel_multiple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "cutoff_date_passed": false,
+    "policy_status": "active"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the notified crops and get the insurance company's contact details for Coimbatore district in Tamil Nadu for the kharif season of 2024. Please provide both immediately."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_get_notified_crops",
+          "parameters": {
+            "state_name": {
+              "value": "Tamil Nadu",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Coimbatore",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2024,
+              "eval_mode": "EXACT"
+            }
+          }
+        },
+        {
+          "tool_name": "pmfby_get_insurer_contact",
+          "parameters": {
+            "state_name": {
+              "value": "Tamil Nadu",
+              "eval_mode": "SUBSTRING"
+            },
+            "district_name": {
+              "value": "Coimbatore",
+              "eval_mode": "SUBSTRING"
+            },
+            "season": {
+              "value": "kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": 2024,
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

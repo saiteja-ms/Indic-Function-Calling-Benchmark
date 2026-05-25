@@ -1,0 +1,64 @@
+{
+  "scenario_id": "pmfby_pmfby_task_irrelevance_006_ARC_06",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_task_irrelevance_006",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soybean crop was completely destroyed by the heavy rains. I want to claim SDRF disaster relief."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "SDRF/NDRF disaster relief is a separate government mechanism from PMFBY crop insurance."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Are you sure? The local officer told me to check online. Can you please check my NDRF application status?"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "SDRF/NDRF disaster relief is a separate government mechanism from PMFBY crop insurance."
+    },
+    {
+      "turn_index": 3,
+      "speaker": "user",
+      "message": "Let me try asking again. I really need the NDRF relief funds for my ruined crops. Is there any way you can process it here?"
+    },
+    {
+      "turn_index": 3,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "SDRF/NDRF disaster relief is a separate government mechanism from PMFBY crop insurance."
+    }
+  ],
+  "expected_final_state": {}
+}

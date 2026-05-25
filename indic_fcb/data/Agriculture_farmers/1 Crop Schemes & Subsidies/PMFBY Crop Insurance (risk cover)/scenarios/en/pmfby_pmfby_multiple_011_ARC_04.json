@@ -1,0 +1,69 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_011_ARC_04",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_011",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "premium_payment_status": "refunded",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My premium refund is delayed and I want to file a complaint right now! My application number is APP98765 and my session token is TKN999. Why is this taking so long?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "grievance_description"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Just write down that my premium was deducted 3 weeks ago but the refund hasn't reached my bank account yet. I will complain to a senior officer if this isn't fixed!"
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "TKN999",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "APP98765",
+            "grievance_description": "premium was deducted 3 weeks ago but the refund hasn't reached my bank account yet"
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "grievance_category": "EXACT",
+            "reference_id": "EXACT",
+            "grievance_description": "SUBSTRING"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

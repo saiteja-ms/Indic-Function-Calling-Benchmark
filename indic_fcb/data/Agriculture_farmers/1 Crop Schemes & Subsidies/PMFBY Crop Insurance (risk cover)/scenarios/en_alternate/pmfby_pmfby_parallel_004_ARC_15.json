@@ -1,0 +1,55 @@
+{
+  "scenario_id": "pmfby_pmfby_parallel_004_ARC_15",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_parallel_004",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "grievance_status": "under_review"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to check the status of my two pending grievances immediately. The grievance IDs are GRV-2023-01 and GRV-2023-02. Please process this right away, I don't want to wait."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_track_grievance_status",
+          "arguments": {
+            "grievance_id": "GRV-2023-01"
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        },
+        {
+          "name": "pmfby_track_grievance_status",
+          "arguments": {
+            "grievance_id": "GRV-2023-02"
+          },
+          "eval_mode": {
+            "grievance_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,0 +1,51 @@
+{
+  "scenario_id": "pmkisan_multiple_004_ARC_15",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_multiple_004",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "registration_status": "not_registered",
+    "eligibility_status": "not_checked",
+    "ekyc_status": "pending",
+    "authenticated": false,
+    "session_token": null,
+    "bank_account": "CNRB0001234|001122334455",
+    "has_active_grievance": false,
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to check my PM-KISAN eligibility immediately. I already have my KYC documents ready to complete eKYC, so let's get this done. My Aadhaar number is 789012345679. Please process it without any delays or system errors."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_check_eligibility",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "789012345679",
+              "eval_mode": "EXACT"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "eligibility_status": "eligible"
+  }
+}

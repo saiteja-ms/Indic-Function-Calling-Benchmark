@@ -1,0 +1,35 @@
+{
+  "scenario_id": "pmkisan_irrelevance_009_ARC_06",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_009",
+  "archetype_ref": "ARC_06",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345678",
+    "mobile_number": "8654321097",
+    "bank_account": "SBIN|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am having trouble selling my soybean crop at a good price. Can you help me register as a trader on eNAM? I am not sure how this online system works."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "eNAM handles trader registration, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

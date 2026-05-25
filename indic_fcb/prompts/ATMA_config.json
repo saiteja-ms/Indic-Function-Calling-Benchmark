@@ -1,0 +1,6 @@
+{
+  "USECASE_DISPLAY_NAME": "Crop Advisory and ATMA extension service",
+  "USECASE_ID": "atma",
+  "USECASE_PREFIX": "atma",
+  "USECASE_STATE_FIELDS_BLOCK": "  farmer_profile_status: not_registered | registered | verified | suspended\n  training_registration_status: not_registered | registered | waitlisted | cancelled | attended | certified\n  query_status: not_submitted | submitted | assigned | responded | closed | escalated\n  farm_school_visit_status: not_scheduled | scheduled | completed | cancelled\n  programme_availability: open | full | closed | cancelled\n  certificate_status: not_issued | issued | downloaded | revoked\n  attendance_confirmed: true | false\n  query_count_open: integer 0+\n  grievance_status: not_filed | filed | under_review | resolved | rejected"
+}

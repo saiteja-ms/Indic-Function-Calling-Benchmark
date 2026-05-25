@@ -3,9 +3,9 @@
     "intent_id": "soilportal_simple_001",
     "usecase": "soilportal",
     "category": "simple",
-    "abstract_goal": "Sends OTP for Soil Health Card Portal authentication.",
+    "abstract_goal": "User wants to retrieve their Soil Health Card details using their farmer ID, state, and district.",
     "required_tools": [
-      "shcportal_generate_otp"
+      "get_soil_health_card"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
@@ -15,51 +15,51 @@
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "eval_notes": "Basic tool call with all required parameters provided."
   },
   {
     "intent_id": "soilportal_simple_002",
     "usecase": "soilportal",
     "category": "simple",
-    "abstract_goal": "Verifies OTP and returns session_token for SHC Portal.",
+    "abstract_goal": "User wants to find nearby soil testing laboratories in a specific state and district.",
     "required_tools": [
-      "shcportal_verify_otp"
+      "get_soil_testing_labs"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "eval_notes": "Basic tool call for location-based search."
   },
   {
     "intent_id": "soilportal_simple_003",
     "usecase": "soilportal",
     "category": "simple",
-    "abstract_goal": "Searches for available Soil Health Card reports for a farmer.",
+    "abstract_goal": "User wants to get fertilizer recommendations for a specific crop based on their Soil Health Card number.",
     "required_tools": [
-      "shcportal_search_reports"
+      "get_fertilizer_recommendations"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
+    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "eval_notes": "Basic tool call requiring SHC number and crop name."
   },
   {
     "intent_id": "soilportal_simple_004",
     "usecase": "soilportal",
     "category": "simple",
-    "abstract_goal": "Retrieves full details of a specific SHC report including nutrient values, recommendations, and lab details.",
+    "abstract_goal": "User wants to track the status of a previously submitted soil sample using the sample ID.",
     "required_tools": [
-      "shcportal_get_report_details"
+      "track_soil_sample_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
@@ -69,797 +69,734 @@
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "eval_notes": "Basic tool call for tracking status."
   },
   {
     "intent_id": "soilportal_simple_005",
     "usecase": "soilportal",
     "category": "simple",
-    "abstract_goal": "Checks the processing status of a soil sample.",
+    "abstract_goal": "User wants to get general information about the Soil Health Card scheme benefits.",
     "required_tools": [
-      "shcportal_check_sample_status"
+      "get_soil_health_scheme_info"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "eval_notes": "Basic tool call for informational queries."
   },
   {
     "intent_id": "soilportal_simple_006",
     "usecase": "soilportal",
     "category": "simple",
-    "abstract_goal": "Initiates download of a Soil Health Card report.",
+    "abstract_goal": "User wants to retrieve their Soil Health Card details using Aadhaar number instead of farmer ID.",
     "required_tools": [
-      "shcportal_download_report"
+      "get_soil_health_card"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
+    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "soilportal_simple_007",
-    "usecase": "soilportal",
-    "category": "simple",
-    "abstract_goal": "Retrieves specific nutrient analysis values from a generated report.",
-    "required_tools": [
-      "shcportal_get_nutrient_values"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "soilportal_simple_008",
-    "usecase": "soilportal",
-    "category": "simple",
-    "abstract_goal": "Generates fertilizer recommendations based on SHC test results and target crop.",
-    "required_tools": [
-      "shcportal_get_fertilizer_recommendation"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "soilportal_simple_009",
-    "usecase": "soilportal",
-    "category": "simple",
-    "abstract_goal": "Retrieves all historical SHC reports for a farmer.",
-    "required_tools": [
-      "shcportal_get_historical_reports"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "soilportal_simple_010",
-    "usecase": "soilportal",
-    "category": "simple",
-    "abstract_goal": "Filters SHC reports for a specific land parcel across all available years.",
-    "required_tools": [
-      "shcportal_filter_reports_by_land"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "soilportal_simple_011",
-    "usecase": "soilportal",
-    "category": "simple",
-    "abstract_goal": "Returns details of the laboratory assigned to test the soil sample.",
-    "required_tools": [
-      "shcportal_get_lab_details"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "soilportal_simple_012",
-    "usecase": "soilportal",
-    "category": "simple",
-    "abstract_goal": "Raises a grievance about SHC Portal.",
-    "required_tools": [
-      "shcportal_raise_grievance"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
-  },
-  {
-    "intent_id": "soilportal_simple_013",
-    "usecase": "soilportal",
-    "category": "simple",
-    "abstract_goal": "Tracks a SHC Portal grievance.",
-    "required_tools": [
-      "shcportal_track_grievance_status"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Basic simple coverage."
+    "eval_notes": "Variation of simple tool call testing alternative identifier parameter."
   },
   {
     "intent_id": "soilportal_multiple_001",
     "usecase": "soilportal",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "abstract_goal": "User wants to download their specific Soil Health Card, but phrasing might sound like asking for general scheme info.",
     "required_tools": [
-      "shcportal_generate_otp"
+      "get_soil_health_card"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_D",
+    "suggested_persona": "PERSONA_A",
     "distractor_tools": [
-      "shcportal_verify_otp"
+      "get_soil_health_scheme_info"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "eval_notes": "Trap: Distinguishing between fetching a specific card vs getting general scheme info."
   },
   {
     "intent_id": "soilportal_multiple_002",
     "usecase": "soilportal",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "abstract_goal": "User wants to know the eligibility criteria for the Soil Health Card scheme, but mentions they don't have a card yet.",
     "required_tools": [
-      "shcportal_generate_otp"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_C",
-    "distractor_tools": [
-      "shcportal_search_reports"
-    ],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
-  },
-  {
-    "intent_id": "soilportal_multiple_003",
-    "usecase": "soilportal",
-    "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
-    "required_tools": [
-      "shcportal_generate_otp"
+      "get_soil_health_scheme_info"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
     "suggested_persona": "PERSONA_B",
     "distractor_tools": [
-      "shcportal_get_report_details"
+      "get_soil_health_card"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "eval_notes": "Trap: Distinguishing between fetching a specific card vs getting general scheme info (reverse of 001)."
+  },
+  {
+    "intent_id": "soilportal_multiple_003",
+    "usecase": "soilportal",
+    "category": "multiple",
+    "abstract_goal": "User wants to check if their soil sample has been tested yet at the lab.",
+    "required_tools": [
+      "track_soil_sample_status"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [
+      "get_soil_testing_labs"
+    ],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Trap: Distinguishing between tracking a sample at a lab vs finding a lab."
   },
   {
     "intent_id": "soilportal_multiple_004",
     "usecase": "soilportal",
     "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
+    "abstract_goal": "User wants to find the address of a soil testing lab to drop off a sample.",
     "required_tools": [
-      "shcportal_generate_otp"
-    ],
-    "chain_order_enforced": false,
-    "domain_constraint": null,
-    "suggested_persona": "PERSONA_E",
-    "distractor_tools": [
-      "shcportal_check_sample_status"
-    ],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
-  },
-  {
-    "intent_id": "soilportal_multiple_005",
-    "usecase": "soilportal",
-    "category": "multiple",
-    "abstract_goal": "Perform action: Sends OTP for Soil Health Card Portal authentication.",
-    "required_tools": [
-      "shcportal_generate_otp"
+      "get_soil_testing_labs"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
     "suggested_persona": "PERSONA_A",
     "distractor_tools": [
-      "shcportal_download_report"
+      "track_soil_sample_status"
     ],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Distractor trap."
+    "eval_notes": "Trap: Distinguishing between tracking a sample at a lab vs finding a lab (reverse of 003)."
   },
   {
     "intent_id": "soilportal_parallel_001",
     "usecase": "soilportal",
     "category": "parallel",
-    "abstract_goal": "Perform this action twice simultaneously for two different entities: shcportal_generate_otp.",
+    "abstract_goal": "User wants to find soil testing labs in two different districts simultaneously.",
     "required_tools": [
-      "shcportal_generate_otp"
+      "get_soil_testing_labs"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_G",
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_generate_otp"
+      "get_soil_testing_labs"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel execution."
+    "eval_notes": "Parallel execution of the same tool with different district parameters."
   },
   {
     "intent_id": "soilportal_parallel_002",
     "usecase": "soilportal",
     "category": "parallel",
-    "abstract_goal": "Perform this action twice simultaneously for two different entities: shcportal_verify_otp.",
+    "abstract_goal": "User wants to track the status of two different soil samples using their respective sample IDs.",
     "required_tools": [
-      "shcportal_verify_otp"
+      "track_soil_sample_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_E",
+    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_verify_otp"
+      "track_soil_sample_status"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel execution."
+    "eval_notes": "Parallel execution of the same tool with different sample ID parameters."
   },
   {
     "intent_id": "soilportal_parallel_003",
     "usecase": "soilportal",
     "category": "parallel",
-    "abstract_goal": "Perform this action twice simultaneously for two different entities: shcportal_search_reports.",
+    "abstract_goal": "User wants fertilizer recommendations for two different crops based on the same Soil Health Card.",
     "required_tools": [
-      "shcportal_search_reports"
+      "get_fertilizer_recommendations"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
+    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_search_reports"
+      "get_fertilizer_recommendations"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel execution."
+    "eval_notes": "Parallel execution of the same tool with different crop parameters."
   },
   {
     "intent_id": "soilportal_parallel_multiple_001",
     "usecase": "soilportal",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: shcportal_verify_otp and shcportal_filter_reports_by_land.",
+    "abstract_goal": "User wants to get their Soil Health Card details and simultaneously find nearby soil testing labs.",
     "required_tools": [
-      "shcportal_verify_otp",
-      "shcportal_filter_reports_by_land"
+      "get_soil_health_card",
+      "get_soil_testing_labs"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_G",
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_verify_otp",
-      "shcportal_filter_reports_by_land"
+      "get_soil_health_card",
+      "get_soil_testing_labs"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "eval_notes": "Parallel execution of two different tools."
   },
   {
     "intent_id": "soilportal_parallel_multiple_002",
     "usecase": "soilportal",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: shcportal_search_reports and shcportal_check_sample_status.",
+    "abstract_goal": "User wants to track a soil sample status and get general information about the scheme benefits.",
     "required_tools": [
-      "shcportal_search_reports",
-      "shcportal_check_sample_status"
+      "track_soil_sample_status",
+      "get_soil_health_scheme_info"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
+    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_search_reports",
-      "shcportal_check_sample_status"
+      "track_soil_sample_status",
+      "get_soil_health_scheme_info"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "eval_notes": "Parallel execution of two different tools."
   },
   {
     "intent_id": "soilportal_parallel_multiple_003",
     "usecase": "soilportal",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: shcportal_generate_otp and shcportal_download_report.",
+    "abstract_goal": "User wants to find soil testing labs and get information on scheme eligibility.",
     "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_download_report"
+      "get_soil_testing_labs",
+      "get_soil_health_scheme_info"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_G",
+    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_generate_otp",
-      "shcportal_download_report"
+      "get_soil_testing_labs",
+      "get_soil_health_scheme_info"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "eval_notes": "Parallel execution of two different tools."
   },
   {
     "intent_id": "soilportal_parallel_multiple_004",
     "usecase": "soilportal",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: shcportal_get_nutrient_values and shcportal_filter_reports_by_land.",
+    "abstract_goal": "User wants to get their Soil Health Card details and track a new soil sample they recently submitted.",
     "required_tools": [
-      "shcportal_get_nutrient_values",
-      "shcportal_filter_reports_by_land"
+      "get_soil_health_card",
+      "track_soil_sample_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_A",
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_get_nutrient_values",
-      "shcportal_filter_reports_by_land"
+      "get_soil_health_card",
+      "track_soil_sample_status"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "eval_notes": "Parallel execution of two different tools."
   },
   {
     "intent_id": "soilportal_parallel_multiple_005",
     "usecase": "soilportal",
     "category": "parallel_multiple",
-    "abstract_goal": "Perform these two different actions simultaneously: shcportal_generate_otp and shcportal_search_reports.",
+    "abstract_goal": "User wants fertilizer recommendations for a crop and wants to find a lab for a fresh soil test.",
     "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_search_reports"
+      "get_fertilizer_recommendations",
+      "get_soil_testing_labs"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_D",
+    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [
-      "shcportal_generate_otp",
-      "shcportal_search_reports"
+      "get_fertilizer_recommendations",
+      "get_soil_testing_labs"
     ],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Parallel multiple execution."
+    "eval_notes": "Parallel execution of two different tools."
   },
   {
     "intent_id": "soilportal_irrelevance_001",
     "usecase": "soilportal",
     "category": "task_irrelevance",
-    "abstract_goal": "Apply for a generic unrelated commercial loan from a private bank.",
+    "abstract_goal": "User wants to check the status of their PM Kisan Samman Nidhi installment.",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_C",
-    "distractor_tools": [
-      "shcportal_generate_otp",
-      "shcportal_track_grievance_status"
-    ],
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Out of scope loan request.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "User is asking about the PM Kisan scheme, which is handled by a different portal and is out of scope for the Soil Health Card portal.",
+    "eval_notes": "Tests rejection of adjacent agricultural schemes."
   },
   {
     "intent_id": "soilportal_irrelevance_002",
     "usecase": "soilportal",
     "category": "task_irrelevance",
-    "abstract_goal": "Ask about the latest cricket match scores and player statistics.",
+    "abstract_goal": "User wants to know the weather forecast for their village for the next three days.",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
-    "distractor_tools": [
-      "shcportal_generate_otp",
-      "shcportal_track_grievance_status"
-    ],
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Completely unrelated general knowledge query.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "User is asking for weather forecasts, which is out of scope for soil health testing.",
+    "eval_notes": "Tests rejection of general agricultural weather queries."
   },
   {
     "intent_id": "soilportal_irrelevance_003",
     "usecase": "soilportal",
     "category": "task_irrelevance",
-    "abstract_goal": "Request medical advice for a persistent fever and headache.",
+    "abstract_goal": "User wants to book a train ticket to travel to the city.",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
-    "distractor_tools": [
-      "shcportal_generate_otp",
-      "shcportal_track_grievance_status"
-    ],
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Unrelated medical query.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "User is asking for railway ticket booking, completely unrelated to agriculture.",
+    "eval_notes": "Tests rejection of completely unrelated domains."
   },
   {
     "intent_id": "soilportal_irrelevance_004",
     "usecase": "soilportal",
     "category": "task_irrelevance",
-    "abstract_goal": "Attempt to book a railway ticket from Delhi to Mumbai.",
+    "abstract_goal": "User is asking for medical advice regarding a fever and cough.",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_E",
-    "distractor_tools": [
-      "shcportal_generate_otp",
-      "shcportal_track_grievance_status"
-    ],
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Unrelated booking request.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "User is asking for human medical advice, not soil health.",
+    "eval_notes": "Tests rejection of healthcare queries."
   },
   {
     "intent_id": "soilportal_irrelevance_005",
     "usecase": "soilportal",
     "category": "task_irrelevance",
-    "abstract_goal": "Inquire about the weather forecast in New York.",
+    "abstract_goal": "User wants to know the live score of an ongoing cricket match.",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_C",
-    "distractor_tools": [
-      "shcportal_generate_otp",
-      "shcportal_track_grievance_status"
-    ],
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
-    "irrelevance_reason": "Out of scope international query.",
-    "eval_notes": "Irrelevance coverage."
+    "irrelevance_reason": "User is asking for sports scores.",
+    "eval_notes": "Tests rejection of entertainment/sports queries."
   },
   {
     "intent_id": "soilportal_base_001",
     "usecase": "soilportal",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: shcportal_generate_otp, shcportal_verify_otp.",
+    "abstract_goal": "User wants to get their Soil Health Card details and then use the retrieved SHC number to get fertilizer recommendations for wheat.",
     "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_verify_otp"
+      "get_soil_health_card",
+      "get_fertilizer_recommendations"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_G",
+    "domain_constraint": "Must fetch SHC first to obtain the SHC number required for the fertilizer recommendations tool.",
+    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "eval_notes": "Standard 2-turn chain."
   },
   {
     "intent_id": "soilportal_base_002",
     "usecase": "soilportal",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: shcportal_raise_grievance, shcportal_track_grievance_status.",
+    "abstract_goal": "User wants to find a soil testing lab in their district, and then track the status of a sample they previously submitted there.",
     "required_tools": [
-      "shcportal_raise_grievance",
-      "shcportal_track_grievance_status"
+      "get_soil_testing_labs",
+      "track_soil_sample_status"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_E",
+    "domain_constraint": "Finds lab first to confirm location, then checks status of a sample.",
+    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "eval_notes": "Standard 2-turn chain."
   },
   {
     "intent_id": "soilportal_base_003",
     "usecase": "soilportal",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: shcportal_generate_otp, shcportal_search_reports.",
+    "abstract_goal": "User wants to learn about the scheme eligibility first, and then find a nearby lab to apply/submit a sample.",
     "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_search_reports"
+      "get_soil_health_scheme_info",
+      "get_soil_testing_labs"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_F",
+    "domain_constraint": "Learns about scheme eligibility first, then finds a lab to take action.",
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "eval_notes": "Standard 2-turn chain."
   },
   {
     "intent_id": "soilportal_base_004",
     "usecase": "soilportal",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: shcportal_generate_otp, shcportal_verify_otp, shcportal_search_reports.",
+    "abstract_goal": "User wants to check if their soil sample is processed, and upon confirmation, fetch the generated Soil Health Card.",
     "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_verify_otp",
-      "shcportal_search_reports"
+      "track_soil_sample_status",
+      "get_soil_health_card"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_D",
+    "domain_constraint": "Checks if sample is processed first, then fetches the generated SHC.",
+    "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "eval_notes": "Standard 2-turn chain."
   },
   {
     "intent_id": "soilportal_base_005",
     "usecase": "soilportal",
     "category": "base",
-    "abstract_goal": "Execute the action sequence sequentially: shcportal_verify_otp, shcportal_search_reports.",
+    "abstract_goal": "User wants to fetch their SHC, get fertilizer recommendations based on it, and then look for a lab to do a re-test.",
     "required_tools": [
-      "shcportal_verify_otp",
-      "shcportal_search_reports"
+      "get_soil_health_card",
+      "get_fertilizer_recommendations",
+      "get_soil_testing_labs"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_F",
+    "domain_constraint": "Fetches SHC, gets recommendations, then looks for a lab for re-testing.",
+    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Base multi-turn coverage."
+    "eval_notes": "Standard 3-turn chain."
   },
   {
-    "intent_id": "soilportal_miss_param_001",
+    "intent_id": "soilportal_missparam_001",
     "usecase": "soilportal",
     "category": "miss_param",
-    "abstract_goal": "Attempt to perform shcportal_generate_otp but do not provide the necessary aadhaar_number.",
+    "abstract_goal": "User wants to find soil testing labs but only provides the state, forgetting the district.",
     "required_tools": [
-      "shcportal_generate_otp"
+      "get_soil_testing_labs"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "district",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Tests handling of missing location parameter."
+  },
+  {
+    "intent_id": "soilportal_missparam_002",
+    "usecase": "soilportal",
+    "category": "miss_param",
+    "abstract_goal": "User wants to get their Soil Health Card details but forgets to provide their farmer ID or Aadhaar.",
+    "required_tools": [
+      "get_soil_health_card"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
     "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [],
-    "missing_param": "aadhaar_number",
+    "missing_param": "farmer_id",
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Miss param coverage."
+    "eval_notes": "Tests handling of missing identifier parameter."
   },
   {
-    "intent_id": "soilportal_miss_param_002",
+    "intent_id": "soilportal_missparam_003",
     "usecase": "soilportal",
     "category": "miss_param",
-    "abstract_goal": "Attempt to perform shcportal_verify_otp but do not provide the necessary aadhaar_number.",
+    "abstract_goal": "User wants fertilizer recommendations using their SHC number but forgets to specify the crop name.",
     "required_tools": [
-      "shcportal_verify_otp"
+      "get_fertilizer_recommendations"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_D",
+    "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
-    "missing_param": "aadhaar_number",
+    "missing_param": "crop_name",
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Miss param coverage."
+    "eval_notes": "Tests handling of missing crop parameter."
   },
   {
-    "intent_id": "soilportal_miss_param_003",
+    "intent_id": "soilportal_missparam_004",
     "usecase": "soilportal",
     "category": "miss_param",
-    "abstract_goal": "Attempt to perform shcportal_search_reports but do not provide the necessary session_token.",
+    "abstract_goal": "User wants to track their soil sample status but forgets to provide the sample ID.",
     "required_tools": [
-      "shcportal_search_reports"
+      "track_soil_sample_status"
     ],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_H",
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [],
-    "missing_param": "session_token",
+    "missing_param": "sample_id",
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Miss param coverage."
+    "eval_notes": "Tests handling of missing tracking ID."
   },
   {
-    "intent_id": "soilportal_miss_func_001",
+    "intent_id": "soilportal_missparam_005",
+    "usecase": "soilportal",
+    "category": "miss_param",
+    "abstract_goal": "User wants to get their Soil Health Card details, provides farmer ID and district, but forgets the state.",
+    "required_tools": [
+      "get_soil_health_card"
+    ],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": "state",
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Tests handling of missing state parameter."
+  },
+  {
+    "intent_id": "soilportal_missfunc_001",
     "usecase": "soilportal",
     "category": "miss_func",
-    "abstract_goal": "Ask to delete the account or update core details not supported by the system.",
+    "abstract_goal": "User wants to book an appointment online to visit a soil testing lab.",
     "required_tools": [],
     "chain_order_enforced": false,
     "domain_constraint": null,
-    "suggested_persona": "PERSONA_D",
-    "distractor_tools": [
-      "shcportal_generate_otp"
-    ],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": "delete_account",
-    "irrelevance_reason": null,
-    "eval_notes": "Miss func coverage."
-  },
-  {
-    "intent_id": "soilportal_long_context_001",
-    "usecase": "soilportal",
-    "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_generate_otp, shcportal_verify_otp.",
-    "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_verify_otp"
-    ],
-    "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
     "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
-    "missing_func": null,
+    "missing_func": "book_lab_appointment",
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "eval_notes": "Tests handling of unsupported transactional action."
   },
   {
-    "intent_id": "soilportal_long_context_002",
+    "intent_id": "soilportal_missfunc_002",
     "usecase": "soilportal",
-    "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_raise_grievance, shcportal_track_grievance_status.",
-    "required_tools": [
-      "shcportal_raise_grievance",
-      "shcportal_track_grievance_status"
-    ],
-    "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
+    "category": "miss_func",
+    "abstract_goal": "User wants to order the recommended fertilizers online through the portal.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "order_fertilizers",
+    "irrelevance_reason": null,
+    "eval_notes": "Tests handling of unsupported e-commerce action."
+  },
+  {
+    "intent_id": "soilportal_missfunc_003",
+    "usecase": "soilportal",
+    "category": "miss_func",
+    "abstract_goal": "User wants to update the registered mobile number on their Soil Health Card.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": "update_shc_mobile_number",
+    "irrelevance_reason": null,
+    "eval_notes": "Tests handling of unsupported profile update action."
+  },
+  {
+    "intent_id": "soilportal_missfunc_004",
+    "usecase": "soilportal",
+    "category": "miss_func",
+    "abstract_goal": "User wants to request a government official to come to their farm and collect a soil sample.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
     "suggested_persona": "PERSONA_A",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
-    "missing_func": null,
+    "missing_func": "request_home_soil_collection",
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "eval_notes": "Tests handling of unsupported service request."
   },
   {
-    "intent_id": "soilportal_long_context_003",
+    "intent_id": "soilportal_missfunc_005",
     "usecase": "soilportal",
-    "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_generate_otp, shcportal_search_reports.",
-    "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_search_reports"
-    ],
-    "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_F",
+    "category": "miss_func",
+    "abstract_goal": "User wants to apply for a financial subsidy for soil testing costs.",
+    "required_tools": [],
+    "chain_order_enforced": false,
+    "domain_constraint": null,
+    "suggested_persona": "PERSONA_B",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
-    "missing_func": null,
+    "missing_func": "apply_soil_testing_subsidy",
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "eval_notes": "Tests handling of unsupported financial application."
   },
   {
-    "intent_id": "soilportal_long_context_004",
+    "intent_id": "soilportal_longcontext_001",
     "usecase": "soilportal",
     "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_generate_otp, shcportal_verify_otp, shcportal_search_reports.",
+    "abstract_goal": "User shares a long story about their farming history, then wants to get their Soil Health Card details and use the retrieved SHC number to get fertilizer recommendations for wheat.",
     "required_tools": [
-      "shcportal_generate_otp",
-      "shcportal_verify_otp",
-      "shcportal_search_reports"
+      "get_soil_health_card",
+      "get_fertilizer_recommendations"
     ],
     "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
-    "suggested_persona": "PERSONA_F",
-    "distractor_tools": [],
-    "parallel_tools": [],
-    "missing_param": null,
-    "missing_func": null,
-    "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
-  },
-  {
-    "intent_id": "soilportal_long_context_005",
-    "usecase": "soilportal",
-    "category": "long_context",
-    "abstract_goal": "Farmer shares a very long story about their village, crop history, and weather patterns over the last 10 years, and amidst this long narrative, asks to execute the sequence: shcportal_verify_otp, shcportal_search_reports.",
-    "required_tools": [
-      "shcportal_verify_otp",
-      "shcportal_search_reports"
-    ],
-    "chain_order_enforced": true,
-    "domain_constraint": "Sequential requirement.",
+    "domain_constraint": "Must fetch SHC first to obtain the SHC number required for the fertilizer recommendations tool.",
     "suggested_persona": "PERSONA_C",
     "distractor_tools": [],
     "parallel_tools": [],
     "missing_param": null,
     "missing_func": null,
     "irrelevance_reason": null,
-    "eval_notes": "Long context coverage."
+    "eval_notes": "Long context version of base_001."
+  },
+  {
+    "intent_id": "soilportal_longcontext_002",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "User complains extensively about past lab delays, then wants to find a soil testing lab in their district, and track the status of a sample they previously submitted there.",
+    "required_tools": [
+      "get_soil_testing_labs",
+      "track_soil_sample_status"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Finds lab first to confirm location, then checks status of a sample.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context version of base_002."
+  },
+  {
+    "intent_id": "soilportal_longcontext_003",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "User talks about their neighbors benefiting from government schemes, wants to learn about the scheme eligibility first, and then find a nearby lab to apply.",
+    "required_tools": [
+      "get_soil_health_scheme_info",
+      "get_soil_testing_labs"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Learns about scheme eligibility first, then finds a lab to take action.",
+    "suggested_persona": "PERSONA_B",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context version of base_003."
+  },
+  {
+    "intent_id": "soilportal_longcontext_004",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "User details their crop cycle and urgency, wants to check if their soil sample is processed, and upon confirmation, fetch the generated Soil Health Card.",
+    "required_tools": [
+      "track_soil_sample_status",
+      "get_soil_health_card"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Checks if sample is processed first, then fetches the generated SHC.",
+    "suggested_persona": "PERSONA_C",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context version of base_004."
+  },
+  {
+    "intent_id": "soilportal_longcontext_005",
+    "usecase": "soilportal",
+    "category": "long_context",
+    "abstract_goal": "User provides a detailed background of their land degradation, wants to fetch their SHC, get fertilizer recommendations based on it, and then look for a lab to do a re-test.",
+    "required_tools": [
+      "get_soil_health_card",
+      "get_fertilizer_recommendations",
+      "get_soil_testing_labs"
+    ],
+    "chain_order_enforced": true,
+    "domain_constraint": "Fetches SHC, gets recommendations, then looks for a lab for re-testing.",
+    "suggested_persona": "PERSONA_A",
+    "distractor_tools": [],
+    "parallel_tools": [],
+    "missing_param": null,
+    "missing_func": null,
+    "irrelevance_reason": null,
+    "eval_notes": "Long context version of base_005."
   }
 ]

@@ -1,0 +1,93 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_006_ARC_14",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_006",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "enrollment_status": "not_enrolled",
+    "land_record_status": "validated"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is not registered for the insurance scheme yet and I need to enroll it immediately. My Aadhaar is 678901234568 and the land survey number is 45/2. Please register my farm."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "season",
+        "year",
+        "area_hectares"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do you need so many details? It is for the Kharif season of 2023, and the area is 0.9 hectares. Just submit the enrollment quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmfby_submit_enrollment",
+          "parameters": {
+            "aadhaar_number": {
+              "value": "678901234568",
+              "eval_mode": "EXACT"
+            },
+            "crop_name": {
+              "value": "sugarcane",
+              "eval_mode": "EXACT"
+            },
+            "survey_number": {
+              "value": "45/2",
+              "eval_mode": "EXACT"
+            },
+            "season": {
+              "value": "Kharif",
+              "eval_mode": "EXACT"
+            },
+            "year": {
+              "value": "2023",
+              "eval_mode": "EXACT"
+            },
+            "area_hectares": {
+              "value": 0.9,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "aadhaar_number": "EXACT",
+            "crop_name": "EXACT",
+            "survey_number": "EXACT",
+            "season": "EXACT",
+            "year": "EXACT",
+            "area_hectares": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

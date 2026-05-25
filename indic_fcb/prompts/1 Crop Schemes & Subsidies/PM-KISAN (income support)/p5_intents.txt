@@ -1,45 +1,174 @@
 You are building an intent registry for a
-function-calling benchmark.
+function-calling benchmark for PM-KISAN
+(Pradhan Mantri Kisan Samman Nidhi income
+support) on UMANG.
 
 READ:
-  - tools.jsonl from the current usecase directory
-  - personas.json from the current usecase directory
+  - tools.jsonl from this path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\tools.jsonl"
+  - persona.json from this path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\persona.json" (16 farmer archetypes for the farmers domain)
 
-USECASE: PM-KISAN (income support)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-TOOLS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\tools.jsonl
+Every intent in this benchmark is positioned at
+a specific cell of a 3-dimensional evaluation
+grid. Each intent MUST declare its position on
+all three axes:
 
-PERSONAS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\personas.json
+AXIS 1 — Conversation length:
+  single_turn  : one user message, one model
+                 response
+  multi_turn   : multiple user messages with
+                 state evolving between them
 
-STUB LOGIC FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\stub_logic.py
+AXIS 2 — Tool calls per turn:
+  single_step  : exactly one tool call expected
+                 in any single turn
+  multi_step   : multiple tool calls expected
+                 in the same turn (parallel or
+                 parallel_multiple)
 
-STUB FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\stubs.py
+AXIS 3 — Task type:
+  simple              : one clear tool, unambiguous
+  parallel_multiple   : multiple tools called
+                        together with no inter-call
+                        dependency
+  irrelevance         : no tool can answer; model
+                        must not call anything
 
-OUTPUT FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\intents.json
+The combination of these three axes produces
+the test cell.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY TO AXIS MAPPING (REFERENCE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+simple
+  conversation_length : single_turn
+  tool_calls_per_turn : single_step
+  task_type           : simple
+
+multiple
+  conversation_length : single_turn
+  tool_calls_per_turn : single_step
+  task_type           : simple
+  (additional: distractor tools present)
+
+parallel
+  conversation_length : single_turn
+  tool_calls_per_turn : multi_step
+  task_type           : simple
+  (same tool, multiple calls)
+
+parallel_multiple
+  conversation_length : single_turn
+  tool_calls_per_turn : multi_step
+  task_type           : parallel_multiple
+
+task_irrelevance
+  conversation_length : single_turn
+  tool_calls_per_turn : single_step
+  task_type           : irrelevance
+
+base
+  conversation_length : multi_turn
+  tool_calls_per_turn : single_step (per turn)
+  task_type           : simple
+
+miss_param
+  conversation_length : multi_turn
+  tool_calls_per_turn : single_step (per turn)
+  task_type           : simple
+  (one turn underspecified)
+
+miss_func
+  conversation_length : multi_turn
+  tool_calls_per_turn : single_step (per turn)
+  task_type           : irrelevance (one turn only)
+
+long_context
+  conversation_length : multi_turn
+  tool_calls_per_turn : single_step (per turn)
+  task_type           : simple
+  (padding turns added)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WHAT IS AN INTENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 An intent is an abstract user goal, independent
-of language and phrasing. Later, 3 scenario
-variants (A, B, C) will be generated per intent.
+of language and phrasing.
 
-An intent contains NO user prompt text —
-only the abstract goal and metadata.
+In this benchmark, an intent carries:
+  - the THREE-AXIS POSITION
+  - the STATE PRECONDITIONS that the archetype
+    must be in for the intent to be coherent
+  - the STATE TRANSITION the intent causes
+    (what changes if the intent succeeds)
+  - the COMPATIBLE ARCHETYPES that could
+    plausibly hold this intent
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When stubs are generated later, they will
+implement exactly the state transitions defined
+here, and they will validate against the
+state preconditions defined here.
+
+This means: intents are the source of truth.
+Stubs follow intents.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE FIELDS AVAILABLE (FROM tools.jsonl)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Infer the state schema from the tools.jsonl
+return values and parameter expectations.
+Each enum field becomes a state field with
+that enum's domain of values.
+
+Common PM-KISAN state fields you should use
+across intents (use exact names, lowercase):
+
+  authenticated              : true | false
+  session_token              : string | null
+  registration_status        : not_registered |
+                               applied | registered |
+                               rejected
+  ekyc_status                : not_started | pending |
+                               completed | failed
+  bank_seeding_status        : not_seeded | pending |
+                               seeded | failed
+  land_record_status         : not_validated |
+                               validated | mismatch
+  eligibility_status         : not_checked | eligible |
+                               ineligible
+  installments_credited      : integer 0-3
+  installments_pending       : integer 0-3
+  installments_rejected      : integer 0-3
+  has_pending_over_90_days   : true | false
+  has_active_grievance       : true | false
+  grievance_status           : not_filed | filed |
+                               under_review |
+                               resolved | rejected
+  payment_failure_reason     : null |
+                               bank_account_invalid |
+                               aadhaar_mismatch |
+                               ekyc_pending |
+                               land_record_dispute
+
+You MAY add additional state fields if a tool's
+return value or parameter implies one. Use the
+exact field name as it appears in tools.jsonl
+return schemas. State field names use
+lowercase_with_underscores.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 GUIDING PRINCIPLE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Do NOT target a fixed number of intents.
 Generate AS MANY intents as needed to achieve
-COMPLETE COVERAGE of every category.
+COMPLETE COVERAGE.
 
 Complete coverage means:
   - every tool exercised in every meaningful way
@@ -48,154 +177,329 @@ Complete coverage means:
   - every commonly omitted parameter covered
   - every plausible-but-unavailable action covered
   - every adjacent-but-out-of-scope topic covered
+  - every cell of the 3-axis grid has at least
+    one intent
+  - every archetype appears in at least 3 intents
 
-More coverage is always better than less.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CATEGORY DEFINITIONS AND COVERAGE RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY-SPECIFIC COVERAGE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ── SIMPLE ──────────────────────────────
-
-Definition:
-  One tool call. All required parameters will
-  be present in the user message.
-
-How many to generate:
-  - At minimum: one intent per tool
-  - Additionally: one extra intent per tool
-    that has meaningful parameter variations
-
-Coverage complete when:
-  Every tool has been exercised in every
-  distinct parameter combination that a
-  real farmer might use.
+Coverage rule:
+  - one intent per tool minimum
+  - additional intents for tools with meaningful
+    parameter variations (e.g. status check by
+    Aadhaar vs mobile vs beneficiary_id)
 
 ── MULTIPLE ────────────────────────────
+Coverage rule:
+  - one intent per distractor trap
+  - each trap appears at least twice with
+    different phrasings
 
-Definition:
-  Many tools available. Only ONE is correct.
-  Distractor tools look tempting but are wrong.
-
-How many to generate:
-  One intent per distractor trap.
-  Each trap must appear at least twice.
-
-Coverage complete when:
-  Every trap appears at least twice.
+Distractor traps to cover:
+  TRAP A: pmkisan_get_beneficiary_status vs
+          pmkisan_get_payment_history
+  TRAP B: pmkisan_complete_ekyc vs
+          pmkisan_check_eligibility
+  TRAP C: pmkisan_track_installment_status vs
+          pmkisan_track_payment
+  TRAP D: pmkisan_raise_grievance vs
+          pmkisan_resolve_payment_failure
+  TRAP E: pmkisan_update_bank_details vs
+          pmkisan_validate_land_records
+  TRAP F: pmkisan_get_beneficiary_status vs
+          pmkisan_check_eligibility
+  TRAP G: pmkisan_track_grievance_status vs
+          pmkisan_track_installment_status
 
 ── PARALLEL ────────────────────────────
+Same-tool simultaneous calls. Pairs to cover:
+  - get_beneficiary_status for two farmers
+  - track_installment_status for installments 1+2
+  - track_payment for two payment references
+  - track_grievance_status for two grievance IDs
+  - check_eligibility for two Aadhaars
 
-Definition:
-  Two calls to the SAME tool with different
-  parameters simultaneously.
+── PARALLEL_MULTIPLE ───────────────────
+Different-tool simultaneous calls. Pairs to cover:
+  - get_beneficiary_status + track_installment_status
+  - get_payment_history + track_grievance_status
+  - check_eligibility + get_beneficiary_status
+  - validate_land_records + check_eligibility
+  - get_payment_history + track_installment_status
 
-Coverage complete when:
-  Every tool with natural parallel use
-  has at least one parallel intent.
+STRICT: never pair tools with a dependency
+between them.
 
-── PARALLEL MULTIPLE ───────────────────
+── TASK_IRRELEVANCE ────────────────────
+Topics to cover:
+  - crop insurance premium (PMFBY)
+  - mandi prices (eNAM)
+  - soil health card status
+  - fertilizer subsidy DBT (iFMS)
+  - MGNREGA job card or payment
+  - Kisan Credit Card loan status
+  - weather forecast (Meghdoot/Kisan Suvidha)
+  - PM-KUSUM solar pump
+  - eNAM trader registration
 
-How many to generate:
-  At least 5 distinct parallel multiple intents.
+── BASE ────────────────────────────────
+Chains to cover (one intent per distinct
+domain-enforced chain):
+  CHAIN A — New registration flow
+  CHAIN B — Payment diagnosis flow
+  CHAIN C — Payment failure resolution
+  CHAIN D — Grievance flow
+  CHAIN E — eKYC fix after registration
+  CHAIN F — Bank update after payment failure
 
-Definition:
-  Two or more DIFFERENT tools called at the
-  same time. Independent execution.
+── MISS_PARAM ──────────────────────────
+Parameters commonly omitted:
+  - aadhaar_number missing from status check
+  - installment_number missing from track request
+  - bank_account missing from update request
+  - ifsc_code missing from bank update
+  - grievance_category missing from complaint
+  - state missing from land record validation
+  - otp missing from verification
+  - beneficiary_id missing when required
 
-Coverage complete when:
-  Every natural cross-tool pair covered.
+── MISS_FUNC ───────────────────────────
+Unavailable actions to cover:
+  - change registered Aadhaar number
+  - transfer benefit to another person
+  - register two beneficiaries on same Aadhaar
+  - claim PM-KISAN for rented land
+  - claim retroactively for missed years
+  - split installment across two bank accounts
+  - check another farmer's status
+  - request advance payment
 
-── TASK IRRELEVANCE ────────────────────
+── LONG_CONTEXT ────────────────────────
+One long_context intent per base chain.
 
-How many to generate:
-  At least 5 distinct task irrelevance intents (e.g. cricket, medical, railway, irrelevant scheme).
-
-Definition:
-  Farmer query but NO tool applies.
-
-Coverage complete when:
-  All adjacent domains are covered.
-
-── BASE (multi-turn) ───────────────────
-
-How many to generate:
-  At least 5 distinct multi-turn flows (chains of 2 to 3 tools).
-
-Definition:
-  Multi-step chain with domain constraints.
-
-Coverage complete when:
-  All real-world flows covered.
-
-── MISS_PARAM (multi-turn) ─────────────
-
-Definition:
-  Missing required parameter.
-
-Coverage complete when:
-  All common missing parameters covered.
-
-── MISS_FUNC (multi-turn) ──────────────
-
-Definition:
-  Unsupported action requested.
-
-Coverage complete when:
-  All realistic unsupported actions covered.
-
-── LONG_CONTEXT (multi-turn) ───────────
-
-Definition:
-  Same as base but with long context.
-
-Coverage complete when:
-  Equal to base count.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OUTPUT SCHEMA (EVERY INTENT)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 {
   "intent_id": "pmkisan_simple_001",
-  "usecase": "pmkisan",
+  "usecase": "pm_kisan",
   "category": "simple",
-  "abstract_goal": "...",
-  "required_tools": ["..."],
+
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+
+  "abstract_goal": "farmer wants to check whether
+    they are registered under PM-KISAN using their
+    Aadhaar number",
+
+  "required_tools": [
+    "pmkisan_get_beneficiary_status"
+  ],
+
   "chain_order_enforced": false,
   "domain_constraint": null,
-  "suggested_persona": "PERSONA_A",
+
   "distractor_tools": [],
   "parallel_tools": [],
   "missing_param": null,
   "missing_func": null,
   "irrelevance_reason": null,
-  "eval_notes": "..."
+
+  "state_preconditions": {
+    "registration_status": "registered"
+  },
+
+  "state_transition": {
+    "reads": ["registration_status",
+              "installments_credited",
+              "installments_pending"],
+    "writes": {}
+  },
+
+  "compatible_archetypes": [
+    "ARC_01", "ARC_03", "ARC_07", "ARC_12"
+  ],
+
+  "eval_notes": "model must not confuse beneficiary
+    status with payment history"
 }
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIELD RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+intent_id:
+  pmkisan_{category}_{NNN}
+  NNN zero-padded to 3 digits
+  category abbreviations:
+    simple → simple
+    multiple → multiple
+    parallel → parallel
+    parallel_multiple → par_multi
+    task_irrelevance → irrelevance
+    base → base
+    miss_param → miss_param
+    miss_func → miss_func
+    long_context → long_ctx
+
+axes:
+  fields exactly as defined above
+  use the CATEGORY TO AXIS MAPPING
+
+required_tools:
+  exact tool name strings from tools.jsonl only
+  for multi-turn intents, list tools in chain
+  order (the order the model should call them)
+
+chain_order_enforced:
+  true only for base and long_context
+  false for everything else
+
+domain_constraint:
+  if chain_order_enforced is true:
+    one sentence explaining why order is required
+    (e.g. "eKYC must complete before installment
+     can be credited")
+  else: null
+
+distractor_tools:
+  non-empty for multiple only
+  empty [] otherwise
+
+parallel_tools:
+  non-empty for parallel and parallel_multiple
+  empty [] otherwise
+
+missing_param:
+  non-null for miss_param only
+  format: {"turn_index": 1, "param_name": "..."}
+  null otherwise
+
+missing_func:
+  non-null for miss_func only
+  format: {"turn_index": 1,
+           "requested_action": "..."}
+  null otherwise
+
+irrelevance_reason:
+  non-null for task_irrelevance only
+  one sentence: which other UMANG service handles
+  this and why PM-KISAN does not
+  null otherwise
+
+state_preconditions:
+  MANDATORY on every intent
+  dict of state_field → expected value
+  use only state fields from the
+  STATE FIELDS AVAILABLE section
+  For task_irrelevance: state_preconditions: {}
+    (state does not matter for out-of-scope)
+
+state_transition:
+  MANDATORY on every intent
+  format:
+    {
+      "reads": [list of state fields read],
+      "writes": {state_field: new_value, ...}
+    }
+  reads: which state fields this intent's tools
+    will read to compute response
+  writes: which state fields will change if the
+    intent succeeds
+    Use {} for read-only intents.
+
+  Examples:
+    Simple status check:
+      reads: ["registration_status",
+              "installments_credited"]
+      writes: {}
+
+    eKYC completion:
+      reads: ["ekyc_status",
+              "authenticated"]
+      writes: {
+        "ekyc_status": "completed",
+        "has_pending_over_90_days": false
+      }
+
+    Grievance filing:
+      reads: ["registration_status"]
+      writes: {
+        "has_active_grievance": true,
+        "grievance_status": "filed"
+      }
+
+compatible_archetypes:
+  list of archetype_ids from persona.json
+  that could plausibly hold this intent
+
+  Compatibility logic examples:
+    - intents requiring upfront_complete
+      information_disclosure: prefer high
+      digital_literacy archetypes
+    - intents about FPO trade: include
+      fpo_member archetypes
+    - intents about widowed transfer:
+      include relevant female archetypes
+    - low digital literacy archetypes:
+      pair with intents that have
+      partial_then_supply or reactive_only
+      patterns (problem_oriented framing)
+
+  Across ALL intents, every one of the 16
+  archetypes must appear in at least 3 intents.
+
+eval_notes:
+  one sentence on what makes evaluation of
+  this intent non-trivial
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SELF-VALIDATION BEFORE OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✓ every tool in tools.jsonl appears in required_tools at least once  
-✓ no invented tool names anywhere  
-✓ all suggested_persona values exist in personas.json  
-✓ chain_order_enforced true only for base and long_context  
-✓ distractor_tools non-empty for multiple  
-✓ parallel_tools non-empty for parallel and parallel_multiple  
-✓ missing_param non-null for miss_param  
-✓ missing_func non-null for miss_func  
-✓ irrelevance_reason non-null for task_irrelevance  
-✓ long_context count matches base count  
+Before producing output, verify:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✓ every intent has axes block with all three
+    fields populated
+  ✓ axes values match CATEGORY TO AXIS MAPPING
+  ✓ every tool in tools.jsonl appears in
+    required_tools at least once
+  ✓ no invented tool names
+  ✓ no invented state field names — all state
+    fields come from the STATE FIELDS AVAILABLE
+    section or are inferred from tools.jsonl
+  ✓ all archetype_ids in compatible_archetypes
+    exist in persona.json
+  ✓ chain_order_enforced true only for base and
+    long_context
+  ✓ distractor_tools non-empty for multiple
+  ✓ parallel_tools non-empty for parallel and
+    parallel_multiple
+  ✓ missing_param non-null for miss_param
+  ✓ missing_func non-null for miss_func
+  ✓ irrelevance_reason non-null for task_irrelevance
+  ✓ state_preconditions present on every intent
+  ✓ state_transition present on every intent
+  ✓ every archetype appears in at least 3 intents
+  ✓ every 3-axis grid cell has at least one intent
+  ✓ every tool exercised by base chains has its
+    state_transition writes consistent with
+    other intents that depend on those writes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OUTPUT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Output ONLY a JSON array.
-No markdown. No explanation.
-No trailing commas. No missing fields.
-No extra fields. No truncation.
+Output ONLY a JSON array of intent objects.
+No markdown fences. No explanation. No comments.
+No trailing commas. No missing fields. No extra
+fields. No truncation.
 
-SAVE TO:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\1 Crop Schemes & Subsidies\PM-KISAN (income support)\intents.json
+SAVE TO: intents.json

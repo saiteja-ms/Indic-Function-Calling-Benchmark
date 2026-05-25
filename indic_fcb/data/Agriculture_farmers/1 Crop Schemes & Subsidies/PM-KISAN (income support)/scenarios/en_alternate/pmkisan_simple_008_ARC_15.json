@@ -1,0 +1,72 @@
+{
+  "scenario_id": "pmkisan_simple_008_ARC_15",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_simple_008",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "registration_status": "registered",
+    "payment_failure_reason": "aadhaar_mismatch",
+    "authenticated": true,
+    "session_token": "TOKEN_123",
+    "beneficiary_id": "BEN_15_123",
+    "failed_transaction_id": "TXN1234567890123",
+    "bank_account": "CNRB0001234|001122334455",
+    "ekyc_status": "completed",
+    "installments": [
+      {
+        "installment_id": "INST_15_1",
+        "installment_number": "installment_1",
+        "amount": 2000,
+        "status": "failed",
+        "transaction_id": "TXN1234567890123"
+      }
+    ]
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am Lakshmi. My PM-KISAN payment failed due to an Aadhaar mismatch. I have updated my Aadhaar details to fix this. My beneficiary ID is BEN_15_123 and the failed transaction ID is TXN1234567890123. Retry the payment immediately. I don't want any more delays or I will escalate this to higher authorities."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkisan_resolve_payment_failure",
+          "parameters": {
+            "session_token": {
+              "value": null,
+              "eval_mode": "TYPE_ONLY"
+            },
+            "beneficiary_id": {
+              "value": "BEN_15_123",
+              "eval_mode": "EXACT"
+            },
+            "failed_transaction_id": {
+              "value": "TXN1234567890123",
+              "eval_mode": "EXACT"
+            },
+            "resolution_action": {
+              "value": "updated Aadhaar",
+              "eval_mode": "SUBSTRING"
+            }
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null
+    }
+  ],
+  "expected_final_state": {
+    "payment_failure_reason": null
+  }
+}

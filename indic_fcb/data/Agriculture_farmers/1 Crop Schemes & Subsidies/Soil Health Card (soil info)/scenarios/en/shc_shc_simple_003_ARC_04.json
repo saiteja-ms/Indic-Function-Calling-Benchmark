@@ -1,0 +1,71 @@
+{
+  "scenario_id": "shc_shc_simple_003_ARC_04",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_simple_003",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "test_status": "completed",
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My soil test is completed and the card is issued, but I can't download the document! This system is always giving me trouble. My sample ID is SAMP-7788."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "Why do I need to give this every time? Fine, my session token is TKN-9900. Just get me my card."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_soil_health_card",
+          "parameters": {
+            "sample_id": {
+              "value": "SAMP-7788",
+              "eval_mode": "EXACT"
+            },
+            "session_token": {
+              "value": "TKN-9900",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "sample_id": "EXACT",
+            "session_token": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

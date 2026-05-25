@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmkusum_miss_func_004_ARC_15",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_func_004",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to submit a second Component B application for my landholding. My survey number is 123/4 and I need a 5 HP pump. I already have an approved application but I need another one."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "submit a second Component B application for the same landholding",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

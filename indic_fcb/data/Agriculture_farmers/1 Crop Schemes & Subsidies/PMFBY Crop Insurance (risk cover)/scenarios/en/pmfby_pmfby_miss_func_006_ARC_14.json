@@ -1,0 +1,37 @@
+{
+  "scenario_id": "pmfby_pmfby_miss_func_006_ARC_14",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_miss_func_006",
+  "archetype_ref": "ARC_14",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "678901234568",
+    "mobile_number": "8432109765",
+    "bank_account": "SBIN001122334455",
+    "farmer_owns_land": false,
+    "enrollment_status": "not_enrolled"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am farming on leased land in Meerut. I want to enroll for PMFBY crop insurance but I do not have the owner's consent document. Please enroll me without it."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "enroll a tenant farmer without owner consent",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

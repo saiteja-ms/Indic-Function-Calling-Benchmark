@@ -1,0 +1,36 @@
+{
+  "scenario_id": "pmkusum_pmkusum_miss_func_003_ARC_15",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_miss_func_003",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB001122334455",
+    "vendor_selection_status": "pending"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to select vendor VEND-999 for my application APP-12345. I know they are not empanelled for Coimbatore district, but I want them anyway."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": "select a vendor not empanelled for the district",
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

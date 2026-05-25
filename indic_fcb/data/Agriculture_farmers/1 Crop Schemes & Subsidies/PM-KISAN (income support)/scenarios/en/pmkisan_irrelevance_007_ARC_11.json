@@ -1,0 +1,35 @@
+{
+  "scenario_id": "pmkisan_irrelevance_007_ARC_11",
+  "usecase": "pm_kisan",
+  "intent_ref": "pmkisan_irrelevance_007",
+  "archetype_ref": "ARC_11",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "irrelevance"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "345678901235",
+    "mobile_number": "7432109865",
+    "bank_account": "CNRB|001122334455"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I am worried about my cotton crop because of the changing climate. Can you please check the weather forecast for Guntur district for the next few days?"
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": "Meghdoot or Kisan Suvidha handles weather forecasts, not PM-KISAN."
+    }
+  ],
+  "expected_final_state": {}
+}

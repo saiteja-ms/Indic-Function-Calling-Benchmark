@@ -1,0 +1,50 @@
+{
+  "scenario_id": "pmfby_pmfby_multiple_012_ARC_15",
+  "usecase": "pmfby",
+  "intent_ref": "pmfby_multiple_012",
+  "archetype_ref": "ARC_15",
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "789012345679",
+    "mobile_number": "7321098654",
+    "bank_account": "CNRB|001122334455",
+    "premium_payment_status": "paid",
+    "policy_status": "not_issued",
+    "grievance_status": "not_filed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to file a complaint right now. My premium was deducted from my bank account but the policy has not been issued yet. My application ID is APP987654. Register this under premium deduction dispute. If this is not resolved immediately, I will escalate to a senior officer."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "pmfby_raise_grievance",
+          "arguments": {
+            "session_token": "null",
+            "grievance_category": "premium_deduction_dispute",
+            "reference_id": "APP987654",
+            "grievance_description": "Premium was deducted from bank account but the policy has not been issued yet."
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "grievance_status": "filed"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "scenario_id": "shc_shc_multiple_008_ARC_04",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_008",
+  "archetype_ref": "ARC_04",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "567890123456",
+    "mobile_number": "6543210987",
+    "bank_account": "BKID001122334455",
+    "card_count_for_plot": 2,
+    "card_status": "issued"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My new soil health card has different values than last year's. I want to compare my historical cards to see the changes. My plot ID is PLOT-456."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "This process is so frustrating, I might just complain to the senior officer! Here is my session token: TOKEN-888. Now compare them quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "name": "shc_compare_historical_cards",
+          "arguments": {
+            "session_token": "TOKEN-888",
+            "plot_id": "PLOT-456"
+          },
+          "eval_modes": {
+            "session_token": "EXACT",
+            "plot_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

@@ -1,201 +1,602 @@
 You are building an intent registry for a
-function-calling benchmark.
+function-calling benchmark for the Agricultural
+Technology Management Agency (ATMA) and Crop
+Advisory service on UMANG.
+
+ATMA is the district-level agricultural extension
+system connecting farmers to KVKs (Krishi Vigyan
+Kendras), subject matter specialists, demonstration
+plots, and training programmes. This usecase
+covers expert advisory access, training
+registration, expert query submission, farm school
+visits, and grievance handling.
+
+This is DISTINCT from:
+  - Kisan Suvidha (weather and market prices)
+  - SHC Portal (soil test results)
+  - Meghdoot/Damini (agro-met and lightning)
+ATMA covers expert human advisory and extension
+services only.
 
 READ:
-  - tools.jsonl from the current usecase directory
-  - personas.json from the current usecase directory
+  - tools.jsonl from path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\tools.jsonl"
+  - persona.json (16 farmer archetypes shared
+    across all farmer usecases) from path "C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\persona.json"
 
-USECASE: Crop Advisory (ATMA)
 
-TOOLS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\tools.jsonl
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL — ARCHETYPE ID FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PERSONAS FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\personas.json
+Archetype IDs in compatible_archetypes MUST be
+the canonical IDs from persona.json:
 
-STUB LOGIC FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\stub_logic.py
+  ARC_01, ARC_02, ARC_03, ARC_04, ARC_05,
+  ARC_06, ARC_07, ARC_08, ARC_09, ARC_10,
+  ARC_11, ARC_12, ARC_13, ARC_14, ARC_15, ARC_16
 
-STUB FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\stubs.py
+DO NOT invent descriptive IDs like
+"arch_01_small_owner_hindi_belt". These will
+fail matching against persona.json and the
+scenario generator will skip them.
 
-OUTPUT FILE:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\intents.json
+To pick compatible archetypes:
+  1. READ persona.json
+  2. Inspect each archetype's attributes
+     (landholding_category, farmer_category,
+      region, irrigation_type, digital_literacy,
+      scheme_experience, etc.)
+  3. Decide if that archetype could plausibly
+     hold this intent
+  4. Reference it by ITS archetype_id from
+     persona.json (ARC_XX format)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE-AXIS EVALUATION — STRUCTURAL DEFINITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AXIS 1 — conversation_length:
+  single_turn = exactly one user message in
+                the conversation
+  multi_turn  = two or more user messages
+
+AXIS 2 — tool_calls_per_turn:
+  single_step = every ground_truth turn has
+                at most ONE tool_call
+  multi_step  = at least one ground_truth turn
+                has TWO or more tool_calls
+
+AXIS 3 — task_type:
+  simple              = at most one tool call
+                        per turn AND no
+                        irrelevance pattern
+  parallel_multiple   = multiple tool calls in
+                        one turn AND those calls
+                        target DIFFERENT tools
+  irrelevance         = ALL ground_truth turns
+                        have null_call: true AND
+                        at least one has an
+                        irrelevance_reason
+
+NOTE: parallel (same tool, different params,
+multiple calls in one turn) maps to task_type
+"simple" — the multi-step nature is captured
+by AXIS 2, not AXIS 3. parallel_multiple is
+reserved for DIFFERENT tools called together.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY TO AXIS MAPPING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+simple           : single_turn, single_step, simple
+multiple         : single_turn, single_step, simple
+                   (with distractors)
+parallel         : single_turn, multi_step, simple
+parallel_multiple: single_turn, multi_step,
+                   parallel_multiple
+task_irrelevance : single_turn, single_step,
+                   irrelevance
+base             : multi_turn, single_step, simple
+miss_param       : multi_turn, single_step, simple
+miss_func        : multi_turn, single_step,
+                   irrelevance (one turn only)
+long_context     : multi_turn, single_step, simple
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WHAT IS AN INTENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-An intent is an abstract user goal, independent
-of language and phrasing. Later, 3 scenario
-variants (A, B, C) will be generated per intent.
+An intent carries:
+  - three-axis position
+  - state_preconditions
+  - state_transition (reads + writes)
+  - compatible_archetypes
 
-An intent contains NO user prompt text —
-only the abstract goal and metadata.
+State preconditions + transitions are the
+SPECIFICATION for stub_logic.py to implement.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GUIDING PRINCIPLE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STATE FIELDS AVAILABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Do NOT target a fixed number of intents.
-Generate AS MANY intents as needed to achieve
-COMPLETE COVERAGE of every category.
+  authenticated              : true | false
+  session_token              : string | null
+  farmer_profile_status      : not_registered |
+                               registered | verified |
+                               suspended
+  training_registration_status: not_registered |
+                                registered |
+                                waitlisted |
+                                cancelled | attended |
+                                certified
+  query_status               : not_submitted |
+                               submitted | assigned |
+                               responded | closed |
+                               escalated
+  farm_school_visit_status   : not_scheduled |
+                               scheduled | completed |
+                               cancelled
+  programme_availability     : open | full | closed |
+                               cancelled
+  certificate_status         : not_issued | issued |
+                               downloaded | revoked
+  attendance_confirmed       : true | false
+  query_count_open           : integer 0+
+  has_active_grievance       : true | false
+  grievance_status           : not_filed | filed |
+                               under_review |
+                               resolved | rejected
 
-Complete coverage means:
-  - every tool exercised in every meaningful way
-  - every distractor trap covered
-  - every domain-enforced chain covered
-  - every commonly omitted parameter covered
-  - every plausible-but-unavailable action covered
-  - every adjacent-but-out-of-scope topic covered
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COVERAGE PRINCIPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-More coverage is always better than less.
+Coverage-driven. No fixed count.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CATEGORY DEFINITIONS AND COVERAGE RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Must achieve:
+  - every tool exercised meaningfully
+  - every distractor trap covered twice
+  - every base chain covered
+  - every missing param covered
+  - every genuinely unavailable action covered
+  - every out-of-scope topic covered
+  - every 3-axis grid cell covered
+  - every archetype in at least 3 intents
 
-── SIMPLE ──────────────────────────────
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY-SPECIFIC COVERAGE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Definition:
-  One tool call. All required parameters will
-  be present in the user message.
+── SIMPLE ──────────────────────────────────────────
 
-How many to generate:
-  - At minimum: one intent per tool
-  - Additionally: one extra intent per tool
-    that has meaningful parameter variations
+One intent per tool minimum.
 
-Coverage complete when:
-  Every tool has been exercised in every
-  distinct parameter combination that a
-  real farmer might use.
+── MULTIPLE ────────────────────────────────────────
 
-── MULTIPLE ────────────────────────────
+Distractor traps — each appears twice with
+different user phrasings.
 
-Definition:
-  Many tools available. Only ONE is correct.
-  Distractor tools look tempting but are wrong.
+A distractor trap is two tools that would
+plausibly seem to solve the SAME user request
+but only ONE is correct.
 
-How many to generate:
-  One intent per distractor trap.
-  Each trap must appear at least twice.
+  TRAP A: "I have a specific problem with my
+          paddy crop"
+    Correct  : atma_submit_expert_query
+    Distractor: atma_get_advisory_bulletin
+    Trap: bulletin is general advisory for the
+    district; expert query is for a specific
+    problem needing personalised response.
 
-Coverage complete when:
-  Every trap appears at least twice.
+  TRAP B: "what training programmes are
+          available next month"
+    Correct  : atma_get_available_trainings
+    Distractor: atma_get_demonstration_schedule
+    Trap: trainings are formal indoor/classroom
+    programmes; demonstrations are field
+    visits to model plots.
 
-── PARALLEL ────────────────────────────
+  TRAP C: "I want to attend the upcoming
+          rice training"
+    Correct  : atma_register_for_training
+    Distractor: atma_get_available_trainings
+    Trap: register is the action of enrolling;
+    get_available is the lookup of options.
 
-Definition:
-  Two calls to the SAME tool with different
-  parameters simultaneously.
+  TRAP D: "how do I get my training certificate"
+    Correct  : atma_download_training_certificate
+    Distractor: atma_confirm_training_attendance
+    Trap: download is for an already-issued
+    certificate; confirm is a prerequisite step
+    that triggers issuance.
 
-Coverage complete when:
-  Every tool with natural parallel use
-  has at least one parallel intent.
+  TRAP E: "the agriculture officer never
+          answered my query"
+    Correct  : atma_raise_grievance
+    Distractor: atma_track_query_response
+    Trap: grievance escalates a service failure;
+    track only shows current status without
+    escalation.
 
-── PARALLEL MULTIPLE ───────────────────
+  TRAP F: "what is the recommended pest
+          management for cotton bollworm"
+    Correct  : atma_get_ipm_advisory
+    Distractor: atma_get_advisory_bulletin
+    Trap: IPM advisory is pest-specific
+    integrated pest management; bulletin is
+    general crop guidance.
 
-How many to generate:
-  At least 5 distinct parallel multiple intents.
+  TRAP G: "I want to visit the demonstration
+          plot in my block"
+    Correct  : atma_schedule_farm_school_visit
+    Distractor: atma_get_demonstration_schedule
+    Trap: schedule_visit is the action of
+    booking; get_demo_schedule is the lookup
+    of when demonstrations happen.
 
-Definition:
-  Two or more DIFFERENT tools called at the
-  same time. Independent execution.
+── PARALLEL ────────────────────────────────────────
 
-Coverage complete when:
-  Every natural cross-tool pair covered.
+Same-tool simultaneous calls. The intent has
+multiple calls to ONE tool in a single turn:
+  - find_nearest_kvk for two districts
+  - get_advisory_bulletin for two crops
+  - get_ipm_advisory for two pest categories
+  - get_available_trainings for two months
+  - track_grievance_status for two IDs
 
-── TASK IRRELEVANCE ────────────────────
+── PARALLEL_MULTIPLE ───────────────────────────────
 
-How many to generate:
-  At least 5 distinct task irrelevance intents (e.g. cricket, medical, railway, irrelevant scheme).
+Different-tool simultaneous calls. The intent
+has calls to MULTIPLE DIFFERENT tools in a
+single turn, with no dependency between them:
+  - find_nearest_kvk + get_sms_contact
+  - get_advisory_bulletin + get_ipm_advisory
+  - get_available_trainings +
+    get_demonstration_schedule
+  - get_technology_package +
+    get_advisory_bulletin
+  - get_agro_climatic_zone +
+    get_technology_package
 
-Definition:
-  Farmer query but NO tool applies.
+STRICT: never pair tools where one depends on
+the other's output.
 
-Coverage complete when:
-  All adjacent domains are covered.
+── TASK_IRRELEVANCE ────────────────────────────────
 
-── BASE (multi-turn) ───────────────────
+Topics where no ATMA tool applies:
+  - weather forecast for next week (Kisan
+    Suvidha or Meghdoot)
+  - soil test scheduling or soil sample
+    collection (SHC scheme)
+  - mandi prices for crops (eNAM or Kisan
+    Suvidha)
+  - PM-KISAN installment status
+  - fertilizer subsidy DBT (iFMS)
+  - PMFBY crop insurance enrollment
+  - PM-KUSUM solar pump application
+  - buying seeds at a registered dealer (PSD
+    usecase)
+  - MSP procurement token booking
+  - cattle vaccination scheduling
+  - lightning alerts (Damini)
 
-How many to generate:
-  At least 5 distinct multi-turn flows (chains of 2 to 3 tools).
+── BASE ────────────────────────────────────────────
 
-Definition:
-  Multi-step chain with domain constraints.
+Multi-turn chains. chain_order_enforced: true.
 
-Coverage complete when:
-  All real-world flows covered.
+  CHAIN A — Profile registration to training
+            registration
+    domain_constraint: "training registration
+    requires a verified farmer profile in the
+    ATMA system"
+    Order: authenticate →
+           register_farmer_profile →
+           get_available_trainings →
+           register_for_training
 
-── MISS_PARAM (multi-turn) ─────────────
+  CHAIN B — Expert query submission and
+            tracking
+    domain_constraint: "expert query requires
+    a verified farmer profile before it can
+    be assigned to a specialist"
+    Order: authenticate →
+           register_farmer_profile →
+           submit_expert_query →
+           track_query_response
 
-Definition:
-  Missing required parameter.
+  CHAIN C — Training completion and certificate
+    domain_constraint: "certificate is issued
+    only after attendance is confirmed by the
+    training coordinator"
+    Order: authenticate →
+           get_available_trainings →
+           register_for_training →
+           confirm_training_attendance →
+           download_training_certificate
 
-Coverage complete when:
-  All common missing parameters covered.
+  CHAIN D — Farm school visit
+    domain_constraint: "farm school visit
+    scheduling requires a verified profile"
+    Order: authenticate →
+           register_farmer_profile →
+           schedule_farm_school_visit
 
-── MISS_FUNC (multi-turn) ──────────────
+  CHAIN E — Grievance flow
+    domain_constraint: "grievance requires a
+    submitted query to file against"
+    Order: authenticate →
+           track_query_response →
+           raise_grievance
 
-Definition:
-  Unsupported action requested.
+── MISS_PARAM ──────────────────────────────────────
 
-Coverage complete when:
-  All realistic unsupported actions covered.
+Parameters commonly omitted:
+  - district missing from KVK lookup
+  - crop missing from advisory bulletin
+  - training_id missing from registration
+  - query_text missing from expert query
+  - visit_date missing from farm school
+    schedule
+  - otp missing from authentication
+  - crop_stage missing from IPM advisory
+  - pest_category missing from IPM advisory
 
-── LONG_CONTEXT (multi-turn) ───────────
+── MISS_FUNC ───────────────────────────────────────
 
-Definition:
-  Same as base but with long context.
+Actions ATMA genuinely cannot perform — no
+tool exists for these:
 
-Coverage complete when:
-  Equal to base count.
+  - register for a training programme that
+    is cancelled (no override mechanism)
+  - download a training certificate before
+    attendance is confirmed (no early
+    issuance)
+  - submit an expert query without a
+    registered farmer profile (system blocks)
+  - schedule a farm school visit without a
+    verified profile (profile prerequisite)
+  - submit a 4th open query when 3 are
+    already open (3-query limit per farmer)
+  - reopen a closed query (no reopen
+    function; must submit new query)
+  - issue a certificate retroactively for a
+    training never attended (no retroactive
+    issuance)
+  - request advisory in a language not
+    supported for the district (system has
+    fixed language coverage per district)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT SCHEMA (EVERY INTENT)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── LONG_CONTEXT ────────────────────────────────────
+
+One long_context intent per base chain (5 total).
+Each has 3-5 padding user turns BEFORE the chain
+begins. Padding turns have tool_calls: [] and
+null_call: true.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPATIBLE ARCHETYPE GUIDANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Compatibility uses ONLY archetype attributes
+from persona.json. NEVER use state fields as
+filters. Always reference archetypes by their
+canonical ID (ARC_01 to ARC_16). Do NOT invent
+descriptive IDs.
+
+MORE COMPATIBLE for ATMA:
+  - scheme_experience: repeat_beneficiary or
+    aware_of_details (informed users benefit
+    most from extension services)
+  - landholding_category: small, medium, large
+    (more to gain from technology packages
+    and IPM advisory)
+  - knowledge_of_scheme: aware_of_basics or
+    aware_of_details (the service requires
+    some background understanding)
+
+LESS COMPATIBLE:
+  - digital_literacy: level_5 archetypes
+    (often bypass extension services using
+    private channels)
+  - knowledge_of_scheme: unaware archetypes
+    for complex base chains (still valid for
+    simple lookups)
+
+FORCED COMPATIBLE:
+  - digital_literacy level_1 and level_2
+    archetypes MUST appear in find_nearest_kvk
+    and get_advisory_bulletin intents (these
+    are the most common low-literacy use cases
+    via CSC operators)
+  - farmer_category: tenant or sharecropper
+    archetypes CAN appear (ATMA does not
+    require land ownership unlike PMFBY or
+    SHC scheme) — include them in regular
+    intents, not only miss_func
+
+PROCESS for picking compatible archetypes:
+  1. Open persona.json
+  2. For each of ARC_01 through ARC_16, check:
+     - landholding_category
+     - farmer_category
+     - region
+     - digital_literacy
+     - scheme_experience
+     - knowledge_of_scheme
+  3. Apply rules above to decide compatibility
+  4. List archetype_id values (ARC_XX format)
+
+Every archetype must appear in at least 3 intents
+across all categories.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 {
   "intent_id": "atma_simple_001",
   "usecase": "atma",
   "category": "simple",
-  "abstract_goal": "...",
-  "required_tools": ["..."],
+
+  "axes": {
+    "conversation_length": "single_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+
+  "abstract_goal": "farmer wants to find the
+    nearest KVK in their district for
+    in-person consultation",
+
+  "required_tools": [
+    "atma_find_nearest_kvk"
+  ],
+
   "chain_order_enforced": false,
   "domain_constraint": null,
-  "suggested_persona": "PERSONA_A",
+
   "distractor_tools": [],
   "parallel_tools": [],
   "missing_param": null,
   "missing_func": null,
   "irrelevance_reason": null,
-  "eval_notes": "..."
+
+  "state_preconditions": {},
+
+  "state_transition": {
+    "reads": ["farmer_profile_status"],
+    "writes": {}
+  },
+
+  "compatible_archetypes": [
+    "ARC_01", "ARC_04", "ARC_07", "ARC_12"
+  ],
+
+  "eval_notes": "model must use KVK lookup
+    not SMS contact lookup"
 }
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SELF-VALIDATION BEFORE OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIELD RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✓ every tool in tools.jsonl appears in required_tools at least once  
-✓ no invented tool names anywhere  
-✓ all suggested_persona values exist in personas.json  
-✓ chain_order_enforced true only for base and long_context  
-✓ distractor_tools non-empty for multiple  
-✓ parallel_tools non-empty for parallel and parallel_multiple  
-✓ missing_param non-null for miss_param  
-✓ missing_func non-null for miss_func  
-✓ irrelevance_reason non-null for task_irrelevance  
-✓ long_context count matches base count  
+intent_id: atma_{category}_{NNN}, NNN zero-padded
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+axes: use CATEGORY TO AXIS MAPPING exactly
+
+required_tools: exact names from tools.jsonl
+
+chain_order_enforced: true only for base and
+  long_context
+
+domain_constraint: one sentence ONLY when
+  chain_order_enforced is true
+
+distractor_tools: non-empty for multiple only
+  Contains the DISTRACTOR side of the trap
+
+parallel_tools: non-empty for parallel and
+  parallel_multiple
+
+missing_param: non-null for miss_param
+  Format: {"turn_index": <int>,
+           "param_name": "<exact from tools.jsonl>"}
+
+missing_func: non-null for miss_func
+  Format: {"turn_index": <int>,
+           "requested_action": "<one sentence>"}
+
+irrelevance_reason: non-null for task_irrelevance
+  One sentence
+
+state_preconditions: MANDATORY
+  Empty {} only for task_irrelevance and for
+  public read-only intents (e.g. KVK lookup)
+  Use only state fields from STATE FIELDS AVAILABLE
+
+state_transition: MANDATORY
+  reads: array of state fields (non-empty)
+  writes: dict (empty {} for read-only intents)
+
+compatible_archetypes: MUST use canonical IDs
+  ARC_01 to ARC_16 from persona.json.
+  NEVER use descriptive IDs like
+  "arch_03_large_owner_punjab".
+  Every archetype in at least 3 intents.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELF-VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURAL:
+  ✓ every intent has axes block
+  ✓ axes match CATEGORY TO AXIS MAPPING
+  ✓ intent_id format atma_{category}_{NNN}
+  ✓ every required field present
+
+TOOLS:
+  ✓ every tool in tools.jsonl in required_tools
+    at least once
+  ✓ no invented tool names
+  ✓ no tool in BOTH required_tools and
+    distractor_tools of same intent
+
+CATEGORY:
+  ✓ chain_order_enforced true only for base
+    and long_context
+  ✓ domain_constraint non-null when
+    chain_order_enforced true
+  ✓ distractor_tools non-empty for multiple
+  ✓ parallel_tools non-empty for parallel and
+    parallel_multiple
+  ✓ missing_param non-null for miss_param
+  ✓ missing_func non-null for miss_func
+  ✓ irrelevance_reason non-null for
+    task_irrelevance
+
+STATE:
+  ✓ no invented state field names
+  ✓ state_preconditions on every intent
+  ✓ state_transition on every intent
+  ✓ reads is non-empty array
+
+ARCHETYPES (CRITICAL — most common error source):
+  ✓ EVERY archetype_id in compatible_archetypes
+    matches the canonical pattern ARC_XX where
+    XX is 01-16
+  ✓ NO descriptive IDs like
+    "arch_03_large_owner_punjab"
+  ✓ all archetype_ids exist in persona.json
+  ✓ compatibility uses only archetype attributes
+  ✓ every archetype appears in at least 3 intents
+  ✓ tenant/sharecropper appears in regular
+    intents (ATMA does not require ownership)
+
+DOMAIN-SPECIFIC:
+  ✓ profile prerequisite for queries and visits
+    reflected in miss_func
+  ✓ certificate-before-attendance exclusion in
+    miss_func
+  ✓ 3-query limit reflected in miss_func
+  ✓ programme cancellation reflected in miss_func
+  ✓ retroactive certificate issuance absent in
+    miss_func
+  ✓ closed-query reopen absent in miss_func
+  ✓ weather/soil/market/dealer content excluded
+    via task_irrelevance
+
+COVERAGE:
+  ✓ every 3-axis grid cell covered
+  ✓ every distractor trap covered twice
+  ✓ every base chain covered
+  ✓ every miss_func action covered
+  ✓ every irrelevance topic covered
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OUTPUT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Output ONLY a JSON array.
-No markdown. No explanation.
-No trailing commas. No missing fields.
-No extra fields. No truncation.
+Output ONLY a JSON array of intent objects.
+No markdown. No explanation. No trailing commas.
 
-SAVE TO:
-C:\Users\SAI TEJA M S\Documents\UGRP Research Work\Indic-Function-Calling-Benchmark\indic_fcb\data\Agriculture_farmers\2 Weather, Soil & Advisory\Crop Advisory (ATMA)\intents.json
+SAVE TO: intents.json

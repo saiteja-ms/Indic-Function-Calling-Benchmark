@@ -1,0 +1,87 @@
+{
+  "scenario_id": "pmkusum_pmkusum_parallel_003_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_parallel_003",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "multi_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "eligibility_status": "eligible"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I need to check the allowed solar pump capacities for two different land parcels I own. One is 3 acres and the other is 5.5 acres. Tell me the options."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "water_table_depth_meters"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "The groundwater depth is 45 meters for both. Don't ask for unnecessary details, just give me the capacities quickly."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 45,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 3,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "water_table_depth_meters": "EXACT",
+            "land_area_acres": "EXACT"
+          }
+        },
+        {
+          "tool_name": "pmkusum_get_pump_capacity_options",
+          "parameters": {
+            "water_table_depth_meters": {
+              "value": 45,
+              "eval_mode": "EXACT"
+            },
+            "land_area_acres": {
+              "value": 5.5,
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "water_table_depth_meters": "EXACT",
+            "land_area_acres": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}

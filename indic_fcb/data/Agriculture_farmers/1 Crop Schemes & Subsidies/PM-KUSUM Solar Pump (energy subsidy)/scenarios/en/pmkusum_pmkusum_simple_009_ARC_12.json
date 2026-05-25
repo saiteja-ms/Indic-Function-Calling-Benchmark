@@ -1,0 +1,79 @@
+{
+  "scenario_id": "pmkusum_pmkusum_simple_009_ARC_12",
+  "usecase": "pm_kusum",
+  "intent_ref": "pmkusum_simple_009",
+  "archetype_ref": "ARC_12",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "456789012346",
+    "mobile_number": "6321098754",
+    "bank_account": "PUNB001122334455",
+    "vendor_selection_status": "pending",
+    "application_status": "approved"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "I want to select the vendor for my approved PM-KUSUM application. My application ID is PK-APP-7788. Please do this quickly, I don't have time for redundant steps."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": [
+        "vendor_id",
+        "session_token"
+      ],
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "I am very cautious about my data, but here is the rest. The vendor ID is VEND-901 and my session token is SESS-12345. Confirm it now."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "pmkusum_select_vendor",
+          "parameters": {
+            "session_token": {
+              "value": "SESS-12345",
+              "eval_mode": "EXACT"
+            },
+            "application_id": {
+              "value": "PK-APP-7788",
+              "eval_mode": "EXACT"
+            },
+            "vendor_id": {
+              "value": "VEND-901",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "session_token": "EXACT",
+            "application_id": "EXACT",
+            "vendor_id": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {
+    "vendor_selection_status": "confirmed"
+  }
+}

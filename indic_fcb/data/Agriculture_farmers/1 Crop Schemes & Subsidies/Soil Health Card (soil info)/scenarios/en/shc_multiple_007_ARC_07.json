@@ -1,0 +1,68 @@
+{
+  "scenario_id": "shc_multiple_007_ARC_07",
+  "usecase": "shc_scheme",
+  "intent_ref": "shc_multiple_007",
+  "archetype_ref": "ARC_07",
+  "axes": {
+    "conversation_length": "multi_turn",
+    "tool_calls_per_turn": "single_step",
+    "task_type": "simple"
+  },
+  "initial_state": {
+    "authenticated": false,
+    "session_token": null,
+    "aadhaar_number": "890123456789",
+    "mobile_number": "7543210986",
+    "bank_account": "SBIN001122334455",
+    "sampling_window_status": "closed"
+  },
+  "conversation": [
+    {
+      "turn_index": 1,
+      "speaker": "user",
+      "message": "My sugarcane crop is harvested and I need to give a soil sample, but I don't know when the collection period opens in Sitapur."
+    },
+    {
+      "turn_index": 1,
+      "speaker": "ground_truth",
+      "tool_calls": [],
+      "null_call": true,
+      "model_should_ask_for": "cropping_season",
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    },
+    {
+      "turn_index": 2,
+      "speaker": "user",
+      "message": "It is for the rabi season."
+    },
+    {
+      "turn_index": 2,
+      "speaker": "ground_truth",
+      "tool_calls": [
+        {
+          "tool_name": "shc_get_sampling_window",
+          "parameters": {
+            "district_code": {
+              "value": "Sitapur",
+              "eval_mode": "EXACT"
+            },
+            "cropping_season": {
+              "value": "rabi",
+              "eval_mode": "EXACT"
+            }
+          },
+          "eval_mode": {
+            "district_code": "EXACT",
+            "cropping_season": "EXACT"
+          }
+        }
+      ],
+      "null_call": false,
+      "model_should_ask_for": null,
+      "model_should_decline": null,
+      "irrelevance_reason": null
+    }
+  ],
+  "expected_final_state": {}
+}
